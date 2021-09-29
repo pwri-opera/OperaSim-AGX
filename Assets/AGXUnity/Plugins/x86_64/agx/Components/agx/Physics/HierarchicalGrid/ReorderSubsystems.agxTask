@@ -1,0 +1,20 @@
+<Task name="ReorderSubsystems">
+  <Task source="SortSubsystems"/>
+  <!-- <Task source="RandomizeSubsystems"/> -->
+  
+  <!-- Reorder geometries -->
+  <!-- Currently disabled because journal recording does not handle permute events nicely for non-recorded buffers. -->
+  <!-- NOTE: Also need to update SortSubsystems.cpp as sourceIndex buffer is reordered there. TODO: Better decoupling of functionality! -->
+  <!-- <Task name="ReorderGeometries" source="Foundation.ReorderStorage">
+    <Parameter.Array instance="permutation" bind="@SortedGeometries"/>
+    <Parameter.Pointer instance="storage" bind="@Geometry"/>
+  </Task> -->
+  
+  
+  <!-- Reorder particles -->
+  <Task name="ReorderParticles" source="Foundation.ReorderStorage">
+    <Parameter.Array instance="permutation" bind="@ParticleSystem.SortedParticles"/>
+    <Parameter.Pointer instance="storage" bind="@ParticleSystem.Particle"/>
+  </Task>
+  
+</Task>

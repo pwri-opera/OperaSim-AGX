@@ -1,0 +1,4 @@
+<Entity name="ContactZone_Edge" source="ContactZone">
+  <Attribute.Scalar name="internalConnections" type="Physics.HierarchicalGrid.ContactZonePtr" numElements="2"/>
+  <Attribute.Scalar name="cornerConnections" type="Physics.HierarchicalGrid.ContactZonePtr" numElements="2"/>
+</Entity>

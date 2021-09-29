@@ -1,0 +1,13 @@
+<Kernel name="CreateOverlapsWithInfiniteObjects" dispatch="serial">
+  
+  <Parameter.Array name="@InfiniteGeometries" type="UInt:32bit"/>
+
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="sourceIndex, subsystem, radius, obbIndex" write="sourceIndex, subsystem, radius, obbIndex"/>
+
+  <Parameter.Array name="@Geometry.model" type="agxCollide::Geometry*" mode="READ"/>
+  <Parameter.Pointer name="@Space" type="agxCollide::Space" include="agxCollide/Space.h"/>
+
+  <Parameter.EntityData name="@GridOverlap" type="GridOverlap" read="collisionObject1, collisionObject2" write="collisionObject1, collisionObject2" globalResult="APPEND, ORDER"/>
+  
+  <Parameter.Pointer name="@CollisionGroupManager" type="agxCollide::CollisionGroupManager" include="agxCollide/CollisionGroupManager.h" required="false"/>
+</Kernel>

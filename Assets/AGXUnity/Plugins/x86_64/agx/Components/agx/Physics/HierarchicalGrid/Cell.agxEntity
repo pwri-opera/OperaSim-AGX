@@ -1,0 +1,60 @@
+<Entity name="Cell">
+  <!-- The tier (level, depth) in the grid where the cell is located -->
+  <Attribute.Scalar name="tier" type="UInt:8bit"/>
+
+  <!-- Distance from leaf cell -->
+  <Attribute.Scalar name="invDepth" type="UInt:8bit"/>
+
+  <!-- Discretized coordinates for the cell -->
+  <Attribute.Scalar name="id" type="Vec3i"/>
+
+  <!-- The position of the cell center -->
+  <Attribute.Scalar name="position" type="Vec3"/>
+
+  <!-- Linearized index of the cell, eg Z-order or Hilbert curve index -->
+  <!-- NOTE: This is now implicitly stored in the cell hierarchy -->
+  <!-- <Attribute.Scalar name="linearId" type="UInt:64bit"/> -->
+
+  <!-- Cell state: ACTIVE, UNINITIALIZED, DEAD -->
+  <Attribute.Scalar name="state" type="UInt:8bit"/>
+
+   <!-- How long the cell has been empty -->
+  <Attribute.Scalar name="emptyTime" type="Real:32bit"/>
+
+  <!-- The content of the cell, an array of collision object indices -->
+  <Attribute.Scalar name="collisionObjects" type="IndexRange:32bit"/>
+
+  <!-- Index to parent cell -->
+  <Attribute.Scalar name="parent" type="UInt:32bit" value="InvalidIndex"/>
+
+  <!-- Indices to children (sorted and compacted) -->
+  <Attribute.Scalar name="children" type="UInt:32bit" numElements="8" value="InvalidIndex"/>
+
+  <!-- Number of child cells -->
+  <Attribute.Scalar name="numChildren" type="UInt:8bit"/>
+
+  <!-- Indices to neighbors. 27 elements is enough, but using 32 for memory alignment. -->
+	<Attribute.Scalar name="neighbors" type="UInt:32bit" numElements="32" value="InvalidIndex"/>
+
+  <!-- The cost of searching the cell in the previous step -->
+  <Attribute.Scalar name="searchCost" type="UInt:32bit"/>
+
+  <!-- During cell reordering we store the sorted index for each cell -->
+  <Attribute.Scalar name="sortedIndex" type="UInt:32bit"/>
+
+  <!-- Internal contact zone -->
+  <Attribute.Scalar name="internalZone" type="Physics.HierarchicalGrid.ContactZonePtr"/>
+  <Attribute.Scalar name="zoneType" type="UInt:8bit"/>
+  <Attribute.Pointer name="solveBodyOffsets" type="agx::AtomicValue"/>
+
+
+
+  <!-- How long before an empty cell is destroyed -->
+  <Attribute.Shared name="emptyThreshold" type="Real:32bit" value="0.0"/>
+
+  <!-- Cell storage reordering frequency -->
+	<Attribute.Shared name="reorderingFrequency" type="Real" value="5"/>
+
+  <!-- Size alignment for tuning cell fitting, zero disables alignment, then radius of first inserted object determines alignment -->
+	<Attribute.Shared name="sizeAlignment" type="Real" value="0"/>
+</Entity>

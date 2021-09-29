@@ -1,0 +1,7 @@
+<Entity name="CollisionGroup">
+  <Attribute.Scalar name="id" type="UInt:32bit"/>
+  <Attribute.Scalar name="name" type="Name"/>
+  <Attribute.HashSet name="sets" type="Physics.CollisionGroupSetPtr"/>
+  <Attribute.HashSet name="disabledGroups" type="Physics.CollisionGroupPtr"/>
+  <Attribute.Pointer name="manager" type="agxCollide::CollisionGroupManager"/>
+</Entity>

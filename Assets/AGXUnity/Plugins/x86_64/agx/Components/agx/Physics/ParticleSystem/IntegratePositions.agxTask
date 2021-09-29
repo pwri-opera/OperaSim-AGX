@@ -1,0 +1,4 @@
+<Task name="IntegratePositions" source="Physics.Particle.IntegratePosition">
+  <Parameter.EntityData instance="particle" bind="@Particle"/>
+	<Parameter.Scalar instance="clock_timeStep" bind="@clock.timeStep"/>
+</Task>

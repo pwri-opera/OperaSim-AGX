@@ -1,0 +1,45 @@
+{
+   "BulkProperties":{
+      "cohesion": 0.0,
+      "density": 1474.0,
+      "dilatancyAngle" : 0.157,
+      "frictionAngle": 0.6807,
+      "maximumDensity" : 1800.0,
+      "poissonsRatio": 0.1,
+      "swellFactor": 1.12,
+      "youngsModulus": 4.5e6
+   },
+   "CompactionProperties":{
+      "angleOfReposeCompactionRate": 1.0,
+      "bankStatePhi" : 0.6666,
+      "compactionTimeRelaxationConstant" : 0.02,
+      "compressionIndex" : 0.05,
+      "hardeningConstantKE" : 1.0,
+      "hardeningConstantNE" : 0.5,
+      "preconsolidationStress" : 98000,
+      "stressCutOffFraction" : 0.01,
+      "dilatancyAngleScalingFactor" : 0.261799
+   },
+   "ExcavationContactProperties" : {
+      "aggregateStiffnessMultiplier" : 0.001,
+      "depthDecayFactor" : 2.0,
+      "depthIncreaseFactor" : 1.0,
+      "excavationStiffnessMultiplier" : 1.0,
+      "maximumAggregateNormalForce" : "inf",
+      "maximumContactDepth" : 1.0
+   },
+   "ParticleProperties":{
+      "adhesionOverlapFactor" : 0.050,
+      "particleCohesion" : 0.0,
+      "particleFriction" : 0.3,
+      "particleRestitution" : 0.0,
+      "particleRollingResistance" : 0.1,
+      "particleTerrainCohesion" : 0.0,
+      "particleTerrainFriction" : 1.0,
+      "particleTerrainRestitution" : 0.0,
+      "particleTerrainRollingResistance" : 0.9,
+      "particleTerrainYoungsModulus" : 1e8,
+      "particleYoungsModulus" : 1e9
+   },
+   "description" : "This material specification is named sand_1 and aims to model the behaviour of sand."
+}

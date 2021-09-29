@@ -1,0 +1,13 @@
+<Task name="RenderOrientedGeometryBounds">
+  <Buffer name="transforms" type="AffineMatrix4x4" numElements="@OrientedGeometryBound.numElements"/>
+  
+  <Task source="Math.Inv">
+    <Parameter.Array instance="result" bind="@transforms"/>
+    <Parameter.Array instance="arg" bind="@OrientedGeometryBound.invTransform"/>
+  </Task>
+  
+  <Task source="Foundation.Rendering.RenderBoxesWithLines">
+    <Parameter.Array instance="halfExtents" bind="@OrientedGeometryBound.halfExtents"/>
+    <Parameter.Array instance="transforms" bind="@transforms"/>
+  </Task>
+</Task>

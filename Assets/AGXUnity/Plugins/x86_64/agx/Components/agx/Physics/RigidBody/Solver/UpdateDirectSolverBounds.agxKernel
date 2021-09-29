@@ -1,0 +1,7 @@
+<SolveKernel name="UpdateDirectSolverBounds" costPerElement="600">
+  <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
+  
+  <Parameter.EntityData name="@BinaryConstraintRow"   type="ConstraintRow" read="epsilon, rhs, bound, indexSetState"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="epsilon, rhs, bound, indexSetState"/>
+  <Parameter.EntityData name="@ContactConstraintRow"  type="ConstraintRow" read="epsilon, rhs, bound, indexSetState"/>
+</SolveKernel>

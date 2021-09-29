@@ -1,0 +1,11 @@
+<SolveKernel name="CommitDirectVelocities">
+  <Parameter.Pointer name="@Solver" type="agx::Solver"/>
+  <Parameter.Array name="@SolveIsland.instance"         type="Physics.SolveIslandPtr"         mode="READ_WRITE" implicit="true"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state" write="velocity, angularVelocity"/>
+
+  <Parameter.EntityData name="@BinaryConstraint"   type="BinaryConstraint"   read="instance"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance"/>
+
+  <Parameter.EntityData name="@BinaryConstraintRow"   type="ConstraintRow" write="indexSetState"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" write="indexSetState"/>
+</SolveKernel>

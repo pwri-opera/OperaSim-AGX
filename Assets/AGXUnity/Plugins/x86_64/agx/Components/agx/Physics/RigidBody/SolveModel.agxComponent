@@ -1,0 +1,111 @@
+<!-- Contact/friction models -->
+<SolveModel name="ContactConstraint.Iterative.IterativeProjectedConeFriction" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_IterativeProjectedConeFriction"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Iterative.BoxFrictionModel" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_BoxFrictionModel"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Iterative.ScaleBoxFrictionModel" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_ScaleBoxFrictionModel"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.DirectAndIterative.IterativeProjectedConeFriction" solveType="DIRECT_AND_ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_IterativeProjectedConeFriction"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.DirectAndIterative.BoxFrictionModel" solveType="DIRECT_AND_ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_BoxFrictionModel"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.DirectAndIterative.ScaleBoxFrictionModel" solveType="DIRECT_AND_ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_ScaleBoxFrictionModel"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Direct.IterativeProjectedConeFriction" solveType="DIRECT" constraintType="CONTACT_CONSTRAINT">
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Direct.BoxFrictionModel" solveType="DIRECT" constraintType="CONTACT_CONSTRAINT">
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Direct.ScaleBoxFrictionModel" solveType="DIRECT" constraintType="CONTACT_CONSTRAINT">
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Split.IterativeProjectedConeFriction" solveType="SPLIT" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_IterativeProjectedConeFriction"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Split.BoxFrictionModel" solveType="SPLIT" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_BoxFrictionModel"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+<SolveModel name="ContactConstraint.Split.ScaleBoxFrictionModel" solveType="SPLIT" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ContactConstraint_ScaleBoxFrictionModel"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : Contact"/>
+  <!-- <SynchronizeIterativeKernel source="Physics.RigidBody.Solver.SynchronizeIterativeSolver : ContactConstraint"/> -->
+  <StoreContactForcesKernel source="Physics.RigidBody.Solver.StoreContactForces"/>
+</SolveModel>
+
+
+<!-- Binary- and many body constraints -->
+<SolveModel name="BinaryConstraint.Iterative" solveType="ITERATIVE" constraintType="BINARY_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : BinaryConstraint"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : BinaryConstraint"/>
+</SolveModel>
+
+<SolveModel name="ManyBodyConstraint.Iterative" solveType="ITERATIVE" constraintType="MANY_BODY_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ManyBodyConstraint"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : ManyBodyConstraint"/>
+</SolveModel>
+
+<SolveModel name="BinaryConstraint.DirectAndIterative" solveType="DIRECT_AND_ITERATIVE" constraintType="BINARY_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : BinaryConstraint"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : BinaryConstraint"/>
+</SolveModel>
+
+<SolveModel name="ManyBodyConstraint.DirectAndIterative" solveType="DIRECT_AND_ITERATIVE" constraintType="MANY_BODY_CONSTRAINT">
+  <IterationKernel source="Physics.RigidBody.Solver.GaussSeidelIteration : ManyBodyConstraint"/>
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : ManyBodyConstraint"/>
+</SolveModel>
+
+<SolveModel name="BinaryConstraint.Direct" solveType="DIRECT" constraintType="BINARY_CONSTRAINT">
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : BinaryConstraint"/>
+</SolveModel>
+
+<SolveModel name="ManyBodyConstraint.Direct" solveType="DIRECT" constraintType="MANY_BODY_CONSTRAINT">
+  <UpdateRhsKernel source="Physics.RigidBody.Solver.CalculateRHS : ManyBodyConstraint"/>
+</SolveModel>
+
+<SolveModel name="StrongInteraction.Direct" solveType="DIRECT" constraintType="STRONG_INTERACTION">
+</SolveModel>

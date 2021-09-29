@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2c0d7c4879d994e94792543f88aaa8, type: 3}
+  m_Name: ExcavatorTrackProps
+  m_EditorClassIdentifier: 
+  m_hingeComplianceTranslational: {x: 8e-10, y: 8e-10, z: 8e-10}
+  m_hingeDampingTranslational: {x: 0.04, y: 0.04, z: 0.04}
+  m_hingeComplianceRotational: {x: 8e-10, y: 8e-10}
+  m_hingeDampingRotational: {x: 0.04, y: 0.04}
+  m_hingeRangeEnabled: 1
+  m_hingeRangeRange:
+    Min: -120
+    Max: 20
+  m_onInitializeMergeNodesToWheelsEnabled: 0
+  m_onInitializeTransformNodesToWheelsEnabled: 1
+  m_transformNodesToWheelsOverlap: 0.001
+  m_nodesToWheelsMergeThreshold: -0.1
+  m_nodesToWheelsSplitThreshold: -0.05
+  m_numNodesIncludedInAverageDirection: 3
+  m_minStabilizingHingeNormalForce: 100000
+  m_stabilizingHingeFrictionParameter: 1

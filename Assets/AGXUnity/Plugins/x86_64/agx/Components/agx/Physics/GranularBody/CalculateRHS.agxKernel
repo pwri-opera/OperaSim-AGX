@@ -1,0 +1,31 @@
+<SolveKernel name="CalculateRHS" implementation="GranularGranularContact" costPerElement="30">
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint" read="isImpacting, body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow" read="violation" write="lambda, rhs"/>
+  <Parameter.EntityData name="solveBody" bind="@SolveBody" type="SolveBody" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  <Parameter.EntityData name="granularBody" bind="@Particle" type="GranularBody" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion"/>
+  
+  <Parameter.EntityData name="@CachedGranularGranularContacts" type="GranularBody.CachedGranularContact" mode="READ_WRITE"/>
+
+  <Parameter.Array name="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement"/>
+  <Parameter.Array name="granularGranularGMinvStorage" bind="@GranularGranularContactConstraintGMInvStorage" mode="WRITE" type="Jacobian6DOFElement"/>
+  <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</SolveKernel>
+
+
+<SolveKernel name="CalculateRHS" implementation="GranularGeometryContact" costPerElement="30">
+  <Parameter.EntityData name="constraint" bind="@GranularBodyContactConstraint" type="ContactConstraint" read="isImpacting, body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularBodyContactConstraint.Row" type="Particle.ContactConstraintRow" read="violation" write="lambda, rhs"/>
+  <Parameter.EntityData name="solveBody" bind="@SolveBody" type="SolveBody" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  <Parameter.EntityData name="granularBody" bind="@Particle" type="GranularBody" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, linearAcceleration, angularAcceleration"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion"/>
+
+  <Parameter.EntityData name="@CachedGranularGeometryContacts" type="GranularBody.CachedGranularContact" mode="READ_WRITE"/>
+
+  <Parameter.Array name="granularGeometryJacobianStorage" bind="@GranularGeometryContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement"/>
+  <Parameter.Array name="granularGeometryGMinvStorage" bind="@GranularGeometryContactConstraintGMInvStorage" mode="WRITE" type="Jacobian6DOFElement"/>
+  <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</SolveKernel>

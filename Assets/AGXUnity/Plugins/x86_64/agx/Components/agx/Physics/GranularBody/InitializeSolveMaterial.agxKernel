@@ -1,0 +1,12 @@
+<Kernel name="InitializeSolveMaterial">
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction, adhesion"/>
+  <Parameter.EntityData name="@SolveMaterial" type="SolveMaterial" write="friction, adhesiveImpulse"/>
+  <Parameter.Scalar name="timeStep" bind="@clock.timeStep" type="Real"/>
+</Kernel>
+
+<Kernel name="InitializeSolveMaterial" implementation="Real32">
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction, adhesion"/>
+  <Parameter.EntityData name="@SolveMaterial" type="SolveMaterial" write="friction, adhesiveImpulse"/>
+  <Parameter.EntityData name="@SolveMaterial32" type="SolveMaterial32" write="friction, adhesiveImpulse"/>
+  <Parameter.Scalar name="timeStep" bind="@clock.timeStep" type="Real"/>
+</Kernel>

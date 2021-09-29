@@ -1,0 +1,9 @@
+<Kernel name="TagContacts" device="CPU" implementation="ParticlePairContact">
+  <Parameter.Array name="@ParticlePairContact.solveModel" type="agx::SolveModel *" mode="WRITE"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>
+
+<Kernel name="TagContacts" device="CPU" implementation="ParticleGeometryContact">
+  <Parameter.Array name="@ParticleGeometryContact.solveModel" type="agx::SolveModel *" mode="WRITE"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>

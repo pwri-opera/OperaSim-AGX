@@ -1,0 +1,12 @@
+<Entity name="Shape" source="Referenced">
+	<Attribute.Scalar name="type" type="UInt:8bit"/>
+	<Attribute.Scalar name="inGroup" type="Bool"/>
+	<Attribute.Scalar name="boundingAABB" type="BoundingAABB"/>
+	<Attribute.Scalar name="geometry" type="Physics.GeometryPtr"/>
+	<Attribute.Scalar name="transform" type="AffineMatrix4x4"/>
+	<Attribute.Scalar name="modifiedCount" type="UInt:32bit"/>
+	<!-- <Attribute.Scalar name="boundingSphere" type="Real"/> -->
+	<!-- <Attribute.Scalar name="material" type="EntityPtr"/> -->
+	<Attribute.Pointer name="model" type="agxCollide::Shape"/>
+
+</Entity>

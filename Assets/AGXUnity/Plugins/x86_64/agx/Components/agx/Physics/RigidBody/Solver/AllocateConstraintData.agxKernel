@@ -1,0 +1,33 @@
+<Kernel name="AllocateConstraintData" implementation="Contact" dispatch="serial">
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="body1, body2, points, material" write="constraintIndex"/>
+
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction, surfaceFrictionEnabled"/>
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" write="rowIndex, numRows, body1, body2, jacobianIndex, materialIndex, contactPointRange"/>
+
+  <Parameter.Pointer name="contactConstraintRowStorage" bind="@ContactConstraintRow" type="agxData::EntityStorage"/> 
+  <Parameter.Pointer name="contactConstraintJacobianStorage" bind="@ContactConstraintJacobian" type="agxData::Buffer"/>
+  <Parameter.Pointer name="contactConstraintGMInvStorage" bind="@ContactConstraintGMInv" type="agxData::Buffer"/>
+
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="instance, state"/>
+	<Parameter.Scalar name="@NumGeometryContactsUsingPPGS" type="UInt" mode="READ"/>
+</Kernel>
+
+<Kernel name="AllocateConstraintData" implementation="BinaryConstraint" dispatch="serial">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance" write="jacobianIndex, rowIndex, numRows"/>
+
+  <Parameter.Pointer name="binaryConstraintRowStorage"      bind="@BinaryConstraintRow"       type="agxData::EntityStorage"/> 
+  <Parameter.Pointer name="binaryConstraintJacobianStorage" bind="@BinaryConstraintJacobian"  type="agxData::Buffer"/>
+  <Parameter.Pointer name="binaryConstraintGMInvStorage"    bind="@BinaryConstraintGMInv"     type="agxData::Buffer"/> 
+</Kernel>
+
+<Kernel name="AllocateConstraintData" implementation="ManyBodyConstraint" dispatch="serial">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance" write="jacobianIndex, rowIndex, numRows"/>
+  
+  <Parameter.Pointer name="manyBodyConstraintRowStorage"      bind="@ManyBodyConstraintRow"       type="agxData::EntityStorage"/> 
+  <Parameter.Pointer name="manyBodyConstraintJacobianStorage" bind="@ManyBodyConstraintJacobian"  type="agxData::Buffer"/>
+  <Parameter.Pointer name="manyBodyConstraintGMInvStorage"    bind="@ManyBodyConstraintGMInv"     type="agxData::Buffer"/> 
+
+  <Parameter.Array   name="@ManyBodyConstraintJacobian"                                           type="Jacobian6DOFElement"    mode="WRITE"/>
+</Kernel>

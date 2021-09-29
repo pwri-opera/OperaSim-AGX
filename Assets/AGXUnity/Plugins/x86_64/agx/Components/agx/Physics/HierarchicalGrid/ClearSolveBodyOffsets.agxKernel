@@ -1,0 +1,3 @@
+<Kernel name="ClearSolveBodyOffsets" dispatch="serial">
+  <Parameter.Pointer name="@SolveBodyManager" type="agx::Physics::HierarchicalGrid::SolveBodyManager" include="agx/Physics/HierarchicalGrid/SolveBodyManager.h"/>
+</Kernel>

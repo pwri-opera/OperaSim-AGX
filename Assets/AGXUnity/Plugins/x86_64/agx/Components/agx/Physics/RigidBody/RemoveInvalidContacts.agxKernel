@@ -1,0 +1,6 @@
+<Kernel name="RemoveInvalidContacts" dispatch="serial">
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, body1, body2, points"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state"/>
+  <!-- <Parameter.Pointer name="@Space" type="agxCollide::Space" include="agxCollide/Space.h"/> -->
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

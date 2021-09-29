@@ -1,0 +1,11 @@
+<Kernel name="TagContacts" implementation="ParticlePairContact">
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="material" write="solveModel"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+
+<Kernel name="TagContacts" implementation="ParticleGeometryContact">
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="material" write="solveModel"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>

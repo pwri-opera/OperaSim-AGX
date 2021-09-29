@@ -1,0 +1,29 @@
+<SolveKernel name="CalculateContactResiduals" device="CPU" implementation="GranularGranularContact">
+  <Parameter.EntityData name="constraint"                      bind="@GranularGranularContactConstraint"                  type="ContactConstraint"             mode="READ"/>
+  <Parameter.EntityData name="constraintRow"                   bind="@GranularGranularContactConstraint.Row"              type="Particle.ContactConstraintRow" mode="READ_WRITE"/>
+  <Parameter.Array      name="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage"   type="Jacobian6DOFElement"           mode="READ"/>
+  <Parameter.EntityData name="particle"                        bind="@SolveBody"                                          type="SolveBody"                     mode="READ"/>
+  <Parameter.Scalar name="@contactMode"                        type="UInt" mode="READ"/>
+  <Parameter.Array name="@iterationResiduals" 								 type="Real" mode="WRITE"/>
+  <Parameter.Scalar name="@iterationResidualMutex"             type="SpinMutex" mode="READ_WRITE"/>
+</SolveKernel>
+
+<SolveKernel name="CalculateContactResiduals" device="CPU" implementation="GranularGeometryContact"> 
+  <Parameter.EntityData name="constraint"                      bind="@GranularBodyContactConstraint" type="ContactConstraint" mode="READ"/>
+  <Parameter.EntityData name="constraintRow"                   bind="@GranularBodyContactConstraint.Row" type="Particle.ContactConstraintRow" mode="READ_WRITE"/>  
+  <Parameter.Array      name="granularGeometryJacobianStorage" bind="@GranularGeometryContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement"/>
+  <Parameter.EntityData name="particle"                        bind="@SolveBody" type="SolveBody" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  <Parameter.EntityData name="rigidBody"                       bind="@RigidBody" type="RigidBody"                     mode="READ"/>
+  <Parameter.Scalar name="@contactMode"                        type="UInt" mode="READ"/>
+  <Parameter.Array name="@iterationResiduals" 								 type="Real" mode="WRITE"/>
+  <Parameter.Scalar name="@iterationResidualMutex"             type="SpinMutex" mode="READ_WRITE"/>
+</SolveKernel>
+
+<SolveKernel name="CalculateContactResiduals" device="CPU" implementation="GranularGranularContact_LocalJacobians">
+  <Parameter.EntityData name="constraint"                      bind="@GranularGranularContactConstraint"                  type="ContactConstraint"             mode="READ"/>
+  <Parameter.EntityData name="constraintRow"                   bind="@GranularGranularContactConstraint.Row"              type="Particle.ContactConstraintRow" mode="READ_WRITE"/>
+  <Parameter.EntityData name="particle"                        bind="@SolveBody"                                          type="SolveBody"                     mode="READ"/>
+  <Parameter.Scalar name="@contactMode"                        type="UInt" mode="READ"/>
+  <Parameter.Array name="@iterationResiduals" 								 type="Real" mode="WRITE"/>
+  <Parameter.Scalar name="@iterationResidualMutex"             type="SpinMutex" mode="READ_WRITE"/>
+</SolveKernel>

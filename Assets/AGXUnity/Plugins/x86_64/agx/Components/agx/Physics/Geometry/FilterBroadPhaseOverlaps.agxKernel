@@ -1,0 +1,26 @@
+<Kernel name="FilterBroadPhaseOverlaps">
+
+  <description>
+    Takes the axis-aligned bounding-box overlaps that sweep-and-prune finds and
+    extracts the ones that also pass the oriented bound test.
+  </description>
+
+  <!-- The output from sweep-and-prune. -->
+  <Parameter.EntityData name="@BroadPhasePair" type="BroadPhasePair" read="geometry1, geometry2, state, contact" write="geometry1, geometry2, state, contact"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state" required="false"/>
+
+  <!-- The actual bounds, along with the mapping from the geometries to their respective bound. -->
+  <Parameter.EntityData name="@OrientedGeometryBound" type="HierarchicalGrid.OrientedGeometryBound" read="halfExtents, invTransform"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="body, state, orientedBoundId, boundingRadius, localBoundCenter, transform"/>
+  <Parameter.Pointer name="orientedGeometryBoundStorage" bind="@OrientedGeometryBound" type="agxData::EntityStorage" include="agxData/EntityStorage.h"/>
+
+
+  <!-- Indices to broad-phase pairs that pass the test. -->
+  <Parameter.Array name="@FilteredBroadPhasePairs" type="UInt:32bit" globalResult="TRUNCATE, SORT"/>
+
+  <!-- Separations, not sorted/ordered here, full sort in ComputeNarrowPhaseContacts instead -->
+  <Parameter.EntityData name="@SeparationPair" type="GeometryPair" read="geometry1, geometry2" write="geometry1, geometry2" globalResult="APPEND, SORT"/>
+
+  <Parameter.Pointer name="@Space" type="agxCollide::Space" include="agxCollide/Space.h"/>
+
+</Kernel>

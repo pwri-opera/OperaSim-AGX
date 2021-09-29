@@ -1,0 +1,26 @@
+<Kernel name="CalculateJacobians" implementation="ParticlePairContact">
+  <Parameter.EntityData name="constraint" bind="@ParticleParticleContactConstraint" type="Particle.ContactConstraint" write="G, isImpacting"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleParticleContactConstraint.Row" type="Particle.ContactConstraintRow" write="epsilon, lambda, rhs, violation, velocity"/>
+
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, normal, depth, material, velocity"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="oldVelocity, mass"/>
+  
+  <!-- Constants -->
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
+</Kernel>
+
+
+<Kernel name="CalculateJacobians" implementation="ParticleGeometryContact">
+  <Parameter.EntityData name="constraint" bind="@ParticleBodyContactConstraint" type="Particle.ParticleBodyContactConstraint" write="G, isImpacting"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleBodyContactConstraint.Row" type="Particle.ContactConstraintRow" write="epsilon, lambda, rhs, violation, velocity"/>
+  
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, point, normal, depth, material, velocity"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="oldVelocity, mass"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="mass, state, cmTransform, linearAcceleration, angularAcceleration"/>
+  
+
+  <!-- Constants -->
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
+</Kernel>

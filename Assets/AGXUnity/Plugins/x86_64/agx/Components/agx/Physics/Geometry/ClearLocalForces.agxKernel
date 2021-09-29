@@ -1,0 +1,5 @@
+<Kernel name="ClearLocalForces" dispatch="serial">
+
+  <Parameter.EntityData name="@ContactPoint"     type="ContactPoint"     read="instance" write="localForce" />
+
+</Kernel>

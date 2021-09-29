@@ -1,0 +1,4 @@
+<Entity name="Frame" source="Referenced">
+	<Attribute.Scalar name="globalTransform" type="AffineMatrix4x4"/>
+	<Attribute.Scalar name="localTransform" type="AffineMatrix4x4"/>
+</Entity>

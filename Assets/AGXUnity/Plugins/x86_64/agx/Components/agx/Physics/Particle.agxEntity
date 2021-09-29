@@ -1,0 +1,50 @@
+<Entity name="Particle" hasConstructor="true">
+	<Attribute.Scalar name="state" type="ParticleState"/>
+
+	<!-- Shared attributes -->
+	<Attribute.Shared name="defaultRadius" type="Real" value="0.075"/>
+	<Attribute.Shared name="defaultMass" type="Real" value="1.25"/>
+	<Attribute.Shared name="defaultMaterial" type="Physics.MaterialPtr"/>
+	<Attribute.Shared name="defaultCollisionGroupSet" type="Physics.CollisionGroupSetPtr"/>
+
+  <!-- TODO Remove -->
+	<Attribute.Shared name="defaultInvMass" type="Real" value="Math.Inv(@defaultMass)"/>
+
+	<!-- Basic state of a particle. -->
+	<Attribute.Scalar name="position" type="Vec3"/>
+	<Attribute.Scalar name="velocity" type="Vec3"/>
+	<Attribute.Scalar name="oldVelocity" type="Vec3"/>
+	<Attribute.Scalar name="force" type="Vec3"/>
+	<Attribute.Scalar name="life" type="Real" value="INFINITY"/>
+
+	<Attribute.Scalar name="radius" type="Real" value="0.075"/>
+	<Attribute.Scalar name="mass" type="Real" value="1.25"/>
+	<Attribute.Scalar name="invMass" type="Real" value="Math.Inv(@mass)"/>
+
+	<Attribute.Scalar name="material" type="Physics.MaterialPtr"/>
+	<Attribute.Scalar name="materialUuid" type="Uuid"/>
+	<Attribute.Scalar name="collisionGroupSet" type="Physics.CollisionGroupSetPtr"/>
+
+	<!-- Collision detection data. -->
+	<Attribute.Scalar name="tier" type="UInt:8bit" value="InvalidIndex"/> <!-- Used by the Hierarchical Hash Grid broad phase algorithm. -->
+	<Attribute.Scalar name="cellIndex" type="UInt:32bit"/> <!-- Index to the cell -->
+	<Attribute.Scalar name="cellSlot" type="UInt:16bit"/> <!-- The local index inside the cell -->
+	<Attribute.Scalar name="oldCell" type="UInt:32bit" value="InvalidIndex"/>
+
+  	<!-- Used with corner based bottom-up hierarchical grid overlap search -->
+  	<!-- <Attribute.Scalar name="cornerCellIndices" type="UInt:32bit" numElements="8"/>  -->
+  	<!-- <Attribute.Scalar name="cornerCellSlots" type="UInt:16bit" numElements="8"/> -->
+
+	<!-- ><Attribute.Scalar name="cellSlotOld" type="Vec3i"/> --> <!-- cellIndex, localIndex, zoneIndex -->
+	<!--<Attribute.Array name="contactList" type="UInt:32bit"/>-->
+
+	<Attribute.Scalar name="geometryContactList" type="UInt:32bit" value="InvalidIndex"/> <!-- Linked list of indices, terminated by InvalidIndex. -->
+
+	<Attribute.Scalar name="solveBodyIndex" type="UInt:32bit"/>
+	<Attribute.Scalar name="graphNode" type="Physics.GraphNodePtr"/>
+
+	<!-- Misc attributes. -->
+	<Attribute.Scalar name="color" type="Vec4:32bit" value="0.8, 0.8, 0.8, 1"/>
+	<Attribute.Scalar name="geometryContactVector" type="Vec3"/>
+	<Attribute.Scalar name="enableRendering" type="Real:32bit" value="1.0"/>
+</Entity>

@@ -1,0 +1,15 @@
+<Kernel name="UpdateWorldMassAndInertia">
+	
+	<Parameter.Scalar type="Real" name="timeStep" bind="@clock.timeStep"/>
+	
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, cmTransform, mass, effectiveMass, worldMassMatrix, invWorldMassMatrix, inertia, effectiveInertia, worldInertia, invWorldInertia, effectiveWorldMassMatrix, effectiveInvWorldMassMatrix, effectiveWorldInertia, effectiveInvWorldInertia, linearVelocityDamping, linearVelocityZeroDamping, angularVelocityDamping, angularVelocityZeroDamping, velocity, angularVelocity, effectiveMassTransformDiagonal" write="worldMassMatrix, invWorldMassMatrix, worldInertia, invWorldInertia, effectiveWorldMassMatrix, effectiveInvWorldMassMatrix, effectiveWorldInertia, effectiveInvWorldInertia, linearAcceleration, angularAcceleration"/>
+</Kernel>
+
+
+<Kernel name="UpdateWorldMassAndInertia" implementation="SSE">
+	
+	<Parameter.Scalar type="Real" name="timeStep" bind="@clock.timeStep"/>
+
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, cmTransform, mass, effectiveMass, worldMassMatrix, invWorldMassMatrix, inertia, effectiveInertia, worldInertia, invWorldInertia, effectiveWorldMassMatrix, effectiveInvWorldMassMatrix, effectiveWorldInertia, effectiveInvWorldInertia, linearVelocityDamping, linearVelocityZeroDamping, angularVelocityDamping, angularVelocityZeroDamping, velocity, angularVelocity, effectiveMassTransformDiagonal" write="worldMassMatrix, invWorldMassMatrix, worldInertia, invWorldInertia, effectiveWorldMassMatrix, effectiveInvWorldMassMatrix, effectiveWorldInertia, effectiveInvWorldInertia, linearAcceleration, angularAcceleration"/>
+</Kernel>
+

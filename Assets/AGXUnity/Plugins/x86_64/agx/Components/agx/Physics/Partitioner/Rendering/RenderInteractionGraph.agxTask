@@ -1,0 +1,23 @@
+<Task name="RenderInteractionGraph">
+  <Buffer name="GraphNodeVertices" type="Vec3" numElements="@GraphNode.numElements"/>
+  <Buffer name="GraphEdgeLines" type="Line:32bit" numElements="@GraphNode.edgesElements.numElements"/>
+  <Buffer name="GraphNodeColors" type="Vec4" numElements="@GraphNodeVertices.numElements"/>
+  
+  <Task source="GenerateGraphNodeVertices"/>
+  <Task source="GenerateGraphEdgeLines"/>
+  
+  
+  <Parameter.Scalar name="color" type="Vec4" mode="READ" value="Vec4(1, 1, 1, 1)"/>
+
+  <Task source="Foundation.Rendering.RenderPointSprites">
+    <Parameter.Array instance="vertices" bind="@GraphNodeVertices"/>
+    <Parameter.Array instance="color" value="@GraphNodeColors"/>
+    <Parameter.Scalar instance="radius" value="Real(0.1)"/>
+  </Task>
+  
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@GraphEdgeLines"/>
+		<Parameter.Scalar instance="color" value="@color"/>
+  </Task>
+
+</Task>

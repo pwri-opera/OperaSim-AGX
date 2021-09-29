@@ -1,0 +1,12 @@
+<Entity name="ContactConstraintRow32" useInstanceTable="false">
+	<Attribute.Scalar name="lambda"          type="Real:32bit"/>
+  <Attribute.Scalar name="impactLambda"    type="Real:32bit"/>
+	<Attribute.Scalar name="rhs"             type="Real:32bit"/>
+	<Attribute.Scalar name="epsilon"         type="Real:32bit"/>
+	<Attribute.Scalar name="velocity"        type="Real:32bit"/>
+	<Attribute.Scalar name="invD"            type="Real:32bit"/>
+	<Attribute.Scalar name="violation"       type="Real:32bit"/>
+	<Attribute.Scalar name="residual"        type="Real"/>
+  <!-- <Attribute.Scalar name="bound"        type="RangeReal:32bit"/> -->
+	<!-- <Attribute.Scalar name="damping" type="Real:32bit"/> -->
+</Entity>

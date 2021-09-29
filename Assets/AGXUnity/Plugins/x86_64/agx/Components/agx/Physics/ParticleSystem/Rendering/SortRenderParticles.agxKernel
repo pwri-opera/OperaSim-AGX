@@ -1,0 +1,4 @@
+<Kernel name="SortRenderParticles" device="CPU" dispatch="serial">
+  <Parameter.Array name="@ParticleCameraDistances" type="Real" mode="READ"/>
+  <Parameter.Array name="@SortedRenderParticles" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

@@ -1,0 +1,30 @@
+<Kernel name="BuildIslands" dispatch="serial">
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, state, edges" write="state, island, subindex"/>
+  
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="color" write="nodes, color"/>
+  <Parameter.Pointer name="islandNodeBuffer" bind="@SolveIsland.nodes.elements" type="agxData::Buffer"/>
+  <Parameter.Array name="@SolveIsland.nodes.elements" type="UInt:32bit" mode="WRITE"/>
+</Kernel>
+
+
+<Kernel name="BuildIslands" dispatch="serial" implementation="ParallelPGS">
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" write="source, type"/>
+  
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" write="nodes"/>
+  
+  <Parameter.Pointer name="islandNodeBuffer" bind="@SolveIsland.nodes.elements" type="agxData::Buffer"/>
+  <Parameter.Array name="@SolveIsland.nodes.elements" type="UInt:32bit" mode="WRITE" implicit="true"/>
+  
+  
+  <!-- <Parameter.EntityData name="@Geometry" type="Geometry" read="body" write=""/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, instance" write="" implicit="true"/>
+
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ" required="false"/>
+  
+  
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, body1, body2" write="graphNode"/>
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="instance, particle, body" required="false"/>
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance, body1, body2" write="graphNode"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance, bodies" write="graphNode"/> -->
+</Kernel>

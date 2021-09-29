@@ -1,0 +1,3 @@
+<Entity name="Sphere" source="Shape">
+	<Attribute.Scalar name="radius" type="Real"/>
+</Entity>

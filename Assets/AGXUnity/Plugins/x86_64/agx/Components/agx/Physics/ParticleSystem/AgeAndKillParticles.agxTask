@@ -1,0 +1,13 @@
+<Task name="AgeAndKillParticles">
+  
+  <description>
+  A combination of the particle aging kernel and the particle removal kernel.
+  Also supplies a buffer that the two kernels use to communicate the indices
+  that points to dead particles.
+  </description>
+
+  <Buffer name="DeadParticles" type="UInt:32bit"/>
+
+  <Task source="AgeParticles"/>
+  <Task source="RemoveDeadParticles"/>
+</Task>

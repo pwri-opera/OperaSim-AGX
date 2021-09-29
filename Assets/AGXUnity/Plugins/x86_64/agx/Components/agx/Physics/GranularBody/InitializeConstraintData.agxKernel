@@ -1,0 +1,64 @@
+<!--  -->
+<Kernel name="InitializeConstraintData" implementation="GranularGranularContact">
+  <Parameter.Array name="@SortedParticleParticleContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="rollingResistanceCoefficient"/>
+  
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+
+<!--  -->
+<Kernel name="InitializeConstraintData" implementation="GranularGeometryContact">
+  <Parameter.Array name="@SortedParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularBodyContactConstraint" type="ContactConstraint" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="rollingResistanceCoefficient"/>
+  
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+
+
+<!--  -->
+<Kernel name="InitializeConstraintData" implementation="GranularGranularContact_LocalJacobians">
+  <Parameter.Array name="@SortedParticleParticleContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="rollingResistanceCoefficient"/>
+  
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow" write="epsilon, lambda, rhs, violation, velocity"/>
+  
+  <!-- Constants -->
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
+	<Parameter.Scalar name="@nonlinearCoefficient" type="Real"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+  <Parameter.Scalar name="@granularPoissonRatio" type="Real" mode="READ"/>
+</Kernel>
+
+
+<!--  -->
+<!-- <Kernel name="InitializeConstraintData" implementation="GranularGeometryContact_ParallelPGS">
+  <Parameter.Array name="@SortedParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularBodyContactConstraint" type="ContactConstraint" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+</Kernel> -->
+
+<!--  -->
+<Kernel name="InitializeConstraintData" implementation="GranularGeometryContact_LocalJacobians">
+  <!-- <Parameter.Array name="@SortedParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularBodyContactConstraint" type="ContactConstraint" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="mass, state, cmTransform, linearAcceleration, angularAcceleration"/>
+  
+  <Parameter.EntityData name="constraintRow" bind="@GranularBodyContactConstraint.Row" type="Particle.ContactConstraintRow" write="epsilon, lambda, rhs, violation, velocity"/>
+  
+
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/> -->
+</Kernel>

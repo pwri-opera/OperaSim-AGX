@@ -1,0 +1,14 @@
+
+<Kernel name="IntegrateVelocities" implementation="SolveBody">
+  <Parameter.EntityData name="@Particle" type="Physics.GranularBody" read="velocity, angularVelocity, torque, force, invMass, invInertia, solveBodyIndex, invMass, invInertia" write="oldVelocity, oldAngularVelocity"/>
+  <Parameter.EntityData name="@SolveBody" type="Physics.SolveBody" write="velocity, angularVelocity, invMass, invInertia"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+	<Parameter.Scalar name="@thetaSteppingParameter" type="Real"/>
+</Kernel>
+
+<Kernel name="IntegrateVelocities" implementation="SolveBody32">
+  <Parameter.EntityData name="@Particle" type="Physics.GranularBody" read="velocity, angularVelocity, torque, force, invMass, invInertia, solveBodyIndex, invMass, invInertia" write="oldVelocity, oldAngularVelocity"/>
+  <Parameter.EntityData name="@SolveBody" type="Physics.SolveBody32" write="velocity, angularVelocity, invMass, invInertia"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+	<Parameter.Scalar name="@thetaSteppingParameter" type="Real"/>
+</Kernel>

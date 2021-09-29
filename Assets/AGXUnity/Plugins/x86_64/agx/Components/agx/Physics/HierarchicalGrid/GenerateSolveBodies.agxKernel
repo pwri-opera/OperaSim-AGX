@@ -1,0 +1,7 @@
+<Kernel name="GenerateSolveBodies" dispatch="serial">
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="cellIndex, velocity, angularVelocity" write="solveBodyIndex"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="zoneType"/>
+  <Parameter.EntityData name="@SolveBody" type="SolveBody" write="velocity, angularVelocity"/>
+  
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>

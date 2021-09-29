@@ -1,0 +1,5 @@
+<Entity name="WireShape" source="Capsule">
+  <Attribute.Scalar name="previousPoint0" type="Vec3"/>
+  <Attribute.Scalar name="previousPoint1" type="Vec3"/>
+  <Attribute.Scalar name="wireId"         type="UInt:32bit" value="InvalidIndex"/>
+</Entity>

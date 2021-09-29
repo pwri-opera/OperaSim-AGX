@@ -1,0 +1,25 @@
+<Entity name="SolveParticle">
+  <Attribute.Scalar name="position" type="Vec3"/>
+  <Attribute.Scalar name="velocity" type="Vec3"/>
+  <Attribute.Scalar name="force" type="Vec3"/>
+  <Attribute.Scalar name="density" type="Real"/>
+  <Attribute.Scalar name="sourceIndex" type="UInt:32bit"/>
+    
+  <!--
+    This is the inverse mapping of the source index. So
+    SolveParticle.sourceIndex[ i ] gives the index into the source particles
+    from which SolveParticle i was created. Given a index into the source
+    particles, SolveParticle.solveIndex[ i ] returns the index where the
+    SolveParticle for that source particle has been created.
+
+    May be a bit confusing that SolveParticle.solveIndex[ i ] doesn't belong
+    to the same particle as the data stored on the same index in the other
+    buffers of SolveParticle.
+  -->
+  <Attribute.Scalar name="solveIndex" type="UInt:32bit"/>
+  
+  <!-- 
+    Contact list where the neighbor indices are in the solve index space.
+   -->
+  <Attribute.Array name="contactList" type="UInt:32bit"/>
+</Entity>

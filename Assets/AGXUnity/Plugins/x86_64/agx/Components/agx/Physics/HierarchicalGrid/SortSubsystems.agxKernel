@@ -1,0 +1,8 @@
+<Kernel name="SortSubsystems" dispatch="serial">
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="sourceIndex, subsystem" write="sourceIndex"/>
+  <Parameter.Array name="@ParticleSystem.SortedParticles" type="UInt:32bit" mode="WRITE" required="false"/>
+  <Parameter.Array name="@SortedGeometries" type="UInt:32bit" mode="WRITE"/>
+  <!-- <Parameter.Array name="@InfiniteGeometries" type="UInt:32bit" mode="READ_WRITE"/> -->
+  <!-- <Parameter.Array name="@DisabledGeometries" type="UInt:32bit" mode="READ_WRITE"/> -->
+  <!-- <Parameter.Array name="@ZeroSizedGeometries" type="UInt:32bit" mode="READ_WRITE"/> -->
+</Kernel>

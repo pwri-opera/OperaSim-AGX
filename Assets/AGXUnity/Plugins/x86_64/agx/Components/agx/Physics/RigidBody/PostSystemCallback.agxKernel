@@ -1,0 +1,3 @@
+<Kernel name="PostSystemCallback" dispatch="serial">
+  <Parameter.Pointer name="@DynamicsSystem"             type="agx::DynamicsSystem"              include="agx/DynamicsSystem.h"/>
+</Kernel> 

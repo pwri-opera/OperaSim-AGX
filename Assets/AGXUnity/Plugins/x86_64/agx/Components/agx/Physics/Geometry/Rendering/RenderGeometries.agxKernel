@@ -1,0 +1,6 @@
+<Kernel name="RenderGeometries" dispatch="serial">
+	<Parameter.Array name="transformBuffer" type="AffineMatrix4x4" mode="READ" bind="@Geometry.transform"/>
+	<Parameter.Array name="shapeBuffer" type="Physics.Geometry.ShapePtr" mode="READ" bind="@Geometry.shape"/>
+	<Parameter.Scalar name="fillColor" type="Vec4" value="0.5, 0.5, 0.5, 1"/>
+	<Parameter.Scalar name="outlineColor" type="Vec4" value="0.5, 0.8, 0.95, 1"/>
+</Kernel>

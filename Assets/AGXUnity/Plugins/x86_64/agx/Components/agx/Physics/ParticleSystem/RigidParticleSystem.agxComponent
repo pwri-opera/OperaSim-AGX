@@ -1,0 +1,62 @@
+<Component name="RigidParticleSystem" source="ParticleSystem">
+  
+  <!-- Solve models -->
+  <SolveModel name="ParticlePairContact.Iterative" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+    <IterationKernel source="Physics.ParticleSystem.GaussSeidelIteration : ParticlePairContact"/>
+    <UpdateRhsKernel source="Physics.ParticleSystem.CalculateRHS : ParticlePairContact"/>
+  </SolveModel>
+
+  <SolveModel name="ParticleGeometryContact.Iterative" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+    <IterationKernel source="Physics.ParticleSystem.GaussSeidelIteration : ParticleGeometryContact"/>
+    <UpdateRhsKernel source="Physics.ParticleSystem.CalculateRHS : ParticleGeometryContact"/>
+  </SolveModel>
+  
+  
+  <!-- Update task -->
+  <Task name="Update">
+    <Task name="PreIntegratePositions" source="IntegratePositions" enable="false" depends="@Simulation.Update.UpdateEmitters" resolve="@Simulation.Update.PreSetup"/>
+    <Task source="ParticleSystem.RemoveDeadParticles" depends="@Simulation.Update.PreSetup" resolve="@Simulation.Update.TriggerPreCollideStepEvent"/>
+    
+    <Task source="GenerateParticlePairContacts" depends="@Simulation.Update.UpdateSpace"/>
+    <Task source="GenerateParticleGeometryContacts"/>
+    
+    <Task source="AssignContactMaterials : ParticlePairContact" depends="@Simulation.Update.UpdateSpace.CreateMissingContactMaterials"/>
+    <Task source="AssignContactMaterials : ParticleGeometryContact"/>
+    <Task source="CreateMissingContactMaterials : ParticlePairContact"/>
+    <Task source="CreateMissingContactMaterials : ParticleGeometryContact"/>
+
+  	<!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
+    <Task name="PreEventSync" resolve="@Simulation.Update.TriggerContactEventListeners"/>
+
+    <Task source="FilterContacts : ParticlePair" depends="@Simulation.Update.TriggerPreStepEvents"/>
+    <Task source="FilterContacts : ParticleGeometry" resolve="@Simulation.Update.UpdateSystem"/>
+    
+    <Task source="ApplyUniformGravity"/>
+    <Task source="IntegrateVelocities"/>
+
+    <Task source="GaussSeidelContactSolver.AllocateConstraintData" depends="@Simulation.Update.UpdateSystem.IntegrateVelocities" resolve="@Simulation.Update.UpdateSystem.BuildInteractionGraph"/>
+    <Task source="GaussSeidelContactSolver.InitializeConstraintData : ParticlePairContact"/>
+    <Task source="GaussSeidelContactSolver.InitializeConstraintData : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.BuildInternalIslandGroups"/>
+
+    <Task source="GaussSeidelContactSolver.CalculateJacobians : ParticlePairContact"/>
+    <Task source="GaussSeidelContactSolver.CalculateJacobians : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.CalculateIslandImpacts"/>
+
+
+    <Task source="GaussSeidelContactSolver.CalculateGMInv : ParticlePairContact"/>
+    <Task source="GaussSeidelContactSolver.CalculateGMInv : ParticleGeometryContact"/>
+
+
+    <Task source="TagContacts : ParticlePairContact"/>
+    <Task source="TagContacts : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.BuildInternalIslandGroups"/>
+
+    <!-- NOTE: Solver is defined using SolveModel -->
+
+    <Task source="IntegratePositions" depends="@Simulation.Solver"/>    
+    <Task source="ParticleSystem.AgeParticles" resolve="@Simulation.Update.TriggerPostStepEvents"/>
+    <Task source="ClearForces" resolve="@Simulation.Update.TriggerPostStepEvents"/>
+    <Task source="CalculateBound"/>
+    
+  </Task>
+  
+  
+</Component>

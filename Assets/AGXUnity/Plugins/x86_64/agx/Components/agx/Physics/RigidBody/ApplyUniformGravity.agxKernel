@@ -1,0 +1,13 @@
+<Kernel name="ApplyUniformGravity">
+   <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, mass, force" write="force"/>
+
+   <Parameter.Scalar name="gravity" type="Vec3"/>
+</Kernel>
+
+
+<Kernel name="ApplyUniformGravity" implementation="SSE">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, mass, force" write="force"/>
+
+   <Parameter.Scalar name="gravity" type="Vec3"/>
+</Kernel>
+

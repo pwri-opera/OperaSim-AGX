@@ -1,0 +1,4 @@
+<SolveKernel name="DirectSolve">
+  <Parameter.Pointer name="@Solver" type="agx::Solver"/>
+  <!-- <Parameter.Array name="@SolveIsland.directSolverData" type="agx::DirectSolverData*" mode="READ_WRITE"/> -->
+</SolveKernel>

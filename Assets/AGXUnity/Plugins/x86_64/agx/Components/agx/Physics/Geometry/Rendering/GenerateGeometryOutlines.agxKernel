@@ -1,0 +1,12 @@
+<Kernel name="GenerateGeometryOutlines"> 
+	<Parameter.Array name="transformBuffer" type="AffineMatrix4x4" mode="READ" bind="@Geometry.transform"/>
+	<Parameter.Array name="shapeBuffer" type="Physics.Geometry.ShapePtr" mode="READ" bind="@Geometry.shape"/>
+	<Parameter.Scalar name="color" type="Vec4" value="0.7, 0.7, 0.7, 0.5"/>
+	
+	<!-- <Parameter.Scalar name="cameraViewMatrix" type="Matrix4x4" bind="@camera.view"/> -->
+	<Parameter.Scalar name="cameraProjectionViewMatrix" type="Matrix4x4" bind="@camera.modelViewProjection"/>
+	
+	<Parameter.EntityData name="@Outline" type="Line" write="line" globalResult="TRUNCATE"/>
+
+	<PreJob name="loadModels"/>	
+</Kernel>

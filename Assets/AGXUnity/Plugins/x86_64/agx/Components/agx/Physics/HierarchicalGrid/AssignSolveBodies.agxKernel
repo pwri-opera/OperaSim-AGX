@@ -1,0 +1,14 @@
+<Kernel name="AssignSolveBodies">
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex, solveBodyIndex" write="solveBodyIndex"/>
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="parent, id"/>
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>
+
+<Kernel name="AssignSolveBodies" implementation="NoReordering">
+  <Parameter.EntityData name="@Particle" type="Particle" write="solveBodyIndex"/>
+</Kernel>
+
+
+<Kernel name="AssignSolveBodies" implementation="RandomShuffle" dispatch="serial">
+  <Parameter.EntityData name="@Particle" type="Particle" write="solveBodyIndex"/>
+</Kernel>

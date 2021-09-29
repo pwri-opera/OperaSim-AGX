@@ -1,0 +1,14 @@
+<Kernel name="DisconnectDeadCells" dispatch="serial">
+	<Parameter.Array name="@DeadCells" type="UInt:32bit" mode="READ"/>
+	<Parameter.Scalar name="@NumDisconnectedCells" type="UInt:32bit" mode="READ"/>
+	
+  <Parameter.EntityData name="@Cell" type="Cell" read="id, tier, parent, children, neighbors, numChildren" write="parent, children, neighbors, numChildren"/>
+  
+  <Parameter.Array name="@GridTier.cellTable" type="agx::GridCellTable *" mode="READ_WRITE" include="agx/Physics/HierarchicalGrid/Common.h"/>
+  <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ_WRITE"/>
+  
+  <Parameter.Pointer name="newCellsBuffer" bind="@NewCells" type="agxData::Buffer"/>
+  
+  <Parameter.Pointer name="@SolveBodyManager" type="agx::Physics::HierarchicalGrid::SolveBodyManager" include="agx/Physics/HierarchicalGrid/SolveBodyManager.h"/>
+</Kernel>
+

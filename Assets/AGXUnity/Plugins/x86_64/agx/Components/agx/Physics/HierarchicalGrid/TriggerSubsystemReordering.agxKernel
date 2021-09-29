@@ -1,0 +1,9 @@
+<Kernel name="TriggerSubsystemReordering" dispatch="serial">
+  <Parameter.Pointer name="@ReorderSubsystems" type="agx::Task"/>
+  
+  <Parameter.Scalar name="@clock.time" type="Real" mode="READ"/>
+  <Parameter.Scalar name="@clock.timeStep" type="Real" mode="READ"/>
+  <Parameter.Scalar name="@SubsystemReorderingFrequency" type="Real" mode="READ"/>
+  
+  <Parameter.Scalar name="lastReorderTime" type="Real" value="0" mode="READ_WRITE"/>
+</Kernel>

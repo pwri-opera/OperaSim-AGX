@@ -1,0 +1,10 @@
+<Kernel.Scalar name="SetVelocity">
+  <Parameter.EntityInstance name="particle" type="Particle" write="velocity"/>
+  <Parameter.Scalar name="velocity" type="Vec3" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="SetVelocity">
+  <Parameter.EntityPtr name="particle" type="Particle" write="velocity"/>
+  <Parameter.Scalar name="velocity" type="Vec3" mode="READ"/>
+</Kernel.Scalar>
+

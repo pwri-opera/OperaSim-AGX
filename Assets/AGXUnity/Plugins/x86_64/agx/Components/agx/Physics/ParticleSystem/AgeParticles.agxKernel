@@ -1,0 +1,15 @@
+<Kernel name="AgeParticles" dispatch="parallel">
+  
+  <description>
+  
+  Reduces the particle's life with the time step. The indices of particles
+  with a life less than or equals to zero is written to the DeadParticles
+  buffer.
+
+  </description>
+
+  <Parameter.Array name="@Particle.life" type="Real" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
+
+  <Parameter.Array name="@DeadParticles" type="UInt:32bit" globalResult="TRUNCATE"/>
+</Kernel>

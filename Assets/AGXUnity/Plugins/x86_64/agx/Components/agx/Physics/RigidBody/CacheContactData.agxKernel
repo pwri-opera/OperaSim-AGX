@@ -1,0 +1,10 @@
+<Kernel name="CacheContactData" dispatch="serial">
+
+  <Parameter.EntityData name="@BroadPhasePair"   type="BroadPhasePair"   read="instance" write="warmStartingData"/>
+  <Parameter.EntityData name="@GeometryContact"  type="GeometryContact"  read="instance, points" />
+  <Parameter.EntityData name="@ContactPoint"     type="ContactPoint"     read="instance, localForce, indexSet" />
+
+  <Parameter.EntityData name="@WarmStartingData" type="WarmStartingData" read="instance" write="localForce, indexSet" />
+
+</Kernel>
+  

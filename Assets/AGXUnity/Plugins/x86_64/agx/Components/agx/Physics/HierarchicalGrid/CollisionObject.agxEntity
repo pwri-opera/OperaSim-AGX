@@ -1,0 +1,21 @@
+<Entity name="CollisionObject">
+  <!-- The source object which the collision object represent -->
+  <Attribute.Scalar name="sourceIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="subsystem" type="UInt:16bit"/>
+
+  <!-- The index to the cell where the collision object resides. -->
+  <!-- <Attribute.Scalar name="cellIndex" type="UInt:32bit"/> -->
+
+  <!-- Alt 1: Bounding AABB -->
+  <!-- <Attribute.Scalar name="aabb" type="Bound3:32bit"/> -->
+
+  <!-- Alt 2: Bounding sphere (position + radius) -->
+  <Attribute.Scalar name="radius" type="Real"/>
+  <Attribute.Scalar name="position" type="Vec3"/> <!-- TODO SOA x,y,z in 3d to save bandwidth and prepare for SIMD? -->
+
+  <!-- Optional oriented bounding box (index) -->
+  <Attribute.Scalar name="obbIndex" type="UInt:32bit" value="InvalidIndex"/>
+
+  <!-- Optional collision group set (id) -->
+  <Attribute.Scalar name="collisionGroupSet" type="UInt:32bit" value="InvalidIndex"/>
+</Entity>

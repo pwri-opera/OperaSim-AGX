@@ -1,0 +1,58 @@
+<SolveKernel name="CalculateRHS" implementation="Contact" costPerElement="30">
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, jacobianIndex, rowIndex, numRows, contactPointRange"/>
+
+	<Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="violation, damping, holonomic" write="rhs, lambda, bound"/>
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="velocity, angularVelocity, linearAcceleration, angularAcceleration"/>
+
+	<Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"      mode="READ"/>
+
+	<Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
+	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+</SolveKernel>
+
+
+<SolveKernel name="CalculateRHS" implementation="BinaryConstraint" costPerElement="30">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="body1, body2, jacobianIndex, rowIndex, numRows"/>
+
+  <Parameter.Array  name="@BinaryConstraintJacobian"        type="Jacobian6DOFElement"  mode="READ"/>
+
+	<Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="violation, holonomic, velocity, damping" write="rhs, lambda, bound"/>
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="velocity, angularVelocity, linearAcceleration, angularAcceleration"/>
+
+  <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
+	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+</SolveKernel>
+
+
+<SolveKernel name="CalculateRHS" implementation="ManyBodyConstraint" costPerElement="30">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance, bodies, jacobianIndex, rowIndex, numRows"/>
+
+	<Parameter.Array name="@ManyBodyConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
+
+	<Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="violation, holonomic, velocity, damping" write="rhs, lambda, bound"/>
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="velocity, angularVelocity, linearAcceleration, angularAcceleration"/>
+
+  <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
+	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+</SolveKernel>
+
+
+<SolveKernel name="CalculateRHS" implementation="Direct">
+  <Parameter.Pointer name="@Solver" type="agx::Solver"/>
+
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="body1, body2, jacobianIndex, blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="violation, holonomic, velocity, damping, rhs" write="rhs"/>
+
+	<Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="bodies, jacobianIndex, blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="violation, holonomic, velocity, damping, rhs" write="rhs, bound"/>
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, jacobianIndex, blockRowIndex, rowIndex, numRows, contactPointRange"/>
+	<Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="violation, damping, rhs" write="rhs, bound"/>
+
+  <Parameter.EntityData name="@StrongInteraction" type="StrongInteraction" read="instance"/>
+
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="force, torque, velocity, angularVelocity, linearAcceleration, angularAcceleration, state, worldMassMatrix, worldInertia"/>
+
+  <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
+	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+</SolveKernel>

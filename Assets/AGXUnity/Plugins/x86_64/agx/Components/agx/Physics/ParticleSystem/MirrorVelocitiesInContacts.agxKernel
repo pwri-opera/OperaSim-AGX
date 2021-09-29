@@ -1,0 +1,19 @@
+<Kernel name="MirrorVelocitiesInContacts">
+  <Parameter.Array name="@ParticlePairContact.particle1" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ParticlePairContact.particle2" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ParticlePairContact.normal" type="Vec3:32bit" mode="READ"/>
+  <Parameter.Array name="@ParticlePairContact.depth" type="Real" mode="READ"/>
+  
+  <Parameter.Array name="@Particle.velocity" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Array name="@Particle.force" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+<Kernel name="MirrorVelocitiesInContacts" implementation="2D">
+  <Parameter.Array name="@ParticlePairContact.particle1" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ParticlePairContact.particle2" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ParticlePairContact.normal" type="Vec3:32bit" mode="READ"/>
+  <Parameter.Array name="@ParticlePairContact.depth" type="Real" mode="READ"/>
+  
+  <Parameter.Array name="@Particle.velocity" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Array name="@Particle.force" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
