@@ -7,8 +7,8 @@ using TwistMsg = RosSharp.RosBridgeClient.MessageTypes.Geometry.Twist;
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    /// RosBridgeClient‚ğ—˜—p‚µ‚Ä–ûˆ³ƒVƒ‡ƒxƒ‹‚ÌŠeƒAƒNƒ`ƒ…ƒG[ƒ^‚ÌROSƒgƒsƒbƒN‚Ésubscribe‚µAó‚¯‚½ƒƒbƒZ[ƒW‚Ìw—ß’l‚Å
-    /// Excavator‚ÌConstraint§Œä“ü—Í‚ğİ’è‚·‚éƒXƒNƒŠƒvƒgB
+    /// RosBridgeClientï¿½ğ—˜—pï¿½ï¿½ï¿½Ä–ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ÌŠeï¿½Aï¿½Nï¿½`ï¿½ï¿½ï¿½Gï¿½[ï¿½^ï¿½ï¿½ROSï¿½gï¿½sï¿½bï¿½Nï¿½ï¿½subscribeï¿½ï¿½ï¿½Aï¿½ó‚¯‚ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìwï¿½ß’lï¿½ï¿½
+    /// Excavatorï¿½ï¿½Constraintï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½İ’è‚·ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½B
     /// </summary>
     public class ExcavatorSubscriber : MonoBehaviour
     {
@@ -37,7 +37,8 @@ namespace PWRISimulator.ROS
         [Header("Topic Names")]
 
         [InspectorLabel("Tracks Twist")]
-        public string tracksTopicName = "/cmd_vel";
+        // public string tracksTopicName = "/cmd_vel";
+        public string tracksTopicName = "/zx120/tracks/cmd_vel";
 
         [InspectorLabel("Swing")]
         public string swingTopic = "/zx120/rotator/cmd";
@@ -78,10 +79,10 @@ namespace PWRISimulator.ROS
                 return;
             }
             
-            // ‚±‚ÌƒXƒNƒŠƒvƒg‚ªexcavator.UpdateConstraintControl‚ğÀs‚·‚é‚Ì‚ÅA©“®“I‚ÈŒÄ‚Ño‚µ‚Í•s—v
+            // ï¿½ï¿½ï¿½ÌƒXï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½excavator.UpdateConstraintControlï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ÈŒÄ‚Ñoï¿½ï¿½ï¿½Í•sï¿½v
             excavator.autoUpdateConstraints = false;
 
-            // Float64‚ğ•âŠÔ‚·‚éƒƒ\ƒbƒh
+            // Float64ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½éƒï¿½\ï¿½bï¿½h
             var float64PositionInterpolator = interpolatePositions ? MessageUtil.Interpolate :
                 (RealTimeDataBuffer<Float64Msg>.Interpolator)null;
 
@@ -111,7 +112,7 @@ namespace PWRISimulator.ROS
 
             if (excavator.leftSprocket != null && excavator.rightSprocket != null)
             {
-                // —š‘Ñ“¯m‚Ì‹——£AsprocketƒzƒC[ƒ‹”¼Œa(—š‘ÑŒú‚³‚ğŠÜ‚Ş)‚ğæ“¾
+                // ï¿½ï¿½ï¿½Ñ“ï¿½ï¿½mï¿½Ì‹ï¿½ï¿½ï¿½ï¿½Asprocketï¿½zï¿½Cï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½a(ï¿½ï¿½ï¿½ÑŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)ï¿½ï¿½ï¿½æ“¾
                 double separation, radius;
                 if (!excavator.GetTracksSeparationAndRadius(out separation, out radius))
                     Debug.LogWarning($"{name} failed to get tracks separation and radius from {excavator.name}.");

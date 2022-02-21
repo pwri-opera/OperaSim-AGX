@@ -32,7 +32,7 @@ namespace PWRISimulator
     {
         public override void OnInspectorGUI()
         {
-            // ConstructionMachineEditor‚ÌGUI‚ð•\Ž¦
+            // ConstructionMachineEditorï¿½ï¿½GUIï¿½ï¿½\ï¿½ï¿½
             base.OnInspectorGUI();
         }
     }

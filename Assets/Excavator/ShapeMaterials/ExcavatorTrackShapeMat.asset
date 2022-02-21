@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bd8393dfcda7614ba44f4d1ad3f0f29, type: 3}
   m_Name: ExcavatorTrackShapeMat
   m_EditorClassIdentifier: 
-  m_density: 1000
+  m_density: 5000
   m_youngsWireStretch: 1e+10
   m_youngsWireBend: 1e+9

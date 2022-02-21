@@ -7,8 +7,8 @@ using TwistMsg = RosSharp.RosBridgeClient.MessageTypes.Geometry.Twist;
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    /// RosBridgeClient‚ğ—˜—p‚µ‚ÄƒNƒ[ƒ‰ƒ_ƒ“ƒv‚ÌŠeƒAƒNƒ`ƒ…ƒG[ƒ^w—ß‚ÌROSƒgƒsƒbƒN‚Ésubscribe‚µAó‚¯‚½ƒƒbƒZ[ƒW‚Ìw—ß’l‚Å
-    /// DumpTruck‚ÌConstraint§Œä“ü—Í‚ğİ’è‚·‚éB
+    /// RosBridgeClientï¿½ğ—˜—pï¿½ï¿½ï¿½ÄƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½vï¿½ÌŠeï¿½Aï¿½Nï¿½`ï¿½ï¿½ï¿½Gï¿½[ï¿½^ï¿½wï¿½ß‚ï¿½ROSï¿½gï¿½sï¿½bï¿½Nï¿½ï¿½subscribeï¿½ï¿½ï¿½Aï¿½ó‚¯‚ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìwï¿½ß’lï¿½ï¿½
+    /// DumpTruckï¿½ï¿½Constraintï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½İ’è‚·ï¿½ï¿½B
     /// </summary>
     public class DumpTruckSubscriber : MonoBehaviour
     {
@@ -69,22 +69,22 @@ namespace PWRISimulator.ROS
                 return;
             }
 
-            // ‚±‚ÌƒXƒNƒŠƒvƒg‚ªdumpTruck.UpdateConstraintControl‚ğÀs‚·‚é‚Ì‚ÅA©“®“I‚ÈŒÄ‚Ño‚µ‚Í•s—v
+            // ï¿½ï¿½ï¿½ÌƒXï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½dumpTruck.UpdateConstraintControlï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ÈŒÄ‚Ñoï¿½ï¿½ï¿½Í•sï¿½v
             dumpTruck.autoUpdateConstraints = false;
 
-            // Float64‚ğ•âŠÔ‚·‚éƒƒ\ƒbƒh
+            // Float64ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½éƒï¿½\ï¿½bï¿½h
             var float64PositionInterpolator = interpolatePositions ? MessageUtil.Interpolate :
                 (RealTimeDataBuffer<Float64Msg>.Interpolator)null;
 
             if (dumpTruck.containerTilt != null)
             {
-                AddSubscriptionHandler<Float64Msg>(containerTopic, msg => dumpTruck.containerTilt.controlValue = msg.data,
+                AddSubscriptionHandler<Float64Msg>(containerTopic, msg => dumpTruck.containerTilt.controlValue = msg.data *-1,
                     float64PositionInterpolator);
             }
 
             if (dumpTruck.leftSprocket != null && dumpTruck.rightSprocket != null)
             {
-                // —š‘Ñ“¯m‚Ì‹——£AsprocketƒzƒC[ƒ‹”¼Œa(—š‘ÑŒú‚³‚ğŠÜ‚Ş)‚ğæ“¾
+                // ï¿½ï¿½ï¿½Ñ“ï¿½ï¿½mï¿½Ì‹ï¿½ï¿½ï¿½ï¿½Asprocketï¿½zï¿½Cï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½a(ï¿½ï¿½ï¿½ÑŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)ï¿½ï¿½ï¿½æ“¾
                 double separation, radius;
                 if (!dumpTruck.GetTracksSeparationAndRadius(out separation, out radius))
                     Debug.LogWarning($"{name} failed to get tracks separation and radius from {dumpTruck.name}.");

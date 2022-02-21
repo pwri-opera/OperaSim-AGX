@@ -2011,7 +2011,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4846129477664146540}
-  m_LocalRotation: {x: 0.7071067, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 2.3068, y: 0.0034, z: 1.5619}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2032,7 +2032,7 @@ Transform:
   - {fileID: 1271604601}
   m_Father: {fileID: 4846129479255368666}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.98, y: 0, z: 0}
 --- !u!114 &4846129477664146537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2047,19 +2047,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 0
-    m_defaultValue: 669.74396
+    m_defaultValue: 769.83997
     m_userValue: 3505
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 3761.0508, y: 7463.634, z: 5226.8315}
+    m_defaultValue: {x: 3717.4243, y: 7121.383, z: 4835.929}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 0
-    m_defaultValue: {x: -1419.0125, y: 6.1664333, z: 3.1420405}
+    m_defaultValue: {x: -1304.4976, y: 5.787134, z: 2.689592}
     m_userValue: {x: 0, y: 0, z: 0}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -1.7704104, y: 0.5165038, z: 0.002318263}
+    m_defaultValue: {x: -1.8802967, y: 0.5392602, z: 0.0020266625}
     m_userValue: {x: -0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -11016,7 +11016,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 0
-    m_defaultValue: {x: 0, y: 0, z: 0}
+    m_defaultValue: {x: -1.1067998e-15, y: -4.1971817e-16, z: 4.351773e-15}
     m_userValue: {x: 0, y: 0, z: 0}
   m_centerOfMassOffset:
     m_defaultToggle: 0
@@ -15368,15 +15368,15 @@ MonoBehaviour:
     m_userValue: 7010
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 5235.5757, y: 3034.0774, z: 6139.5957}
+    m_defaultValue: {x: 5241.38, y: 3149.3, z: 6249.015}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 0
-    m_defaultValue: {x: -1265.3121, y: -190.0608, z: -525.55035}
+    m_defaultValue: {x: -1366.2108, y: -184.73912, z: -525.5504}
     m_userValue: {x: 0, y: 0, z: 0}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -1.7013358, y: 0.15207194, z: 2.1059427}
+    m_defaultValue: {x: -1.7215247, y: 0.15207213, z: 2.1059427}
     m_userValue: {x: -0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}

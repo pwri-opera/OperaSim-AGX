@@ -23,7 +23,7 @@ namespace PWRISimulator.ROS
         protected override void Reset()
         {
             base.Reset();
-            // ƒfƒtƒHƒ‹ƒg‚Å‚±‚ÌComponent‚ÌGameObject‚ðŽg—p
+            // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Å‚ï¿½ï¿½ï¿½Componentï¿½ï¿½GameObjectï¿½ï¿½ï¿½gï¿½p
             sourceTransform = gameObject.transform;
         }
 
@@ -70,6 +70,9 @@ namespace PWRISimulator.ROS
             positionMsg.x = pos.x;
             positionMsg.y = pos.y;
             positionMsg.z = pos.z;
+            // positionMsg.x = sourceTransform.position.x;
+            // positionMsg.y = sourceTransform.position.y;
+            // positionMsg.z = sourceTransform.position.z;
         }
 
         void UpdateRotation(QuaterniontMsg rotationMsg)
@@ -84,6 +87,10 @@ namespace PWRISimulator.ROS
             rotationMsg.y = rotation.y;
             rotationMsg.z = rotation.z;
             rotationMsg.w = rotation.w;
+            // rotationMsg.x = sourceTransform.rotation.x;
+            // rotationMsg.y = sourceTransform.rotation.y;
+            // rotationMsg.z = sourceTransform.rotation.z;
+            // rotationMsg.w = sourceTransform.rotation.w;
         }
     }
 }

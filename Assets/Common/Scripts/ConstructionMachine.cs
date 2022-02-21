@@ -11,10 +11,10 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ŠÈ’P‚È‹¤’Ê‚ÌƒCƒ“ƒ^ƒtƒF[ƒX‚ÅŒš‹@‚Ì—lX‚ÈƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ÉƒAƒNƒZƒX‚Å‚«‚é‚æ‚¤‚É‚·‚éƒx[ƒXƒNƒ‰ƒXB
+    /// ï¿½È’Pï¿½È‹ï¿½ï¿½Ê‚ÌƒCï¿½ï¿½ï¿½^ï¿½tï¿½Fï¿½[ï¿½Xï¿½ÅŒï¿½ï¿½@ï¿½Ì—lï¿½Xï¿½ÈƒRï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½gï¿½ÉƒAï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½xï¿½[ï¿½Xï¿½Nï¿½ï¿½ï¿½Xï¿½B
     /// 
-    /// ÀÛ‚ÌŒš‹@ƒNƒ‰ƒX‚É(–ûˆ³ƒVƒ‡ƒxƒ‹Aƒ_ƒ“ƒvƒgƒ‰ƒbƒN‚È‚Ç)‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚³‚¹‚éB‘€ì‚³‚¹‚½‚¢Constraint‚²‚Æ‚ÉAqƒNƒ‰ƒX‚©‚ç
-    /// ConstraintControlƒpƒ‰ƒ[ƒ^‚ğƒ†[ƒU‚É’ñ‹Ÿ‚µAInitialize‚©‚çRegisterConstraintControl‚ğŒÄ‚Ño‚µ‚Ä“o˜^‚·‚éB
+    /// ï¿½ï¿½ï¿½Û‚ÌŒï¿½ï¿½@ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Aï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½È‚ï¿½)ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ì‚³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Constraintï¿½ï¿½ï¿½Æ‚ÉAï¿½qï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½
+    /// ConstraintControlï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Uï¿½É’ñ‹Ÿ‚ï¿½ï¿½AInitializeï¿½ï¿½ï¿½ï¿½RegisterConstraintControlï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½Ä“oï¿½^ï¿½ï¿½ï¿½ï¿½B
     /// </summary>
     [DefaultExecutionOrder(100)]
     public abstract class ConstructionMachine : ScriptComponent
@@ -22,14 +22,14 @@ namespace PWRISimulator
         #region Public
 
         /// <summary>
-        /// ©“®“I‚ÉConstraintControl‚²‚Æ‚ÌcontrolValue‚ğ‚»‚ê‚¼‚ê‚ÌAGXUnity‚ÌConstraint‚Éİ’è‚·‚éiAGXUnity‚ÌPreStepForward
-        /// ƒR[ƒ‹ƒoƒbƒN‚©‚çjBfalse‚Ìê‡‚ÍAcontrolValue‚ğ•ÏX‚·‚é‚Æƒ}ƒjƒ…ƒAƒ‹‚ÅUpdateConstraintControls‚ğŒÄ‚Ño‚·•K—vB
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ConstraintControlï¿½ï¿½ï¿½Æ‚ï¿½controlValueï¿½ï¿½ï¿½ï¿½ï¿½ê‚¼ï¿½ï¿½ï¿½AGXUnityï¿½ï¿½Constraintï¿½Éİ’è‚·ï¿½ï¿½iAGXUnityï¿½ï¿½PreStepForward
+        /// ï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½jï¿½Bfalseï¿½Ìê‡ï¿½ÍAcontrolValueï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½Æƒ}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½UpdateConstraintControlsï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½Kï¿½vï¿½B
         /// </summary>
         public bool autoUpdateConstraints = true;
 
         /// <summary>
-        /// ConstraintControl‚²‚Æ‚ÌcontrolValue‚ğ‚»‚ê‚¼‚ê‚ÌAGXUnity‚ÌConstraint‚Éİ’è‚·‚éBautoUpdateConstraints‚ªtrueê‡‚Í
-        /// ©“®“I‚ÉOnPreStepForward()‚©‚çŒÄ‚Ño‚³‚ê‚Ä‚¢‚éB
+        /// ConstraintControlï¿½ï¿½ï¿½Æ‚ï¿½controlValueï¿½ï¿½ï¿½ï¿½ï¿½ê‚¼ï¿½ï¿½ï¿½AGXUnityï¿½ï¿½Constraintï¿½Éİ’è‚·ï¿½ï¿½BautoUpdateConstraintsï¿½ï¿½trueï¿½ê‡ï¿½ï¿½
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½OnPreStepForward()ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B
         /// </summary>
         public void UpdateConstraintControls()
         {
@@ -38,9 +38,9 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ‚±‚ÌGameObject‚ÌŠK‘w‚É‚Q‚Â‚ÌTrack‚ğ’T‚µ‚Ä‚»‚ê‚¼‚ê‚ÌsprocketƒzƒC[ƒ‹‚ğæ“¾‚µAseparation‚Æ‚¢‚¤o—Í‚ğsprocketƒzƒC[ƒ‹
-        /// “¯m‚Ì‹——£‚Éİ’è‚µAradius‚Æ‚¢‚¤o—Í‚ğsprocket”¼Œa{TrackŒú‚³‚Éİ’è‚µATrue‚ğ•Ô‚·B¸”s‚Ìê‡‚ÍAseparationAradius
-        /// ‚ğƒ[ƒ‚Éİ’è‚µFalse‚ğ•Ô‚·B
+        /// ï¿½ï¿½ï¿½ï¿½GameObjectï¿½ÌŠKï¿½wï¿½É‚Qï¿½Â‚ï¿½Trackï¿½ï¿½Tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ê‚¼ï¿½ï¿½ï¿½sprocketï¿½zï¿½Cï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Aseparationï¿½Æ‚ï¿½ï¿½ï¿½ï¿½oï¿½Í‚ï¿½sprocketï¿½zï¿½Cï¿½[ï¿½ï¿½
+        /// ï¿½ï¿½ï¿½mï¿½Ì‹ï¿½ï¿½ï¿½ï¿½Éİ’è‚µï¿½Aradiusï¿½Æ‚ï¿½ï¿½ï¿½ï¿½oï¿½Í‚ï¿½sprocketï¿½ï¿½ï¿½aï¿½{Trackï¿½ï¿½ï¿½ï¿½ï¿½Éİ’è‚µï¿½ATrueï¿½ï¿½Ô‚ï¿½ï¿½Bï¿½ï¿½ï¿½sï¿½Ìê‡ï¿½ÍAseparationï¿½Aradius
+        /// ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Éİ’è‚µFalseï¿½ï¿½Ô‚ï¿½ï¿½B
         /// </summary>
         public bool GetTracksSeparationAndRadius(out double separation, out double radius)
         {
@@ -64,13 +64,13 @@ namespace PWRISimulator
         #region Private
 
         /// <summary>
-        /// “o˜^‚³‚ê‚½‚PConstraintControl‚Ìˆê——BConstraintControl‚ğ‰Šú‰»‚µ‚½‚èAAGXUnity‚ÌConstraint‚ÉcontrolValue‚ğ’ÊM
-        /// ‚µ‚½‚è‚·‚é‚½‚ß‚ÌƒŠƒXƒgBEditor‚Éİ’è‚³‚ê‚È‚­APlay‚¾‚¯‚Éİ’è‚³‚êAg‚í‚ê‚Ä‚¢‚éB
+        /// ï¿½oï¿½^ï¿½ï¿½ï¿½ê‚½ï¿½PConstraintControlï¿½Ìˆê——ï¿½BConstraintControlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AAGXUnityï¿½ï¿½Constraintï¿½ï¿½controlValueï¿½ï¿½ÊM
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½è‚·ï¿½é‚½ï¿½ß‚Ìƒï¿½ï¿½Xï¿½gï¿½BEditorï¿½ï¿½ï¿½Éİ’è‚³ï¿½ï¿½È‚ï¿½ï¿½APlayï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’è‚³ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B
         /// </summary>
         List<ConstraintControl> contraintControls = new List<ConstraintControl>();
         
         /// <summary>
-        /// Unity‚ÌStart‚Ì‘ã‚í‚è‚ÉAAGXUnity—p‚Ì‰Šú‰»ƒƒ\ƒbƒhB
+        /// Unityï¿½ï¿½Startï¿½Ì‘ï¿½ï¿½ï¿½ÉAAGXUnityï¿½pï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½B
         /// </summary>
         /// <returns></returns>
         protected override bool Initialize()
@@ -92,7 +92,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ConstraintControl‚ğ“o˜^‚·‚éBqƒNƒ‰ƒX‚ª‘€ì‚µ‚½‚¢Constraint‚²‚Æ‚É‚±‚Ìƒƒ\ƒbƒh‚ğInitialize()‚©‚çŒÄ‚Ño‚·•K—vB
+        /// ConstraintControlï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½Bï¿½qï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ì‚µï¿½ï¿½ï¿½ï¿½Constraintï¿½ï¿½ï¿½Æ‚É‚ï¿½ï¿½Ìƒï¿½ï¿½\ï¿½bï¿½hï¿½ï¿½Initialize()ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½Kï¿½vï¿½B
         /// </summary>
         protected void RegisterConstraintControl(ConstraintControl constraintControl)
         {
@@ -101,8 +101,8 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// AGXUnity‚ÌPreStepForwardƒGƒxƒ“ƒgBqƒNƒ‰ƒX‚©‚çƒI[ƒoƒ‰ƒCƒh‚·‚éê‡‚ÍA•K‚¸‚±‚ÌƒyƒAƒŒƒ“ƒgƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh‚ğ
-        /// ŒÄ‚Ño‚µ‚Ä‚­‚¾‚³‚¢B
+        /// AGXUnityï¿½ï¿½PreStepForwardï¿½Gï¿½xï¿½ï¿½ï¿½gï¿½Bï¿½qï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½ï¿½ï¿½Cï¿½hï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½Ìƒyï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Nï¿½ï¿½ï¿½Xï¿½Ìƒï¿½ï¿½\ï¿½bï¿½hï¿½ï¿½
+        /// ï¿½Ä‚Ñoï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
         /// </summary>
         protected virtual void OnPreStepForward()
         {
@@ -121,7 +121,7 @@ namespace PWRISimulator
         {
             var machine = (ConstructionMachine)target;
 
-            // ƒfƒtƒHƒ‹ƒgGUI‚ğ•\¦
+            // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gGUIï¿½ï¿½\ï¿½ï¿½
             base.OnInspectorGUI();
 
             if (showDumpContainers)
@@ -203,7 +203,7 @@ namespace PWRISimulator
                         bool enabledToggled = EditorGUILayout.Toggle("Enabled", enabled);
                         if (enabledToggled != enabled)
                         {
-                            // gameObject‚ÌactiveƒvƒƒpƒeƒBŒo—R‚Å—LŒø‰»‚ğŠÇ—‚·‚éiqƒrƒWƒ…ƒAƒ‹‚È‚Ç‚à‰e‹¿‚³‚ê‚é‚æ‚¤‚Éj
+                            // gameObjectï¿½ï¿½activeï¿½vï¿½ï¿½ï¿½pï¿½eï¿½Bï¿½oï¿½Rï¿½Å—Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç—ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½qï¿½rï¿½Wï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½È‚Ç‚ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½Éj
                             noMergeZones[i].enabled = true;
                             noMergeZones[i].gameObject.SetActive(enabledToggled);
                         }

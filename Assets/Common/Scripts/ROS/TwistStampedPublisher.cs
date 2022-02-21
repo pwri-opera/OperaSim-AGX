@@ -25,7 +25,7 @@ namespace PWRISimulator.ROS
         protected override void Reset()
         {
             base.Reset();
-            // ƒfƒtƒHƒ‹ƒg‚Å‚±‚ÌComponent‚ÌGameObject‚ðŽg—p
+            // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Å‚ï¿½ï¿½ï¿½Componentï¿½ï¿½GameObjectï¿½ï¿½ï¿½gï¿½p
             sourceTransform = gameObject.transform;
         }
 

@@ -6,6 +6,7 @@ using RosSharp.RosBridgeClient;
 using Float64Msg = RosSharp.RosBridgeClient.MessageTypes.Std.Float64;
 using WrenchStampedMsg = RosSharp.RosBridgeClient.MessageTypes.Geometry.WrenchStamped;
 using Vector3Msg = RosSharp.RosBridgeClient.MessageTypes.Geometry.Vector3;
+using JointStateMsg = RosSharp.RosBridgeClient.MessageTypes.Sensor.JointState;
 
 namespace PWRISimulator.ROS
 {
@@ -88,6 +89,12 @@ namespace PWRISimulator.ROS
         [InspectorLabel("Contact Force")]
         public string shovelContactForceTopic = "/zx120/excavation/contact_force";
 
+        [Header("Joint State Topic")]
+        [InspectorLabel("Joint State")]
+        public string containerJsTopic = "/zx120/joint_states";
+        public string FrameId = "";
+
+
         protected override void OnAdvertise()
         {
             if (rosConnector?.RosSocket == null)
@@ -163,6 +170,15 @@ namespace PWRISimulator.ROS
 
                 AddPublicationHandler<WrenchStampedMsg>(shovelContactForceTopic, () => MessageUtil.ToWrenchStampedMsg(
                     excavationData.contactForce, Vector3.zero, Time.timeAsDouble, MessageUtil.DefaultFrameId));
+            }
+            if (excavator.swing != null && excavator.boomTilt != null && excavator.armTilt != null && excavator.bucketTilt != null){
+                AddPublicationHandler<JointStateMsg>(containerJsTopic, () => new JointStateMsg(
+                    MessageUtil.ToHeaderMessage(Time.fixedTimeAsDouble,FrameId),
+                    new string[4]{"rotator_joint","boom_joint","arm_joint","backet_joint"},
+                    new double[4]{excavator.swing.currentPosition,excavator.boomTilt.currentPosition,excavator.armTilt.currentPosition,excavator.bucketTilt.currentPosition},
+                    new double[4]{0,0,0,0},
+                    new double[4]{0,0,0,0}
+                    ));
             }
         }
     }
