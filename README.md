@@ -21,13 +21,6 @@
 ### ROS側(初期設定)
 - rosbridge_websocketの起動
    - `roslaunch rosbridge_server rosbridge_websocket.launch`
-- ショベルの初期姿勢の設定
-   - ROSメッセージを介して，Unityモデルの関節角度の入力を行う
-   - cmdメッセージを送信し、モデルの初期姿勢を定義する。以下に実行例を示す
-      - 以下を実行することで，初期姿勢が定義される  
-         - `rostopic pub /zx120/boom/cmd std_msgs/Float64 "data: -0.8"` 
-         - `rostopic pub /zx120/bucket/cmd std_msgs/Float64 "data: 1.0"`
-         - `rostopic pub /zx120/arm/cmd std_msgs/Float64 "data: 2"`
 ### Unity側
 - Unity Hubより，本プロジェクトファイル(ConstSim)を追加
 <p align="left">
