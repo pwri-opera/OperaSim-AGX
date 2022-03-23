@@ -7580,7 +7580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nativeName: RR
-  m_enable: 0
+  m_enable: 1
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 461775392}
@@ -7590,8 +7590,8 @@ MonoBehaviour:
       Min: 0
       Max: Infinity
   m_range:
-    Min: -Infinity
-    Max: Infinity
+    Min: 0.5235
+    Max: 2.6529
 --- !u!114 &461775393
 MonoBehaviour:
   m_ObjectHideFlags: 2
