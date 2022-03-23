@@ -17,10 +17,30 @@
          - `rostopic pub /zx120/arm/cmd std_msgs/Float64 "data: 2"`
 ### Unity側
 - Unity Hubより，本プロジェクトファイル(ConstSim)を追加
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/82022162/159667401-9f5f0393-3e23-4178-98b4-90408fa83305.jpg" " width="600px">
+</p>
+                                                                                                                                  
 - 追加されたプロジェクトのタイトルを押し，Unity Editorで開く
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/82022162/159667974-c66c51f0-c067-4c7b-a434-2eecf9e2051d.jpg" " width="600px">
+</p>             
+
 - 建設機械のモデルが表示されていない場合には，プロジェクトウィンドウからAssets/Scenes/MainScene.unityをダブルクリックしてロードする
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/82022162/159667970-b24fbc10-f4e8-4acf-8290-d6a541fd2efc.jpg" " width="600px">
+</p>     
+                                                                                                                                  
 - Assets/AGXUnity/Plugins/x86_64のフォルダへAGX Dynamicsのライセンスファイルをコピー&ペースト
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/82022162/159667980-0426a5a0-f920-4a50-99b3-0b70ddc442c2.jpg" " width="600px">
+</p>            
+
 - HierarchyウィンドウからRosConnectorというGameObjectを選択し，Ros Bridge Sercer Urlを入力する
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/82022162/159667977-d040451e-1cfd-4d5c-bb8e-5d0c6107ba8b.jpg" " width="600px">
+</p>
+                                                                                                                                  
 - Playボタンを押してシミュレーションを実行
 ### ROS側(制御プログラムの実行)
 - Moveitに基づく油圧ショベルを行うためには以下を実行
