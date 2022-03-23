@@ -4,6 +4,19 @@
 - AGX：2.29.4.4(x64, VS2015)
 - Ubuntu：18.04
 - ROS：Melodic
+## 制御用ROSメッセージ
+- 本シミュレータでは，以下のROSメッセージを受け取ることで建設機械モデルの各軸が制御される
+
+| 対象軸 | ROSメッセージ型 | 指令  | Topic名 |
+| ----  |  ---- | ---- | ---- |
+|  クローラダンプの履帯速度  |  Twist  | 速度 | /ic120/tracks/cmd_vel |
+|  荷台の角度  |  Float64  | 角度 | /ic120/vessel/cmd |
+|  アームの角度  |  Float64  | 角度 | /zx120/arm/cmd |
+|  ブームの角度  |  Float64  | 角度 | /zx120/boom/cmd |
+|  バケットの角度  |  Float64  | 角度 | /zx120/bucket/cmd |
+| 車体旋回の角度 | Float64 | 角度 | /zx120/swing/cmd |
+| 油圧ショベルの履帯の速度 | Twist | 速度 | /zx120/tracks/cmd_vel |
+
 ## 実行方法
 ### ROS側(初期設定)
 - rosbridge_websocketの起動
