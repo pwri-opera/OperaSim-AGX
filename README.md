@@ -1,4 +1,9 @@
 # ConstSim
+## 概要
+- 本シミュレータは油圧ショベル，クローラダンプを対象としたシミュレータである
+- [Unity](https://unity.com/)をベースとしたシミュレータであり，物理エンジンには[AGX Dynamics](https://www.vmc-motion.com/%E5%95%86%E5%93%81%E3%83%BB%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9/agx-dynamics/)が用いられる
+- 本シミュレータを用いるためには，AGX Dynamicsのライセンスを購入する必要がある．
+- ROSメッセージのやり取りには[ROS Bridge Server](http://wiki.ros.org/rosbridge_server)が用いられ，メッセージを介して建設機械モデルの制御が行われる．
 ## ソフトウェア要件
 - Unity：2020.3.11f1
 - AGX：2.29.4.4(x64, VS2015)
