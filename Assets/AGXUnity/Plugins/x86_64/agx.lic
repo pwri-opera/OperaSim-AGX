@@ -1,0 +1,15 @@
+Key {
+  User         "PWRI / VMC"
+  Contact      "ogi@vmc.jp"
+  EndDate      "2022-05-31"
+  HwKey        "E72920CDD500F22F7484317049C7122C"
+  Modules      "AgX,AgX-Granular,AgX-Particles,AgX-Terrain,AgX-Tracks"
+  Version      "2"
+  Info         "AGX Dynamics Toolkit"
+  Url          ""
+  Id1          ""
+  Id2          "EndOfUpdate \"2022-05-31\""
+  Serial       ""
+
+  License      "MFQCKCmP3IwgadobHYxZ0CyzSJNLB+4VuJqiqpB0L/g3DnrZoklfIT4sHdMCKCrlLDlRMaLmBgactFq1Y1wbd0WH3kN00lQ2d0Y+uPBRwpJVjTyVdKc="
+}
