@@ -37,16 +37,4 @@ MonoBehaviour:
     m_vector3: {x: 0, y: 0, z: 0}
     m_vector4: {x: 0, y: 0, z: 0, w: 0}
     m_color: {r: 0, g: 0, b: 0, a: 0}
-  - m_key: 4186251870
-    m_instanceId: 18552
-    m_isStatic: 0
-    m_bool: 0
-    m_int: 0
-    m_float: 0
-    m_string: 
-    m_asset: {fileID: 0}
-    m_vector2: {x: 0, y: 0}
-    m_vector3: {x: 0, y: 0, z: 0}
-    m_vector4: {x: 0, y: 0, z: 0, w: 0}
-    m_color: {r: 0, g: 0, b: 0, a: 0}
-  m_lastGC: 32.8634494
+  m_lastGC: 21.0765507
