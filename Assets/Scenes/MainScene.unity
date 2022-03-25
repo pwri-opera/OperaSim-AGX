@@ -4639,7 +4639,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0.83000004, z: -0.6499996}
+    m_defaultValue: {x: -0, y: 0.83, z: -0.6499996}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -20932,15 +20932,15 @@ MonoBehaviour:
     m_userValue: 464
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 106.457405, y: 78.133194, z: 76.45403}
+    m_defaultValue: {x: 106.45745, y: 78.133194, z: 76.45407}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0.005627896, y: -1.5601346, z: -0.0019624317}
+    m_defaultValue: {x: -0.0056252126, y: -1.5601346, z: -0.0019614934}
     m_userValue: {x: 0, y: 0, z: 0}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: 0.43316916, y: 0.014199658, z: 0.462669}
+    m_defaultValue: {x: 0.43316916, y: 0.014199563, z: 0.462669}
     m_userValue: {x: 0.3406007, y: 0, z: 0.61}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -24615,7 +24615,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: 0, z: 0, w: -0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 549924637}
-    m_localPosition: {x: 0, y: -0.019001963, z: 0.0000000018626451}
+    m_localPosition: {x: 0, y: -0.019001486, z: 0.0000000018626451}
     m_localRotation: {x: 0.7071068, y: 0, z: -0.7071068, w: 0}
   m_synchronized: 1
 --- !u!114 &1667833053
