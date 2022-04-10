@@ -196,9 +196,11 @@ MonoBehaviour:
   rightSprocketPosTopic: /ic120/sprocket_right/actual_pos
   rightSprocketSpeedTopic: /ic120/sprocket_right/actual_speed
   rightSprocketForceTopic: /ic120/sprocket_right/actual_force
-  containerPosTopic: /ic120/vessel/actual_pos
-  containerSpeedTopic: /ic120/vessel/actual_speed
-  containerForceTopic: /ic120/vessel/actual_force
+  vesselPosTopic: /ic120/vessel/actual_pos
+  vesselSpeedTopic: /ic120/vessel/actual_speed
+  vesselForceTopic: /ic120/vessel/actual_force
+  vesselJsTopic: /ic120/joint_states
+  FrameId: 
 --- !u!114 &2172130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,49 +235,6 @@ MonoBehaviour:
   dumpSoilSource: {fileID: 269654399}
   massTopic: /ic120/vessel/soil_mass
   volumeTopic: /ic120/vessel/soil_volume
---- !u!1 &101122960
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 101122962}
-  - component: {fileID: 101122961}
-  m_Layer: 0
-  m_Name: AGXUnity.RuntimeObjects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &101122961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101122960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6a9e4af77e3804aae97d5030ab5f9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &101122962
-Transform:
-  m_ObjectHideFlags: 8
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101122960}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 23
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &126760987
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,6 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40732282a9b72f4e80d0c43c0a0576a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deformableTerrain: {fileID: 0}
 --- !u!1 &576265256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,7 +1672,7 @@ MonoBehaviour:
   maxBufferSize: 200
   interpolatePositions: 1
   tracksTopicName: /ic120/tracks/cmd_vel
-  containerTopic: /ic120/vessel/cmd
+  vesselTopic: /ic120/vessel/cmd
 --- !u!21 &1765616120
 Material:
   serializedVersion: 6
