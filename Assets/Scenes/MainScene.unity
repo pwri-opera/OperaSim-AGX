@@ -559,7 +559,7 @@ MonoBehaviour:
   m_collisionsEnabled: 1
   m_isSensor: 0
   m_material: {fileID: 11400000, guid: 05f55a651eddb474d8b2628b922b7234, type: 2}
-  m_halfExtents: {x: 0.14, y: 0.44, z: 0.04}
+  m_halfExtents: {x: 0.14, y: 0.35, z: 0.04}
 --- !u!1 &44532673
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,7 +905,7 @@ MonoBehaviour:
   m_collisionsEnabled: 1
   m_isSensor: 0
   m_material: {fileID: 11400000, guid: 05f55a651eddb474d8b2628b922b7234, type: 2}
-  m_halfExtents: {x: 0.32, y: 0.44, z: 0.04}
+  m_halfExtents: {x: 0.32, y: 0.35, z: 0.04}
 --- !u!1 &55859874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1102,7 @@ MonoBehaviour:
   m_collisionsEnabled: 1
   m_isSensor: 0
   m_material: {fileID: 11400000, guid: 05f55a651eddb474d8b2628b922b7234, type: 2}
-  m_halfExtents: {x: 0.145, y: 0.44, z: 0.04}
+  m_halfExtents: {x: 0.145, y: 0.35, z: 0.04}
 --- !u!1 &74644254
 GameObject:
   m_ObjectHideFlags: 0
@@ -12802,7 +12802,7 @@ MonoBehaviour:
   m_collisionsEnabled: 1
   m_isSensor: 0
   m_material: {fileID: 11400000, guid: 05f55a651eddb474d8b2628b922b7234, type: 2}
-  m_halfExtents: {x: 0.42, y: 0.44, z: 0.03}
+  m_halfExtents: {x: 0.42, y: 0.35, z: 0.03}
 --- !u!1 &822640174
 GameObject:
   m_ObjectHideFlags: 0
@@ -18519,7 +18519,7 @@ MonoBehaviour:
   m_collisionsEnabled: 1
   m_isSensor: 0
   m_material: {fileID: 11400000, guid: 05f55a651eddb474d8b2628b922b7234, type: 2}
-  m_halfExtents: {x: 0.14, y: 0.44, z: 0.03}
+  m_halfExtents: {x: 0.14, y: 0.35, z: 0.03}
 --- !u!1 &1182737614
 GameObject:
   m_ObjectHideFlags: 0
