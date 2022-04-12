@@ -318,6 +318,8 @@ namespace AGXUnity.Model
                                        0.0f );
 
       Native.setTransform( Utils.TerrainUtils.CalculateNativeOffset( transform, TerrainData ) );
+      
+      // agxTerrain::Terrain* agxTerrain::Terrain::createFromHeightField( agxCollide::HeightField* heightField, maximumDepth );
 
       foreach ( var shovel in Shovels )
         Native.add( shovel.GetInitialized<DeformableTerrainShovel>()?.Native );
