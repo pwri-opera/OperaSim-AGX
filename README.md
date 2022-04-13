@@ -14,13 +14,13 @@
 
 | 対象軸 | ROSメッセージ型 | 指令  | Topic名 |
 | ----  |  ---- | ---- | ---- |
-|  クローラダンプの履帯速度  |  Twist  | 速度 | /ic120/tracks/cmd_vel |
-|  荷台の角度  |  Float64  | 角度 | /ic120/vessel/cmd |
-|  アームの角度  |  Float64  | 角度 | /zx120/arm/cmd |
-|  ブームの角度  |  Float64  | 角度 | /zx120/boom/cmd |
-|  バケットの角度  |  Float64  | 角度 | /zx120/bucket/cmd |
-| 車体旋回の角度 | Float64 | 角度 | /zx120/swing/cmd |
-| 油圧ショベルの履帯の速度 | Twist | 速度 | /zx120/tracks/cmd_vel |
+|  クローラダンプの履帯並進速度  |  geometry_msgs/Twist [m/s]  | 速度 | /ic120/tracks/cmd_vel |
+|  荷台の角度  |  std_msgs/Float64  | 角度 [rad] | /ic120/vessel/cmd |
+|  アームの角度  |  std_msgs/Float64  | 角度 [rad] | /zx120/arm/cmd |
+|  ブームの角度  |  std_msgs/Float64  | 角度 [rad] | /zx120/boom/cmd |
+|  バケットの角度  |  std_msgs/Float64  | 角度 [rad] | /zx120/bucket/cmd |
+| 車体旋回の角度 | std_msgs/Float64 | 角度 [rad] | /zx120/swing/cmd |
+| 油圧ショベルの履帯の並進速度 | geometry_msgs/Twist | 速度 [m/s] | /zx120/tracks/cmd_vel |
 
 ## 実行方法
 ### ROS側(初期設定)
