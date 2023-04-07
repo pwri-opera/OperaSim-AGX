@@ -1,4 +1,4 @@
-# ConstSim
+# OperaSim-AGX
 Simulator on Unity + AGX Dynamics communicating with ROS
 
 ## 概要
@@ -29,7 +29,7 @@ Simulator on Unity + AGX Dynamics communicating with ROS
 - rosbridge_websocketの起動
    - `roslaunch rosbridge_server rosbridge_websocket.launch`
 ### Unity側
-- Unity Hubより，本プロジェクトファイル(ConstSim)を追加
+- Unity Hubより，本プロジェクトファイル(OperaSim-AGX)を追加
 <p align="left">
   <img src="https://user-images.githubusercontent.com/82022162/159667401-9f5f0393-3e23-4178-98b4-90408fa83305.jpg" " width="600px">
 </p>
