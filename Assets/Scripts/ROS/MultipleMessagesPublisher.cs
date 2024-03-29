@@ -7,9 +7,9 @@ using Float64Msg = RosSharp.RosBridgeClient.MessageTypes.Std.Float64;
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    /// •¡”‚ÌROSƒgƒsƒbƒN‚ğpublish‚·‚éƒRƒ“ƒ|ƒlƒ“ƒgƒx[ƒXƒNƒ‰ƒXB‹ï‘Ì“I‚ÈqƒNƒ‰ƒX‚ª‚±‚Ìƒx[ƒXƒNƒ‰ƒX‚ğŒp³‚µ‚ÄOnAdvertiseƒƒ\ƒbƒh
-    /// ‚©‚çŠeƒgƒsƒbƒN‚²‚Æ‚ÉAddPublicationHandler()‚ğŒÄ‚Ño‚·‚æ‚¤‚É‚µ‚Ä‚­‚¾‚³‚¢B‚±‚Ìƒx[ƒXƒNƒ‰ƒX‚Í©“®“I‚É’Ç‰Á‚µ‚½
-    /// PublicationHandler‚ğFrequency‚É‚æ‚éüŠú“I‚ÉPublish‚µ‚Ä‚¢‚éB
+    /// è¤‡æ•°ã®ROSãƒˆãƒ”ãƒƒã‚¯ã‚’publishã™ã‚‹ã‚³ãƒ³ãƒãƒãƒ³ãƒˆãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚å…·ä½“çš„ãªå­ã‚¯ãƒ©ã‚¹ãŒã“ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ã¦OnAdvertiseãƒ¡ã‚½ãƒƒãƒ‰
+    /// ã‹ã‚‰å„ãƒˆãƒ”ãƒƒã‚¯ã”ã¨ã«AddPublicationHandler()ã‚’å‘¼ã³å‡ºã™ã‚ˆã†ã«ã—ã¦ãã ã•ã„ã€‚ã“ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã¯è‡ªå‹•çš„ã«è¿½åŠ ã—ãŸ
+    /// PublicationHandlerã‚’Frequencyã«ã‚ˆã‚‹å‘¨æœŸçš„ã«Publishã—ã¦ã„ã‚‹ã€‚
     /// </summary>
     public abstract class MultipleMessagesPublisher : MonoBehaviour
     {
@@ -22,13 +22,13 @@ namespace PWRISimulator.ROS
         bool isQuitting = false;
 
         /// <summary>
-        /// qƒNƒ‰ƒX‚©‚çƒI[ƒoƒ‰ƒCƒh‚·‚éƒƒ\ƒbƒhBƒCƒ“ƒvƒŠƒP[ƒVƒ‡ƒ““à‚É‚ÍAŠeƒgƒsƒbƒN‚ÉAddPublicationHandler()‚ğŒÄ‚Ño‚·‚Í‚¸‚¾B
+        /// å­ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã‚ªãƒ¼ãƒãƒ©ã‚¤ãƒ‰ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ã‚¤ãƒ³ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å†…ã«ã¯ã€å„ãƒˆãƒ”ãƒƒã‚¯ã«AddPublicationHandler()ã‚’å‘¼ã³å‡ºã™ã¯ãšã ã€‚
         /// </summary>
         protected abstract void OnAdvertise();
 
         protected virtual void Reset()
         {
-            // rosConnector‚ÌƒfƒtƒHƒ‹ƒg’l‚É‚ÍƒV[ƒ“‚É‚ ‚éRosConnector‚ğ’T‚µ‚Äİ’è‚·‚é
+            // rosConnectorã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã«ã¯ã‚·ãƒ¼ãƒ³ã«ã‚ã‚‹RosConnectorã‚’æ¢ã—ã¦è¨­å®šã™ã‚‹
             rosConnector = FindObjectOfType<RosConnector>(includeInactive: false);
         }
 
@@ -41,8 +41,8 @@ namespace PWRISimulator.ROS
 
         protected virtual void OnEnable()
         {
-            // ŠJn‚ÉOnEnable‚ÍStart‚æ‚è‘‚­ŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚ªA‚»‚Ì‚Æ‚«‚ÍRosConnector‚Í‚Ü‚¾‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅA
-            // Start()‚Ü‚ÅAdvertise‚ğ‘Ò‚½‚¹‚éB
+            // é–‹å§‹ã«OnEnableã¯Startã‚ˆã‚Šæ—©ãå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ãŒã€ãã®ã¨ãã¯RosConnectorã¯ã¾ã åˆæœŸåŒ–ã•ã‚Œã¦ã„ãªã„ã®ã§ã€
+            // Start()ã¾ã§Advertiseã‚’å¾…ãŸã›ã‚‹ã€‚
             if (hasStarted)
             {
                 StartCoroutine(UpdateAndPublishMessagesCoroutine());

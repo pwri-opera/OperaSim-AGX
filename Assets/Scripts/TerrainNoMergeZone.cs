@@ -11,11 +11,11 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// AGXUnity.Shape‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ‚ÂGameObject‚É’Ç‰Á‚·‚é‚ÆA‚»‚ÌŒ`ó‚Ì’†‚É“ü‚Á‚Ä‚¢‚é—±q‚ªTerrain‚Æƒ}[ƒW‚Å‚«‚È‚¢‚æ‚¤‚É
-    /// ‚È‚éBQlFAgxTerrain.Terrain.addNoMergeZoneToGeometry
+    /// AGXUnity.Shapeã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æŒã¤GameObjectã«è¿½åŠ ã™ã‚‹ã¨ã€ãã®å½¢çŠ¶ã®ä¸­ã«å…¥ã£ã¦ã„ã‚‹ç²’å­ãŒTerrainã¨ãƒãƒ¼ã‚¸ã§ããªã„ã‚ˆã†ã«
+    /// ãªã‚‹ã€‚å‚è€ƒï¼šAgxTerrain.Terrain.addNoMergeZoneToGeometry
     /// </summary>
-    /// <remarks>Œ»“_‚Å‚ÍAÀÛ“I‚Éw¦‚µ‚½Œ`ó‚¾‚¯‚¶‚á‚È‚­A‚»‚ÌŒ`ó‚ªL‚°‚éAxis Aligned Bounding Box‚Ì—eÏ‚ªg—p‚³‚ê‚éB
-    /// ‚Â‚Ü‚èAÀÛ‚ÌŒ`ó‚æ‚è‘å‚«‚¢—eÏ‚Ì‰Â”\«B</remarks>
+    /// <remarks>ç¾æ™‚ç‚¹ã§ã¯ã€å®Ÿéš›çš„ã«æŒ‡ç¤ºã—ãŸå½¢çŠ¶ã ã‘ã˜ã‚ƒãªãã€ãã®å½¢çŠ¶ãŒåºƒã’ã‚‹Axis Aligned Bounding Boxã®å®¹ç©ãŒä½¿ç”¨ã•ã‚Œã‚‹ã€‚
+    /// ã¤ã¾ã‚Šã€å®Ÿéš›ã®å½¢çŠ¶ã‚ˆã‚Šå¤§ãã„å®¹ç©ã®å¯èƒ½æ€§ã€‚</remarks>
     public class TerrainNoMergeZone : ScriptComponent
     {
         [Tooltip("The distance by which to extend the no-merge volume from the original shape volume.")]
@@ -93,7 +93,7 @@ namespace PWRISimulator
                 success = terrain.Native.addNoMergeZoneToGeometry(shape.NativeGeometry, extensionDistance);
 
             if (!success)
-                Debug.LogWarning($"{name} : Failed to " + (remove ? "remove" : "add") + $" shape \"{shape.name}\" " +
+                Debug.LogWarning($"{name} : Failed to " + (remove ? "remove" : "add") + $" shape Â¥"{shape.name}Â¥" " +
                                   "to no merge terrain zone.");
             return success;
         }

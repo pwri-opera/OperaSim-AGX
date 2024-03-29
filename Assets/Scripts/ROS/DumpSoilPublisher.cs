@@ -13,7 +13,7 @@ namespace PWRISimulator.ROS
         protected override void Reset()
         {
             base.Reset();
-            // dumpSoilSource‚ÌƒfƒtƒHƒ‹ƒg’l‚É‚ÍƒV[ƒ“‚É‚ ‚éDumpSoil‚ğ’T‚µ‚Äİ’è‚·‚é
+            // dumpSoilSourceã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã«ã¯ã‚·ãƒ¼ãƒ³ã«ã‚ã‚‹DumpSoilã‚’æ¢ã—ã¦è¨­å®šã™ã‚‹
             dumpSoilSource = FindObjectOfType<DumpSoil>(false);
         }
 

@@ -11,7 +11,7 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ŠÈ’P‚È‹¤’Ê‚ÌƒCƒ“ƒ^ƒtƒF[ƒX‚Å–ûˆ³ƒVƒ‡ƒxƒ‹‚ÌƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ğ§Œä‚µ‚½‚èAÀ‘ª‚µ‚½‚è‚·‚é‚±‚Æ‚Å‚«‚é‚æ‚¤‚É‚·‚éƒNƒ‰ƒXB
+    /// ç°¡å˜ãªå…±é€šã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã§æ²¹åœ§ã‚·ãƒ§ãƒ™ãƒ«ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚’åˆ¶å¾¡ã—ãŸã‚Šã€å®Ÿæ¸¬ã—ãŸã‚Šã™ã‚‹ã“ã¨ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
     /// </summary>
     [RequireComponent(typeof(ExcavationData))]
     public class Excavator : ConstructionMachine
@@ -49,7 +49,7 @@ namespace PWRISimulator
     {
         public override void OnInspectorGUI()
         {
-            // ConstructionMachineEditor‚ÌGUI‚ğ•\¦
+            // ConstructionMachineEditorã®GUIã‚’è¡¨ç¤º
             base.OnInspectorGUI();
         }
     }

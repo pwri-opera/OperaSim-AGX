@@ -11,8 +11,8 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// Spawnƒƒ\ƒbƒh‚Ü‚½‚ÍInspector‚ÌSpawnƒ{ƒ^ƒ“Œo—R‚ÅAw¦‚µ‚½Œ`ó‘ÌÏ‚Ì’†‚É—±q‚ğˆêu‚Éì¬‚³‚¹‚éƒXƒNƒŠƒvƒgB
-    /// QlFagx.ParticleSystem.spawnParticlesInGeometry
+    /// Spawnãƒ¡ã‚½ãƒƒãƒ‰ã¾ãŸã¯Inspectorã®Spawnãƒœã‚¿ãƒ³çµŒç”±ã§ã€æŒ‡ç¤ºã—ãŸå½¢çŠ¶ä½“ç©ã®ä¸­ã«ç²’å­ã‚’ä¸€ç¬ã«ä½œæˆã•ã›ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚
+    /// å‚è€ƒï¼šagx.ParticleSystem.spawnParticlesInGeometry
     /// </summary>
     public class ParticleSpawner : ScriptComponent
     {
@@ -63,10 +63,10 @@ namespace PWRISimulator
             agxTerrain.SoilSimulationInterface soilSim = terrain.Native?.getSoilSimulationInterface();
             agx.GranularBodySystem granularSystem = soilSim?.getGranularBodySystem();
 
-            // ƒ†[ƒUİ’èŸ‘æATerrain‚Ì—±q‚Ì”¼Œa‚©w¦‚³‚ê‚½”¼Œa‚ğg—p
+            // ãƒ¦ãƒ¼ã‚¶è¨­å®šæ¬¡ç¬¬ã€Terrainã®ç²’å­ã®åŠå¾„ã‹æŒ‡ç¤ºã•ã‚ŒãŸåŠå¾„ã‚’ä½¿ç”¨
             radius = overrideRadius ? radius : terrain.Native.getParticleNominalRadius();
             
-            // ”¼Œa‚ğg—p‚·‚éDistributionTable‚ğæ“¾‚·‚é‚ªA‚Ü‚¾ì‚Á‚Ä‚¢‚È‚¢ê‡‚Íì¬‚µ‚Ä•Û‘¶
+            // åŠå¾„ã‚’ä½¿ç”¨ã™ã‚‹DistributionTableã‚’å–å¾—ã™ã‚‹ãŒã€ã¾ã ä½œã£ã¦ã„ãªã„å ´åˆã¯ä½œæˆã—ã¦ä¿å­˜
             agx.ParticleEmitter.DistributionTable distTable;
             if (distributionTables.ContainsKey(radius))
             {
@@ -80,13 +80,13 @@ namespace PWRISimulator
                 distributionTables[radius] = distTable;
             }
 
-            // margin‚Æradius‚ğg‚Á‚ÄA—±q“¯m‚ÌŒ´“_‹——£‚ğŒvZ
+            // marginã¨radiusã‚’ä½¿ã£ã¦ã€ç²’å­åŒå£«ã®åŸç‚¹è·é›¢ã‚’è¨ˆç®—
             agx.Vec3 spacing = new agx.Vec3((radius + margin) * 2.0);
 
-            // —±q‚ªSpawnƒ][ƒ“‚ÌGeometry‚ÆÕ“Ë‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+            // ç²’å­ãŒSpawnã‚¾ãƒ¼ãƒ³ã®Geometryã¨è¡çªã—ãªã„ã‚ˆã†ã«ã™ã‚‹
             granularSystem.setEnableCollisions(spawnVolumeShape.NativeGeometry, false);
 
-            // —±q‚ğ¶¬‚·‚é
+            // ç²’å­ã‚’ç”Ÿæˆã™ã‚‹
             agxData.EntityRange particles = hcpPacking ?
                 granularSystem.spawnParticlesInGeometryHCP(
                     spawnVolumeShape.NativeGeometry, distTable, spacing, jitterFactor) :
@@ -101,10 +101,10 @@ namespace PWRISimulator
     {
         public override void OnInspectorGUI()
         {
-            // ƒfƒtƒHƒ‹ƒgGUI‚ğ•\¦
+            // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆGUIã‚’è¡¨ç¤º
             base.OnInspectorGUI();
 
-            // Spawnƒ{ƒ^ƒ“‚ğ’Ç‰Á
+            // Spawnãƒœã‚¿ãƒ³ã‚’è¿½åŠ 
             if(GUILayout.Button("Spawn"))
             {
                 (target as ParticleSpawner).Spawn();

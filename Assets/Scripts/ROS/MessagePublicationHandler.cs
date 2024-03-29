@@ -13,7 +13,7 @@ namespace PWRISimulator.ROS
     };
 
     /// <summary>
-    /// w¦‚µ‚½ƒf[ƒ^æ“¾ƒƒ\ƒbƒh‚ğg‚Á‚ÄAƒI[ƒi[‚ªŠÇ—‚·‚éüŠú‚É‚æ‚éROS‚Ìtopic‚Öpublish‚·‚éB
+    /// æŒ‡ç¤ºã—ãŸãƒ‡ãƒ¼ã‚¿å–å¾—ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ã£ã¦ã€ã‚ªãƒ¼ãƒŠãƒ¼ãŒç®¡ç†ã™ã‚‹å‘¨æœŸã«ã‚ˆã‚‹ROSã®topicã¸publishã™ã‚‹ã€‚
     /// </summary>
     public class MessagePublicationHandler<T> : IMessagePublicationHandler where T : Message
     {
@@ -28,19 +28,19 @@ namespace PWRISimulator.ROS
 
             if (getMessageFunction == null)
             {
-                Debug.LogError($"Failed to advertise topic \"{topicName}\" because getMessageFunction null.");
+                Debug.LogError($"Failed to advertise topic Â¥"{topicName}Â¥" because getMessageFunction null.");
                 return;
             }
 
             if (rosConnector?.RosSocket == null)
             {
-                Debug.LogError($"Failed to advertise topic \"{topicName}\" because RosConnector or RosSocket is null.");
+                Debug.LogError($"Failed to advertise topic Â¥"{topicName}Â¥" because RosConnector or RosSocket is null.");
                 return;
             }
 
             publicationId = rosConnector.RosSocket.Advertise<T>(topicName);
 
-            Debug.Log($"Advertised topic \"{topicName}\".");
+            Debug.Log($"Advertised topic Â¥"{topicName}Â¥".");
 
         }
 
@@ -49,14 +49,14 @@ namespace PWRISimulator.ROS
             if (rosConnector?.RosSocket == null || publicationId == null)
                 return;
 
-            Debug.Log($"UnAdvertise topic \"{publicationId}\".");
+            Debug.Log($"UnAdvertise topic Â¥"{publicationId}Â¥".");
 
             rosConnector.RosSocket.Unadvertise(publicationId);
             publicationId = null;
         }
 
         /// <summary>
-        /// w¦‚µ‚½ƒf[ƒ^æ“¾ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µA–ß‚è’l‚ğpublish‚·‚éB
+        /// æŒ‡ç¤ºã—ãŸãƒ‡ãƒ¼ã‚¿å–å¾—ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã€æˆ»ã‚Šå€¤ã‚’publishã™ã‚‹ã€‚
         /// </summary>
         public void UpdateAndSendMessage()
         {

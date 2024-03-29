@@ -159,7 +159,7 @@ namespace VMT.Profiling
         {
             var data = (PerformanceMeasure)target;
 
-            // デフォルトGUIを表示する
+            // 繝�繝輔か繝ｫ繝�GUI繧定｡ｨ遉ｺ縺吶ｋ
             base.OnInspectorGUI();
 
             GUI.enabled = Application.isPlaying;

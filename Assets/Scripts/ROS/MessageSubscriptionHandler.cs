@@ -6,24 +6,24 @@ using Float64Msg = RosSharp.RosBridgeClient.MessageTypes.Std.Float64;
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    ///  Œp‘±“I‚ÈüŠú‚É“Í‚­ƒƒbƒZ[ƒW‚ÍAƒI[ƒi[‚ªŠÇ—‚·‚éüŠú‚É“K—p‚Å‚«‚é‚æ‚¤‚É‚·‚éƒXƒNƒŠƒvƒgB
+    ///  ç¶™ç¶šçš„ãªå‘¨æœŸã«å±Šããƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯ã€ã‚ªãƒ¼ãƒŠãƒ¼ãŒç®¡ç†ã™ã‚‹å‘¨æœŸã«é©ç”¨ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚
     /// </summary>
     public interface IMessageSubscriptionHandler
     {
         /// <summary>
-        /// ƒƒbƒZ[ƒW‚ğUnity‚Ì‘ÎÛ‚Ìƒpƒ‰ƒ[ƒ^‚Æ‚©‚Éİ’è‚·‚éƒƒ\ƒbƒhBƒI[ƒi[‚ªüŠú“I‚ÉŒÄ‚Ño‚·‚Í‚¸‚¾B
+        /// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’Unityã®å¯¾è±¡ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨ã‹ã«è¨­å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ã‚ªãƒ¼ãƒŠãƒ¼ãŒå‘¨æœŸçš„ã«å‘¼ã³å‡ºã™ã¯ãšã ã€‚
         /// </summary>
-        /// <param name="time">Œ»İ‚ÌGameTime‚âFixedTime‚âƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“(‚Ç‚±‚©‚ç‚Ìg‚¢•û‚É‚æ‚Á‚Ä)</param>
+        /// <param name="time">ç¾åœ¨ã®GameTimeã‚„FixedTimeã‚„ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³(ã©ã“ã‹ã‚‰ã®ä½¿ã„æ–¹ã«ã‚ˆã£ã¦)</param>
         void ExecuteMessageAction(double time);
     };
 
     /// <summary>
-    /// ƒƒbƒZ[ƒW‚ğg‚¢‚½‚¢‚Æ‚«‚ÉAÅI‚É“Í‚¢‚½ƒƒbƒZ[ƒW‚ğg—p‚·‚éIMessageSubscriptionHandlerƒXƒNƒŠƒvƒgB
-    /// Ú×F
-    /// * ƒƒbƒZ[ƒW‚ª“Í‚­‚ÆOnReceivedMessage‚ª•Ê“r‚ÈƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚êAƒƒbƒZ[ƒW‚ğ•Û‘¶‚·‚éiˆÈ‘O‚ÌƒƒbƒZ[ƒW‚ğíœjB
-    /// * ƒI[ƒi[‚ªExecuteMessageAction‚ğüŠú“I‚ÉƒƒCƒ“ƒXƒŒƒbƒh‚©‚çÀs‚µ‚ÄAÅI‚É“Í‚¢‚½ƒƒbƒZ[ƒW‚ğ“K—p‚·‚éB
+    /// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ã„ãŸã„ã¨ãã«ã€æœ€çµ‚ã«å±Šã„ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ç”¨ã™ã‚‹IMessageSubscriptionHandlerã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚
+    /// è©³ç´°ï¼š
+    /// * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå±Šãã¨OnReceivedMessageãŒåˆ¥é€”ãªã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä¿å­˜ã™ã‚‹ï¼ˆä»¥å‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‰Šé™¤ï¼‰ã€‚
+    /// * ã‚ªãƒ¼ãƒŠãƒ¼ãŒExecuteMessageActionã‚’å‘¨æœŸçš„ã«ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å®Ÿè¡Œã—ã¦ã€æœ€çµ‚ã«å±Šã„ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é©ç”¨ã™ã‚‹ã€‚
     /// </summary>
-    /// <typeparam name="T">ROSƒƒbƒZ[ƒWƒNƒ‰ƒX</typeparam>
+    /// <typeparam name="T">ROSãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹</typeparam>
     public class MessageSubscriptionHandler<T> : IMessageSubscriptionHandler where T : Message
     {
         RosSharp.RosBridgeClient.SubscriptionHandler<T> messageAction;
@@ -35,14 +35,14 @@ namespace PWRISimulator.ROS
             this.messageAction = messageAction;
             if(rosConnector?.RosSocket == null)
             {
-                Debug.LogError($"Failed to subscribe to topic \"{topicName}\" because RosConnector or RosSocket is null.");
+                Debug.LogError($"Failed to subscribe to topic Â¥"{topicName}Â¥" because RosConnector or RosSocket is null.");
                 return;
             }
             rosConnector.RosSocket.Subscribe<T>(topicName, OnReceivedMessage, throttleRate);
         }
 
         /// <summary>
-        /// ƒƒbƒZ[ƒW‚ª“Í‚¢‚½‚Æ‚«‚ÉROSBridgeClient‚©‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒhBƒƒCƒ“ƒXƒŒƒbƒhˆÈŠOƒXƒŒƒbƒh‚©‚çÀs‚³‚ê‚éB
+        /// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå±Šã„ãŸã¨ãã«ROSBridgeClientã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å®Ÿè¡Œã•ã‚Œã‚‹ã€‚
         /// </summary>
         void OnReceivedMessage(T msg)
         {
@@ -50,9 +50,9 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// ÅI‚É“Í‚¢‚½ƒƒbƒZ[ƒW‚ğ“K—p‚·‚éBƒI[ƒi[‚ªüŠú“I‚ÉŒÄ‚Ño‚·‚Í‚¸‚¾B
+        /// æœ€çµ‚ã«å±Šã„ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é©ç”¨ã™ã‚‹ã€‚ã‚ªãƒ¼ãƒŠãƒ¼ãŒå‘¨æœŸçš„ã«å‘¼ã³å‡ºã™ã¯ãšã ã€‚
         /// </summary>
-        /// <param name="time">Œ»İ‚ÌGameTime‚âFixedTime‚âƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“(‚Ç‚±‚©‚ç‚Ìg‚¢•û‚É‚æ‚Á‚Ä)</param>
+        /// <param name="time">ç¾åœ¨ã®GameTimeã‚„FixedTimeã‚„ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³(ã©ã“ã‹ã‚‰ã®ä½¿ã„æ–¹ã«ã‚ˆã£ã¦)</param>
         public void ExecuteMessageAction(double time)
         {
             T msg = lastReceivedValue;
@@ -62,13 +62,13 @@ namespace PWRISimulator.ROS
     }
 
     /// <summary>
-    /// ƒƒbƒZ[ƒW‚ğg‚¢‚½‚¢‚ÉAŒ»İ‚ÌGame“_‚É‘Î‰‚µ‚½ƒŠƒAƒ‹ƒ^ƒCƒ€“_‚É“Í‚¢‚½ƒƒbƒZ[ƒW‚ğg—p‚·‚éIMessageSubscriptionHandlerB
-    /// Ú×F
-    /// * ƒƒbƒZ[ƒW‚ª“Í‚­‚ÆOnReceivedMessage‚ª•Ê“r‚ÈƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚êAƒƒbƒZ[ƒW‚ğRealTimeDataBuffer‚É‘}“ü‚·‚éB
-    /// * ExecuteMessageAction‚ğÀs‚·‚é‚ÆAŒ»İ‚ÌFixedTime“_‚ğ‘Î‰‚·‚éƒŠƒAƒ‹ƒ^ƒCƒ€“_‚É•ÏŠ·‚µA‚»‚Ì“_‚É“Í‚¢‚½ƒƒbƒZ[ƒW‚ğ
-    ///   “K—p‚·‚éBƒŠƒAƒ‹ƒ^ƒCƒ€“_‚ª³Šm‚Éˆê’v‚µ‚È‚¢–â‘è‚ğ‰ğŒˆ‚½‚ß‚ÉA‚Q‚Â‚Ì—×‚Ì“Í‚¢‚½ƒf[ƒ^‚ÉŠî‚Ã‚¢‚Ä•âŠÔ‚·‚éd‘g‚İ‚ğ’ñ‹Ÿ‚·‚éB
+    /// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ã„ãŸã„ã«ã€ç¾åœ¨ã®Gameæ™‚ç‚¹ã«å¯¾å¿œã—ãŸãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ æ™‚ç‚¹ã«å±Šã„ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ç”¨ã™ã‚‹IMessageSubscriptionHandlerã€‚
+    /// è©³ç´°ï¼š
+    /// * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå±Šãã¨OnReceivedMessageãŒåˆ¥é€”ãªã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’RealTimeDataBufferã«æŒ¿å…¥ã™ã‚‹ã€‚
+    /// * ExecuteMessageActionã‚’å®Ÿè¡Œã™ã‚‹ã¨ã€ç¾åœ¨ã®FixedTimeæ™‚ç‚¹ã‚’å¯¾å¿œã™ã‚‹ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ æ™‚ç‚¹ã«å¤‰æ›ã—ã€ãã®æ™‚ç‚¹ã«å±Šã„ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’
+    ///   é©ç”¨ã™ã‚‹ã€‚ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ æ™‚ç‚¹ãŒæ­£ç¢ºã«ä¸€è‡´ã—ãªã„å•é¡Œã‚’è§£æ±ºãŸã‚ã«ã€ï¼’ã¤ã®éš£ã®å±Šã„ãŸãƒ‡ãƒ¼ã‚¿ã«åŸºã¥ã„ã¦è£œé–“ã™ã‚‹ä»•çµ„ã¿ã‚’æä¾›ã™ã‚‹ã€‚
     /// </summary>
-    /// <typeparam name="T">ROSƒƒbƒZ[ƒWƒNƒ‰ƒX</typeparam>
+    /// <typeparam name="T">ROSãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹</typeparam>
     public class TimeCorrectedMessageSubscriptionHandler<T> : IMessageSubscriptionHandler where T : Message
     {
         RosSharp.RosBridgeClient.SubscriptionHandler<T> messageAction;
@@ -76,13 +76,13 @@ namespace PWRISimulator.ROS
         RealTimeDataBuffer<T> realTimeDataBuffer;
 
         public TimeCorrectedMessageSubscriptionHandler(RosConnector rosConnector, string topicName,
-            RosSharp.RosBridgeClient.SubscriptionHandler<T> messageAction,@RealTimeTracker synchronizer,
+            RosSharp.RosBridgeClient.SubscriptionHandler<T> messageAction,ã€€RealTimeTracker synchronizer,
             RealTimeDataBuffer<T>.Interpolator interpolator = null, int throttleRate = 0, int maxBufferSize = 200)
         {
             this.messageAction = messageAction;
             if (rosConnector?.RosSocket == null)
             {
-                Debug.LogError($"Failed to subscribe to topic \"{topicName}\" because RosConnector or RosSocket is null.");
+                Debug.LogError($"Failed to subscribe to topic Â¥"{topicName}Â¥" because RosConnector or RosSocket is null.");
                 return;
             }
             
@@ -96,7 +96,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// ƒƒbƒZ[ƒW‚ª“Í‚¢‚½‚Æ‚«‚ÉROSBridgeClient‚©‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒhBƒƒCƒ“ƒXƒŒƒbƒhˆÈŠOƒXƒŒƒbƒh‚©‚çÀs‚³‚ê‚éB
+        /// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå±Šã„ãŸã¨ãã«ROSBridgeClientã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ä»¥å¤–ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å®Ÿè¡Œã•ã‚Œã‚‹ã€‚
         /// </summary>
         void OnReceivedMessage(T msg)
         {
@@ -107,10 +107,10 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// Œ»İ‚Ìtime“_‚ğ‘Î‰‚·‚éƒŠƒAƒ‹ƒ^ƒCƒ€“_‚É•ÏŠ·‚µA‚»‚Ì“_‚É“Í‚¢‚½ƒƒbƒZ[ƒW‚ğ“K—p‚·‚éBƒI[ƒi[‚ªüŠú“I‚ÉŒÄ‚Ño‚·
-        /// ‚Í‚¸‚¾B
+        /// ç¾åœ¨ã®timeæ™‚ç‚¹ã‚’å¯¾å¿œã™ã‚‹ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ æ™‚ç‚¹ã«å¤‰æ›ã—ã€ãã®æ™‚ç‚¹ã«å±Šã„ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é©ç”¨ã™ã‚‹ã€‚ã‚ªãƒ¼ãƒŠãƒ¼ãŒå‘¨æœŸçš„ã«å‘¼ã³å‡ºã™
+        /// ã¯ãšã ã€‚
         /// </summary>
-        /// <param name="time">Œ»İ‚ÌGameTime‚âFixedTime‚âƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“(‚Ç‚±‚©‚ç‚Ìg‚¢•û‚É‚æ‚Á‚Ä)</param>
+        /// <param name="time">ç¾åœ¨ã®GameTimeã‚„FixedTimeã‚„ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³(ã©ã“ã‹ã‚‰ã®ä½¿ã„æ–¹ã«ã‚ˆã£ã¦)</param>
         public void ExecuteMessageAction(double time)
         {
             double realTime = realTimeTracker.ConvertUnityTimeToRealTime(time);

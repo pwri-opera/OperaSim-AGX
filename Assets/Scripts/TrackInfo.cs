@@ -11,7 +11,7 @@ using UnityEditor;
 namespace VMT.Util
 {
     /// <summary>
-    /// Play�̊J�n��AAGXUnity.Model.Track�̗l�X�ȏ����擾���AInspector�܂���Console�ɕ\������
+    /// Playの開始後、AGXUnity.Model.Trackの様々な情報を取得し、InspectorまたはConsoleに表示する
     /// </summary>
     public class TrackInfo : ScriptComponent
     {
@@ -71,12 +71,12 @@ namespace VMT.Util
 
         void PrintData()
         {
-            Debug.Log($"Track \"{track.name}\" : " +
+            Debug.Log($"Track ¥"{track.name}¥" : " +
                       $"mass = {bodyMass.ToString("F3")} " +
                       $"localMassCenter = {bodyLocalMassCenter.ToString("F3")} " +
                       $"boxSize = {boxSize.ToString("F3")} " +
                       $"boxLocalPos = {boxLocalPosition.ToString("F3")} " + 
-                      $"\ninertiaTensor =\n  {bodyInertiaTensor.ToString("\n  ")}");
+                      $"¥ninertiaTensor =¥n  {bodyInertiaTensor.ToString("¥n  ")}");
         }
     }
 
@@ -88,10 +88,10 @@ namespace VMT.Util
         {
             TrackInfo data = (TrackInfo)target;
 
-            // �f�t�H���gGUI��\������
+            // デフォルトGUIを表示する
             base.OnInspectorGUI();
 
-            // Track����\������
+            // Track情報を表示する
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Track", EditorStyles.boldLabel);
             EditorGUILayout.LabelField("Number Of Nodes:", data.nodeCount.ToString());

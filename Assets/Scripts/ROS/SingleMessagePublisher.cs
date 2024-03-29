@@ -8,8 +8,8 @@ using System;
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    /// ‚P‚ÂROSƒgƒsƒbƒN‚ğpublish‚·‚éƒRƒ“ƒ|ƒlƒ“ƒgƒx[ƒXƒNƒ‰ƒXB‹ï‘Ì“I‚ÈqƒNƒ‰ƒX‚ª‚±‚Ìƒx[ƒXƒNƒ‰ƒX‚ğŒp³‚µ‚ÄƒƒbƒZ[ƒW‚ğì¬‚µ
-    /// Publishƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µ‚Äpublish‚·‚éB‚±‚Ìƒx[ƒXƒNƒ‰ƒX‚Éadvertise/unadvertise‚ğ”C‚¹‚éB
+    /// ï¼‘ã¤ROSãƒˆãƒ”ãƒƒã‚¯ã‚’publishã™ã‚‹ã‚³ãƒ³ãƒãƒãƒ³ãƒˆãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚å…·ä½“çš„ãªå­ã‚¯ãƒ©ã‚¹ãŒã“ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ã¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½œæˆã—
+    /// Publishãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã¦publishã™ã‚‹ã€‚ã“ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã«advertise/unadvertiseã‚’ä»»ã›ã‚‹ã€‚
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class SingleMessagePublisher<T> : MonoBehaviour where T : Message
@@ -34,7 +34,7 @@ namespace PWRISimulator.ROS
 
         protected virtual void Reset()
         {
-            // rosConnector‚ÌƒfƒtƒHƒ‹ƒg’l‚É‚ÍƒV[ƒ“‚É‚ ‚éRosConnector‚ğ’T‚µ‚Äİ’è‚·‚é
+            // rosConnectorã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã«ã¯ã‚·ãƒ¼ãƒ³ã«ã‚ã‚‹RosConnectorã‚’æ¢ã—ã¦è¨­å®šã™ã‚‹
             rosConnector = FindObjectOfType<RosConnector>(includeInactive: false);
         }
 
@@ -46,8 +46,8 @@ namespace PWRISimulator.ROS
 
         protected virtual void OnEnable()
         {
-            // ŠJn‚ÉOnEnable‚ÍStart‚æ‚è‘‚­ŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚ªA‚»‚Ì‚Æ‚«‚ÍRosConnector‚Í‚Ü‚¾‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅA
-            // Start()‚Ü‚ÅAdvertise‚ğ‘Ò‚½‚¹‚éB
+            // é–‹å§‹ã«OnEnableã¯Startã‚ˆã‚Šæ—©ãå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ãŒã€ãã®ã¨ãã¯RosConnectorã¯ã¾ã åˆæœŸåŒ–ã•ã‚Œã¦ã„ãªã„ã®ã§ã€
+            // Start()ã¾ã§Advertiseã‚’å¾…ãŸã›ã‚‹ã€‚
             if (hasStarted)
                 Advertise();
         }
@@ -87,14 +87,14 @@ namespace PWRISimulator.ROS
 
             publicationId = rosConnector.RosSocket.Advertise<T>(topic);
 
-            Debug.Log($"{name} : Advertised topic \"{topic}\".");
+            Debug.Log($"{name} : Advertised topic Â¥"{topic}Â¥".");
 
             OnAdvertised();
         }
 
         void UnAdvertise()
         {
-            Debug.Log($"{name} : Unadvertise topic \"{topic ?? "null"}\".");
+            Debug.Log($"{name} : Unadvertise topic Â¥"{topic ?? "null"}Â¥".");
 
             try
             {
@@ -103,7 +103,7 @@ namespace PWRISimulator.ROS
             }
             catch(Exception ex)
             {
-                Debug.LogWarning($"{name} : Failed to unadvertise. Exception: \n" + ex);
+                Debug.LogWarning($"{name} : Failed to unadvertise. Exception: Â¥n" + ex);
             }
             finally { publicationId = null;}
 
