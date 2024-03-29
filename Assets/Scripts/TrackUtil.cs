@@ -9,9 +9,9 @@ namespace PWRISimulator
     public static class TrackUtil
     {
         /// <summary>
-        /// w¦‚µ‚½‚Q‚Â‚ÌTrack‚Ì‚»‚ê‚¼‚ê‚ÌsprocketƒzƒC[ƒ‹‚ğæ“¾‚µAseparation‚Æ‚¢‚¤o—Í‚ğsprocketƒzƒC[ƒ‹“¯m‚Ì‹——£‚Éİ’è‚µA
-        /// radius‚Æ‚¢‚¤o—Í‚ğsprocket”¼Œa{TrackŒú‚³‚Éİ’è‚µATrue‚ğ•Ô‚·B¸”s‚Ìê‡‚ÍAseparationAradius‚ğƒ[ƒ‚Éİ’è‚µFalse
-        /// ‚ğ•Ô‚·B
+        /// æŒ‡ç¤ºã—ãŸï¼’ã¤ã®Trackã®ãã‚Œãã‚Œã®sprocketãƒ›ã‚¤ãƒ¼ãƒ«ã‚’å–å¾—ã—ã€separationã¨ã„ã†å‡ºåŠ›ã‚’sprocketãƒ›ã‚¤ãƒ¼ãƒ«åŒå£«ã®è·é›¢ã«è¨­å®šã—ã€
+        /// radiusã¨ã„ã†å‡ºåŠ›ã‚’sprocketåŠå¾„ï¼‹Trackåšã•ã«è¨­å®šã—ã€Trueã‚’è¿”ã™ã€‚å¤±æ•—ã®å ´åˆã¯ã€separationã€radiusã‚’ã‚¼ãƒ­ã«è¨­å®šã—False
+        /// ã‚’è¿”ã™ã€‚
         /// </summary>
         public static bool GetSeparationAndTractionRadius(Track trackLeft, Track trackRight, out double separation,
                                                                                              out double radius)
@@ -33,9 +33,9 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// Constraint‚ÌReferenceObject‚Ü‚½‚ÍConnectedObject‚É’¼Ú‚É‘}“ü‚µ‚½TrackWheelƒRƒ“ƒ|ƒlƒ“ƒg‚ğ’T‚µA•Ô‚·B
-        /// Œ©‚Â‚¯‚È‚¢ê‡‚ÍAsearchInChildren=True‚¾‚Á‚½‚çAReferenceObject‚»‚µ‚ÄConnectedObject‚ÌŠK‘w‚É
-        /// TrackWheelƒRƒ“ƒ|ƒlƒ“ƒg‚ğ‚Ü‚½’T‚µA•Ô‚·B
+        /// Constraintã®ReferenceObjectã¾ãŸã¯ConnectedObjectã«ç›´æ¥ã«æŒ¿å…¥ã—ãŸTrackWheelã‚³ãƒ³ãƒãƒãƒ³ãƒˆã‚’æ¢ã—ã€è¿”ã™ã€‚
+        /// è¦‹ã¤ã‘ãªã„å ´åˆã¯ã€searchInChildren=Trueã ã£ãŸã‚‰ã€ReferenceObjectãã—ã¦ConnectedObjectã®éšå±¤ã«
+        /// TrackWheelã‚³ãƒ³ãƒãƒãƒ³ãƒˆã‚’ã¾ãŸæ¢ã—ã€è¿”ã™ã€‚
         /// </summary>
         public static TrackWheel GetTrackWheel(Constraint wheelConstraint, TrackWheelModel? model, bool searchChildren)
         {
@@ -43,10 +43,10 @@ namespace PWRISimulator
             if (pair == null)
                 return null;
 
-            // ‚Q‰ñ’T‚µ‚Ä‚İ‚éF‚P‰ñ–Ú‚Í‚Q‚Â‚ÌGameObject‚Ì’¼Ú‚ÌƒRƒ“ƒ|ƒlƒ“ƒg‚¾‚¯’T‚·‚ªA‚Q‰ñ–Ú‚Í‚Q‚Â‚ÌGameObject‚ÌqŠK‘w‚É‚à’T‚·B
+            // ï¼’å›æ¢ã—ã¦ã¿ã‚‹ï¼šï¼‘å›ç›®ã¯ï¼’ã¤ã®GameObjectã®ç›´æ¥ã®ã‚³ãƒ³ãƒãƒãƒ³ãƒˆã ã‘æ¢ã™ãŒã€ï¼’å›ç›®ã¯ï¼’ã¤ã®GameObjectã®å­éšå±¤ã«ã‚‚æ¢ã™ã€‚
             for (int i = 0; i < (searchChildren ? 2 : 1); ++i)
             {
-                // Constraint‚ªŒq‚®‚Q‚Â‚ÌGameObject‚ÉTrackWheel‚ğ’T‚·
+                // ConstraintãŒç¹‹ãï¼’ã¤ã®GameObjectã«TrackWheelã‚’æ¢ã™
                 foreach (var obj in new GameObject[]{ pair.ReferenceObject, pair.ConnectedObject })
                 {
                     if (obj == null)
@@ -55,14 +55,14 @@ namespace PWRISimulator
                     Func<TrackWheel, bool> condition = w =>
                         w != null && w.RigidBody.gameObject == obj && (!model.HasValue || w.Model == model);
                     
-                    // gameObject‚ÌƒRƒ“ƒ|ƒlƒ“ƒg‚¾‚¯’T‚·
+                    // gameObjectã®ã‚³ãƒ³ãƒãƒãƒ³ãƒˆã ã‘æ¢ã™
                     if (i == 0)
                     {
                         TrackWheel wheel = obj.GetComponent<TrackWheel>();
                         if (condition(wheel))
                             return wheel;
                     }
-                    // gameObject‚Ìq‹Ÿ‚ÌƒRƒ“ƒ|ƒlƒ“ƒg‚à’T‚·
+                    // gameObjectã®å­ä¾›ã®ã‚³ãƒ³ãƒãƒãƒ³ãƒˆã‚‚æ¢ã™
                     else
                     {
                         TrackWheel wheel = obj.GetComponentsInChildren<TrackWheel>().First(condition);

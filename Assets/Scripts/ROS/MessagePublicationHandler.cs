@@ -13,7 +13,7 @@ namespace PWRISimulator.ROS
     };
 
     /// <summary>
-    /// w¦‚µ‚½ƒf[ƒ^æ“¾ƒƒ\ƒbƒh‚ğg‚Á‚ÄAƒI[ƒi[‚ªŠÇ—‚·‚éüŠú‚É‚æ‚éROS‚Ìtopic‚Öpublish‚·‚éB
+    /// æŒ‡ç¤ºã—ãŸãƒ‡ãƒ¼ã‚¿å–å¾—ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ã£ã¦ã€ã‚ªãƒ¼ãƒŠãƒ¼ãŒç®¡ç†ã™ã‚‹å‘¨æœŸã«ã‚ˆã‚‹ROSã®topicã¸publishã™ã‚‹ã€‚
     /// </summary>
     public class MessagePublicationHandler<T> : IMessagePublicationHandler where T : Message
     {
@@ -56,7 +56,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// w¦‚µ‚½ƒf[ƒ^æ“¾ƒƒ\ƒbƒh‚ğŒÄ‚Ño‚µA–ß‚è’l‚ğpublish‚·‚éB
+        /// æŒ‡ç¤ºã—ãŸãƒ‡ãƒ¼ã‚¿å–å¾—ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã€æˆ»ã‚Šå€¤ã‚’publishã™ã‚‹ã€‚
         /// </summary>
         public void UpdateAndSendMessage()
         {

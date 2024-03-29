@@ -55,7 +55,7 @@ namespace PWRISimulator.ROS
         {
             uint secs = (uint)time;
             uint nsecs = (uint)((time - secs) * 1e+9);
-            // RosBridge(?)‚Í©“®“I‚Éseq‚ğ¶¬‚·‚é‚æ‚¤‚È‚Ì‚ÅA0‚Éİ’è‚µ‚ÄtimeAframeId‚¾‚¯‚ÉXV
+            // RosBridge(?)ã¯è‡ªå‹•çš„ã«seqã‚’ç”Ÿæˆã™ã‚‹ã‚ˆã†ãªã®ã§ã€0ã«è¨­å®šã—ã¦timeã€frameIdã ã‘ã«æ›´æ–°
             return new HeaderMsg(0, new TimeMsg(secs, nsecs), frameId);
         }
 

@@ -4,23 +4,23 @@ using UnityEngine;
 namespace PWRISimulator
 {
     /// <summary>
-    /// §Œä‚Ìw—ß’l‚Ìí—ŞB
+    /// åˆ¶å¾¡ã®æŒ‡ä»¤å€¤ã®ç¨®é¡ã€‚
     /// </summary>
     [Serializable]
     public enum ControlType
     {
         /// <summary>
-        /// ˆÊ’u^Šp“x‚ÅConstraint‚ğ§Œä‚·‚éBAGXUnity‚ÌLockController‚ğ—˜—pB
+        /// ä½ç½®ï¼è§’åº¦ã§Constraintã‚’åˆ¶å¾¡ã™ã‚‹ã€‚AGXUnityã®LockControllerã‚’åˆ©ç”¨ã€‚
         /// </summary>
         Position,
 
         /// <summary>
-        /// ‘¬“x^‰Á‘¬“x‚ÅConstraint‚ğ§Œä‚·‚éBAGXUnity‚ÌTargetSpeedController‚ğ—˜—pB
+        /// é€Ÿåº¦ï¼åŠ é€Ÿåº¦ã§Constraintã‚’åˆ¶å¾¡ã™ã‚‹ã€‚AGXUnityã®TargetSpeedControllerã‚’åˆ©ç”¨ã€‚
         /// </summary>
         Speed,
 
         /// <summary>
-        /// —Í^ƒgƒ‹ƒN‚ÅConstraint‚ğ§Œä‚·‚éBAGXUnity‚ÌTargetSpeedController‚ğ—˜—p(‘¬“x‚ğ–³ŒÀ‚Éİ’è‚µAForceRange‚ğ§Œä)B
+        /// åŠ›ï¼ãƒˆãƒ«ã‚¯ã§Constraintã‚’åˆ¶å¾¡ã™ã‚‹ã€‚AGXUnityã®TargetSpeedControllerã‚’åˆ©ç”¨(é€Ÿåº¦ã‚’ç„¡é™ã«è¨­å®šã—ã€ForceRangeã‚’åˆ¶å¾¡)ã€‚
         /// </summary>
         Force
     };

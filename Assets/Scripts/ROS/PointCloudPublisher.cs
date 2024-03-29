@@ -13,7 +13,7 @@ using PointFieldMsg = RosSharp.RosBridgeClient.MessageTypes.Sensor.PointField;
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    /// w¦‚µ‚½PointCloudGeneratorƒIƒuƒWƒFƒNƒg‚©‚ç“_ŒQƒf[ƒ^‚ğæ“¾‚µROS‚Ö’ÊM‚·‚éB
+    /// æŒ‡ç¤ºã—ãŸPointCloudGeneratorã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ç‚¹ç¾¤ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã—ROSã¸é€šä¿¡ã™ã‚‹ã€‚
     /// </summary>
     public class PointCloudPublisher : SingleMessagePublisher<PointCloud2Msg>
     {
@@ -34,13 +34,13 @@ namespace PWRISimulator.ROS
         float[] pointsAsFloats = new float[0];
         byte[] pointsAsBytes = new byte[0];
 
-        // •Ê“r‚ÌpublishƒXƒŒƒbƒh—pF
+        // åˆ¥é€”ã®publishã‚¹ãƒ¬ãƒƒãƒ‰ç”¨ï¼š
 
         Thread publishThread;
         ManualResetEventSlim publishResetEvent = new ManualResetEventSlim(false);
         CancellationTokenSource cancellationTokenSource = null;
 
-        // ƒvƒƒtƒ@ƒCƒŠƒ“ƒO—pF
+        // ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒªãƒ³ã‚°ç”¨ï¼š
 
         static readonly ProfilerMarker profileMarker_GetPoints = new ProfilerMarker(
             ProfilerCategory.Scripts, nameof(PointCloudPublisher) + ".GetPoints");
@@ -62,7 +62,7 @@ namespace PWRISimulator.ROS
         {
             base.OnAdvertised();
             
-            // w¦‚µ‚½ü”g”‚Épublish‚·‚éCoroutine‚ğŠJn
+            // æŒ‡ç¤ºã—ãŸå‘¨æ³¢æ•°ã«publishã™ã‚‹Coroutineã‚’é–‹å§‹
             StartCoroutine(PublishCoroutine());
         }
 
@@ -70,10 +70,10 @@ namespace PWRISimulator.ROS
         {
             base.OnUnadvertised();
             
-            // publish‚·‚éCoroutine‚ğ’†~
+            // publishã™ã‚‹Coroutineã‚’ä¸­æ­¢
             StopCoroutine(nameof(PublishCoroutine));
             
-            // •Ê“r‚ÈƒXƒŒƒbƒh‚©‚çpublish‚ğs‚¤ƒoƒCƒA‚Í‚»‚ÌƒXƒŒƒbƒh‚ğ’†~
+            // åˆ¥é€”ãªã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰publishã‚’è¡Œã†ãƒã‚¤ã‚¢ã¯ãã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ä¸­æ­¢
             if (publishThread != null)
                 StopPublishThread();
         }
@@ -87,7 +87,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// w¦‚µ‚½ü”g”‚Épublish‚·‚éB
+        /// æŒ‡ç¤ºã—ãŸå‘¨æ³¢æ•°ã«publishã™ã‚‹ã€‚
         /// </summary>
         System.Collections.IEnumerator PublishCoroutine()
         {
@@ -99,9 +99,9 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// PointCloudGenerator‚©‚ç“_ŒQƒf[ƒ^‚ğæ“¾‚µ‚ÄAROS Message‚ğXV‚µ‚Äpublish‚·‚éB
-        /// publishFromThread‚Ítrue‚Ìê‡‚ÍA’¼Ú‚±‚ÌƒXƒŒƒbƒh‚©‚çpublish‚µ‚È‚­ApublishResetEvent‚ğset‚µ‚Ä•Ê“r‚ÌPublishThread
-        /// ‚ªpublish‚³‚¹‚éB
+        /// PointCloudGeneratorã‹ã‚‰ç‚¹ç¾¤ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã—ã¦ã€ROS Messageã‚’æ›´æ–°ã—ã¦publishã™ã‚‹ã€‚
+        /// publishFromThreadã¯trueã®å ´åˆã¯ã€ç›´æ¥ã“ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰publishã—ãªãã€publishResetEventã‚’setã—ã¦åˆ¥é€”ã®PublishThread
+        /// ãŒpublishã•ã›ã‚‹ã€‚
         /// </summary>
         void UpdateMessageAndPublish()
         {
@@ -117,7 +117,7 @@ namespace PWRISimulator.ROS
 
             using (profileMarker_GetPoints.Auto())
             {
-                // ƒ|ƒCƒ“ƒgƒf[ƒ^‚ğæ“¾
+                // ãƒã‚¤ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
                 if (pointCloudGenerator != null)
                     pointsAsFloats = pointCloudGenerator.GeneratePointCloud(flipX: true);
                 else
@@ -126,13 +126,13 @@ namespace PWRISimulator.ROS
 
             using (profileMarker_ConvertPoints.Auto())
             {
-                // ƒ|ƒCƒ“ƒgƒf[ƒ^‚ğbyte”z—ñ‚Ö•ÏŠ·
+                // ãƒã‚¤ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’byteé…åˆ—ã¸å¤‰æ›
                 ConvertFloatsToRosByteArray(pointsAsFloats, ref pointsAsBytes);
             }
 
             using (profileMarker_CreateMessage.Auto())
             {
-                // ˆê‰ñ‚¾‚¯Äg—p‚Å‚«‚éƒƒbƒZ[ƒWƒx[ƒX‚ğì¬
+                // ä¸€å›ã ã‘å†ä½¿ç”¨ã§ãã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ™ãƒ¼ã‚¹ã‚’ä½œæˆ
                 if (message == null)
                 {
                     message = new PointCloud2Msg();
@@ -147,7 +147,7 @@ namespace PWRISimulator.ROS
                     message.is_dense = true;
                 }
 
-                // •Ï‚í‚éƒf[ƒ^‚¾‚¯‚ğ‘‚«‚Ş
+                // å¤‰ã‚ã‚‹ãƒ‡ãƒ¼ã‚¿ã ã‘ã‚’æ›¸ãè¾¼ã‚€
                 message.header = MessageUtil.ToHeaderMessage(includeTimeInMessage ? Time.timeAsDouble : 0, frameId);
                 message.data = pointsAsBytes;
                 message.width = (uint)pointsAsBytes.Length / message.point_step;
@@ -155,7 +155,7 @@ namespace PWRISimulator.ROS
 
             using (profileMarker_SendMessage.Auto())
             {
-                // ’ÊM‚³‚¹‚é
+                // é€šä¿¡ã•ã›ã‚‹
                 if (publishFromThread)
                 {
                     if (publishThread == null || !publishThread.IsAlive)
@@ -177,13 +177,13 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// publish‚·‚éƒXƒŒƒbƒhBpublishResetEvent‚ªset‚É‚È‚é‚Æpublish‚ğ‚µ‚ÄApublish‚ªI‚í‚Á‚½‚çpublishResetEvent‚ğresetB
+        /// publishã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã€‚publishResetEventãŒsetã«ãªã‚‹ã¨publishã‚’ã—ã¦ã€publishãŒçµ‚ã‚ã£ãŸã‚‰publishResetEventã‚’resetã€‚
         /// </summary>
         /// <param name="cancellationToken"></param>
         void PublishThread(CancellationToken cancellationToken)
         {
             Debug.Log("Publish thread is starting.");
-            int timeoutMs = 10000; // timeout‚É‚È‚ç‚È‚¢ƒR[ƒh‚ğ‘‚¢‚½‚¯‚Ç”N‚Ì–¯‚Étimeoutg—p
+            int timeoutMs = 10000; // timeoutã«ãªã‚‰ãªã„ã‚³ãƒ¼ãƒ‰ã‚’æ›¸ã„ãŸã‘ã©å¹´ã®æ°‘ã«timeoutä½¿ç”¨
             while (publicationId != null)
             {
                 try
@@ -195,7 +195,7 @@ namespace PWRISimulator.ROS
                 {
                     if (ex is ObjectDisposedException || ex is ObjectDisposedException ||
                         ex is OperationCanceledException || ex is InvalidOperationException)
-                        break; // ‚í‚´‚ÆCancellationToken‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚½‚¹‚¢‚ÌException
+                        break; // ã‚ã–ã¨CancellationTokenã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸã›ã„ã®Exception
                     else
                         throw;
                 }
@@ -232,7 +232,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// ‚P‚ÂPoint‚Ì’è‹`‚ğì¬B
+        /// ï¼‘ã¤Pointã®å®šç¾©ã‚’ä½œæˆã€‚
         /// </summary>
         /// <returns></returns>
         static PointFieldMsg[] CreatePointFields(bool reorder)
@@ -240,12 +240,12 @@ namespace PWRISimulator.ROS
             // ROS X = Unity Z
             // ROS Y = Unity -X
             // ROS Z = Unity Y
-            // ‚Â‚Ü‚èA
+            // ã¤ã¾ã‚Šã€
             // Unity X = ROS -Y
             // Unity Y = ROS Z
             // Unity Z = ROS X
 
-            // ¦ xÀ•W‚ÍŠù‚Éƒf[ƒ^‚ğ¶¬‚Ì‚Æ‚«‚É‹t‚É‚µ‚Ä‚¨‚¢‚½‚Ì‚Å•‰†‚ğ•t‚¯‚È‚¢irviz‚Í•‰†‚ÌField‹LÚ‚ğ‘Î‰‚µ‚½‚¢‚È‚¢‚æ‚¤‚¾‚©‚çj
+            // â€» xåº§æ¨™ã¯æ—¢ã«ãƒ‡ãƒ¼ã‚¿ã‚’ç”Ÿæˆã®ã¨ãã«é€†ã«ã—ã¦ãŠã„ãŸã®ã§è² å·ã‚’ä»˜ã‘ãªã„ï¼ˆrvizã¯è² å·ã®Fieldè¨˜è¼‰ã‚’å¯¾å¿œã—ãŸã„ãªã„ã‚ˆã†ã ã‹ã‚‰ï¼‰
             PointFieldMsg[] pointFields = {
                 new PointFieldMsg(reorder ? "y" : "x", 0 * sizeof(float), PointFieldMsg.FLOAT32, 1),
                 new PointFieldMsg(reorder ? "z" : "y", 1 * sizeof(float), PointFieldMsg.FLOAT32, 1),
@@ -255,10 +255,10 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// float”z—ñ‚ğbyte”z—ñ‚Ö•ÏŠ·BÀ•WŒn•ÏŠ·‚Ís‚í‚È‚¢B
+        /// floaté…åˆ—ã‚’byteé…åˆ—ã¸å¤‰æ›ã€‚åº§æ¨™ç³»å¤‰æ›ã¯è¡Œã‚ãªã„ã€‚
         /// </summary>
-        /// <param name="floats">“ü—Í‚Ìfloat”z—ñ</param>
-        /// <param name="bytes">o—Í‚Ìbyte”z—ñ</param>
+        /// <param name="floats">å…¥åŠ›ã®floaté…åˆ—</param>
+        /// <param name="bytes">å‡ºåŠ›ã®byteé…åˆ—</param>
         void ConvertFloatsToRosByteArray(float[] floats, ref byte[] bytes)
         {
             if (bytes == null || bytes.Length != floats.Length * sizeof(float))
@@ -270,10 +270,10 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// Vector3”z—ñ‚ğbyte”z—ñ‚Ö•ÏŠ·BUnity‚©‚çROS‚Ö‚ÌÀ•WŒn•ÏŠ·‚ğs‚¤B
+        /// Vector3é…åˆ—ã‚’byteé…åˆ—ã¸å¤‰æ›ã€‚Unityã‹ã‚‰ROSã¸ã®åº§æ¨™ç³»å¤‰æ›ã‚’è¡Œã†ã€‚
         /// </summary>
-        /// <param name="floats">“ü—Í‚ÌVector3”z—ñ</param>
-        /// <param name="bytes">o—Í‚Ìbyte”z—ñ</param>
+        /// <param name="floats">å…¥åŠ›ã®Vector3é…åˆ—</param>
+        /// <param name="bytes">å‡ºåŠ›ã®byteé…åˆ—</param>
         void ConvertPointsToRosByteArray(Vector3[] points, ref byte[] bytes)
         {
             if (bytes == null || bytes.Length != points.Length * 3 * sizeof(float))
@@ -285,18 +285,18 @@ namespace PWRISimulator.ROS
             float[] comp = new float[1];
             for (int i = 0, j = 0; i < points.Length; i++, j += 12)
             {
-                // ˆÈ~‚ÌƒR[ƒh‚ÍAfloat‚ğbytes‚Ö•ÏŠ·‚·‚é‚Æ‚«‚ÉA“¯‚ÉROSÀ•WŒn‚Ö•ÏŠ·ix = z, y = -x, z = yj
+                // ä»¥é™ã®ã‚³ãƒ¼ãƒ‰ã¯ã€floatã‚’bytesã¸å¤‰æ›ã™ã‚‹ã¨ãã«ã€åŒæ™‚ã«ROSåº§æ¨™ç³»ã¸å¤‰æ›ï¼ˆx = z, y = -x, z = yï¼‰
                 Vector3 p = points[i];
 
-                // XÀ•W‚Ìfloat‚ğbyte‚Æ‚µ‚Ä‘‚«‚Ş
+                // Xåº§æ¨™ã®floatã‚’byteã¨ã—ã¦æ›¸ãè¾¼ã‚€
                 comp[0] = p.z;
                 Buffer.BlockCopy(comp, 0, bytes, j + 0, sizeof(float));
 
-                // YÀ•W‚Ìfloat‚ğbyte‚Æ‚µ‚Ä‘‚«‚Ş
+                // Yåº§æ¨™ã®floatã‚’byteã¨ã—ã¦æ›¸ãè¾¼ã‚€
                 comp[0] = -p.x;
                 Buffer.BlockCopy(comp, 0, bytes, j + 4, sizeof(float));
 
-                // ZÀ•W‚Ìfloat‚ğbyte‚Æ‚µ‚Ä‘‚«‚Ş
+                // Zåº§æ¨™ã®floatã‚’byteã¨ã—ã¦æ›¸ãè¾¼ã‚€
                 comp[0] = p.y;
                 Buffer.BlockCopy(comp, 0, bytes, j + 8, sizeof(float));
             }

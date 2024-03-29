@@ -34,7 +34,7 @@ namespace PWRISimulator
 
             var rotationValue = containerBody.transform.localEulerAngles.y;
 
-            // Šp“x’l‚ª0‚©‚ç360‚Ö”ò‚Î‚È‚¢‚æ‚¤‚É”ÍˆÍ‚ð[0, 360]‚©‚ç[-180A180]‚Ö•ÏŠ·
+            // è§’åº¦å€¤ãŒ0ã‹ã‚‰360ã¸é£›ã°ãªã„ã‚ˆã†ã«ç¯„å›²ã‚’[0, 360]ã‹ã‚‰[-180ã€180]ã¸å¤‰æ›
             if (rotationValue > 180)
                 rotationValue -= 360;
             else if (rotationValue < -180)
@@ -52,7 +52,7 @@ namespace PWRISimulator
             if (lockEnabled == backDoorJoint.Enable)
                 return;
             
-            //@Agx‚ÌLockController‚ðEnable/Disable
+            //ã€€Agxã®LockControllerã‚’Enable/Disable
             backDoorJoint.Enable = lockEnabled;
 
             if (printToConsole)
@@ -61,7 +61,7 @@ namespace PWRISimulator
                 Debug.Log($"{name} : {lockedMsg} door ({backDoorJoint.name})");
             }
 
-            // Inspector‚ÌGUI‚©‚çÝ’è‚µ‚½Event‚ðŒÄ‚Ño‚·
+            // Inspectorã®GUIã‹ã‚‰è¨­å®šã—ãŸEventã‚’å‘¼ã³å‡ºã™
             if (lockEnabled && lockEvent != null)
                 lockEvent.Invoke();
             else if (!lockEnabled && unlockEvent != null)

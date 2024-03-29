@@ -4,16 +4,16 @@ using UnityEngine.InputSystem;
 namespace PWRISimulator
 {
     /// <summary>
-    /// Excavator—p‚ÌInputActionMap‚ÌActions‚ğExcavator.cs‚ÌƒRƒ“ƒXƒgƒŒƒCƒ“ƒgƒCƒ“ƒ^ƒtƒF[ƒX‚ÆŒq‚®ƒXƒNƒŠƒvƒgB
+    /// Excavatorç”¨ã®InputActionMapã®Actionsã‚’Excavator.csã®ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ç¹‹ãã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚
     /// 
-    /// ŠeUpdate‚Éw¦‚µ‚½InputActionMap‚ÌAction‚²‚Æ‚Ì’l‚ğæ“¾‚·‚éA‚È‚Ì‚ÅAUnity‚ÌPlayerInputƒRƒ“ƒ|ƒlƒ“ƒg‚Í•s—vB
+    /// å„Updateã«æŒ‡ç¤ºã—ãŸInputActionMapã®Actionã”ã¨ã®å€¤ã‚’å–å¾—ã™ã‚‹ã€ãªã®ã§ã€Unityã®PlayerInputã‚³ãƒ³ãƒãƒãƒ³ãƒˆã¯ä¸è¦ã€‚
     /// </summary>
     public class ExcavatorPlayerInputHandler2 : MonoBehaviour
     {
         [Header("Target Machine")]
 
         /// <summary>
-        /// ‘ÎÛ‚ÌExcvatorƒRƒ“ƒ|ƒlƒ“ƒgB
+        /// å¯¾è±¡ã®Excvatorã‚³ãƒ³ãƒãƒãƒ³ãƒˆã€‚
         /// </summary>
         public Excavator excavator;
 

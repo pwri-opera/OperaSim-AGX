@@ -43,7 +43,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// timeSource�ɂ��̎��Ԃ𑪂��ĕԂ��i�P�ʁF�b�j�B
+        /// timeSourceによるの時間を測って返す（単位：秒）。
         /// </summary>
         double GetTime()
         {

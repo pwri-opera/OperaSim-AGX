@@ -9,13 +9,13 @@ namespace PWRISimulator.ROS
     public enum RealTimeDataAccessType { Closest, Previous, Next, Interpolate /*, Extrapolate*/ };
 
     /// <summary>
-    /// ЋћЊn—с‚МѓЉѓAѓ‹ѓ^ѓCѓЂѓfЃ[ѓ^‚рЉЗ—ќ‚·‚йѓNѓ‰ѓXЃB—б‚¦‚ОЃA‚Q‚В‚МЉO‚к‚йѓ^ѓCѓЂѓ‰ѓCѓ“‚МЉФѓfЃ[ѓ^‚р‹¤—L‚Е‚«‚й‚ж‚¤‚Й‚·‚йЃB
+    /// ж™‚зі»е€—гЃ®гѓЄг‚ўгѓ«г‚їг‚¤гѓ гѓ‡гѓјг‚їг‚’з®Ўзђ†гЃ™г‚‹г‚Їгѓ©г‚№гЂ‚дѕ‹гЃ€гЃ°гЂЃпј’гЃ¤гЃ®е¤–г‚Њг‚‹г‚їг‚¤гѓ гѓ©г‚¤гѓігЃ®й–“гѓ‡гѓјг‚їг‚’е…±жњ‰гЃ§гЃЌг‚‹г‚€гЃ†гЃ«гЃ™г‚‹гЂ‚
     /// 
-    /// ѓfЃ[ѓ^ѓvѓЌѓWѓ…Ѓ[ѓTЃ[‚ЄAdd(data, time)ѓЃѓ\ѓbѓh‚ЕђV‚µ‚ўѓfЃ[ѓ^‚рЋћЊn—сѓoѓbѓtѓ@‚Й“ь‚кЃAѓfЃ[ѓ^ѓRѓ“ѓVѓ…Ѓ[ѓ}‚ЄGet(time)
-    /// ѓЃѓ\ѓbѓh‚ЕѓfЃ[ѓ^‚рЋж“ѕ‚·‚йЋg‚ў•ы‚Ж‚И‚йЃBAdd‚ЖGet‚Н•КЃX‚ИѓXѓЊѓbѓh‚©‚зЊД‚СЏo‚№‚йЃBGet‚µ‚ЅѓfЃ[ѓ^‚ж‚иЊГ‚ўѓfЃ[ѓ^‚ЄЋ©“®“I‚Й
-    /// ЌнЏњ‚і‚к‚йЃB
+    /// гѓ‡гѓјг‚їгѓ—гѓ­г‚ёгѓҐгѓјг‚µгѓјгЃЊAdd(data, time)гѓЎг‚Ѕгѓѓгѓ‰гЃ§ж–°гЃ—гЃ„гѓ‡гѓјг‚їг‚’ж™‚зі»е€—гѓђгѓѓгѓ•г‚ЎгЃ«е…Ґг‚ЊгЂЃгѓ‡гѓјг‚їг‚ігѓіг‚·гѓҐгѓјгѓћгЃЊGet(time)
+    /// гѓЎг‚Ѕгѓѓгѓ‰гЃ§гѓ‡гѓјг‚їг‚’еЏ–еѕ—гЃ™г‚‹дЅїгЃ„ж–№гЃЁгЃЄг‚‹гЂ‚AddгЃЁGetгЃЇе€ҐгЂ…гЃЄг‚№гѓ¬гѓѓгѓ‰гЃ‹г‚‰е‘јгЃіе‡єгЃ›г‚‹гЂ‚GetгЃ—гЃџгѓ‡гѓјг‚їг‚€г‚ЉеЏ¤гЃ„гѓ‡гѓјг‚їгЃЊи‡Єе‹•зљ„гЃ«
+    /// е‰Љй™¤гЃ•г‚Њг‚‹гЂ‚
     /// </summary>
-    /// <typeparam name="T">ѓfЃ[ѓ^‚Мѓ^ѓCѓv</typeparam>
+    /// <typeparam name="T">гѓ‡гѓјг‚їгЃ®г‚їг‚¤гѓ—</typeparam>
     public class RealTimeDataBuffer<T>
     {
         public delegate T Interpolator(T a, T b, double t);
@@ -93,13 +93,13 @@ namespace PWRISimulator.ROS
             T data = default(T);
             lock (bufferLock)
             {
-                // ѓTѓCѓY‚Н‚O‚МЏкЌ‡
+                // г‚µг‚¤г‚єгЃЇпјђгЃ®е ґеђ€
                 if (buffer.Count == 0)
                 {
                     //Debug.Log("Trying to get value from an empty RealTimeDataBuffer. Will return default value.");
                     return default(T);
                 }
-                // ЋwЋ¦‚Мtime‚НЊ»ЌЭ‚МЋћЊn—с‚ж‚иЊГ‚ўЏкЌ‡
+                // жЊ‡з¤єгЃ®timeгЃЇзЏѕењЁгЃ®ж™‚зі»е€—г‚€г‚ЉеЏ¤гЃ„е ґеђ€
                 else if (time < buffer.First.Value.time)
                 {
                     if (clampToFirst)
@@ -111,10 +111,10 @@ namespace PWRISimulator.ROS
                         return default(T);
                     }
                 }
-                // ЋwЋ¦‚Мtime‚НЊ»ЌЭ‚МЋћЊn—с‚ж‚иђV‚µ‚ўЏкЌ‡
+                // жЊ‡з¤єгЃ®timeгЃЇзЏѕењЁгЃ®ж™‚зі»е€—г‚€г‚Љж–°гЃ—гЃ„е ґеђ€
                 else if (time > buffer.Last.Value.time)
                 {
-                    // ђМ‚МѓfЃ[ѓ^‚рЌнЏњ
+                    // ж”гЃ®гѓ‡гѓјг‚їг‚’е‰Љй™¤
                     if (removeHistoryWhenReading)
                         while (buffer.Last.Previous != null)
                             buffer.Remove(buffer.Last.Previous);
@@ -130,20 +130,20 @@ namespace PWRISimulator.ROS
                 }
                 else
                 {
-                    // Џг‹L€ИЉOЃAtime‚рЌ‡‚н‚№‚Д—v‘f‚рЊџЌх
+                    // дёЉиЁд»Ґе¤–гЂЃtimeг‚’еђ€г‚ЏгЃ›гЃ¦и¦Ѓзґ г‚’ж¤њзґў
                     LinkedListNode<Entry> node = buffer.First;
                     while (node != null)
                     {
-                        // ЋwЋ¦‚Мtime‚МЉ®аш‚Иѓ}ѓbѓ`‚МЏкЌ‡
+                        // жЊ‡з¤єгЃ®timeгЃ®е®Њз’§гЃЄгѓћгѓѓгѓЃгЃ®е ґеђ€
                         if (time == node.Value.time)
                         {
                             data = node.Value.data;
                             break;
                         }
-                        // ЋwЋ¦‚Мtime‚Є‘O‚М—v‘f‚ж‚и‘е‚«‚­‚ДЋџ‚М—v‘f‚ж‚иЏ¬‚і‚ўЏкЌ‡
+                        // жЊ‡з¤єгЃ®timeгЃЊе‰ЌгЃ®и¦Ѓзґ г‚€г‚Ље¤§гЃЌгЃЏгЃ¦ж¬ЎгЃ®и¦Ѓзґ г‚€г‚Ље°ЏгЃ•гЃ„е ґеђ€
                         else if (node.Next != null && time < node.Next.Value.time)
                         {
-                            // AccessType‚Й‚ж‚Б‚Д—Ч‚М—v‘f‚©‚зѓfЃ[ѓ^‚рЋж“ѕ
+                            // AccessTypeгЃ«г‚€гЃЈгЃ¦йљЈгЃ®и¦Ѓзґ гЃ‹г‚‰гѓ‡гѓјг‚їг‚’еЏ–еѕ—
                             if (accessType == RealTimeDataAccessType.Previous)
                                 data = node.Value.data;
                             else if (accessType == RealTimeDataAccessType.Next)
@@ -158,16 +158,16 @@ namespace PWRISimulator.ROS
                                 data = interpolator(node.Value.data, node.Next.Value.data, t);
                             }
 
-                            // ђМ‚МѓfЃ[ѓ^‚рЌнЏњ
+                            // ж”гЃ®гѓ‡гѓјг‚їг‚’е‰Љй™¤
                             if (removeHistoryWhenReading)
                                 while (node.Previous != null)
                                     buffer.Remove(node.Previous);
-                            // ѓfЃ[ѓ^‚рЊ©‚В‚Ї‚Ѕ‚М‚Еѓ‹Ѓ[ѓv‚р‚в‚Я‚й
+                            // гѓ‡гѓјг‚їг‚’и¦‹гЃ¤гЃ‘гЃџгЃ®гЃ§гѓ«гѓјгѓ—г‚’г‚„г‚Ѓг‚‹
                             break;
                         }
                         else
                         {
-                            // ѓfЃ[ѓ^‚р‚Ь‚ѕЊ©‚В‚Ї‚Д‚ў‚И‚ў‚М‚Еѓ‹Ѓ[ѓv‚р‘±‚Ї‚й
+                            // гѓ‡гѓјг‚їг‚’гЃѕгЃ и¦‹гЃ¤гЃ‘гЃ¦гЃ„гЃЄгЃ„гЃ®гЃ§гѓ«гѓјгѓ—г‚’з¶љгЃ‘г‚‹
                             node = node.Next;
                             Debug.Assert(node != null, $"{GetType().Name} : Unexpected code reached.");
                         }

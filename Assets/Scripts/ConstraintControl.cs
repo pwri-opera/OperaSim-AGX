@@ -6,7 +6,7 @@ using AGXUnity.Utils;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ‚æ‚èŠÈ’P‚ÈƒCƒ“ƒ^ƒtƒF[ƒX‚ÅConstraint‚ğ§Œä‚µ‚½‚èA—Í‚È‚Ç‚ğÀ‘ª‚µ‚½‚è‚Å‚«‚é‚æ‚¤‚ÈConsraintƒvƒƒNƒVƒNƒ‰ƒXB
+    /// ã‚ˆã‚Šç°¡å˜ãªã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã§Constraintã‚’åˆ¶å¾¡ã—ãŸã‚Šã€åŠ›ãªã©ã‚’å®Ÿæ¸¬ã—ãŸã‚Šã§ãã‚‹ã‚ˆã†ãªConsraintãƒ—ãƒ­ã‚¯ã‚·ã‚¯ãƒ©ã‚¹ã€‚
     /// </summary>
     [Serializable]
     public class ConstraintControl
@@ -14,32 +14,32 @@ namespace PWRISimulator
         #region Public
 
         /// <summary>
-        /// ‘ÎÛ‚ÌConstraintB
+        /// å¯¾è±¡ã®Constraintã€‚
         /// </summary>
         [InspectorLabel("Target Constraint")]
         public Constraint constraint;
 
         /// <summary>
-        /// ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ğ§Œä‚·‚é‚©Btrue‚Ìê‡‚ÍAcontrolType‚É‚æ‚éƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ÌTargetSpeedController‚©
-        /// LockController‚ğ§Œä‚·‚éBfalse‚Ìê‡‚ÍA‘ÎÛ‚ÌConstraint‚Ìİ’è‚ğG‚ç‚È‚¢BPlay‚µ‚Ä‚¢‚éŠÔ‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢B
+        /// ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚’åˆ¶å¾¡ã™ã‚‹ã‹ã€‚trueã®å ´åˆã¯ã€controlTypeã«ã‚ˆã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã®TargetSpeedControllerã‹
+        /// LockControllerã‚’åˆ¶å¾¡ã™ã‚‹ã€‚falseã®å ´åˆã¯ã€å¯¾è±¡ã®Constraintã®è¨­å®šã‚’è§¦ã‚‰ãªã„ã€‚Playã—ã¦ã„ã‚‹é–“ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ããªã„ã€‚
         /// </summary>
         public bool controlEnabled = false;
 
         /// <summary>
-        /// controlValueA‚Â‚Ü‚è§Œä‚Ìw—ß’lA‚Ìí—ŞB‰Šú‰»‚µ‚½Œã‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢B
+        /// controlValueã€ã¤ã¾ã‚Šåˆ¶å¾¡ã®æŒ‡ä»¤å€¤ã€ã®ç¨®é¡ã€‚åˆæœŸåŒ–ã—ãŸå¾Œã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ããªã„ã€‚
         /// </summary>
         /// <seealso cref="ControlType"/>
         [ConditionalHide("controlEnabled", true)]
         public ControlType controlType = ControlType.Speed;
 
         /// <summary>
-        /// Constraint§Œä‚Ìw—ß’lBcontrolType‚É‚æ‚Á‚ÄˆÊ’uEŠp“x‚©A‘¬“xEŠp‘¬“x‚©A—ÍEƒgƒ‹ƒNB
+        /// Constraintåˆ¶å¾¡ã®æŒ‡ä»¤å€¤ã€‚controlTypeã«ã‚ˆã£ã¦ä½ç½®ãƒ»è§’åº¦ã‹ã€é€Ÿåº¦ãƒ»è§’é€Ÿåº¦ã‹ã€åŠ›ãƒ»ãƒˆãƒ«ã‚¯ã€‚
         /// </summary>
         [ConditionalHide("controlEnabled", true)]
         public double controlValue = 0.0f;
 
         /// <summary>
-        /// Constraint‚Ì§Œä•û–@‚ªRigidBody‚É‚©‚¯‚ç‚ê‚éÅ‘å‚Ì—Í^ƒgƒ‹ƒNB
+        /// Constraintã®åˆ¶å¾¡æ–¹æ³•ãŒRigidBodyã«ã‹ã‘ã‚‰ã‚Œã‚‹æœ€å¤§ã®åŠ›ï¼ãƒˆãƒ«ã‚¯ã€‚
         /// </summary>
         [ConditionalHide("controlEnabled", true)]
         public double controlMaxForce = double.PositiveInfinity;
@@ -59,7 +59,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ÀÛ‚ÌAGXUnity‚ÌƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ğ§Œä•û–@‚É‚æ‚Á‚Ä€”õ‚·‚éB
+        /// å®Ÿéš›ã®AGXUnityã®ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚’åˆ¶å¾¡æ–¹æ³•ã«ã‚ˆã£ã¦æº–å‚™ã™ã‚‹ã€‚
         /// </summary>
         public void Initialize()
         {
@@ -83,7 +83,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// controlValue‚ğÀÛ‚ÌAGXUnity‚ÌƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚Éİ’è‚·‚éB
+        /// controlValueã‚’å®Ÿéš›ã®AGXUnityã®ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã«è¨­å®šã™ã‚‹ã€‚
         /// </summary>
         public void UpdateConstraintControl()
         {
@@ -105,7 +105,7 @@ namespace PWRISimulator
         #region Private
 
         ControlType? controlTypePrev = null;
-        double? controlValuePrev = null;@// controlValue‚ª•Ï‚í‚Á‚½‚©ŒŸ’m‚·‚é‚½‚ß‚Ì’lB
+        double? controlValuePrev = null;ã€€// controlValueãŒå¤‰ã‚ã£ãŸã‹æ¤œçŸ¥ã™ã‚‹ãŸã‚ã®å€¤ã€‚
         double? controlMaxForcePrev = null;
 
         agx.Constraint1DOF nativeConstraint;
@@ -114,7 +114,7 @@ namespace PWRISimulator
         agx.ElementaryConstraint activeController;
 
         /// <summary>
-        /// controlType‚É‚æ‚Á‚ÄAlockController‚©targetSpeedController‚ğEnable
+        /// controlTypeã«ã‚ˆã£ã¦ã€lockControllerã‹targetSpeedControllerã‚’Enable
         /// </summary>
         void UpdateControlType()
         {
