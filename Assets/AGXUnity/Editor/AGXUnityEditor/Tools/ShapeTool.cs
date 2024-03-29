@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
-using UnityEditor;
-using AGXUnity.Collide;
+﻿using AGXUnity.Collide;
 using AGXUnity.Rendering;
-
+using System;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 using GUI = AGXUnity.Utils.GUI;
 using Object = UnityEngine.Object;
 
@@ -29,10 +28,8 @@ namespace AGXUnityEditor.Tools
         if ( value && !ShapeResizeTool ) {
           RemoveAllChildren();
 
-          var shapeResizeTool                                            = new ShapeResizeTool( Shape );
-          shapeResizeTool.ActivateKey.HideDefaultHandlesWhenIsDown       = true;
-          shapeResizeTool.SymmetricScaleKey.HideDefaultHandlesWhenIsDown = true;
-          shapeResizeTool.RemoveOnKeyEscape                              = true;
+          var shapeResizeTool               = new ShapeResizeTool( Shape );
+          shapeResizeTool.RemoveOnKeyEscape = true;
 
           AddChild( shapeResizeTool );
 
@@ -59,19 +56,19 @@ namespace AGXUnityEditor.Tools
       }
     }
 
-    public bool ShapeCreateTool
+    public bool CreateOrientedShapeTool
     {
-      get { return GetChild<ShapeCreateTool>() != null; }
+      get { return GetChild<CreateOrientedShapeTool>() != null; }
       set
       {
-        if ( value && !ShapeCreateTool ) {
+        if ( value && !CreateOrientedShapeTool ) {
           RemoveAllChildren();
 
-          var shapeCreateTool = new ShapeCreateTool( Shape.gameObject );
+          var shapeCreateTool = new CreateOrientedShapeTool( Shape.gameObject );
           AddChild( shapeCreateTool );
         }
         else if ( !value )
-          RemoveChild( GetChild<ShapeCreateTool>() );
+          RemoveChild( GetChild<CreateOrientedShapeTool>() );
       }
     }
 
@@ -121,8 +118,8 @@ namespace AGXUnityEditor.Tools
                                                                     () => toggleShapeResizeTool = true,
                                                                     Tools.ShapeResizeTool.SupportsShape( Shape ) ),
                                 InspectorGUI.ToolButtonData.Create( ToolIcon.CreateShapeGivenVisual,
-                                                                    ShapeCreateTool,
-                                                                    "Create shape from visual objects",
+                                                                    CreateOrientedShapeTool,
+                                                                    "Create oriented shape from visual objects",
                                                                     () => toggleShapeCreate = true ),
                                 InspectorGUI.ToolButtonData.Create( ToolIcon.DisableCollisions,
                                                                     DisableCollisionsTool,
@@ -134,8 +131,8 @@ namespace AGXUnityEditor.Tools
                                                                     () => toggleShapeVisualCreate = true,
                                                                     Tools.ShapeVisualCreateTool.CanCreateVisual( Shape ) ) );
 
-      if ( ShapeCreateTool ) {
-        GetChild<ShapeCreateTool>().OnInspectorGUI();
+      if ( CreateOrientedShapeTool ) {
+        GetChild<CreateOrientedShapeTool>().OnInspectorGUI();
       }
       if ( DisableCollisionsTool ) {
         GetChild<DisableCollisionsTool>().OnInspectorGUI();
@@ -147,7 +144,7 @@ namespace AGXUnityEditor.Tools
       if ( toggleShapeResizeTool )
         ShapeResizeTool = !ShapeResizeTool;
       if ( toggleShapeCreate )
-        ShapeCreateTool = !ShapeCreateTool;
+        CreateOrientedShapeTool = !CreateOrientedShapeTool;
       if ( toggleDisableCollisions )
         DisableCollisionsTool = !DisableCollisionsTool;
       if ( toggleShapeVisualCreate )
@@ -174,27 +171,29 @@ namespace AGXUnityEditor.Tools
         if ( distinctMaterials.Length == 1 )
           isExtended = ShapeVisualMaterialGUI( "Common Render Material",
                                                distinctMaterials[ 0 ],
-                                               newMaterial => shapeVisual.SetMaterial( newMaterial ) );
+                                               newMaterial => shapeVisual.SetMaterial( newMaterial ),
+                                               shapeVisual );
         else
           isExtended = InspectorGUI.Foldout( EditorData.Instance.GetData( Shape, "Render Materials" ),
                                              GUI.MakeLabel( "Render Materials" ) );
-
         if ( isExtended )
           using ( InspectorGUI.IndentScope.Single )
             for ( int i = 0; i < materials.Length; ++i ) {
               ShapeVisualMaterialGUI( names[ i ],
                                       materials[ i ],
-                                      newMaterial => shapeVisual.ReplaceMaterial( i, newMaterial ) );
+                                      newMaterial => shapeVisual.ReplaceMaterial( i, newMaterial ),
+                                      shapeVisual );
             }
       }
       else if ( materials.Length == 1 ) {
         ShapeVisualMaterialGUI( "Render Material",
                                 materials[ 0 ],
-                                newMaterial => shapeVisual.ReplaceMaterial( 0, newMaterial ) );
+                                newMaterial => shapeVisual.ReplaceMaterial( 0, newMaterial ),
+                                shapeVisual );
       }
     }
 
-    private bool ShapeVisualMaterialGUI( string name, Material material, Action<Material> onNewMaterial )
+    private bool ShapeVisualMaterialGUI( string name, Material material, Action<Material> onNewMaterial, ShapeVisual undoRoot )
     {
       var editorData = EditorData.Instance.GetData( Shape, "Visual_" + name );
       var result = InspectorGUI.FoldoutObjectField( GUI.MakeLabel( name ),
@@ -202,8 +201,11 @@ namespace AGXUnityEditor.Tools
                                                     typeof( Material ),
                                                     editorData,
                                                     false ) as Material;
-      if ( result != material )
+      if ( result != material ) {
+        Undo.RecordObjects( undoRoot.GetComponentsInChildren<MeshRenderer>(), "Set shape visual material" );
         onNewMaterial?.Invoke( result );
+        EditorUtility.SetDirty( undoRoot );
+      }
 
       return editorData.Bool;
     }

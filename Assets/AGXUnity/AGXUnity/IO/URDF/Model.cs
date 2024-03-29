@@ -119,6 +119,10 @@ namespace AGXUnity.IO.URDF
           dataDirectory += '/';
       }
 
+      // The Unity URDF importer has a custom Collada importer that
+      // does things to the transforms. If this importer is installed
+      // we're reverting the modifications made.
+      var hasUnityURDFImporter = Options.UnityURDFImporterInstalled;
       var loadedInstances = new List<GameObject>();
       Func<string, ResourceType, Object> resourceLoader = ( resourceFilename, type ) =>
       {
@@ -132,6 +136,10 @@ namespace AGXUnity.IO.URDF
           resourceFilename = dataDirectory + resourceFilename.Substring( "package://".Length );
         else if ( !string.IsNullOrEmpty( dataDirectory ) )
           resourceFilename = dataDirectory + resourceFilename;
+
+        // Makes resourceFilename relative to the application root directory,
+        // expands any ".." in the path and replaces any \ with /.
+        resourceFilename = resourceFilename.PrettyPath();
 
         var hasExtension = Path.HasExtension( resourceFilename );
         var isStlFile    = hasExtension && Path.GetExtension( resourceFilename ).ToLowerInvariant() == ".stl";
@@ -161,13 +169,20 @@ namespace AGXUnity.IO.URDF
           var colladaInfo = Utils.ParseColladaInfo( resourceFilename );
           var resourceGo = resource as GameObject;
           // Model implementation assumes Z-up, anything other than that
-          // has to be transformed.
-          if ( resourceGo != null && !colladaInfo.IsDefault ) {
+          // has to be transformed. Note that we have to "undo" the transforms
+          // made by the Unity URDF importer Collada processor, if installed.
+          if ( resourceGo != null && ( !colladaInfo.IsDefault || hasUnityURDFImporter ) ) {
             var colladaInstance = Object.Instantiate<GameObject>( resourceGo );
+            var rotationPatch = hasUnityURDFImporter ?
+                                  GetInverseUnityColladaImporterRotation( colladaInfo.UpAxis ) :
+                                  Quaternion.identity;
             if ( colladaInfo.UpAxis == Utils.ColladaInfo.Axis.Y )
-              colladaInstance.transform.rotation = Quaternion.Euler( -90, 0, 0 ) * colladaInstance.transform.rotation;
+              colladaInstance.transform.rotation = Quaternion.Euler( -90, 0, 0 ) * rotationPatch * colladaInstance.transform.rotation;
             else if ( colladaInfo.UpAxis == Utils.ColladaInfo.Axis.X )
-              colladaInstance.transform.rotation = Quaternion.Euler( -90, 0, 90 ) * colladaInstance.transform.rotation;
+              colladaInstance.transform.rotation = Quaternion.Euler( -90, 0, 90 ) * rotationPatch * colladaInstance.transform.rotation;
+            else
+              colladaInstance.transform.rotation = rotationPatch * colladaInstance.transform.rotation;
+
             loadedInstances.Add( colladaInstance );
             resource = colladaInstance;
           }
@@ -176,6 +191,15 @@ namespace AGXUnity.IO.URDF
         return resource;
       };
       return resourceLoader;
+    }
+
+    private static Quaternion GetInverseUnityColladaImporterRotation( Utils.ColladaInfo.Axis axis )
+    {
+      return Quaternion.Inverse( Quaternion.Euler( axis == Utils.ColladaInfo.Axis.X ?
+                                                     new Vector3( -90, 90, 90 ) :
+                                                   axis == Utils.ColladaInfo.Axis.Y ?
+                                                     new Vector3( -90, 90, 0 ) :
+                                                     new Vector3( 0, 90, 0 ) ) );
     }
 
     /// <summary>
@@ -405,6 +429,7 @@ namespace AGXUnity.IO.URDF
       // Reading links defined under the "robot" scope.
       var links = new List<Link>();
       var localMaterials = new HashSet<string>();
+      var warningBeginStr = GUI.AddColorTag( "URDF Warning", Color.yellow );
       foreach ( var linkElement in root.Elements( "link" ) ) {
         var link = Instantiate<Link>( linkElement );
 
@@ -425,7 +450,7 @@ namespace AGXUnity.IO.URDF
                                                                       !localMaterials.Contains( visual.Material.Name ) &&
                                                                       GetMaterial( visual.Material.Name ) == null ).Select( visual => visual.Material ).ToArray();
         if ( missingMaterialReferences.Length > 0 ) {
-          Debug.LogWarning( $"{GUI.AddColorTag( "URDF Warning", Color.yellow )}: {link.Name} contains " +
+          Debug.LogWarning( $"{warningBeginStr}: {link.Name} contains " +
                             $"{missingMaterialReferences.Length} missing material references:" );
           foreach ( var missingMaterialReference in missingMaterialReferences )
             Debug.LogWarning( $"    {Utils.GetLineInfo( missingMaterialReference.LineNumber )}: <material name = \"{missingMaterialReference.Name}\"/>" );
@@ -447,11 +472,18 @@ namespace AGXUnity.IO.URDF
           throw new UrdfIOException( $"{Utils.GetLineInfo( jointElement )}: Non-unique link name '{joint.Name}'." );
         if ( GetLink( joint.Parent ) == null )
           throw new UrdfIOException( $"{Utils.GetLineInfo( jointElement )}: Joint parent link with name {joint.Parent} doesn't exist." );
-        if ( GetLink( joint.Child ) == null )
+        var childLink = GetLink( joint.Child );
+        if ( childLink == null )
           throw new UrdfIOException( $"{Utils.GetLineInfo( jointElement )}: Joint child link with name {joint.Child} doesn't exist." );
 
         m_jointTable.Add( joint.Name, joints.Count );
         joints.Add( joint );
+
+        // Avoiding warning for "world" type of links, i.e., 'parentLink' of
+        // this joint may have inertial == null.
+        if ( childLink.Inertial == null && childLink.Collisions.Length == 0 )
+          Debug.LogWarning( $"{warningBeginStr} [{Utils.GetLineInfo( childLink.LineNumber )}]: Intermediate link '{childLink.Name}' is defined without " +
+                            $"<inertial> and <collision> which results in default mass (1) and default inertia diagonal (1, 1, 1)." );
       }
       m_joints = joints.ToArray();
 
@@ -556,7 +588,7 @@ namespace AGXUnity.IO.URDF
       return go;
     }
 
-    private void SetTransform( Transform transform, Pose pose )
+    private void SetTransform( Transform transform, Pose pose, bool patchColladaTransform )
     {
       if ( pose == null )
         return;
@@ -565,13 +597,9 @@ namespace AGXUnity.IO.URDF
       // when the model is loaded into a project. This "patch"
       // undo this transform in many cases. Assumes <up_axis>Z_UP</up_axis>
       // in the .dae.
-      var patchTransform = Options.TransformCollada &&
-                           pose is Visual visual &&
-                           visual.Geometry.Type == Geometry.GeometryType.Mesh &&
-                           visual.Geometry.ResourceType == Geometry.MeshResourceType.Collada;
-      if ( patchTransform ) {
+      if ( patchColladaTransform ) {
         var xRotation = Quaternion.Euler( new Vector3( 90, 0, 0 ) );
-        transform.SetPositionAndRotation( pose.Xyz.ToLeftHanded() +  xRotation * transform.position,
+        transform.SetPositionAndRotation( pose.Xyz.ToLeftHanded() + xRotation * transform.position,
                                           ( pose.Rpy.RadEulerToLeftHanded() * xRotation ) * transform.rotation );
       }
       else {
@@ -620,6 +648,7 @@ namespace AGXUnity.IO.URDF
                           collision.Name;
       var shapeGo = GetOrCreateGameObject( shapeGoName );
       GetOrCreateComponent<ElementComponent>( shapeGo ).SetElement( collision );
+      var patchColladaTransform = false;
       try {
         if ( collision.Geometry.Type == Geometry.GeometryType.Box ) {
           var box = GetOrCreateComponent<Collide.Box>( shapeGo );
@@ -642,25 +671,7 @@ namespace AGXUnity.IO.URDF
           sphere.Radius = collision.Geometry.Radius;
         }
         else if ( collision.Geometry.Type == Geometry.GeometryType.Mesh ) {
-          var meshResource = GetResource<GameObject>( collision.Geometry.Filename, ResourceType.CollisionMesh );
-          if ( meshResource == null )
-            throw new UrdfIOException( $"Mesh resource '{collision.Geometry.Filename}' is null." );
-
-          if ( collision.Geometry.HasScale )
-            shapeGo.transform.localScale = collision.Geometry.Scale;
-
-          // The Collada importer in Unity is scaling the models depending
-          // on the units used.
-          if ( collision.Geometry.ResourceType == Geometry.MeshResourceType.Collada )
-            shapeGo.transform.localScale = Vector3.Scale( shapeGo.transform.localScale,
-                                                          meshResource.transform.localScale );
-
-          var sourceMeshes = ( from filter in meshResource.GetComponentsInChildren<MeshFilter>() select filter.sharedMesh ).ToArray();
-          if ( sourceMeshes.Length == 0 )
-            throw new UrdfIOException( $"Mesh resource '{collision.Geometry.Filename}' doesn't contain any meshes." );
-          var mesh = GetOrCreateComponent<Collide.Mesh>( shapeGo );
-          foreach ( var sourceMesh in sourceMeshes )
-            mesh.AddSourceObject( sourceMesh );
+          patchColladaTransform = CreateCollisionMesh( collision, shapeGo );
         }
       }
       catch ( System.Exception ) {
@@ -669,7 +680,7 @@ namespace AGXUnity.IO.URDF
       }
 
       shapeGo.transform.parent = rb.transform;
-      SetTransform( shapeGo.transform, collision );
+      SetTransform( shapeGo.transform, collision, patchColladaTransform && Options.TransformCollada );
 
       return shapeGo;
     }
@@ -678,6 +689,7 @@ namespace AGXUnity.IO.URDF
     {
       GameObject instance = null;
       UnityEngine.Material renderMaterial = null;
+      var patchColladaTransform = false;
       if ( visual.Geometry.Type == Geometry.GeometryType.Mesh ) {
         var meshResource = GetResource<GameObject>( visual.Geometry.Filename, ResourceType.VisualMesh );
         if ( meshResource == null )
@@ -687,6 +699,10 @@ namespace AGXUnity.IO.URDF
           instance.transform.localScale = visual.Geometry.Scale;
         // Overrides model if <material> is defined under <visual>.
         renderMaterial = GetOrCreateRenderMaterial( visual.Material );
+
+        patchColladaTransform = Options.TransformCollada &&
+                                visual.Geometry.Type == Geometry.GeometryType.Mesh &&
+                                visual.Geometry.ResourceType == Geometry.MeshResourceType.Collada;
       }
       else {
         instance = InstantiateAndSizePrimitiveRenderer( visual );
@@ -721,7 +737,7 @@ namespace AGXUnity.IO.URDF
       }
 
       gameObjectToTransform.transform.parent = rb.transform;
-      SetTransform( gameObjectToTransform.transform, visual );
+      SetTransform( gameObjectToTransform.transform, visual, patchColladaTransform );
       GetOrCreateComponent<ElementComponent>( gameObjectToTransform ).SetElement( visual );
 
       return gameObjectToTransform;
@@ -825,6 +841,56 @@ namespace AGXUnity.IO.URDF
                                         2.0f * visual.Geometry.Radius * Vector3.one :
                                         Vector3.one;
       return instance;
+    }
+
+    private bool CreateCollisionMesh( Collision collision, GameObject shapeGo )
+    {
+      var meshResource = GetResource<GameObject>( collision.Geometry.Filename, ResourceType.CollisionMesh );
+      if ( meshResource == null )
+        throw new UrdfIOException( $"Mesh resource '{collision.Geometry.Filename}' is null." );
+
+      if ( collision.Geometry.HasScale )
+        shapeGo.transform.localScale = collision.Geometry.Scale;
+
+      var isCollada = collision.Geometry.ResourceType == Geometry.MeshResourceType.Collada;
+      // The Collada importer in Unity is scaling the models depending
+      // on the units used.
+      if ( isCollada )
+        shapeGo.transform.localScale = Vector3.Scale( shapeGo.transform.localScale,
+                                                      meshResource.transform.localScale );
+
+      var filters = meshResource.GetComponentsInChildren<MeshFilter>();
+      var handleSpecialCollada = filters.Length > 0 &&
+                                 isCollada &&
+                                 filters.Any( filter => filter.gameObject != meshResource );
+      if ( handleSpecialCollada ) {
+        // Special case where a Collada import contains game objects with
+        // filter(s) that isn't on the meshResource. It could either be
+        // a single child or multiple, in hierarchy. We're currently not
+        // restoring that complete hierarchy, we're only taking the ones
+        // that contains a mesh filter. That's why we use 'lossyScale' and
+        // "global" position and rotation.
+        for ( int i = 0; i < filters.Length; ++i ) {
+          var extra = GetOrCreateGameObject( $"{collision.Name}_extra_{i + 1}" );
+          extra.transform.parent = shapeGo.transform;
+          extra.transform.localRotation = filters[ i ].transform.rotation;
+          extra.transform.localPosition = filters[ i ].transform.position;
+          extra.transform.localScale = filters[ i ].transform.lossyScale;
+
+          var mesh = GetOrCreateComponent<Collide.Mesh>( extra );
+          mesh.SetSourceObject( filters[ i ].sharedMesh );
+        }
+      }
+      else {
+        var sourceMeshes = meshResource.GetComponentsInChildren<MeshFilter>().Select( filter => filter.sharedMesh );
+        if ( sourceMeshes.Count() == 0 )
+          throw new UrdfIOException( $"Mesh resource '{collision.Geometry.Filename}' doesn't contain any meshes." );
+        var mesh = GetOrCreateComponent<Collide.Mesh>( shapeGo );
+        foreach ( var sourceMesh in sourceMeshes )
+          mesh.AddSourceObject( sourceMesh );
+      }
+
+      return handleSpecialCollada;
     }
 
     private T GetResource<T>( string filename, ResourceType type )

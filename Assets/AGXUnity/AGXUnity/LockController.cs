@@ -9,6 +9,7 @@ namespace AGXUnity
   /// </summary>
   [AddComponentMenu( "" )]
   [HideInInspector]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#controllers" )]
   public class LockController : ElementaryConstraintController
   {
     /// <summary>
@@ -29,6 +30,17 @@ namespace AGXUnity
         if ( Native != null )
           agx.LockController.safeCast( Native ).setPosition( m_position );
       }
+    }
+
+    /// <summary>
+    /// Convenience method to get current force applied by this controller. 0 if not initialized.
+    /// </summary>
+    public float GetCurrentForce()
+    {
+      if ( Native != null )
+        return (float) agx.LockController.safeCast( Native ).getCurrentForce( );
+      else
+        return 0;
     }
 
     protected override void Construct( agx.ElementaryConstraint tmpEc )

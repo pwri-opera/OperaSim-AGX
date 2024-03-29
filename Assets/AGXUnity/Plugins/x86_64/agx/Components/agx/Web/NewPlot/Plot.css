@@ -1,0 +1,71 @@
+body {
+  margin: 5px;
+  font-size: 11px;
+/*  line-height: 1.3;*/
+  font-weight: normal;
+  font-family: "Verdana";
+  background: gray;
+  overflow: scroll;
+
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+  user-select: none;
+}
+
+.plotContext {
+  border-radius:10px;
+  background: white;
+  white-space: nowrap;
+  padding: 5px 30px 5px 15px;
+  margin: 5px;
+  height: 100px;
+  width: 100px;
+  float: left;
+}
+
+.plotWindow {
+  /*width: 600px;*/
+  height: 100%;
+}
+
+.plotContext:before,
+.plotContext:after {
+  content:"";
+  display:table;
+}
+
+.plotContext:after {
+  clear:both;
+}
+
+#toolTip {
+  position: absolute;
+  border: 1px solid rgb(255, 221, 221);
+  padding: 2px;
+  background-color: rgb(255, 238, 238);
+  opacity: 0.9;
+  top: 220px;
+  left: 1078px;
+  display: none;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 11;
+}
+
+#progress-form {
+  display: none;
+}
+
+.progress {
+  font-size: 38px;
+  text-align: center;
+  margin: 0px;
+  margin-top: 25px;
+}
+
+#empty-plot-form {
+  display: none;
+}

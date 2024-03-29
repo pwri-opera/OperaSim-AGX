@@ -1,7 +1,6 @@
 <Entity name="BulkMaterial" source="Referenced">
 	<Attribute.Scalar name="density" type="Real"/>
 	<Attribute.Scalar name="youngsModulus" type="Real"/>
-	<Attribute.Scalar name="poissonsRatio" type="Real"/>
 	<Attribute.Scalar name="viscosity" type="Real"/>
 	<Attribute.Scalar name="damping" type="Real"/>
   <Attribute.Scalar name="minElasticRestLength" type="Real" value="0.001"/>

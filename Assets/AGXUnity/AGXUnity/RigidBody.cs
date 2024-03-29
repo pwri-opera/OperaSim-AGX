@@ -14,6 +14,7 @@ namespace AGXUnity
   [AddComponentMenu( "AGXUnity/Rigid Body" )]
   [DisallowMultipleComponent]
   [RequireComponent( typeof( MassProperties ) )]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#rigid-body" )]
   public class RigidBody : ScriptComponent
   {
     /// <summary>
@@ -220,12 +221,6 @@ namespace AGXUnity
     }
 
     /// <summary>
-    /// True if the game object is active in hierarchy and this component is enabled.
-    /// </summary>
-    [HideInInspector]
-    public bool IsEnabled { get { return gameObject.activeInHierarchy && enabled; } }
-
-    /// <summary>
     /// Array of shapes belonging to this rigid body instance.
     /// </summary>
     [HideInInspector]
@@ -233,7 +228,7 @@ namespace AGXUnity
     {
       get
       {
-        return State == States.CONSTRUCTED || State == States.DESTROYED ?
+        return State != States.INITIALIZED ?
                  GetShapes() :
                  m_shapesCache;
       }
@@ -312,6 +307,17 @@ namespace AGXUnity
     }
 
     /// <summary>
+    /// During runtime, the shapes that belongs to this rigid body are cached when
+    /// this instance is initialized. If additional shapes are added after this
+    /// rigid body has been initialized, call this method to update the cache and
+    /// for the newly added shapes to be available using the property Shapes.
+    /// </summary>
+    public void SyncShapesCache()
+    {
+      m_shapesCache = GetShapes();
+    }
+
+    /// <summary>
     /// Peek at a temporary native instance or the current (if initialized).
     /// </summary>
     /// <param name="callback">Callback with temporary or already initialized native instance. Callback signature ( nativeRb, isTemporary ).</param>
@@ -328,16 +334,15 @@ namespace AGXUnity
       else {
         using ( var rb = new agx.RigidBody() ) {
           foreach ( var shape in Shapes ) {
-            var nativeShape = shape.CreateTemporaryNative();
-            if ( nativeShape != null ) {
-              var geometry = new agxCollide.Geometry( nativeShape );
+            var geometry = shape.CreateTemporaryNative();
+            if ( geometry == null )
+              continue;
 
-              geometry.setEnable( shape.IsEnabled );
+            geometry.setEnable( shape.isActiveAndEnabled );
+            if ( shape.Material != null )
+              geometry.setMaterial( shape.Material.CreateTemporaryNative() );
 
-              if ( shape.Material != null )
-                geometry.setMaterial( shape.Material.CreateTemporaryNative() );
-              rb.add( geometry, shape.GetNativeRigidBodyOffset( this ) );
-            }
+            rb.add( geometry, shape.GetNativeRigidBodyOffset( this ) );
           }
 
           // For center of mass position/rotation to be correct we have to
@@ -365,16 +370,14 @@ namespace AGXUnity
 
       var native = new agx.RigidBody( template.name );
       foreach ( var shape in shapes ) {
-        var nativeShape = shape.CreateTemporaryNative();
-        if ( nativeShape != null ) {
-          var geometry = new agxCollide.Geometry( nativeShape );
+        var geometry = shape.CreateTemporaryNative();
 
-          geometry.setEnable( shape.IsEnabled );
+        // shape.isActiveAndEnabled is always false for loaded prefabs.
+        geometry.setEnable( shape.enabled );
 
-          if ( shape.Material != null )
-            geometry.setMaterial( shape.Material.GetInitialized<ShapeMaterial>().Native );
-          native.add( geometry, shape.GetNativeRigidBodyOffset( template ) );
-        }
+        if ( shape.Material != null )
+          geometry.setMaterial( shape.Material.GetInitialized<ShapeMaterial>().Native );
+        native.add( geometry, shape.GetNativeRigidBodyOffset( template ) );
       }
 
       template.SyncNativeTransform( native );
@@ -445,7 +448,7 @@ namespace AGXUnity
 
       m_rb = new agx.RigidBody();
       m_rb.setName( name );
-      m_rb.setEnable( IsEnabled );
+      m_rb.setEnable( isActiveAndEnabled );
       m_rb.getMassProperties().setAutoGenerateMask( 0u );
 
       SyncNativeTransform( m_rb );
@@ -456,8 +459,7 @@ namespace AGXUnity
 
       UpdateMassProperties();
 
-      if ( IsEnabled )
-        HandleUpdateCallbacks( true );
+      HandleUpdateCallbacks( isActiveAndEnabled );
 
       return true;
     }
@@ -476,6 +478,9 @@ namespace AGXUnity
     {
       if ( Simulation.HasInstance )
         GetSimulation().remove( m_rb );
+
+      if ( m_rb != null )
+        m_rb.ReturnToPool();
 
       m_rb               = null;
       m_transform        = null;

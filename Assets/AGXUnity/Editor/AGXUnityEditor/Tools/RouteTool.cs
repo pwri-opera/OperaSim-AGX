@@ -208,10 +208,12 @@ namespace AGXUnityEditor.Tools
       state.InsertBefore = InspectorGUI.Button( MiscIcon.EntryInsertBefore,
                                                 true,
                                                 "Insert a new node before this node.",
+                                                0.85f,
                                                 GUILayout.Width( 18 ) );
       state.InsertAfter = InspectorGUI.Button( MiscIcon.EntryInsertAfter,
                                                true,
                                                "Insert a new node after this node.",
+                                               0.85f,
                                                GUILayout.Width( 18 ) );
       state.Erase = InspectorGUI.Button( MiscIcon.EntryRemove,
                                          true,
@@ -233,6 +235,8 @@ namespace AGXUnityEditor.Tools
       NodeT listOpNode   = null;
 
       Undo.RecordObject( Route, "Route changed" );
+
+      EditorGUI.BeginChangeCheck();
 
       if ( InspectorGUI.Foldout( EditorData.Instance.GetData( Parent,
                                                               "Route",
@@ -309,6 +313,8 @@ namespace AGXUnityEditor.Tools
         Selected = null;
         Route.Remove( listOpNode );
       }
+      if( EditorGUI.EndChangeCheck() )
+        EditorUtility.SetDirty( Route );
     }
 
     private void CreateRouteNodeTool( NodeT node )

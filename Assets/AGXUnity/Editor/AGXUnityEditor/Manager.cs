@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +95,8 @@ namespace AGXUnityEditor
 
       Selection.selectionChanged += OnSelectionChanged;
 
+      DragDropListener.OnPrefabsDroppedInScene += OnPrefabsDroppedInScene;
+
       while ( VisualsParent != null && VisualsParent.transform.childCount > 0 )
         GameObject.DestroyImmediate( VisualsParent.transform.GetChild( 0 ).gameObject );
 
@@ -118,7 +120,8 @@ namespace AGXUnityEditor
       InspectorWindow,
       SceneHierarchyWindow,
       SceneView,
-      GameView
+      GameView,
+      ProjectBrowser
     }
 
     /// <summary>
@@ -282,25 +285,13 @@ namespace AGXUnityEditor
       return null;
     }
 
-    /// <summary>
-    /// Get or create default shape visuals material.
-    /// </summary>
-    /// <returns>Material asset.</returns>
-    public static Material GetOrCreateShapeVisualDefaultMaterial()
-    {
-      return GetOrCreateAsset<Material>( IO.Utils.AGXUnityResourceDirectory +
-                                         '/' + AGXUnity.Rendering.ShapeVisual.DefaultMaterialPathResources + ".mat",
-                                         () => AGXUnity.Rendering.ShapeVisual.CreateDefaultMaterial() );
-    }
-
     public static void OnVisualPrimitiveNodeCreate( Utils.VisualPrimitive primitive )
     {
       if ( primitive == null || primitive.Node == null )
         return;
 
       // TODO: Fix so that "MouseOver" works for newly created primitives.
-
-      if ( primitive.Node.transform.parent != VisualsParent )
+     if ( primitive.Node.transform.parent != VisualsParent )
         VisualsParent.AddChild( primitive.Node );
 
       m_visualPrimitives.Add( primitive );
@@ -315,6 +306,52 @@ namespace AGXUnityEditor
       m_visualPrimitives.Remove( primitive );
 
       GameObject.DestroyImmediate( primitive.Node );
+    }
+
+    internal static bool HasPlayerNetCompatibilityIssueWarning()
+    {
+      return HasPlayerNetCompatibility( "warning" );
+    }
+
+    internal static bool HasPlayerNetCompatibilityIssueError()
+    {
+      return HasPlayerNetCompatibility( "error" );
+    }
+
+    private static bool HasPlayerNetCompatibility( string infoWarningOrError )
+    {
+      // WARNING INFO:
+      //     Unity 2018, 2019: AGX Dynamics for Unity compiles but undefined behavior
+      //                       in players with API compatibility @ .NET Standard 2.0.
+      if ( PlayerSettings.GetApiCompatibilityLevel( BuildTargetGroup.Standalone ) != ApiCompatibilityLevel.NET_4_6 ) {
+        var apiCompatibilityLevelName =
+#if UNITY_2021_2_OR_NEWER
+          ".NET Framework";
+#else
+          ".NET 4.x";
+#endif
+        string prefix = string.Empty;
+        if ( infoWarningOrError == "info" )
+          prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>INFO:</b> ", Color.white );
+        else if ( infoWarningOrError == "warning" )
+          prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>WARNING:</b> ", Color.yellow );
+        else
+          prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>ERROR:</b> ", Color.red );
+
+        var message = prefix +
+                      $"AGX Dynamics for Unity requires .NET API compatibility level: {apiCompatibilityLevelName}.\n" +
+                      $"<b>AGXUnity -> Settings -> .NET Compatibility Level</b>";
+        if ( infoWarningOrError == "info" )
+          Debug.Log( message );
+        else if ( infoWarningOrError == "warning" )
+          Debug.LogWarning( message );
+        else
+          Debug.LogError( message );
+
+        return false;
+      }
+
+      return true;
     }
 
     private static string m_currentSceneName = string.Empty;
@@ -336,6 +373,8 @@ namespace AGXUnityEditor
           m_visualsParent = GameObject.Find( m_visualParentName ) ?? new GameObject( m_visualParentName );
           m_visualsParent.hideFlags = HideFlags.HideAndDontSave;
         }
+
+        PrefabUtils.PlaceInCurrentStange( m_visualsParent );
 
         return m_visualsParent;
       }
@@ -379,15 +418,41 @@ namespace AGXUnityEditor
           PropertySynchronizer.Synchronize( obj );
       }
 
-      // Synchronizing all shape sizes with visuals - it's not possible
-      // to determine affected shapes from tools targets or selection
-      // since it may have changed when undo is performed.
-      var shapes = Object.FindObjectsOfType<AGXUnity.Collide.Shape>();
-      foreach ( var shape in shapes ) {
+      // Shapes or bodies doesn't have to be selected when having their
+      // size updated, due to the recursive editors. We know that one of
+      // their parent is though (since selection is included in undo/redo),
+      // so find shapes in children of the selection and access bodies
+      // from there as well.
+      //
+      // Note that UpdateMassProperties is a time consuming operation. Ideally
+      // we would like to know if operations has been made that affects the
+      // mass properties of bodies.
+      var shapesInSelection = Selection.GetFiltered<GameObject>( SelectionMode.TopLevel |
+                                                                 SelectionMode.Editable )
+                                       .SelectMany( go => go.GetComponentsInChildren<AGXUnity.Collide.Shape>() );
+      foreach ( var shape in shapesInSelection ) {
         var visual = AGXUnity.Rendering.ShapeVisual.Find( shape );
-        if ( visual )
+        if ( visual != null )
           visual.OnSizeUpdated();
       }
+
+      // Looking at the number of shapes to begin with because it can
+      // be one rigid body with many shapes. The thing is that the
+      // undo/redo operation is highly unlikely to be affecting the
+      // mass properties. And note that the mass properties won't be
+      // wrong in the simulation due to this, only displayed wrong
+      // until simulation.
+      var updateMassProperties = shapesInSelection.Count() < 32;
+      if ( updateMassProperties ) {
+        var bodiesInSelection = Selection.GetFiltered<GameObject>( SelectionMode.TopLevel |
+                                                                   SelectionMode.Editable )
+                                         .SelectMany( go => go.GetComponentsInChildren<AGXUnity.RigidBody>() );
+        foreach ( var rb in bodiesInSelection )
+          rb.UpdateMassProperties();
+      }
+
+      foreach ( var customTargetTool in ToolManager.ActiveTools )
+        customTargetTool.OnUndoRedo();
 
       if ( targets.Count() > 0 )
         SceneView.RepaintAll();
@@ -551,9 +616,15 @@ namespace AGXUnityEditor
     private static void OnHierarchyWindowChanged()
     {
       var scene = EditorSceneManager.GetActiveScene();
+      var currNumScenesLoaded =
+#if UNITY_2022_2_OR_NEWER
+                                UnityEngine.SceneManagement.SceneManager.loadedSceneCount;
+#else
+                                EditorSceneManager.loadedSceneCount;
+#endif
       var isSceneLoaded = scene.name != m_currentSceneName ||
                           // Drag drop of scene into hierarchy.
-                          EditorSceneManager.loadedSceneCount > m_numScenesLoaded;
+                          currNumScenesLoaded > m_numScenesLoaded;
 
       if ( isSceneLoaded ) {
         EditorData.Instance.GC();
@@ -562,33 +633,14 @@ namespace AGXUnityEditor
 
         AutoUpdateSceneHandler.HandleUpdates( scene );
       }
-      else if ( Selection.activeGameObject != null ) {
-#if UNITY_2018_3_OR_NEWER
-        var isPrefabInstance = PrefabUtility.GetPrefabInstanceStatus( Selection.activeGameObject ) != PrefabInstanceStatus.NotAPrefab;
-#else
-        var isPrefabInstance = PrefabUtility.GetPrefabType( Selection.activeGameObject ) == PrefabType.PrefabInstance ||
-                               PrefabUtility.GetPrefabType( Selection.activeGameObject ) == PrefabType.DisconnectedPrefabInstance;
-#endif
-        // We want to catch when a prefab has been instantiated in the
-        // scene. Maybe this feature should be explicit, i.e., some
-        // method doing the work.
-        // NOTE: We receive callbacks to OnHierarchyWindowChanged when a
-        //       component is added and when the undo/redo is performed.
-        //       To not screw up the undo/redo history we block this feature
-        //       when undo/redo has been made close in time.
-        // TODO: Make this work - OnHierarchyWindowChanged is not a good place
-        //       to instantiate additional things.
-        if ( isPrefabInstance && ( EditorApplication.timeSinceStartup - s_lastUndoRedoTime ) > 2.0 )
-          AssetPostprocessorHandler.OnPrefabAddedToScene( Selection.activeGameObject );
-      }
 
-      m_numScenesLoaded = EditorSceneManager.loadedSceneCount;
+      m_numScenesLoaded = currNumScenesLoaded;
     }
 
     /// <summary>
     /// Previous selection used to reset used EditorDataEntry entries.
     /// </summary>
-    private static UnityEngine.Object[] m_previousSelection = new UnityEngine.Object[] { };
+    private static Object[] m_previousSelection = new Object[] { };
 
     /// <summary>
     /// Editor data entry for "SelectedInHierarchy" property.
@@ -653,6 +705,27 @@ namespace AGXUnityEditor
         ToolManager.ReleaseAllRecursiveEditors();
     }
 
+    private static void OnPrefabsDroppedInScene( GameObject[] instances )
+    {
+      var ourInstances = instances.Where( instance =>
+                                            instance != null &&
+                                            ( instance.GetComponentInChildren<AGXUnity.IO.RestoredAGXFile>() != null ||
+                                              instance.GetComponentInChildren<AGXUnity.IO.SavedPrefabLocalData>() != null ) );
+      if ( ourInstances.Count() == 0 )
+        return;
+
+      foreach ( var instance in ourInstances )
+        Undo.ClearUndo( instance );
+
+      Undo.SetCurrentGroupName( "Adding prefab instance(s) to scene." );
+      var groupId = Undo.GetCurrentGroup();
+      foreach ( var instance in ourInstances ) {
+        AssetPostprocessorHandler.OnPrefabAddedToScene( instance );
+      }
+      Undo.CollapseUndoOperations( groupId );
+    }
+
+
     private static void HandleWindowsGUI( SceneView sceneView )
     {
       if ( SceneViewGUIWindowHandler.RenderWindows( Event.current ) )
@@ -673,16 +746,6 @@ namespace AGXUnityEditor
       Debug.LogWarning( "AGX Dynamics for Unity is currently updating..." );
       return EnvironmentState.Updating;
 #else
-      // WARNING INFO:
-      //     Unity 2018, 2019: AGX Dynamics for Unity compiles but undefined behavior
-      //                       in players with API compatibility @ .NET Standard 2.0.
-      //     Unity 2017: AGX Dynamics for Unity won't compile due to 
-      if ( PlayerSettings.GetApiCompatibilityLevel( BuildTargetGroup.Standalone ) != ApiCompatibilityLevel.NET_4_6 ) {
-        Debug.LogWarning( AGXUnity.Utils.GUI.AddColorTag( "<b>WARNING:</b> ", Color.yellow ) +
-                          "AGX Dynamics for Unity requires .NET API compatibility level: .NET 4.x.\n" +
-                          "<b>Edit -> Project Settings... -> Player -> Other Settings -> Configuration -> Api Compatibility Level -> .NET 4.x</b>" );
-      }
-
       // Running from within the editor - two options:
       //   1. Unity has been started from an AGX environment => do nothing.
       //   2. AGX Dynamics dll's are present in the plugins directory => setup
@@ -716,10 +779,12 @@ namespace AGXUnityEditor
         for ( int i = 0; i < (int)agxIO.Environment.Type.NUM_TYPES; ++i )
           envInstance.getFilePath( (agxIO.Environment.Type)i ).clear();
 
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( "." );
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( IO.Utils.AGXUnityPluginDirectoryFull );
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( AGXUnity.IO.Environment.Get( AGXUnity.IO.Environment.Variable.AGX_PLUGIN_PATH ) );
-        envInstance.getFilePath( agxIO.Environment.Type.RUNTIME_PATH ).pushbackPath( AGXUnity.IO.Environment.Get( AGXUnity.IO.Environment.Variable.AGX_PLUGIN_PATH ) );
+        // Adding Plugins/x86_64/agx to RESOURCE_PATH (for additional data) and
+        // to RUNTIME_PATH (for entities and components). The license file is
+        // searched for by the license manager.
+        var dataAndRuntimePath = AGXUnity.IO.Environment.Get( AGXUnity.IO.Environment.Variable.AGX_PLUGIN_PATH );
+        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataAndRuntimePath );
+        envInstance.getFilePath( agxIO.Environment.Type.RUNTIME_PATH ).pushbackPath( dataAndRuntimePath );
       }
       // Check if user would like to initialize AGX Dynamics with an
       // installed (or Algoryx developer) version.
@@ -731,20 +796,19 @@ namespace AGXUnityEditor
       // This validate is only for "license status" window so
       // the user will be noticed when something is wrong.
       try {
+        AGXUnity.LicenseManager.LoadFile();
+
         AGXUnity.NativeHandler.Instance.ValidateLicense();
-        if ( EditorSettings.Instance.AGXDynamics_LogEnabled &&
-             !string.IsNullOrEmpty( EditorSettings.Instance.AGXDynamics_LogPath.Trim() ) )
-          agx.Logger.instance().openLogfile( EditorSettings.Instance.AGXDynamics_LogPath.Trim(),
-                                             true,
-                                             true );
       }
       catch ( Exception ) {
         return EnvironmentState.Uninitialized;
       }
 
+      HasPlayerNetCompatibilityIssueWarning();
+
       return EnvironmentState.Initialized;
 #endif
-    }
+      }
 
     private static bool HandleScriptReload( bool success )
     {
@@ -755,7 +819,7 @@ namespace AGXUnityEditor
         lastRequestData.Bool = false;
       }
       else {
-        if ( (float)EditorApplication.timeSinceStartup - lastRequestData.Float > 1.0f ) {
+        if ( (float)EditorApplication.timeSinceStartup - lastRequestData.Float > 10.0f ) {
           lastRequestData.Float = (float)EditorApplication.timeSinceStartup;
           lastRequestData.Bool = true;
 #if UNITY_2019_3_OR_NEWER
@@ -772,7 +836,7 @@ namespace AGXUnityEditor
 
     private static EditorDataEntry GetRequestScriptReloadData()
     {
-      return EditorData.Instance.GetStaticData( "Manager.RequestScriptReload", e => e.Float = -1.0f );
+      return EditorData.Instance.GetStaticData( "Manager.RequestScriptReload", e => e.Float = -10.0f );
     }
 
     private static bool Equals( byte[] a, byte[] b )
@@ -807,11 +871,37 @@ namespace AGXUnityEditor
       if ( EditorApplication.isPlayingOrWillChangePlaymode )
         return true;
 
-      string localDllFilename = IO.Utils.AGXUnityPluginDirectoryFull + "/agxDotNet.dll";
-      var currDll             = new FileInfo( localDllFilename );
-      var installedDll        = AGXUnity.IO.Environment.FindFile( "agxDotNet.dll" );
+      var dotNetAssemblyNames = new string[]
+      {
+        "agxDotNet.dll",
+        "agxMathDotNet.dll"
+      };
 
-      // Wasn't able to find any installed agxDotNet.dll - it's up to Unity to handle this...
+      var result = true;
+      foreach ( var dotNetAssemblyName in dotNetAssemblyNames )
+        result = VerifyDotNetAssemblyCompatibility( dotNetAssemblyName ) &&
+                 result;
+
+#if UNITY_2019_4_OR_NEWER
+      if ( !result ) {
+        var defineSymbol = "AGX_DYNAMICS_UPDATE_REBUILD";
+        if ( Build.DefineSymbols.Contains( defineSymbol ) )
+          Build.DefineSymbols.Remove( defineSymbol );
+        else
+          Build.DefineSymbols.Add( defineSymbol );
+      }
+#endif
+
+      return result;
+    }
+
+    private static bool VerifyDotNetAssemblyCompatibility( string dotNetAssemblyName )
+    {
+      string localDllFilename = IO.Utils.AGXUnityPluginDirectoryFull + $"/{dotNetAssemblyName}";
+      var currDll = new FileInfo( localDllFilename );
+      var installedDll = AGXUnity.IO.Environment.FindFile( dotNetAssemblyName );
+
+      // Wasn't able to find any installed version of the assembly - it's up to Unity to handle this...
       if ( installedDll == null || !installedDll.Exists )
         return true;
 
@@ -822,7 +912,7 @@ namespace AGXUnityEditor
       AGXUnity.NativeHandler.Instance.Register( null );
 
       if ( !currDll.Exists || HasBeenChanged( currDll, installedDll ) ) {
-        Debug.Log( "<color=green>New version of agxDotNet.dll located in: " + installedDll.Directory + ". Copying it to current project.</color>" );
+        Debug.Log( $"<color=green>New version of {dotNetAssemblyName} located in: " + installedDll.Directory + ". Copying it to current project.</color>" );
         installedDll.CopyTo( localDllFilename, true );
         return false;
       }
@@ -859,15 +949,6 @@ namespace AGXUnityEditor
       if ( !Directory.Exists( Utils.CustomEditorGenerator.Path ) )
         Directory.CreateDirectory( Utils.CustomEditorGenerator.Path );
       Utils.CustomEditorGenerator.Synchronize();
-
-      // Shape visual material.
-      GetOrCreateShapeVisualDefaultMaterial();
-
-      // Merge split thresholds.
-      if ( !AssetDatabase.IsValidFolder( IO.Utils.AGXUnityResourceDirectory + '/' + AGXUnity.MergeSplitThresholds.ResourceDirectory ) )
-        AssetDatabase.CreateFolder( IO.Utils.AGXUnityResourceDirectory, AGXUnity.MergeSplitThresholds.ResourceDirectory );
-      GetOrCreateAsset<AGXUnity.GeometryContactMergeSplitThresholds>( IO.Utils.AGXUnityResourceDirectory + '/' + AGXUnity.GeometryContactMergeSplitThresholds.ResourcePath + ".asset" );
-      GetOrCreateAsset<AGXUnity.ConstraintMergeSplitThresholds>( IO.Utils.AGXUnityResourceDirectory + '/' + AGXUnity.ConstraintMergeSplitThresholds.ResourcePath + ".asset" );
     }
   }
 }

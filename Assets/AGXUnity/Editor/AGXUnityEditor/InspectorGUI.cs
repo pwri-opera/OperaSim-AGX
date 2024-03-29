@@ -1,13 +1,12 @@
-﻿using System;
+﻿using AGXUnity;
+using AGXUnity.Utils;
+using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.ComponentModel;
-using UnityEngine;
 using UnityEditor;
-using AGXUnity;
-using AGXUnity.Utils;
-
-using GUI    = AGXUnity.Utils.GUI;
+using UnityEngine;
+using GUI = AGXUnity.Utils.GUI;
 using Object = UnityEngine.Object;
 
 namespace AGXUnityEditor
@@ -25,6 +24,8 @@ namespace AGXUnityEditor
       var content = new GUIContent();
       content.text = field.Name.SplitCamelCase() + postText;
       content.tooltip = field.GetCustomAttribute<DescriptionAttribute>( false )?.Description;
+      if ( content.tooltip == null )
+        content.tooltip = field.GetCustomAttribute<TooltipAttribute>( false )?.tooltip;
 
       return content;
     }
@@ -34,7 +35,7 @@ namespace AGXUnityEditor
       get
       {
 #if UNITY_2019_3_OR_NEWER
-        return 22.0f;
+        return 20.0f;
 #else
         return 14.0f;
 #endif
@@ -131,21 +132,25 @@ namespace AGXUnityEditor
 
     public static void BrandSeparator( float height = 1.0f, float space = 1.0f )
     {
-      var rect = EditorGUILayout.GetControlRect( GUILayout.Height( space + height ) );
-      rect.height = height;
-      rect.y += space / 2.0f;
-      EditorGUI.DrawRect( rect, InspectorGUISkin.BrandColor );
+      Separator( height, space, InspectorGUISkin.BrandColor, 1.0f );
     }
 
     public static void Separator( float height = 1.0f, float space = 1.0f )
     {
+      Separator( height, space, Color.black );
+    }
+
+    public static void Separator( float height, float space, Color color )
+    {
+      Separator( height, space, color, EditorGUIUtility.isProSkin ? 0.35f : 0.25f );
+    }
+
+    public static void Separator( float height, float space, Color color, float intensity01 )
+    {
       var rect = EditorGUILayout.GetControlRect( GUILayout.Height( space + height ) );
       rect.height = height;
       rect.y += space / 2.0f;
-      EditorGUI.DrawRect( rect,
-                          Color.Lerp( BackgroundColor,
-                                      Color.black,
-                                      EditorGUIUtility.isProSkin ? 0.35f : 0.25f ) );
+      EditorGUI.DrawRect( rect, Color.Lerp( BackgroundColor, color, intensity01 ) );
     }
 
     public static void DashedBrandSeparator( float height = 1.0f, float space = 1.0f )
@@ -269,6 +274,93 @@ namespace AGXUnityEditor
       return EditorGUILayout.Toggle( content, value );
     }
 
+    public static bool Toggle( MiscIcon icon,
+                               bool active,
+                               bool enabled,
+                               string tooltip = "",
+                               params GUILayoutOption[] options )
+    {
+
+      return Toggle( icon,
+                     active,
+                     enabled,
+                     InspectorEditor.Skin.ButtonMiddle,
+                     tooltip,
+                     1.0f,
+                     options );
+    }
+
+    public static bool Toggle( MiscIcon icon,
+                               bool active,
+                               bool enabled,
+                               string tooltip = "",
+                               float buttonScale = 1.0f,
+                               params GUILayoutOption[] options )
+    {
+
+      return Toggle( icon,
+                     active,
+                     enabled,
+                     InspectorEditor.Skin.ButtonMiddle,
+                     tooltip,
+                     buttonScale,
+                     options );
+    }
+
+    public static bool Toggle( MiscIcon icon,
+                               bool active,
+                               bool enabled,
+                               GUIStyle buttonStyle,
+                               string tooltip = "",
+                               float iconScale = 1.0f,
+                               params GUILayoutOption[] options )
+    {
+      s_miscIconButtonContent.tooltip = tooltip;
+      var result = GUILayout.Toggle( active,
+                                     s_miscIconButtonContent,
+                                     buttonStyle,
+                                     options );
+      ButtonIcon( GUILayoutUtility.GetLastRect(), icon, enabled, iconScale );
+
+      return result;
+    }
+
+    public static bool Toggle( Rect rect,
+                               MiscIcon icon,
+                               bool active,
+                               bool enabled,
+                               string tooltip = "",
+                               float iconScale = 1.0f )
+    {
+      return Toggle( rect,
+                     icon,
+                     active,
+                     enabled,
+                     InspectorEditor.Skin.ButtonMiddle,
+                     tooltip,
+                     iconScale );
+    }
+
+    public static bool Toggle( Rect rect,
+                               MiscIcon icon,
+                               bool active,
+                               bool enabled,
+                               GUIStyle buttonStyle,
+                               string tooltip = "",
+                               float iconScale = 1.0f )
+    {
+      s_miscIconButtonContent.tooltip = tooltip;
+      var result = false;
+      using ( new GUI.EnabledBlock( enabled ) )
+        result = UnityEngine.GUI.Toggle( rect,
+                                         active,
+                                         s_miscIconButtonContent,
+                                         buttonStyle );
+      ButtonIcon( rect, icon, enabled, iconScale );
+
+      return result;
+    }
+
     public static bool Foldout( EditorDataEntry state, GUIContent content, Action<bool> onStateChanged = null )
     {
       // There's a indentation bug (a few pixels off) in EditorGUILayout.Foldout.
@@ -276,9 +368,6 @@ namespace AGXUnityEditor
                                         state.Bool,
                                         content,
                                         true );
-
-      if ( newState != state.Bool )
-        UnityEngine.GUI.changed = false;
 
       if ( onStateChanged != null && newState != state.Bool )
         onStateChanged.Invoke( newState );
@@ -312,10 +401,8 @@ namespace AGXUnityEditor
                                           foldoutData.Bool,
                                           content,
                                           true ) && instance != null;
-        if ( newState != foldoutData.Bool ) {
+        if ( newState != foldoutData.Bool )
           foldoutData.Bool = newState;
-          UnityEngine.GUI.changed = false;
-        }
       }
       position.xMax = oldWidth;
 
@@ -329,17 +416,17 @@ namespace AGXUnityEditor
 
         position.x += EditorGUIUtility.labelWidth - IndentScope.PixelLevel;
         position.xMax -= EditorGUIUtility.labelWidth +
-                         Convert.ToInt32( supportsCreateAsset ) * createNewButtonWidth -
+                         Convert.ToInt32( supportsCreateAsset ) * ( createNewButtonWidth + 2 ) -
                          IndentScope.PixelLevel;
         result = EditorGUI.ObjectField( position, instance, instanceType, allowSceneObject );
         if ( supportsCreateAsset ) {
           var buttonRect = new Rect( position.xMax + 2, position.y, createNewButtonWidth, EditorGUIUtility.singleLineHeight );
-          buttonRect.xMax = buttonRect.x + createNewButtonWidth - 2;
 
           createNewPressed = Button( buttonRect,
                                      MiscIcon.CreateAsset,
                                      UnityEngine.GUI.enabled,
-                                     "Create new asset." );
+                                     "Create new asset.",
+                                     0.9f );
         }
       }
       else
@@ -415,10 +502,6 @@ namespace AGXUnityEditor
 
     private static void HandleMaterialEditorGUI( MaterialEditor editor )
     {
-      var isBuiltInMaterial = editor.target == null ||
-                              !AssetDatabase.GetAssetPath( editor.target ).StartsWith( "Assets" ) ||
-                              ( editor.target as Material ) == Manager.GetOrCreateShapeVisualDefaultMaterial();
-      using ( new GUI.EnabledBlock( !isBuiltInMaterial ) )
       using ( IndentScope.NoIndent ) {
         editor.DrawHeader();
         editor.OnInspectorGUI();
@@ -430,6 +513,35 @@ namespace AGXUnityEditor
                                      string openFolderTitle,
                                      Action<string> onNewFolder )
     {
+      var updated = false;
+      SelectableTextField( label,
+                           currentFolder,
+                           MiscButtonData.Create( GUI.MakeLabel( "...",
+                                                                 InspectorGUISkin.BrandColor,
+                                                                 true ),
+                                                  () =>
+                                                  {
+                                                    string result = EditorUtility.OpenFolderPanel( openFolderTitle,
+                                                                                                   currentFolder,
+                                                                                                   "" );
+                                                    if ( !string.IsNullOrEmpty( result ) && result != currentFolder ) {
+                                                      onNewFolder?.Invoke( result );
+                                                      // Remove focus from any control so that the field is updated.
+                                                      UnityEngine.GUI.FocusControl( "" );
+                                                      updated = true;
+                                                    }
+                                                  },
+                                                  UnityEngine.GUI.enabled,
+                                                  "Open select folder panel." ) );
+      return updated;
+    }
+
+    public static bool SelectFile( GUIContent label,
+                                   string currentFile,
+                                   string openFileTitle,
+                                   string openFileDirectory,
+                                   Action<string> onNewFileSelected )
+    {
       var selectNewFolderButtonWidth = 28.0f;
 
       var rect     = EditorGUILayout.GetControlRect();
@@ -438,23 +550,29 @@ namespace AGXUnityEditor
 
       EditorGUI.PrefixLabel( rect, label );
 
-      rect.x    += EditorGUIUtility.labelWidth;
+      var indentOffset = IndentScope.PixelLevel - 2;
+
+      rect.x    += EditorGUIUtility.labelWidth - indentOffset;
       rect.width = orgWidth -
                    EditorGUIUtility.labelWidth -
-                   selectNewFolderButtonWidth;
-      EditorGUI.TextField( rect,
-                           currentFolder,
-                           InspectorEditor.Skin.TextField );
+                   selectNewFolderButtonWidth + indentOffset;
+      EditorGUI.SelectableLabel( rect,
+                                 currentFile,
+                                 InspectorEditor.Skin.TextField );
       rect.x    += rect.width;
       rect.width = selectNewFolderButtonWidth;
       if ( UnityEngine.GUI.Button( rect,
-                                   GUI.MakeLabel( "..." ),
+                                   GUI.MakeLabel( "...",
+                                                  InspectorGUISkin.BrandColor,
+                                                  true ),
                                    InspectorEditor.Skin.ButtonMiddle ) ) {
-        string result = EditorUtility.OpenFolderPanel( openFolderTitle,
-                                                       currentFolder,
-                                                       "" );
-        if ( !string.IsNullOrEmpty( result ) && result != currentFolder ) {
-          onNewFolder( result );
+        string result = EditorUtility.OpenFilePanel( openFileTitle,
+                                                     openFileDirectory,
+                                                     "" );
+        if ( !string.IsNullOrEmpty( result ) && result != currentFile ) {
+          onNewFileSelected?.Invoke( result );
+          // Remove focus from any control so that the field is updated.
+          UnityEngine.GUI.FocusControl( "" );
           return true;
         }
       }
@@ -480,7 +598,9 @@ namespace AGXUnityEditor
 
       EditorGUI.PrefixLabel( saveInitialRect, label );
 
-      saveInitialRect.x    += EditorGUIUtility.labelWidth;
+      var indentOffset = IndentScope.PixelLevel - 2;
+
+      saveInitialRect.x    += EditorGUIUtility.labelWidth - indentOffset;
       saveInitialRect.width = saveInitialToggleWidth;
       enabled               = EditorGUI.Toggle( saveInitialRect,
                                                 enabled );
@@ -490,14 +610,15 @@ namespace AGXUnityEditor
         saveInitialRect.width = saveInitialOrgWidth -
                                 EditorGUIUtility.labelWidth -
                                 saveInitialToggleWidth -
-                                saveInitialSaveFilePanelButtonWidth;
+                                saveInitialSaveFilePanelButtonWidth +
+                                indentOffset;
         currentEntry = EditorGUI.TextField( saveInitialRect,
                                             currentEntry,
                                             InspectorEditor.Skin.TextField );
         saveInitialRect.x    += saveInitialRect.width;
         saveInitialRect.width = saveInitialSaveFilePanelButtonWidth;
         if ( UnityEngine.GUI.Button( saveInitialRect,
-                                     GUI.MakeLabel( "..." ),
+                                     GUI.MakeLabel( "...", InspectorGUISkin.BrandColor, true ),
                                      InspectorEditor.Skin.ButtonMiddle ) ) {
           string result = EditorUtility.SaveFilePanel( saveFilePanelTitle,
                                                        currentEntry,
@@ -511,6 +632,39 @@ namespace AGXUnityEditor
               Debug.Log( "Unknown file extension: " + fileInfo.Extension );
           }
         }
+      }
+
+      return currentEntry;
+    }
+
+    public static T ToggleEnum<T>( GUIContent label,
+                                   bool enabled,
+                                   Action<bool> enabledResult,
+                                   T currentEntry )
+      where T : Enum
+    {
+      var toggleWidth   = 18.0f;
+      var controlRect   = EditorGUILayout.GetControlRect();
+      var totalWidth    = controlRect.width;
+      controlRect.width = EditorGUIUtility.labelWidth;
+
+      EditorGUI.PrefixLabel( controlRect, label );
+
+      var indentOffset = IndentScope.PixelLevel - 2;
+
+      controlRect.x += EditorGUIUtility.labelWidth - indentOffset;
+      controlRect.width = toggleWidth;
+      enabled = EditorGUI.Toggle( controlRect,
+                                  enabled );
+      enabledResult( enabled );
+      using ( new GUI.EnabledBlock( enabled ) ) {
+        controlRect.x += toggleWidth;
+        controlRect.width = totalWidth -
+                            EditorGUIUtility.labelWidth -
+                            toggleWidth +
+                            indentOffset;
+        currentEntry = (T)EditorGUI.EnumPopup( controlRect,
+                                               currentEntry );
       }
 
       return currentEntry;
@@ -577,13 +731,17 @@ namespace AGXUnityEditor
     {
       var texture = IconManager.GetIcon( data.Icon );
       var pressed = false;
-      using ( new GUI.EnabledBlock( data.Enabled ) )
-        pressed = UnityEngine.GUI.Button( rect,
-                                          ToolButtonTooltip( data.Tooltip ),
-                                          InspectorEditor.Skin.GetButton( data.IsActive, buttonType ) );
+      using ( new GUI.EnabledBlock( data.Enabled ) ) {
+        var active = UnityEngine.GUI.Toggle( rect,
+                                             data.IsActive,
+                                             ToolButtonTooltip( data.Tooltip ),
+                                             InspectorEditor.Skin.GetButton( buttonType ) );
+        pressed = active != data.IsActive;
+      }
+
       if ( texture != null ) {
         using ( IconManager.ForegroundColorBlock( data.IsActive, data.Enabled ) )
-          UnityEngine.GUI.DrawTexture( IconManager.GetIconRect( rect ), texture );
+          UnityEngine.GUI.DrawTexture( IconManager.GetIconRect( rect, 0.8f ), texture );
       }
 
       data.PostRender?.Invoke();
@@ -660,8 +818,22 @@ namespace AGXUnityEditor
                                        T[] availableItemsToAdd = null )
       where T : Object
     {
+      ToolListGUI<T>( context, items, identifier, identifier, onAdd, onRemove, preItemEditor, postItemEditor, availableItemsToAdd );
+    }
+
+    public static void ToolListGUI<T>( Tools.CustomTargetTool context,
+                                     T[] items,
+                                     string identifier,
+                                     string label,
+                                     Action<T> onAdd,
+                                     Action<T> onRemove,
+                                     Action<T, int> preItemEditor = null,
+                                     Action<T, int> postItemEditor = null,
+                                     T[] availableItemsToAdd = null )
+    where T : Object
+    {
       var displayItemsList = Foldout( GetTargetToolArrayGUIData( context.Targets[ 0 ], identifier ),
-                                      GUI.MakeLabel( identifier + $" [{items.Length}]" ) );
+                                      GUI.MakeLabel( label + $" [{items.Length}]" ) );
       var itemTypename = typeof( T ).Name;
       var isAsset = typeof( ScriptableObject ).IsAssignableFrom( typeof( T ) );
       var itemTypenameSplit = itemTypename.SplitCamelCase();
@@ -684,6 +856,7 @@ namespace AGXUnityEditor
                            $"Remove {item.name} from {targetTypename}.",
                            GUILayout.Width( 18 ) ) )
                 itemToRemove = item;
+              GUILayout.Space( 2.0f );
             }
 
             if ( !displayItem ) {
@@ -700,18 +873,22 @@ namespace AGXUnityEditor
           T itemToAdd = null;
           var addButtonPressed = false;
           GUILayout.Space( 2.0f * EditorGUIUtility.standardVerticalSpacing );
-          using ( new GUILayout.VerticalScope( FadeNormalBackground( InspectorEditor.Skin.Label, 0.1f ) ) ) {
-            using ( GUI.AlignBlock.Center )
-              GUILayout.Label( GUI.MakeLabel( "Add item", true ), InspectorEditor.Skin.Label );
-            var buttonWidth = 16.0f;
-            var rect = EditorGUILayout.GetControlRect();
-            var xMax = rect.xMax;
-            rect.xMax = rect.xMax - buttonWidth - EditorGUIUtility.standardVerticalSpacing;
-            itemToAdd = EditorGUI.ObjectField( rect, (Object)null, typeof( T ), true ) as T;
-            rect.x = rect.xMax + 1.25f * EditorGUIUtility.standardVerticalSpacing;
-            rect.xMax = xMax;
-            rect.width = buttonWidth;
-            addButtonPressed = Button( rect, MiscIcon.ContextDropdown, UnityEngine.GUI.enabled );
+          using ( new GUILayout.HorizontalScope() ) {
+            GUILayout.Space( 15.0f * EditorGUI.indentLevel );
+            using ( new GUILayout.VerticalScope( FadeNormalBackground( InspectorEditor.Skin.Label, 0.1f ) ) ) {
+              using ( GUI.AlignBlock.Center )
+                GUILayout.Label( GUI.MakeLabel( "Add item", true ), InspectorEditor.Skin.Label );
+              var buttonWidth = 16.0f;
+              var rect = EditorGUILayout.GetControlRect();
+              rect.xMin -= EditorGUI.indentLevel * 15.0f;
+              var xMax = rect.xMax;
+              rect.xMax = rect.xMax - buttonWidth - EditorGUIUtility.standardVerticalSpacing;
+              itemToAdd = EditorGUI.ObjectField( rect, (Object)null, typeof( T ), true ) as T;
+              rect.x = rect.xMax + 1.25f * EditorGUIUtility.standardVerticalSpacing;
+              rect.xMax = xMax;
+              rect.width = buttonWidth;
+              addButtonPressed = Button( rect, MiscIcon.ContextDropdown, UnityEngine.GUI.enabled );
+            }
           }
 
           if ( addButtonPressed ) {
@@ -858,6 +1035,218 @@ namespace AGXUnityEditor
       return false;
     }
 
+    /// <summary>
+    /// Text field with selectable text which isn't possible to edit.
+    /// </summary>
+    /// <param name="label">Text field label.</param>
+    /// <param name="text">Text in the text field.</param>
+    public static void SelectableTextField( GUIContent label,
+                                            string text )
+    {
+      SelectableTextField( label, text, InspectorEditor.Skin.TextField );
+    }
+
+    /// <summary>
+    /// Text field with selectable text which isn't possible to edit.
+    /// </summary>
+    /// <param name="label">Text field label.</param>
+    /// <param name="text">Text in the text field.</param>
+    /// <param name="textFieldStyle">Style of text field.</param>
+    public static void SelectableTextField( GUIContent label,
+                                            string text,
+                                            GUIStyle textFieldStyle )
+    {
+      var rect = EditorGUILayout.GetControlRect();
+      var orgWidth = rect.width;
+
+      rect.width = EditorGUIUtility.labelWidth;
+
+      EditorGUI.PrefixLabel( rect, label );
+
+      var indentOffset = IndentScope.PixelLevel - 2;
+      rect.x += EditorGUIUtility.labelWidth - indentOffset;
+      rect.width = orgWidth -
+                   EditorGUIUtility.labelWidth +
+                   indentOffset;
+
+      EditorGUI.SelectableLabel( rect,
+                                 text,
+                                 textFieldStyle );
+    }
+
+    /// <summary>
+    /// Misc button data.
+    /// </summary>
+    public struct MiscButtonData
+    {
+      /// <summary>
+      /// Create given misc icon and an on click callback.
+      /// </summary>
+      /// <param name="icon">Misc icon for the button.</param>
+      /// <param name="onClick">Callback when the button is clicked.</param>
+      /// <param name="enabled">True if the button is enabled, otherwise false.</param>
+      /// <param name="tooltip">Optional tool-tip of the button.</param>
+      /// <param name="width">Width of the button.</param>
+      /// <returns></returns>
+      public static MiscButtonData Create( MiscIcon icon,
+                                           Action onClick,
+                                           bool enabled = true,
+                                           string tooltip = "",
+                                           float width = 28.0f )
+      {
+        return new MiscButtonData()
+        {
+          Icon      = icon,
+          IconLabel = null,
+          OnClick   = onClick,
+          Enabled   = enabled,
+          Tooltip   = tooltip,
+          Width     = width
+        };
+      }
+
+      /// <summary>
+      /// Create given button content and an on click callback.
+      /// </summary>
+      /// <param name="buttonContent">Button content.</param>
+      /// <param name="onClick">Callback when the button is clicked.</param>
+      /// <param name="enabled">True if the button is enabled, otherwise false.</param>
+      /// <param name="tooltip">Option tool-tip of the button.</param>
+      /// <param name="width">Width of the button.</param>
+      /// <returns></returns>
+      public static MiscButtonData Create( GUIContent buttonContent,
+                                           Action onClick,
+                                           bool enabled = true,
+                                           string tooltip = "",
+                                           float width = 28.0f )
+      {
+        buttonContent.tooltip = tooltip;
+
+        return new MiscButtonData()
+        {
+          IconLabel = buttonContent,
+          OnClick   = onClick,
+          Enabled   = enabled,
+          Tooltip   = tooltip,
+          Width     = width
+        };
+      }
+
+      public MiscIcon Icon;
+      public GUIContent IconLabel;
+      public Action OnClick;
+      public bool Enabled;
+      public string Tooltip;
+      public float Width;
+    }
+
+    /// <summary>
+    /// Selectable text field which isn't possible to edit. On the right
+    /// of the text field an arbitrary number of buttons can be added.
+    /// </summary>
+    /// <param name="label">Text field label.</param>
+    /// <param name="text">Text in text field.</param>
+    /// <param name="buttonData">Buttons.</param>
+    public static void SelectableTextField( GUIContent label,
+                                            string text,
+                                            params MiscButtonData[] buttonData )
+    {
+      if ( buttonData.Length == 0 ) {
+        SelectableTextField( label, text );
+        return;
+      }
+
+      var buttonSectionTotalWidth = buttonData.Sum( data => data.Width );
+      var rect = EditorGUILayout.GetControlRect();
+      var orgWidth = rect.width;
+
+      rect.width = EditorGUIUtility.labelWidth;
+
+      EditorGUI.PrefixLabel( rect, label );
+
+      var indentOffset = IndentScope.PixelLevel - 2;
+
+      rect.x    += EditorGUIUtility.labelWidth - indentOffset;
+      rect.width = orgWidth -
+                   EditorGUIUtility.labelWidth -
+                   buttonSectionTotalWidth +
+                   indentOffset;
+
+      EditorGUI.SelectableLabel( rect,
+                                 text,
+                                 InspectorEditor.Skin.TextField );
+
+      rect.x += rect.width;
+
+      Action clickAction = null;
+      foreach ( var data in buttonData ) {
+        rect.width = data.Width;
+        var clicked = false;
+        if ( data.IconLabel != null )
+          using ( new GUI.EnabledBlock( data.Enabled ) )
+            clicked = UnityEngine.GUI.Button( rect,
+                                              data.IconLabel,
+                                              InspectorEditor.Skin.ButtonMiddle );
+        else
+          clicked = Button( rect,
+                            data.Icon,
+                            data.Enabled,
+                            data.Tooltip );
+        if ( clicked )
+          clickAction = data.OnClick;
+
+        rect.x += rect.width;
+      }
+
+      clickAction?.Invoke();
+    }
+
+    /// <summary>
+    /// Displays license information as:
+    ///   License expires            2020-05-13 (14 days 7 hours remaining)
+    /// or
+    ///   License expired            License not found
+    /// or
+    ///   License expired            2020-05-13 (3 days ago)
+    /// </summary>
+    /// <param name="info">License info.</param>
+    public static void LicenseEndDateField( LicenseInfo info )
+    {
+      var fieldColor = EditorGUIUtility.isProSkin ?
+                         Color.white :
+                         Color.black;
+      var fieldErrorColor = Color.Lerp( Color.red,
+                                        Color.black,
+                                        0.25f );
+      var fieldOkColor = Color.Lerp( Color.green,
+                                     Color.black,
+                                     0.35f );
+      var fieldWarningColor = Color.Lerp( Color.yellow,
+                                          Color.black,
+                                          0.45f );
+      EditorGUILayout.LabelField( GUI.MakeLabel( info.IsExpired ?
+                                                   "License expired" :
+                                                   "License expires" ),
+                                  info.ValidEndDate ?
+                                    GUI.MakeLabel( info.EndDate.ToString( "yyyy-MM-dd" ) +
+                                                   GUI.AddColorTag( $" ({info.DiffString} {( info.IsExpired ? "ago" : "remaining" )})",
+                                                                    info.IsExpired ?
+                                                                      fieldErrorColor :
+                                                                      info.IsAboutToBeExpired( 10 ) ?
+                                                                        fieldWarningColor :
+                                                                        fieldOkColor ),
+                                                   fieldColor ) :
+                                  info.IsParsed ?
+                                    GUI.MakeLabel( string.IsNullOrEmpty( info.Status ) ?
+                                                     "Invalid license" :
+                                                     info.Status,
+                                                   fieldErrorColor,
+                                                   false,
+                                                   info.Status ) :
+                                    GUI.MakeLabel( "License not found", fieldErrorColor ),
+                                  InspectorEditor.Skin.Label );
+    }
+
     public static Color ProBackgroundColor = new Color32( 56, 56, 56, 255 );
     public static Color IndieBackgroundColor = new Color32( 194, 194, 194, 255 );
 
@@ -889,13 +1278,11 @@ namespace AGXUnityEditor
 
     public static void WarningLabel( string warning )
     {
-      var prevBgc = UnityEngine.GUI.backgroundColor;
-      UnityEngine.GUI.backgroundColor = Color.Lerp( Color.white, Color.black, 0.55f );
-      EditorGUILayout.LabelField( GUI.MakeLabel( warning,
-                                                 Color.Lerp( Color.red, Color.white, 0.25f ),
-                                                 true ),
-                                  InspectorEditor.Skin.TextAreaMiddleCenter );
-      UnityEngine.GUI.backgroundColor = prevBgc;
+      using ( new GUI.BackgroundColorBlock( Color.Lerp( Color.white, Color.black, 0.55f ) ) )
+        EditorGUILayout.LabelField( GUI.MakeLabel( warning,
+                                                   Color.Lerp( Color.red, Color.white, 0.25f ),
+                                                   true ),
+                                    InspectorEditor.Skin.TextAreaMiddleCenter );
     }
 
     /// <summary>
@@ -910,24 +1297,80 @@ namespace AGXUnityEditor
     /// <typeparam name="T">Expected dropped object type.</typeparam>
     /// <param name="dropArea">Drop rect.</param>
     /// <param name="current">Current event.</param>
+    /// <param name="validator">Validate if the drop event is valid for the given object in current context.</param>
     /// <param name="onDrop">Callback when an object has been dropped.</param>
-    public static void HandleDragDrop<T>( Rect dropArea, Event current, Action<T> onDrop )
+    public static void HandleDragDrop<T>( Rect dropArea,
+                                          Event current,
+                                          Predicate<T> validator,
+                                          Action<T> onDrop )
       where T : Object
     {
-      bool isDragDropEventInDropArea = ( current.type == EventType.DragPerform || current.type == EventType.DragUpdated ) && dropArea.Contains( current.mousePosition );
+      bool isDragDropEventInDropArea = current != null &&
+                                       ( current.type == EventType.DragPerform ||
+                                         current.type == EventType.DragUpdated ) &&
+                                       dropArea.Contains( current.mousePosition ) &&
+                                       DragAndDrop.objectReferences.Length == 1;
       if ( !isDragDropEventInDropArea )
         return;
 
-      bool validObject = DragAndDrop.objectReferences.Length == 1 && DragAndDrop.objectReferences[ 0 ] is T;
-      DragAndDrop.visualMode = validObject ?
+      var objectDragged = DragAndDrop.objectReferences[ 0 ] as T;
+      if ( objectDragged == null )
+        return;
+
+      DragAndDrop.visualMode = validator( objectDragged ) ?
                                   DragAndDropVisualMode.Copy :
                                   DragAndDropVisualMode.Rejected;
-
-      if ( Event.current.type == EventType.DragPerform && validObject ) {
+      if ( DragAndDrop.visualMode == DragAndDropVisualMode.Copy &&
+           Event.current.type == EventType.DragPerform ) {
         DragAndDrop.AcceptDrag();
 
         onDrop( DragAndDrop.objectReferences[ 0 ] as T );
       }
+
+      current.Use();
+    }
+
+    /// <summary>
+    /// Handles drag and drop over Scene View.
+    /// </summary>
+    /// <typeparam name="T">Type dragged.</typeparam>
+    /// <param name="current">Current event.</param>
+    /// <param name="mouseOverObjectValidator">Predicate if the mouse-over object in scene view supports <typeparamref name="T"/>.</param>
+    /// <param name="onDrop">Callback when an object has been dropped.</param>
+    public static void HandleSceneViewDragDrop<T>( Event current,
+                                                   Predicate<GameObject> mouseOverObjectValidator,
+                                                   Action<GameObject, T> onDrop )
+      where T : Object
+    {
+      var isDragDropEvent = current != null &&
+                            mouseOverObjectValidator != null &&
+                            onDrop != null &&
+                            ( current.type == EventType.DragPerform ||
+                              current.type == EventType.DragUpdated ) &&
+                            Manager.IsMouseOverWindow( SceneView.currentDrawingSceneView ) &&
+                            DragAndDrop.objectReferences.Length == 1;
+      if ( !isDragDropEvent )
+        return;
+
+      var objectDragged = DragAndDrop.objectReferences[ 0 ] as T;
+      if ( objectDragged == null )
+        return;
+
+      Manager.UpdateMouseOverPrimitives( current, true );
+
+      var isValidMouseOverGameObject = Manager.MouseOverObject != null &&
+                                       mouseOverObjectValidator( Manager.MouseOverObject );
+      DragAndDrop.visualMode = isValidMouseOverGameObject ?
+                                 DragAndDropVisualMode.Copy :
+                                 DragAndDropVisualMode.Rejected;
+      if ( DragAndDrop.visualMode == DragAndDropVisualMode.Copy &&
+           current.type == EventType.DragPerform ) {
+        DragAndDrop.AcceptDrag();
+
+        onDrop( Manager.MouseOverObject, objectDragged );
+      }
+
+      current.Use();
     }
 
     public static void HandleFrame( IFrame frame,
@@ -951,11 +1394,11 @@ namespace AGXUnityEditor
       var refFrame = frames[ 0 ];
       var isMultiSelect = frames.Length > 1;
 
-        var frameTool = includeFrameToolIfPresent ?
+      var frameTool = includeFrameToolIfPresent ?
                           Tools.FrameTool.FindActive( refFrame ) :
                           null;
-        if ( frameTool != null )
-          frameTool.ToolsGUI( isMultiSelect );
+      if ( frameTool != null )
+        frameTool.ToolsGUI( isMultiSelect );
 
       using ( IndentScope.Create( indentLevelInc ) ) {
         UnityEngine.GUI.enabled = true;
@@ -972,14 +1415,11 @@ namespace AGXUnityEditor
             frame.SetParent( newParent );
         }
 
-        UnityEngine.GUI.changed = false;
-
         EditorGUI.showMixedValue = frames.Any( frame => !Equals( refFrame.LocalPosition, frame.LocalPosition ) );
         var localPosition = EditorGUILayout.Vector3Field( GUI.MakeLabel( "Local position" ), refFrame.LocalPosition );
-        if ( UnityEngine.GUI.changed ) {
+        if ( refFrame.LocalPosition != localPosition ) {
           foreach ( var frame in frames )
             frame.LocalPosition = localPosition;
-          UnityEngine.GUI.changed = false;
         }
         EditorGUI.showMixedValue = false;
 
@@ -991,7 +1431,6 @@ namespace AGXUnityEditor
         if ( !Equals( inputEuler, outputEuler ) ) {
           foreach ( var frame in frames )
             frame.LocalRotation = Quaternion.Euler( outputEuler );
-          UnityEngine.GUI.changed = false;
         }
         EditorGUI.showMixedValue = false;
       }
@@ -1039,6 +1478,49 @@ namespace AGXUnityEditor
                              displayInvalidRangeWarning );
     }
 
+    /// <summary>
+    /// Prefix label of EditorGUI.MultiFloatField, e.g.,
+    ///     EditorGUI.MultiFloatField( MultiFloatFieldPrefixLabel( label ),
+    ///                                GUIContent.none,
+    ///                                ... );
+    /// </summary>
+    /// <param name="label">Label, no label if null.</param>
+    /// <returns>Rect to be used for the EditorGUI.MultiFloatField.</returns>
+    public static Rect MultiFieldPrefixLabel( GUIContent label )
+    {
+      var numRectRows = ( EditorGUIUtility.wideMode || label == null ? 1 : 2 );
+      var rectHeight = EditorGUIUtility.singleLineHeight * numRectRows;
+      var position = EditorGUILayout.GetControlRect( false, rectHeight );
+
+      var orgXMax = position.xMax;
+      // No label, indent resulting rect by label width in wide mode.
+      // In narrow mode we indent by one indent level (15).
+      if ( label == null ) {
+        // Wide mode (normal), indent by labelWidth and correction.
+        if ( EditorGUIUtility.wideMode ) {
+          var indentOffset = IndentScope.PixelLevel - 2;
+          position.x += EditorGUIUtility.labelWidth - indentOffset;
+        }
+        // Narrow mode, indent by one indent level.
+        else
+          position.x += 15;
+      }
+      // Prefix label is given, draw label and correct for indentation
+      // and/or wide mode state.
+      else {
+        EditorGUI.PrefixLabel( position, label );
+        if ( EditorGUIUtility.wideMode )
+          position.x += EditorGUIUtility.labelWidth - IndentScope.PixelLevel + 2;
+        else
+          position.x += 15;
+        if ( numRectRows == 2 )
+          position.y += EditorGUIUtility.singleLineHeight;
+      }
+      position.xMax = orgXMax;
+
+      return position;
+    }
+
     public static RangeRealResult RangeRealField( GUIContent content,
                                                   RangeReal value,
                                                   GUIContent minContent,
@@ -1055,7 +1537,8 @@ namespace AGXUnityEditor
         MaxChanged = false
       };
 
-      var position = EditorGUILayout.GetControlRect();
+      var position = MultiFieldPrefixLabel( content );
+
       s_rangeRealContent[ 0 ] = minContent;
       s_rangeRealContent[ 1 ] = maxContent;
       s_rangeRealValues[ 0 ]  = value.Min;
@@ -1063,7 +1546,7 @@ namespace AGXUnityEditor
 
       EditorGUI.BeginChangeCheck();
       EditorGUI.MultiFloatField( position,
-                                 content,
+                                 GUIContent.none,
                                  s_rangeRealContent,
                                  s_rangeRealValues );
       if ( EditorGUI.EndChangeCheck() ) {
@@ -1137,45 +1620,99 @@ namespace AGXUnityEditor
       return value;
     }
 
+    /// <summary>
+    /// Draws Vector2Int field with custom sub-labels (default "X,Y").
+    /// </summary>
+    /// <param name="label">Vector2Int label.</param>
+    /// <param name="value">Current value.</param>
+    /// <param name="subLabels">Comma separated string with name of each element.</param>
+    /// <returns>Updated value of the Vector2Int field.</returns>
+    public static Vector2Int Vector2IntField( GUIContent label, Vector2Int value, string subLabels = "X,Y" )
+    {
+      for ( int i = 0; i < s_multiInt2Values.Length; ++i )
+        s_multiInt2Values[ i ] = value[ i ];
+      Vector234IntFieldEx( label, s_multiInt2Values, subLabels, "X,Y", values =>
+      {
+        for ( int i = 0; i < values.Length; ++i )
+          value[ i ] = values[ i ];
+      } );
+      return value;
+    }
+
+    /// <summary>
+    /// Draws Vector3Int field with custom sub-labels (default "X,Y,Z").
+    /// </summary>
+    /// <param name="label">Vector3Int label.</param>
+    /// <param name="value">Current value.</param>
+    /// <param name="subLabels">Comma separated string with name of each element.</param>
+    /// <returns>Updated value of the Vector3Int field.</returns>
+    public static Vector3Int Vector3IntField( GUIContent label, Vector3Int value, string subLabels = "X,Y,Z" )
+    {
+      for ( int i = 0; i < s_multiInt3Values.Length; ++i )
+        s_multiInt3Values[ i ] = value[ i ];
+      Vector234IntFieldEx( label, s_multiInt3Values, subLabels, "X,Y,Z", values =>
+      {
+        for ( int i = 0; i < values.Length; ++i )
+          value[ i ] = values[ i ];
+      } );
+      return value;
+    }
+
+    internal static GUIContent[] GetMultiFieldLabels( int numValues,
+                                                      string subLabels,
+                                                      string defaultSubLabels )
+    {
+      string[] subs = null;
+      if ( subLabels == defaultSubLabels )
+        subs = numValues == 2 ?
+                 s_multiField2DefaultSubLabels :
+               numValues == 3 ?
+                 s_multiField3DefaultSubLabels :
+                 s_multiField4DefaultSubLabels;
+      else
+        subs = subLabels.Split( ',' );
+      if ( subs.Length != numValues )
+        throw new AGXUnity.Exception( $"Wrong number of sub-labels for vector, expected {numValues} commas, got {subLabels.Length}: '{subLabels}'" );
+      var contents = numValues == 2 ?
+                       s_multiField2Contents :
+                     numValues == 3 ?
+                       s_multiField3Contents :
+                       s_multiField4Contents;
+      for ( int i = 0; i < numValues; ++i )
+        contents[ i ].text = subs[ i ];
+
+      return contents;
+    }
+
     internal static void Vector234FieldEx( GUIContent label,
                                            float[] values,
                                            string subLabels,
                                            string defaultSubLabels,
                                            Action<float[]> onChange )
     {
-      string[] subs = null;
-      if ( subLabels == defaultSubLabels )
-        subs = values.Length == 2 ?
-                 s_multiFloat2DefaultSubLabels :
-               values.Length == 3 ?
-                 s_multiFloat3DefaultSubLabels :
-                 s_multiFloat4DefaultSubLabels;
-      else
-        subs = subLabels.Split( ',' );
-      if ( subs.Length != values.Length )
-        throw new AGXUnity.Exception( $"Wrong number of sub-labels for vector, expected {values.Length} commas, got {subLabels.Length}: '{subLabels}'" );
-      var contents = values.Length == 2 ?
-                       s_multiFloat2Contents :
-                     values.Length == 3 ?
-                       s_multiFloat3Contents :
-                       s_multiFloat4Contents;
-      for ( int i = 0; i < values.Length; ++i )
-        contents[ i ].text = subs[ i ];
-      var rect = EditorGUILayout.GetControlRect( label != null,
-                                                 EditorGUIUtility.singleLineHeight * ( EditorGUIUtility.wideMode ? 1 : 2 ) );
+      var contents = GetMultiFieldLabels( values.Length, subLabels, defaultSubLabels );
+      var position = MultiFieldPrefixLabel( label );
       EditorGUI.BeginChangeCheck();
-      if ( label == null ) {
-        EditorGUI.MultiFloatField( rect,
-                                   s_customFloatFieldEmptyContent,
-                                   contents,
-                                   values );
-      }
-      else {
-        EditorGUI.MultiFloatField( rect,
-                                   label,
-                                   contents,
-                                   values );
-      }
+      EditorGUI.MultiFloatField( position,
+                                 GUIContent.none,
+                                 contents,
+                                 values );
+      if ( EditorGUI.EndChangeCheck() )
+        onChange?.Invoke( values );
+    }
+
+    internal static void Vector234IntFieldEx( GUIContent label,
+                                             int[] values,
+                                             string subLabels,
+                                             string defaultSubLabels,
+                                             Action<int[]> onChange )
+    {
+      var contents = GetMultiFieldLabels( values.Length, subLabels, defaultSubLabels );
+      var position = MultiFieldPrefixLabel( label );
+      EditorGUI.BeginChangeCheck();
+      EditorGUI.MultiIntField( position,
+                                contents,
+                                values );
       if ( EditorGUI.EndChangeCheck() )
         onChange?.Invoke( values );
     }
@@ -1183,47 +1720,88 @@ namespace AGXUnityEditor
     private static float[] s_multiFloat2Values = new float[] { 0, 0 };
     private static float[] s_multiFloat3Values = new float[] { 0, 0, 0 };
     private static float[] s_multiFloat4Values = new float[] { 0, 0, 0, 0 };
-    private static readonly string[] s_multiFloat2DefaultSubLabels = new string[] { "X", "Y" };
-    private static readonly string[] s_multiFloat3DefaultSubLabels = new string[] { "X", "Y", "Z" };
-    private static readonly string[] s_multiFloat4DefaultSubLabels = new string[] { "X", "Y", "Z", "W" };
-    private static GUIContent[] s_multiFloat2Contents = new GUIContent[]
+    private static int[] s_multiInt2Values = new int[] { 0, 0 };
+    private static int[] s_multiInt3Values = new int[] { 0, 0, 0 };
+
+    private static readonly string[] s_multiField2DefaultSubLabels = new string[] { "X", "Y" };
+    private static readonly string[] s_multiField3DefaultSubLabels = new string[] { "X", "Y", "Z" };
+    private static readonly string[] s_multiField4DefaultSubLabels = new string[] { "X", "Y", "Z", "W" };
+    private static GUIContent[] s_multiField2Contents = new GUIContent[]
     {
-      new GUIContent( s_multiFloat2DefaultSubLabels[ 0 ] ),
-      new GUIContent( s_multiFloat2DefaultSubLabels[ 1 ] )
+      new GUIContent( s_multiField2DefaultSubLabels[ 0 ] ),
+      new GUIContent( s_multiField2DefaultSubLabels[ 1 ] )
     };
-    private static GUIContent[] s_multiFloat3Contents = new GUIContent[]
+    private static GUIContent[] s_multiField3Contents = new GUIContent[]
     {
-      new GUIContent( s_multiFloat3DefaultSubLabels[ 0 ] ),
-      new GUIContent( s_multiFloat3DefaultSubLabels[ 1 ] ),
-      new GUIContent( s_multiFloat3DefaultSubLabels[ 2 ] )
+      new GUIContent( s_multiField3DefaultSubLabels[ 0 ] ),
+      new GUIContent( s_multiField3DefaultSubLabels[ 1 ] ),
+      new GUIContent( s_multiField3DefaultSubLabels[ 2 ] )
     };
-    private static GUIContent[] s_multiFloat4Contents = new GUIContent[]
+    private static GUIContent[] s_multiField4Contents = new GUIContent[]
     {
-      new GUIContent( s_multiFloat4DefaultSubLabels[ 0 ] ),
-      new GUIContent( s_multiFloat4DefaultSubLabels[ 1 ] ),
-      new GUIContent( s_multiFloat4DefaultSubLabels[ 2 ] ),
-      new GUIContent( s_multiFloat4DefaultSubLabels[ 3 ] )
+      new GUIContent( s_multiField4DefaultSubLabels[ 0 ] ),
+      new GUIContent( s_multiField4DefaultSubLabels[ 1 ] ),
+      new GUIContent( s_multiField4DefaultSubLabels[ 2 ] ),
+      new GUIContent( s_multiField4DefaultSubLabels[ 3 ] )
     };
 
-    private static GUIContent s_customFloatFieldEmptyContent = new GUIContent( " " );
-    private static GUIContent[] s_customFloatFieldSubLabelContents = new GUIContent[] { GUIContent.none };
+    private static GUIContent[] s_customFieldSubLabelContents = new GUIContent[] { GUIContent.none };
     private static float[] s_customFloatFieldData = new float[] { 0.0f };
 
     public static float CustomFloatField( GUIContent labelContent, GUIContent fieldContent, float value )
     {
-      var content                             = labelContent ?? s_customFloatFieldEmptyContent;
-      var position                            = EditorGUILayout.GetControlRect();
-      s_customFloatFieldSubLabelContents[ 0 ] = fieldContent;
-      s_customFloatFieldData[ 0 ]             = value;
+      var position = MultiFieldPrefixLabel( labelContent );
+
+      s_customFieldSubLabelContents[ 0 ] = fieldContent;
+      s_customFloatFieldData[ 0 ]        = value;
 
       EditorGUI.BeginChangeCheck();
       EditorGUI.MultiFloatField( position,
-                                 content,
-                                 s_customFloatFieldSubLabelContents,
+                                 GUIContent.none,
+                                 s_customFieldSubLabelContents,
                                  s_customFloatFieldData );
       if ( EditorGUI.EndChangeCheck() )
         return s_customFloatFieldData[ 0 ];
       return value;
+    }
+
+    /// <summary>
+    /// Draws float fields with custom sub-labels
+    /// </summary>
+    /// <param name="label">Label value.</param>
+    /// <param name="subLabels">GUI content .</param>
+    /// <param name="values">Current values.</param>
+    /// <returns>Updated value of the float fields.</returns>
+    public static float[] MultiFloatField( GUIContent label, GUIContent[] subLabels, float[] values )
+    {
+      var numRectRows = ( EditorGUIUtility.wideMode || label == null ? 1 : 2 );
+      var rectHeight = EditorGUIUtility.singleLineHeight * numRectRows;
+      var position = EditorGUILayout.GetControlRect( false, rectHeight );
+      EditorGUI.MultiFloatField( position, label, subLabels, values );
+      return values;
+    }
+
+    /// <summary>
+    /// Draws a main label and labels for each entry in a MultiField. Intended to be used to provide column headers for a MultiField.
+    /// </summary>
+    /// <param name="mainLabel">Prefix label GUIContent.</param>
+    /// <param name="subLabels">Column labels GUIContents.</param>
+    public static void MultiFieldColumnLabels( GUIContent mainLabel, GUIContent[] subLabels )
+    {
+      var position = mainLabel != null ? InspectorGUI.MultiFieldPrefixLabel(mainLabel) : EditorGUILayout.GetControlRect( false, EditorGUIUtility.singleLineHeight );
+
+      float spacingSubLabel = 4; // From EditorGui.cs
+      int count = subLabels.Length;
+      var indentOffset = InspectorGUI.IndentScope.PixelLevel - 2;
+      float fieldWidth = (position.width - (count - 1) * spacingSubLabel - indentOffset) / count;
+      Rect subRect = new Rect(position) {width = fieldWidth, x = position.x + indentOffset};
+      int oldIndentLevel = EditorGUI.indentLevel;
+      EditorGUI.indentLevel = 0;
+      for ( int i = 0; i < count; i++ ) {
+        EditorGUI.LabelField( subRect, subLabels[ i ] );
+        subRect.x += fieldWidth + spacingSubLabel;
+      }
+      EditorGUI.indentLevel = oldIndentLevel;
     }
 
     private static GUIStyle s_dropdownToolStyle = null;
@@ -1272,6 +1850,26 @@ namespace AGXUnityEditor
       EditorGUIUtility.labelWidth += DropdownToolStyle.padding.left;
 
       EditorGUILayout.EndVertical();
+    }
+
+    public static Tuple<T1, T2> PairObjectsField<T1, T2>( T1 item1, T2 item2 )
+      where T1 : Object
+      where T2 : Object
+    {
+      var skin = InspectorEditor.Skin;
+      using ( new EditorGUILayout.HorizontalScope() ) {
+        using ( new EditorGUILayout.VerticalScope( GUILayout.Width( 12 ) ) ) {
+          GUILayout.FlexibleSpace();
+          GUILayout.Label( GUI.MakeLabel( "[", 30 ), InspectorEditor.Skin.Label, GUILayout.Height( 32 ), GUILayout.Width( 12 ) );
+          GUILayout.FlexibleSpace();
+        }
+        using ( new EditorGUILayout.VerticalScope() ) {
+          var o1 = EditorGUILayout.ObjectField( item1, typeof( T1 ), false ) as T1;
+          var o2 = EditorGUILayout.ObjectField( item2, typeof( T2 ), false ) as T2;
+
+          return System.Tuple.Create( o1, o2 );
+        }
+      }
     }
   }
 }

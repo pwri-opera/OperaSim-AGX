@@ -1,13 +1,8 @@
 <SolveKernel name="PrepareDirectSolvers" costPerElement="600">
   <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
-  
+
   <!-- Bodies in a direct solve -->
   <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="directBodies"/>
-
-  
-  <!-- TO Direct binary- and many body constraints -->
-  <!-- <Parameter.Array name="@SolveIsland.directBinaryConstraintGroup"    type="Physics.InteractionGroupPtr"    mode="READ"/> -->
-  <!-- <Parameter.Array name="@SolveIsland.directManyBodyConstraintGroup"  type="Physics.InteractionGroupPtr"    mode="READ"/> -->
 
   <!-- General constraint buffers -->
   <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance"/>
@@ -31,7 +26,10 @@
   <!-- Used in: prepare rhs -->
   <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, solveIndex, effectiveWorldMassMatrix, effectiveWorldInertia, linearAcceleration, angularAcceleration, worldMassMatrix, worldInertia"/>
 
+  <!-- Used in: Push bounds for contacts. -->
+  <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="point, normal, depth, velocity, tangentU, tangentV"/>
+
   <Parameter.Scalar name="stabilityReportEnable" type="Bool" bind="@Solver.stabilityReportEnable"/>
-  
-	<Parameter.Scalar name="@useComplexImpactStage" type="Bool"/>
+
+  <Parameter.Scalar name="@useComplexImpactStage" type="Bool"/>
 </SolveKernel>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <title>Plot</title>
+  <link rel="shortcut icon" href="http://www.algoryx.se/themes/smoothBlue/favicon.ico" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="Plot.css" />
+  <link rel="stylesheet" href="../css/clean/jquery-ui-1.8.21.custom.css">
+  <link rel="stylesheet" href="../lib/external/jquery-contextmenu/jquery.contextMenu.css" />
+
+  <!-- Scripts -->
+  <script src="../lib/external/jQuery/jquery-1.7.2.min.js"></script>
+  <script src="../lib/external/jQuery/jquery-ui-1.8.18.custom.min.js"></script>
+
+  <script src="../lib/external/flot-0.8.3/jquery.flot.js"></script>
+  <script src="../lib/external/flot-0.8.3/jquery.flot.navigate.js"></script>
+  <script src="../lib/external/flot-0.8.3/jquery.flot.crosshair.js"></script>
+  <script src="../lib/external/flot-0.8.3/jquery.flot.selection.js"></script>
+  <script src="../lib/external/flot-0.8.3/jquery.flot.canvas.js"></script>
+
+  <script src="../lib/external/flot-plugins/jquery.flot.axislabels.js"></script>
+  <script src="../lib/external/flot-plugins/jquery.flot.legendoncanvas.js"></script>
+
+  <script src="../lib/external/jquery-contextmenu/jquery.contextMenu.js"></script>
+
+  <script src="../lib/agx/Fallbacks.js"></script>
+  <script src="../lib/agx/Util.js"></script>
+  <script src="../lib/agx/Math.js"></script>
+  <script src="../lib/agx/Timer.js"></script>
+  <script src="../lib/agx/Object.js"></script>
+  <script src="../lib/agx/Type.js"></script>
+  <script src="../lib/agx/Component.js"></script>
+  <script src="../lib/agx/Value.js"></script>
+  <script src="../lib/agx/Buffer.js"></script>
+  <script src="../lib/agx/EntityStorage.js"></script>
+  <script src="../lib/agx/Frame.js"></script>
+  <script src="../lib/agx/NewPlot.js"></script>
+
+  <script src="Plot.js"></script>
+
+  <script type="text/template" id="plotContext">
+    <div class="plotContext">
+      <div class="plotWindow"></div>
+    </div>
+  </script>
+
+</head>
+
+<!------------------------------------------------------------------------------------------------------------>
+
+<body>
+  <div id="plotMain"></div>
+</body>
+
+<div id="toolTip"></div>
+
+<div id="progress-form" title="">
+  <p class="progress">0%</p>
+</div>
+
+<div id="empty-plot-form" title="">
+  <p></p>
+</div>
+
+</html>

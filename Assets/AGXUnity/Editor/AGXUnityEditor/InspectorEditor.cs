@@ -56,37 +56,36 @@ namespace AGXUnityEditor
     {
       targets = targets.Where( obj => obj != null ).ToArray();
 
-      if ( targets.Length == 0 )
-        return;
+      using ( new GUI.EnabledBlock(targets.All(o => (o.hideFlags & HideFlags.NotEditable) == 0)) ) {
+        if ( targets.Length == 0 )
+          return;
 
-      var objects = targets.Select( target => getChildCallback == null ?
-                                      target :
-                                      getChildCallback( target ) )
-                           .Where( obj => obj != null ).ToArray();
-      if ( objects.Length == 0 )
-        return;
+        var objects = targets.Select( target => getChildCallback == null ?
+                                        target :
+                                        getChildCallback( target ) )
+                             .Where( obj => obj != null ).ToArray();
+        if ( objects.Length == 0 )
+          return;
 
-      Undo.RecordObjects( targets, "Inspector" );
+        Undo.RecordObjects( targets, "Inspector" );
 
-      var hasChanges = false;
-      InvokeWrapper[] fieldsAndProperties = InvokeWrapper.FindFieldsAndProperties( objects[ 0 ].GetType() );
-      var group = InspectorGroupHandler.Create();
-      foreach ( var wrapper in fieldsAndProperties ) {
-        if ( !ShouldBeShownInInspector( wrapper.Member ) )
-          continue;
+        InvokeWrapper[] fieldsAndProperties = InvokeWrapper.FindFieldsAndProperties( objects[ 0 ].GetType() );
+        var group = InspectorGroupHandler.Create();
+        foreach ( var wrapper in fieldsAndProperties ) {
+          if ( !ShouldBeShownInInspector( wrapper.Member ) )
+            continue;
 
-        group.Update( wrapper, objects[ 0 ] );
+          group.Update( wrapper, objects[ 0 ] );
 
-        if ( group.IsHidden )
-          continue;
+          if ( group.IsHidden )
+            continue;
 
-        hasChanges = HandleType( wrapper, objects, fallback ) || hasChanges;
-      }
-      group.Dispose();
-
-      if ( hasChanges ) {
-        foreach ( var obj in targets )
-          EditorUtility.SetDirty( obj );
+          var runtimeDisabled = EditorApplication.isPlayingOrWillChangePlaymode &&
+                                wrapper.Member.IsDefined( typeof( DisableInRuntimeInspectorAttribute ), true );
+          using ( new GUI.EnabledBlock( UnityEngine.GUI.enabled && !runtimeDisabled ) )
+            HandleType( wrapper, objects, fallback );
+        }
+        group.Dispose();
       }
     }
 
@@ -96,7 +95,9 @@ namespace AGXUnityEditor
         return false;
 
       // Override hidden in inspector.
-      if ( memberInfo.IsDefined( typeof( HideInInspector ), true ) )
+      var runtimeHide = EditorApplication.isPlayingOrWillChangePlaymode &&
+                        memberInfo.IsDefined( typeof( HideInRuntimeInspectorAttribute ), true );
+      if ( memberInfo.IsDefined( typeof( HideInInspector ), true ) || runtimeHide )
         return false;
 
       // In general, don't show UnityEngine objects unless ShowInInspector is set.
@@ -113,62 +114,37 @@ namespace AGXUnityEditor
     /// </summary>
     public bool IsMainEditor { get; private set; } = true;
 
-    private static Texture2D m_icon = null;
-    private static Texture2D m_hideTexture = null;
-
     public sealed override void OnInspectorGUI()
     {
       if ( Utils.KeyHandler.HandleDetectKeyOnGUI( this.targets, Event.current ) )
         return;
 
       if ( IsMainEditor && !typeof( ScriptableObject ).IsAssignableFrom( target.GetType() ) ) {
-        var controlRect = EditorGUILayout.GetControlRect( false, 0.0f );
-        if ( m_icon == null )
-          m_icon = IconManager.GetIcon( "algoryx_white_shadow_icon" );
-
-        if ( m_icon != null ) {
-          if ( m_hideTexture == null ) {
-#if UNITY_2019_3_OR_NEWER
-            var hideColor = Color.Lerp( InspectorGUI.BackgroundColor, Color.white, 0.03f );
-#else
-            var hideColor = InspectorGUI.BackgroundColor;
-#endif
-
-            m_hideTexture = GUI.CreateColoredTexture( 1, 1, hideColor );
-          }
-
-          var hideRect = new Rect( controlRect.x,
-#if UNITY_2019_3_OR_NEWER
-                                   controlRect.y - 1.25f * EditorGUIUtility.singleLineHeight - 2,
-#else
-                                   controlRect.y - 1.00f * EditorGUIUtility.singleLineHeight - 1,
-#endif
-                                   18,
-                                   EditorGUIUtility.singleLineHeight + 2 );
-          UnityEngine.GUI.DrawTexture( hideRect, m_hideTexture );
-
-          var iconRect = new Rect( hideRect );
-          iconRect.height = 14.0f;
-          iconRect.width = 14.0f;
-#if UNITY_2019_3_OR_NEWER
-          iconRect.y += 2.5f;
-#else
-          iconRect.y += 1.5f;
-#endif
-          iconRect.x += 3.0f;
-          UnityEngine.GUI.DrawTexture( iconRect, m_icon );
-        }
-
         InspectorGUI.BrandSeparator();
       }
 
       GUILayout.BeginVertical();
+
+      EditorGUI.BeginChangeCheck();
 
       ToolManager.OnPreTargetMembers( this.targets );
 
       DrawMembersGUI( this.targets, null, serializedObject );
 
       ToolManager.OnPostTargetMembers( this.targets );
+      
+      // If any changes occured during the editor draw we have to tell unity that the component has changes.
+      // Additionally, some components (such as the Constraint component) modifies other components on the same GameObject.
+      // In this case all compoments have to be manually dirtied. Here, we blanket dirty all compoments on the same GameObject
+      // as the currently edited component.
+      if ( EditorGUI.EndChangeCheck() ) {
+        foreach ( var t in this.targets ){
+          EditorUtility.SetDirty( t );
+          if(t is MonoBehaviour root)
+            foreach( var comp in root.GetComponents<MonoBehaviour>() )
+              EditorUtility.SetDirty(comp);
+        }
+      }
 
       GUILayout.EndVertical();
     }
@@ -195,10 +171,21 @@ namespace AGXUnityEditor
       m_numTargetGameObjectsTargetComponents = m_targetGameObjects.Sum( go => go.GetComponents( m_targetType ).Length );
 
       // Entire class/component marked as hidden - enable "hide in inspector".
-      if ( this.target.GetType().GetCustomAttributes( typeof( HideInInspector ), false ).Length > 0 )
-        this.target.hideFlags |= HideFlags.HideInInspector;
+      // NOTE: This will break Inspector rendering in 2022.1 and later because changing
+      //       hideFlags here results in a destroy of all editors and the editors that
+      //       should be visible are enabled again but never rendered by Unity.
+      // SOLUTION: Add hideFlags |= HideFlags.HideInInspector in Reset method of the class
+      //           that shouldn't be rendered in the Inspector.
+      // NOTE 2: The above solution does not work when importing prefabs as the act of 
+      //         saving a GameObject to a prefab clears the hideFlags.
+      // SOLUTION: Set the hideFlags on affected components when adding a prefab to the scene
+      //           in AGXUnityEditor.AssetPostprocessorHandler.OnAGXPrefabAdddedToScene
+      if ( this.targets.Any( t => !t.hideFlags.HasFlag( HideFlags.HideInInspector ) ) && m_targetType.GetCustomAttribute<HideInInspector>( false ) != null ) {
+        foreach ( var t in this.targets )
+          t.hideFlags |= HideFlags.HideInInspector;
+      }
 
-      ToolManager.OnTargetEditorEnable( this.targets );
+      ToolManager.OnTargetEditorEnable( this.targets, this );
     }
 
     private void OnDisable()
@@ -252,8 +239,9 @@ namespace AGXUnityEditor
       object value = null;
       bool changed = false;
       if ( drawerInfo.IsValid ) {
+        EditorGUI.BeginChangeCheck();
         value   = drawerInfo.Drawer.Invoke( null, new object[] { objects, wrapper } );
-        changed = UnityEngine.GUI.changed &&
+        changed = EditorGUI.EndChangeCheck() &&
                   ( drawerInfo.IsNullable || value != null );
       }
       // Fallback to Unity types rendered with property drawers.
@@ -277,17 +265,14 @@ namespace AGXUnityEditor
         }
 
         if ( serializedProperty != null ) {
+          EditorGUI.BeginChangeCheck();
           EditorGUILayout.PropertyField( serializedProperty );
-          if ( UnityEngine.GUI.changed && assignSupported ) {
+          if ( EditorGUI.EndChangeCheck() && assignSupported ) {
             changed = true;
             value = serializedProperty.objectReferenceValue;
           }            
         }
       }
-
-      // Reset changed state so that non-edited values
-      // are propagated to other properties.
-      UnityEngine.GUI.changed = false;
 
       EditorGUI.showMixedValue = false;
 

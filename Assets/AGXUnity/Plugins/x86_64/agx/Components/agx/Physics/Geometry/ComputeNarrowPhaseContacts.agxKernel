@@ -15,7 +15,7 @@
     <Parameter.EntityData name="@SeparationPair" type="GeometryPair" read="geometry1, geometry2" write="geometry1, geometry2" globalResult="APPEND, SORT"/>
 
     <Parameter.Pointer name="@MaterialManager" type="agxSDK::MaterialManager" include="agxSDK/MaterialManager.h" required="false"/>
-    <Parameter.Array name="@MaterialLessGeometryContacts" type="Physics.GeometryContactPtr" globalResult="TRUNCATE"/>
+    <Parameter.Array name="@MaterialLessGeometryContacts" type="Physics.GeometryContactPtr" globalResult="TRUNCATE, SORT"/>
 
     <!-- Contact reduction -->
     <Parameter.Scalar name="@contactReductionEnable" type="Bool"/>

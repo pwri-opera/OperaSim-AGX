@@ -5,12 +5,12 @@
   <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="point, normal, depth, maxNormalForce, velocity, state" write="tangentU, tangentV"/>
   <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="restitution, viscosity, youngsModulus, damping, minElasticRestLength, maxElasticRestLength, adhesiveOverlap, adhesion, model"/>
 
-	<Parameter.Array  name="@ContactConstraintJacobian"            type="Jacobian6DOFElement"     mode="WRITE"/>
+  <Parameter.Array  name="@ContactConstraintJacobian" type="Jacobian6DOFElement" mode="WRITE"/>
 
-	<Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="" write="impactSpeed, holonomic, damping, violation, velocity, epsilon, bound, lambda, rhs"/>
-	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="mass, cmTransform, linearAcceleration, angularAcceleration"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="" write="impactSpeed, holonomic, damping, violation, velocity, epsilon, bound, lambda, rhs"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="mass, cmTransform, linearAcceleration, angularAcceleration"/>
 
-	<Parameter.Scalar name="@clock.timeStep"                       type="Real"/>
+  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
   <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
 </Kernel>
 
@@ -19,7 +19,7 @@
 
   <Parameter.Array  name="@BinaryConstraintJacobian"       type="Jacobian6DOFElement" mode="WRITE"/>
 
-	<Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="" write="holonomic, damping, violation, velocity, epsilon, bound, rhs"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="" write="holonomic, damping, violation, velocity, epsilon, bound, rhs"/>
 
   <Parameter.Scalar name="@clock.timeStep"                 type="Real"/>
 </Kernel>
@@ -31,6 +31,6 @@
 
 	<Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="" write="holonomic, damping, violation, velocity, epsilon, bound, rhs"/>
 
-  <Parameter.Scalar name="@clock.timeStep"                   type="Real"/>
+  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
 
 </Kernel>

@@ -1,13 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using AGXUnity;
+using AGXUnity.Rendering;
+using AGXUnity.Collide;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using System.Reflection;
 using UnityEditor;
-using AGXUnity;
+using UnityEngine;
+using static AGXUnityEditor.IO.Utils;
 
 namespace AGXUnityEditor
 {
   public class AssetPostprocessorHandler : AssetPostprocessor
   {
+    static AssetPostprocessorHandler()
+    {
+      // Cache types which have the HideInInspector attribute for use in OnAGXPrefabAdddedToScene
+      TypesHiddenInInspector = new List<System.Type>();
+      foreach ( var a in System.AppDomain.CurrentDomain.GetAssemblies() )
+        if ( !a.GetName().Name.StartsWith( "Unity" ) && !a.GetName().Name.StartsWith( "System" ) )
+          foreach ( var t in a.DefinedTypes )
+            if ( t.IsSubclassOf( typeof( MonoBehaviour ) ) && t.GetCustomAttribute<HideInInspector>() != null )
+              TypesHiddenInInspector.Add( t );
+    }
+
+    static List<System.Type> TypesHiddenInInspector = new List<System.Type>();
+
     private class CollisionGroupEntryEqualityComparer : IEqualityComparer<CollisionGroupEntry>
     {
       public bool Equals( CollisionGroupEntry cg1, CollisionGroupEntry cg2 )
@@ -23,6 +40,29 @@ namespace AGXUnityEditor
 
     private static bool m_isProcessingPrefabInstance = false;
 
+    private void OnPostprocessPrefab( GameObject gameObject )
+    {
+      // Since AGX materials are stored in the scene (in memory) these material instances cannot be added
+      // to prefabs. This causes the prefab preview to not have the correct materials when rendering.
+      // This adds the relevant materials to prefabs on import to avoid broken previews.
+      var svs = gameObject.GetComponentsInChildren<ShapeVisual>();
+
+      var defaultMat = ShapeVisual.DefaultMaterial;
+      defaultMat.hideFlags |= HideFlags.HideInHierarchy;
+
+      bool addToContext = false;
+      foreach ( var sv in svs ) {
+        foreach ( var mat in sv.GetMaterials() ) {
+          if ( mat == null || mat.name == ShapeVisual.DefaultMaterialName ) {
+            addToContext = true;
+            sv.ReplaceMaterial( null, defaultMat );
+          }
+        }
+      }
+      if ( addToContext )
+        context.AddObjectToAsset( "Shape Visual Default Material", defaultMat );
+    }
+
     /// <summary>
     /// Callback when a prefab is created from a scene game object <paramref name="go"/>,
     /// i.e., drag-dropped from hierarchy to the assets folder.
@@ -35,22 +75,20 @@ namespace AGXUnityEditor
       if ( m_isProcessingPrefabInstance )
         return;
 
+      
+
       var isAGXPrefab = instance.GetComponent<AGXUnity.IO.RestoredAGXFile>() != null;
 
       // Collect group ids that are disabled in the CollisionGroupsManager so that
       // when this prefab is added to a scene, the disabled collisions will be
       // added again.
       if ( !isAGXPrefab && CollisionGroupsManager.HasInstance ) {
-#if UNITY_2018_1_OR_NEWER
         var prefab = PrefabUtility.GetCorrespondingObjectFromSource( instance ) as GameObject;
-#else
-        var prefab = PrefabUtility.GetPrefabParent( instance ) as GameObject;
-#endif
         if ( prefab != null ) {
           try {
             m_isProcessingPrefabInstance = true;
 
-            var groups = prefab.GetComponentsInChildren<CollisionGroups>();
+            var groups = prefab.GetComponentsInChildren<CollisionGroups>(); 
             var tags   = ( from componentGroups
                            in groups
                            from tag
@@ -63,27 +101,52 @@ namespace AGXUnityEditor
                                 where !CollisionGroupsManager.Instance.GetEnablePair( tag1.Tag, tag2.Tag )
                                 select new AGXUnity.IO.GroupPair() { First = tag1.Tag, Second = tag2.Tag };
             if ( disabledPairs.Count() > 0 ) {
-#if UNITY_2017_3_OR_NEWER
-#if UNITY_2018_3_OR_NEWER
               var savedData = instance.GetComponent<AGXUnity.IO.SavedPrefabLocalData>();
               if ( savedData == null ) {
                 savedData = instance.AddComponent<AGXUnity.IO.SavedPrefabLocalData>();
                 PrefabUtility.ApplyAddedComponent( savedData, AssetDatabase.GetAssetPath( prefab ), InteractionMode.AutomatedAction );
               }
-#else
-              var savedData = prefab.GetComponent<AGXUnity.IO.SavedPrefabLocalData>();
-              if ( savedData == null )
-                savedData = prefab.AddComponent<AGXUnity.IO.SavedPrefabLocalData>();
-#endif
-#endif
               foreach ( var disabledPair in disabledPairs )
                 savedData.AddDisabledPair( disabledPair.First, disabledPair.Second );
 
-#if UNITY_2018_3_OR_NEWER
               PrefabUtility.ApplyPrefabInstance( instance, InteractionMode.AutomatedAction );
-#else
-              EditorUtility.SetDirty( prefab );
-#endif
+            }
+          }
+          finally {
+            m_isProcessingPrefabInstance = false;
+          }
+        }
+      }
+
+      if ( !isAGXPrefab && ContactMaterialManager.HasInstance ) {
+        var prefab = PrefabUtility.GetCorrespondingObjectFromSource( instance ) as GameObject;
+        if ( prefab != null ) {
+          try {
+            m_isProcessingPrefabInstance = true;
+
+            var shapes    = prefab.GetComponentsInChildren<Shape>();
+            var materials = ( from shape
+                              in shapes
+                              select shape.Material ).Distinct( );
+            var contactMaterials = from cm
+                                  in ContactMaterialManager.Instance.ContactMaterialEntries
+                                  where materials.Contains(cm.ContactMaterial.Material1)
+                                  where materials.Contains(cm.ContactMaterial.Material2)
+                                  select cm;
+            if ( contactMaterials.Count() > 0 ) {
+              var savedData = instance.GetComponent<AGXUnity.IO.SavedPrefabLocalData>();
+              if ( savedData == null ) {
+                savedData = instance.AddComponent<AGXUnity.IO.SavedPrefabLocalData>();
+                PrefabUtility.ApplyAddedComponent( savedData, AssetDatabase.GetAssetPath( prefab ), InteractionMode.AutomatedAction );
+              }
+              foreach ( var cm in contactMaterials ) {
+                if ( cm.IsOriented )
+                  Debug.LogWarning( $"Contact Material '{cm.ContactMaterial.name}' is oriented. Saving oriented materials in prefab is not currently supported. Contact material will be ignored." );
+                else
+                  savedData.AddContactMaterial( cm.ContactMaterial );
+              }
+
+              PrefabUtility.ApplyPrefabInstance( instance, InteractionMode.AutomatedAction );
             }
           }
           finally {
@@ -108,10 +171,10 @@ namespace AGXUnityEditor
 
       var fileInfo = new IO.AGXFileInfo( instance );
       if ( fileInfo.IsValid && fileInfo.Type == IO.AGXFileInfo.FileType.AGXPrefab )
-        OnAGXPrefabAdddedToScene( instance, fileInfo );
+        OnAGXPrefabAddedToScene( instance, fileInfo );
     }
 
-    private static void OnAGXPrefabAdddedToScene( GameObject instance, IO.AGXFileInfo fileInfo )
+    private static void OnAGXPrefabAddedToScene( GameObject instance, IO.AGXFileInfo fileInfo )
     {
       if ( fileInfo.ExistingPrefab == null ) {
         Debug.LogWarning( "Unable to load parent prefab from file: " + fileInfo.NameWithExtension );
@@ -120,6 +183,18 @@ namespace AGXUnityEditor
 
       Undo.SetCurrentGroupName( "Adding: " + instance.name + " to scene." );
       var grouId = Undo.GetCurrentGroup();
+
+      // As of Unity 2022.1 the inspector breaks when setting hideflags while rendering a custom inspector
+      // To circumvent this the hideflags are also set in the Reset method of the affected classes.
+      // This however is not sufficient when importing .agx files as the agx file importer saves a prefab
+      // which removes hideflags set on the object. (See https://forum.unity.com/threads/is-it-impossible-to-save-component-hideflags-in-a-prefab.976974/)
+      // As an additional workaround we set the hideflags on the affected componentes when adding a prefab
+      // to the scene instead.
+      foreach ( var t in TypesHiddenInInspector ) {
+        var components = instance.GetComponentsInChildren(t);
+        foreach ( var comp in components )
+          comp.hideFlags |= HideFlags.HideInInspector;
+      }
 
       var contactMaterialManager = TopMenu.GetOrCreateUniqueGameObject<ContactMaterialManager>();
       Undo.RecordObject( contactMaterialManager, "Adding contact materials" );
@@ -146,13 +221,15 @@ namespace AGXUnityEditor
 
     private static void OnSavedPrefabAddedToScene( GameObject instance, AGXUnity.IO.SavedPrefabLocalData savedPrefabData )
     {
-      if ( savedPrefabData == null || savedPrefabData.DisabledGroups.Length == 0 )
+      if ( savedPrefabData == null || (savedPrefabData.NumSavedDisabledPairs == 0 && savedPrefabData.NumSavedContactMaterials == 0) )
         return;
 
       Undo.SetCurrentGroupName( "Adding prefab data for " + instance.name + " to scene." );
       var grouId = Undo.GetCurrentGroup();
       foreach ( var disabledGroup in savedPrefabData.DisabledGroups )
         TopMenu.GetOrCreateUniqueGameObject<CollisionGroupsManager>().SetEnablePair( disabledGroup.First, disabledGroup.Second, false );
+      foreach ( var contactMaterial in savedPrefabData.ContactMaterials )
+        TopMenu.GetOrCreateUniqueGameObject<ContactMaterialManager>().Add( contactMaterial );
       Undo.CollapseUndoOperations( grouId );
     }
   }

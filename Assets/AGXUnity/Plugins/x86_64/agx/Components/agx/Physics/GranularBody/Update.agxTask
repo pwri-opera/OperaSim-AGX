@@ -1,7 +1,9 @@
 <Task name="Update">
   <Task name="PreIntegratePositions" source="GranularBody.IntegratePositions : SolveBody" enable="false" depends="@Simulation.Update.UpdateEmitters" resolve="@Simulation.Update.PreSetup"/>
 
-  <! -- <Task source="ParticleSystem.RemoveDeadParticles" depends="@Simulation.Update.PreSetup" resolve="@Simulation.Update.TriggerPreCollideStepEvent"/> -->
+  <!-- 
+  <Task source="ParticleSystem.RemoveDeadParticles" depends="@Simulation.Update.PreSetup" resolve="@Simulation.Update.TriggerPreCollideStepEvent"/> 
+  -->
 
   <Task name="HandleRemovedParticlesBeforeSpace" source="ParticleSystem.HandleRemovedParticles"  depends="@Simulation.Update.TriggerPreCollideStepEvent" />
   <Task name="RemoveDeadParticlesBeforeSpace"    source="ParticleSystem.RemoveDeadParticles"    depends="HandleRemovedParticlesBeforeSpace"  resolve="@Simulation.Update.UpdateSpace"/>
@@ -15,7 +17,7 @@
   <Task source="ParticleSystem.CreateMissingContactMaterials : ParticlePairContact"/>
   <Task source="ParticleSystem.CreateMissingContactMaterials : ParticleGeometryContact"/>
 
-	<!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
+  <!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
   <Task name="PreEventSync" resolve="@Simulation.Update.TriggerContactEventListeners"/>
 
 
@@ -67,16 +69,19 @@
   <Task source="GranularBody.ClearForces" resolve="@Simulation.Update.TriggerPostStepEvents"/>
 
 
-  <!--<Task source="GranularBody.StoreContactForcesTask : GranularGranularContact"/>
-  <Task source="GranularBody.StoreContactForcesTask : GranularGeometryContact"/>-->
+  <!--
+  <Task source="GranularBody.StoreContactForcesTask : GranularGranularContact"/>
+  <Task source="GranularBody.StoreContactForcesTask : GranularGeometryContact"/>
+  -->
 
-<!--
+  <!--
   <Task source="GranularBody.PrintNormalForces : GranularGranularContact"/>
   <Task source="GranularBody.PrintNormalForces : GranularGeometryContact"/>
 -->
 
   <Task source="ParticleSystem.AgeParticles" depends="@Simulation.Update.TriggerPostStepEvents"/>
-  <Task source="ParticleSystem.HandleRemovedParticles" depends="@Simulation.Update.TriggerLastStepEvents"/>
+  <Task source="ParticleSystem.HandleRemovedParticles" depends="AgeParticles"/>
+
   <Task source="ParticleSystem.CalculateBound"/>
   <Task source="ParticleSystem.RemoveDeadParticles"/>
 </Task>
@@ -98,7 +103,7 @@
   <Task source="ParticleSystem.CreateMissingContactMaterials : ParticlePairContact"/>
   <Task source="ParticleSystem.CreateMissingContactMaterials : ParticleGeometryContact"/>
 
-	<!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
+  <!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
   <Task name="PreEventSync" resolve="@Simulation.Update.TriggerContactEventListeners"/>
 
   <Task source="ParticleSystem.FilterContacts : ParticlePair" depends="@Simulation.Update.TriggerPreStepEvents"/>
@@ -182,7 +187,8 @@
   <Task source="GranularBody.StoreContactForcesTask : GranularGeometryContact"/>-->
 
   <Task source="ParticleSystem.AgeParticles" depends="@Simulation.Update.TriggerPostStepEvents"/>
-  <Task source="ParticleSystem.HandleRemovedParticles" depends="@Simulation.Update.TriggerLastStepEvents"/>
+  <Task source="ParticleSystem.HandleRemovedParticles" depends="AgeParticles"/>
+
   <Task source="ParticleSystem.CalculateBound"/>
   <Task source="ParticleSystem.RemoveDeadParticles"/>
 </Task>

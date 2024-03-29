@@ -5,7 +5,7 @@
 	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="velocity, angularVelocity, linearAcceleration, angularAcceleration"/>
 
 	<Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"      mode="READ"/>
-
+	<Parameter.EntityData name="@ContactMaterial"             type="ContactMaterial" read="model"/>
 	<Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
 	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
 </SolveKernel>

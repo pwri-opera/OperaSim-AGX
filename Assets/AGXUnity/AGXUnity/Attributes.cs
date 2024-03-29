@@ -13,6 +13,22 @@ namespace AGXUnity
     public ShowInInspector() { }
   }
 
+  /// <summary>
+  /// Disable changes of field or property in the Inspector during runtime.
+  /// </summary>
+  [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
+  public class DisableInRuntimeInspectorAttribute : Attribute
+  {
+  }
+
+  /// <summary>
+  /// Hide field or property in the Inspector during runtime.
+  /// </summary>
+  [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
+  public class HideInRuntimeInspectorAttribute : Attribute
+  {
+  }
+
   [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
   public class InspectorPriorityAttribute : Attribute
   {
@@ -81,6 +97,7 @@ namespace AGXUnity
   public class InspectorGroupBeginAttribute : Attribute
   {
     public string Name;
+    public bool DefaultExpanded = false;
   }
 
   [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
@@ -108,6 +125,10 @@ namespace AGXUnity
         return IsValid( (Vector3)value );
       else if ( type == typeof( Vector2 ) )
         return IsValid( (Vector2)value );
+      else if ( type == typeof( Vector3Int ) )
+        return IsValid( (Vector3Int)value );
+      else if ( type == typeof( Vector2Int ) )
+        return IsValid( (Vector2Int)value );
       else if ( type == typeof( DefaultAndUserValueFloat ) ) {
         DefaultAndUserValueFloat val = (DefaultAndUserValueFloat)value;
         return val.Value > 0 || ( m_acceptZero && val.Value == 0 );
@@ -118,6 +139,10 @@ namespace AGXUnity
       }
       else if ( type == typeof( int ) )
         return (int)value > 0 || ( m_acceptZero && (int)value == 0 );
+      else if ( type == typeof( Vector2Int ) )
+        return IsValid( (Vector2Int)value );
+      else if ( type == typeof( Vector3Int ) )
+        return IsValid( (Vector3Int)value );
       else if ( value is IComparable ) {
         int returnCheck = m_acceptZero ? -1 : 0;
         // CompareTo returns 0 if the values are equal.
@@ -127,6 +152,9 @@ namespace AGXUnity
         return (float)value > 0 || ( m_acceptZero && (float)value == 0 );
       else if ( type == typeof( double ) )
         return (double)value > 0 || ( m_acceptZero && (double)value == 0 );
+      else if ( type.IsGenericType &&
+                type.GetGenericTypeDefinition() == typeof(OptionalOverrideValue<>) )
+        return OptionalOverrideIsValid( value );
       return true;
     }
 
@@ -149,6 +177,30 @@ namespace AGXUnity
     {
       return ( value[ 0 ] > 0 || ( m_acceptZero && value[ 0 ] == 0 ) ) &&
              ( value[ 1 ] > 0 || ( m_acceptZero && value[ 1 ] == 0 ) );
+    }
+
+    public bool IsValid( Vector3Int value )
+    {
+      return ( value[ 0 ] > 0 || ( m_acceptZero && value[ 0 ] == 0 ) ) &&
+             ( value[ 1 ] > 0 || ( m_acceptZero && value[ 1 ] == 0 ) ) &&
+             ( value[ 2 ] > 0 || ( m_acceptZero && value[ 2 ] == 0 ) );
+    }
+
+    public bool IsValid( Vector2Int value )
+    {
+      return ( value[ 0 ] > 0 || ( m_acceptZero && value[ 0 ] == 0 ) ) &&
+             ( value[ 1 ] > 0 || ( m_acceptZero && value[ 1 ] == 0 ) );
+    }
+
+    public bool OptionalOverrideIsValid( object value )
+    {
+      var wrappedType = value.GetType().GenericTypeArguments[0];
+      var ooType = typeof(OptionalOverrideValue<>).MakeGenericType( wrappedType );
+      var wrappedVal = ooType.GetProperty( "OverrideValue" ).GetValue( value );
+      var validator = this.GetType().GetMethod("IsValid",new Type[] { wrappedType } );
+      if ( validator == null )
+        return true;
+      return (bool)validator.Invoke( this, new object[] { wrappedVal });
     }
   }
 

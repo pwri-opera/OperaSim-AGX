@@ -9,6 +9,7 @@ namespace AGXUnity
   /// </summary>
   [AddComponentMenu( "" )]
   [HideInInspector]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#controllers" )]
   public class TargetSpeedController : ElementaryConstraintController
   {
     /// <summary>
@@ -50,6 +51,17 @@ namespace AGXUnity
         if ( Native != null )
           agx.TargetSpeedController.safeCast( Native ).setLockedAtZeroSpeed( m_lockAtZeroSpeed );
       }
+    }
+
+    /// <summary>
+    /// Convenience method to get current force applied by this controller. 0 if not initialized.
+    /// </summary>
+    public float GetCurrentForce()
+    {
+      if ( Native != null )
+        return (float) agx.TargetSpeedController.safeCast( Native ).getCurrentForce( );
+      else
+        return 0;
     }
 
     protected override void Construct( agx.ElementaryConstraint tmpEc )

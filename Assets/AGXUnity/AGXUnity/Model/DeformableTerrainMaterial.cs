@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AGXUnity.Model
 {
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#deformable-terrain-material" )]
   public class DeformableTerrainMaterial : ScriptAsset
   {
     /// <summary>
@@ -11,7 +12,32 @@ namespace AGXUnity.Model
     /// with AGX Dynamics.
     /// </summary>
     [HideInInspector]
-    public static string DefaultTerrainMaterialsPath { get { return "data/TerrainMaterials"; } }
+    public static string DefaultTerrainMaterialsPath
+    {
+      get
+      {
+        if ( s_defaultTerrainMaterialsPath == null ) {
+          var terrainMaterialLibraryOptions = new string[]
+          {
+            "data/TerrainMaterials",
+            "data/MaterialLibrary/TerrainMaterials"
+          };
+
+          foreach ( var materialLibraryOption in terrainMaterialLibraryOptions ) {
+            var fileTest = agxIO.Environment.instance().getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).find( $"{materialLibraryOption}/dirt_1.json" );
+            if ( !string.IsNullOrEmpty( fileTest ) ) {
+              s_defaultTerrainMaterialsPath = materialLibraryOption;
+              break;
+            }
+          }
+
+          if ( s_defaultTerrainMaterialsPath == null )
+            s_defaultTerrainMaterialsPath = terrainMaterialLibraryOptions[ 0 ];
+        }
+
+        return s_defaultTerrainMaterialsPath;
+      }
+    }
 
     /// <summary>
     /// Finds available material presets in the current material directory.
@@ -35,11 +61,12 @@ namespace AGXUnity.Model
                                                                    DefaultTerrainMaterialsPath ) ) {
         var errorMessage = string.Empty;
         if ( Array.IndexOf( GetAvailablePresets(), presetName ) < 0 )
-          errorMessage = $"Unable to find material name {presetName} in the library.";
+          errorMessage = $"AGXUnity.Model.DeformableTerrainMaterial: Unable to find material name {presetName} in the library.";
         else
           errorMessage = terrainMaterial.getLastError();
-        Debug.LogWarning( $"Unable to load preset {presetName}: {errorMessage}" );
+        Debug.LogWarning( $"AGXUnity.Model.DeformableTerrainMaterial: Unable to load preset {presetName}: {errorMessage}" );
       }
+
       return terrainMaterial;
     }
 
@@ -79,6 +106,7 @@ namespace AGXUnity.Model
     /// </summary>
     [InspectorGroupBegin( Name = "Bulk Properties" )]
     [ClampAboveZeroInInspector]
+    [Tooltip( "Describes the density of the soil in kg/m3. This translates to the specific density of the solid soil and the bulk density of the dynamic soil (i.e soil particles)." )]
     public float Density
     {
       get
@@ -104,6 +132,7 @@ namespace AGXUnity.Model
     /// Default: Infinity.
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "Describes the maximum density of the soil in kg/m3. This implicitly determines the maximum compaction of the material." )]
     public float MaximumDensity
     {
       get
@@ -129,6 +158,7 @@ namespace AGXUnity.Model
     /// Default: 1.0E7
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "The bulk stiffness of the material in Pa. This affects the stiffness in the internal aggregate<->terrain contacts." )]
     public float YoungsModulus
     {
       get
@@ -153,6 +183,7 @@ namespace AGXUnity.Model
     /// Default: 0.1
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Specifies the Poisson’s ratio of the mateiral. Used in Penetration resistance calculations." )]
     public float PoissonsRatio
     {
       get
@@ -179,6 +210,7 @@ namespace AGXUnity.Model
     /// Default: 45 degrees
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Describes the internal friction angle of the material. This affects the angle of the failure zones and angle of repose in a 1-to 1 ratio for the avalanching algorithm. It also determines the friction coefficient in aggregate<->terrain contacts." )]
     public float FrictionAngle
     {
       get
@@ -204,6 +236,7 @@ namespace AGXUnity.Model
     /// Default: 0.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Describes the internal cohesion of the material in Newton. This affects the force feedback from the terrain. It also determines the cohesion in aggregate<->terrain contacts." )]
     public float Cohesion
     {
       get
@@ -228,6 +261,7 @@ namespace AGXUnity.Model
     /// Default: 15.0 degrees
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Specifies the dilatancy angle of the mateiral. Used in Penetration resistance calculations." )]
     public float DilatancyAngle
     {
       get
@@ -254,6 +288,7 @@ namespace AGXUnity.Model
     /// Default: 1.1
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "Specifies the fractional increase in bulk volume that occurs when solid soil is converted to dynamic soil." )]
     public float SwellFactor
     {
       get
@@ -287,6 +322,7 @@ namespace AGXUnity.Model
     /// </summary>
     [InspectorGroupBegin( Name = "Compaction Properties" )]
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Hardening constant that determines how Young’s Modulus changes with compaction." )]
     public float HardeningConstantKE
     {
       get
@@ -317,6 +353,7 @@ namespace AGXUnity.Model
     /// Default: 0.5
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Hardening constant that determines how Young’s Modulus changes with compaction." )]
     public float HardeningConstantNE
     {
       get
@@ -343,6 +380,7 @@ namespace AGXUnity.Model
     /// Default: 9.8E4
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "The initial consolidation stress that the soil in the bank state ( compaction = 1.0 ). Only stresses above this may increase compaction levels." )]
     public float PreconsolidationStress
     {
       get
@@ -370,6 +408,7 @@ namespace AGXUnity.Model
     /// Default: 0.6666667
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "The phi0 value of the bank state soil. This is used in the compaction calculation where soil stress generates compacted soil. See the AGX terrain material documentation for more details." )]
     public float BankStatePhi
     {
       get
@@ -401,6 +440,7 @@ namespace AGXUnity.Model
     /// Default: 0.1
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "The compression index for the soil, which is the constant that determines how fast the soil should compress given increased surface stress. See the AGX terrain material documentation for more details" )]
     public float CompressionIndex
     {
       get
@@ -429,6 +469,7 @@ namespace AGXUnity.Model
     /// Default: 0.05
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "The time relaxation constant that limits the rate of density changes due to compaction." )]
     public float CompactionTimeRelaxationConstant
     {
       get
@@ -455,6 +496,7 @@ namespace AGXUnity.Model
     /// Default: 0.01
     /// </summary>
     [ ClampAboveZeroInInspector( true )]
+    [Tooltip( "Determines the fraction of the surface stress that will determine when to stop propagating stress down into the soil." )]
     public float StressCutOffFraction
     {
       get
@@ -483,6 +525,7 @@ namespace AGXUnity.Model
     /// Default: 1.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Determines how angle of repose should change with varying compaction." )]
     public float AngleOfReposeCompactionRate
     {
       get
@@ -510,6 +553,7 @@ namespace AGXUnity.Model
     /// </summary>
     [InspectorGroupBegin( Name = "Particle <-> Particle Properties" )]
     [ClampAboveZeroInInspector]
+    [Tooltip( "Sets the Young’s Modulus (Pa) for the particle agx::Material and the internal particle <-> particle contacts." )]
     public float ParticleYoungsModulus
     {
       get
@@ -534,6 +578,7 @@ namespace AGXUnity.Model
     /// Default: 0.5
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the restitution of the particle <-> particle contacts." )]
     public float ParticleRestitution
     {
       get
@@ -558,6 +603,7 @@ namespace AGXUnity.Model
     /// Default: 0.4
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the friction of the particle <-> particle contacts." )]
     public float ParticleSurfaceFriction
     {
       get
@@ -582,6 +628,7 @@ namespace AGXUnity.Model
     /// Default: 0.3
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the rolling resistance of the particle <-> particle contacts." )]
     public float ParticleRollingResistance
     {
       get
@@ -606,6 +653,7 @@ namespace AGXUnity.Model
     /// Default: 0.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the cohesion (Pa) of the particle <-> particle contacts." )]
     public float ParticleCohesion
     {
       get
@@ -633,6 +681,7 @@ namespace AGXUnity.Model
     /// </summary>
     [InspectorGroupBegin( Name = "Particle <-> Terrain Properties" )]
     [ClampAboveZeroInInspector]
+    [Tooltip( "Sets the the Young’s Modulus (Pa) of the particle <-> terrain contacts." )]
     public float ParticleTerrainYoungsModulus
     {
       get
@@ -657,6 +706,7 @@ namespace AGXUnity.Model
     /// Default: 0.8
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the friction of the particle <-> terrain contacts." )]
     public float ParticleTerrainSurfaceFriction
     {
       get
@@ -681,6 +731,7 @@ namespace AGXUnity.Model
     /// Default: 0.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the restitution of the particle <-> terrain contacts." )]
     public float ParticleTerrainRestitution
     {
       get
@@ -705,6 +756,7 @@ namespace AGXUnity.Model
     /// Default: 0.3
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the rolling resistance of the particle <-> terrain contacts." )]
     public float ParticleTerrainRollingResistance
     {
       get
@@ -729,6 +781,7 @@ namespace AGXUnity.Model
     /// Default: 0.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the cohesion (Pa) of the particle <-> terrain contacts." )]
     public float ParticleTerrainCohesion
     {
       get
@@ -759,12 +812,13 @@ namespace AGXUnity.Model
     /// </summary>
     [InspectorGroupBegin( Name = "Excavation Contact Properties" )]
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Specifies the maximum depth of the aggregate-terrain contact." )]
     public float MaximumContactDepth
     {
       get
       {
         return m_temporaryNative != null ?
-                 Convert.ToSingle( m_temporaryNative.getExcavationContactProperties().getMaximumDepth() ) :
+                 Convert.ToSingle( m_temporaryNative.getExcavationContactProperties().getMaximumContactDepth() ) :
                  m_maximumContactDepth;
       }
       set
@@ -786,6 +840,7 @@ namespace AGXUnity.Model
     /// Default: 2.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Specifies the rate of depth decay in the aggregate-terrain during the separation stage of the excavation and deformation contact." )]
     public float DepthDecayFactor
     {
       get
@@ -813,6 +868,7 @@ namespace AGXUnity.Model
     /// Default: 1.0
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Specifies the rate of depth increase in the aggregate-terrain contact when excavating and deforming." )]
     public float DepthIncreaseFactor
     {
       get
@@ -839,6 +895,7 @@ namespace AGXUnity.Model
     /// Default: Infinity
     /// </summary>
     [ClampAboveZeroInInspector( true )]
+    [Tooltip( "Sets the maximum normal force that can be applied in the aggregate-terrain contact." )]
     public float MaximumAggregateNormalForce
     {
       get
@@ -866,6 +923,7 @@ namespace AGXUnity.Model
     ///   bulkYoungsModulus * stiffnessMultiplier
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "" )]
     public float AggregateStiffnessMultiplier
     {
       get
@@ -893,6 +951,7 @@ namespace AGXUnity.Model
     ///   bulkYoungsModulus * stiffnessMultiplier
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "This adjust the stiffness of the shovel-aggregate contacts by multiplying the Young’s Modulus of the material that is set to the contact. See aggregate<->terrain contacts." )]
     public float ExcavationStiffnessMultiplier
     {
       get
@@ -958,5 +1017,8 @@ namespace AGXUnity.Model
     }
 
     private agxTerrain.TerrainMaterial m_temporaryNative = null;
+
+    [NonSerialized]
+    private static string s_defaultTerrainMaterialsPath = null;
   }
 }

@@ -87,7 +87,7 @@ namespace PWRISimulator
             granularSystem.setEnableCollisions(spawnVolumeShape.NativeGeometry, false);
 
             // 粒子を生成する
-            agxData.EntityRange particles = hcpPacking ?
+            agx.ParticlePtrVector particles = hcpPacking ?
                 granularSystem.spawnParticlesInGeometryHCP(
                     spawnVolumeShape.NativeGeometry, distTable, spacing, jitterFactor) :
                 granularSystem.spawnParticlesInGeometry(
