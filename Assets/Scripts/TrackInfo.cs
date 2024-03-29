@@ -71,7 +71,7 @@ namespace VMT.Util
 
         void PrintData()
         {
-            Debug.Log($"Track ¥"{track.name}¥" : " +
+            Debug.Log($"Track \"{track.name}\" : " +
                       $"mass = {bodyMass.ToString("F3")} " +
                       $"localMassCenter = {bodyLocalMassCenter.ToString("F3")} " +
                       $"boxSize = {boxSize.ToString("F3")} " +

@@ -35,7 +35,7 @@ namespace PWRISimulator.ROS
             this.messageAction = messageAction;
             if(rosConnector?.RosSocket == null)
             {
-                Debug.LogError($"Failed to subscribe to topic ¥"{topicName}¥" because RosConnector or RosSocket is null.");
+                Debug.LogError($"Failed to subscribe to topic \"{topicName}\" because RosConnector or RosSocket is null.");
                 return;
             }
             rosConnector.RosSocket.Subscribe<T>(topicName, OnReceivedMessage, throttleRate);
@@ -82,7 +82,7 @@ namespace PWRISimulator.ROS
             this.messageAction = messageAction;
             if (rosConnector?.RosSocket == null)
             {
-                Debug.LogError($"Failed to subscribe to topic ¥"{topicName}¥" because RosConnector or RosSocket is null.");
+                Debug.LogError($"Failed to subscribe to topic \"{topicName}\" because RosConnector or RosSocket is null.");
                 return;
             }
             

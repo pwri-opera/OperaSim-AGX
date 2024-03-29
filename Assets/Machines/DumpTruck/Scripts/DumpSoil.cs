@@ -728,4 +728,75 @@ namespace PWRISimulator
         public double radius { get; private set; }
         public double diameter { get; private set; }
         public double area { get; private set; }
-        public 
+        public double volume { get; private set; }
+        public double mass { get; private set; }
+        public double density { get; private set; }
+
+        public ParticleData(double radius, double density)
+        {
+            this.radius = radius;
+            this.density = density;
+            diameter = 2.0 * radius;
+            area = radius * radius * Math.PI;
+            volume = Math.Pow(radius, 3.0) * Math.PI * 4.0 / 3.0;
+            mass = density * volume;
+        }
+
+        public static ParticleData CreateFromTerrainProperties(DeformableTerrain terrain)
+        {
+            return new ParticleData(
+                terrain.Native.getParticleNominalRadius(),
+                terrain.Native.getMaterial(agxTerrain.Terrain.MaterialType.PARTICLE).getBulkMaterial().getDensity());
+        }
+
+        static public double CalcMass(double radius, double density)
+        {
+            return density * Math.Pow(radius, 3.0) * Math.PI * 4.0 / 3.0;
+        }
+
+        static public double CalcRadius(double mass, double density)
+        {
+            return Math.Pow(mass * 3.0 / (Math.PI * 4.0 * density), 1.0 / 3.0);
+        }
+
+        public override string ToString()
+        {
+            return $"radius = {radius: 0.####}, diameter = {diameter: 0.####}, area = {area: 0.####}, " +
+                   $"volume = {volume: 0.####}, mass = {mass: 0.####}, density = {density : 0.####}";
+        }
+    };
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(DumpSoil))]
+    class DumpSoilEditor : Editor
+    {
+        public override bool RequiresConstantRepaint()
+        {
+            return RequiresConstantRepaint((DumpSoil)target);
+        }
+
+        static public bool RequiresConstantRepaint(DumpSoil dump)
+        {
+            return dump.showOutputInInspector && (dump.soilMass > 0.0 || dump.soilSpeed > 0.0);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            // 標準のGUIを表示
+            base.OnInspectorGUI();
+
+            var data = (DumpSoil)target;
+
+            if (data.showOutputInInspector)
+                OnSoilDataGUI(data);
+        }
+
+        static public void OnSoilDataGUI(DumpSoil data)
+        {
+            EditorGUILayout.LabelField("Soil mass:", $"{data.soilMass: 0.###} kg");
+            EditorGUILayout.LabelField("Soil height:", $"{data.soilHeight: 0.###} m");
+            EditorGUILayout.LabelField("Soil volume:", $"{data.soilVolume: 0.###} m3");
+        }
+    }
+#endif
+}

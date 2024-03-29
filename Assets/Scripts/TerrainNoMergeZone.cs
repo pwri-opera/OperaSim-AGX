@@ -93,7 +93,7 @@ namespace PWRISimulator
                 success = terrain.Native.addNoMergeZoneToGeometry(shape.NativeGeometry, extensionDistance);
 
             if (!success)
-                Debug.LogWarning($"{name} : Failed to " + (remove ? "remove" : "add") + $" shape ¥"{shape.name}¥" " +
+                Debug.LogWarning($"{name} : Failed to " + (remove ? "remove" : "add") + $" shape \"{shape.name}\" " +
                                   "to no merge terrain zone.");
             return success;
         }

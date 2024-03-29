@@ -28,19 +28,19 @@ namespace PWRISimulator.ROS
 
             if (getMessageFunction == null)
             {
-                Debug.LogError($"Failed to advertise topic ¥"{topicName}¥" because getMessageFunction null.");
+                Debug.LogError($"Failed to advertise topic \"{topicName}\" because getMessageFunction null.");
                 return;
             }
 
             if (rosConnector?.RosSocket == null)
             {
-                Debug.LogError($"Failed to advertise topic ¥"{topicName}¥" because RosConnector or RosSocket is null.");
+                Debug.LogError($"Failed to advertise topic \"{topicName}\" because RosConnector or RosSocket is null.");
                 return;
             }
 
             publicationId = rosConnector.RosSocket.Advertise<T>(topicName);
 
-            Debug.Log($"Advertised topic ¥"{topicName}¥".");
+            Debug.Log($"Advertised topic \"{topicName}\".");
 
         }
 
@@ -49,7 +49,7 @@ namespace PWRISimulator.ROS
             if (rosConnector?.RosSocket == null || publicationId == null)
                 return;
 
-            Debug.Log($"UnAdvertise topic ¥"{publicationId}¥".");
+            Debug.Log($"UnAdvertise topic \"{publicationId}\".");
 
             rosConnector.RosSocket.Unadvertise(publicationId);
             publicationId = null;

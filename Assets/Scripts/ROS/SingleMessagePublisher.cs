@@ -87,14 +87,14 @@ namespace PWRISimulator.ROS
 
             publicationId = rosConnector.RosSocket.Advertise<T>(topic);
 
-            Debug.Log($"{name} : Advertised topic ¥"{topic}¥".");
+            Debug.Log($"{name} : Advertised topic \"{topic}\".");
 
             OnAdvertised();
         }
 
         void UnAdvertise()
         {
-            Debug.Log($"{name} : Unadvertise topic ¥"{topic ?? "null"}¥".");
+            Debug.Log($"{name} : Unadvertise topic \"{topic ?? "null"}\".");
 
             try
             {
