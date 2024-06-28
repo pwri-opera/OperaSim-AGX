@@ -1,0 +1,31 @@
+<Kernel name="BuildInternalIslandGroups" dispatch="serial"> <!-- Note island preparation could be done in parallel, but need better load balancing than uniform split -->
+  <description>
+    Generate groups from tagged interactions. Assign groups to islands.
+    A group has a list of interactions.
+    An island has a list of groups.
+  </description>
+
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="instance, nodes" write="groups, directBodies"/>
+  <Parameter.Array name="@SolveIsland.groups.elements" type="Physics.SolveGroupPtr" mode="WRITE"/>
+  <Parameter.Array name="@SolveIsland.directBodies.elements" type="UInt:32bit" mode="WRITE"/>
+
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, source"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state" write="solveIndex"/>
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2"/>
+
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+
+  <!-- Solve group data -->
+  <Parameter.EntityData name="@SolveGroup" type="SolveGroup" read="instance" write="island, nodes, solveModel"/>
+  <Parameter.Array name="@SolveGroup.nodes.elements" type="UInt:32bit" mode="WRITE"/>
+
+  <Parameter.Pointer name="solveGroupNodeBuffer" bind="@SolveGroup.nodes.elements" type="agxData::Buffer"/>
+  <Parameter.Pointer name="solveIslandBodyBuffer" bind="@SolveIsland.directBodies.elements" type="agxData::Buffer"/>
+  <Parameter.Pointer name="solveIslandGroupBuffer" bind="@SolveIsland.groups.elements" type="agxData::Buffer"/>
+
+  <!-- Used indirectly -->
+  <Parameter.Array name="@GeometryContact.material" type="Physics.ContactMaterialPtr" mode="READ" implicit="true"/>
+  <Parameter.Array name="@GeometryContact.solveModel" type="agx::SolveModel *" mode="READ" implicit="true"/>
+  <Parameter.Array name="@BinaryConstraint.solveModel" type="agx::SolveModel *" mode="READ" implicit="true"/>
+  <Parameter.Array name="@ManyBodyConstraint.solveModel" type="agx::SolveModel *" mode="READ" implicit="true"/>
+</Kernel>

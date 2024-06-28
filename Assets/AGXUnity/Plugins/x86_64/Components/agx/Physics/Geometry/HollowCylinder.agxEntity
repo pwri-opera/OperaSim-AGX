@@ -1,0 +1,5 @@
+<Entity name="HollowCylinder" source="Shape">
+	<Attribute.Scalar name="height"    type="Real"/>
+	<Attribute.Scalar name="radius"    type="Real"/>
+	<Attribute.Scalar name="thickness" type="Real"/>
+</Entity>

@@ -1,0 +1,8 @@
+<Entity name="Material" source="Referenced">
+  <Attribute.Pointer name="model" type="agx::Material"/>
+  <Attribute.Scalar name="name" type="Name"/>
+  <Attribute.Scalar name="materialLibraryName" type="Name" />
+  <Attribute.Scalar name="bulkMaterial" type="Physics.BulkMaterialPtr"/>
+  <Attribute.Scalar name="surfaceMaterial" type="Physics.SurfaceMaterialPtr"/>
+  <Attribute.Scalar name="wireMaterial" type="Physics.WireMaterialPtr"/>
+</Entity>

@@ -1,0 +1,9 @@
+<Kernel name="StoreContactLambdas32" implementation="GranularGranularContact">
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, point, normal, depth, material, velocity"/>
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint32" read="isImpacting, body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow32" read="lambda" write="lambda, rhs"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="oldVelocity, oldAngularVelocity, mass, position"/>
+  <Parameter.EntityData name="@CachedGranularGranularContacts" type="GranularBody.CachedGranularContact" mode="READ_WRITE"/>
+  <Parameter.HashTable  name="@GranularGranularContactTable" bucketType="Physics.GranularBody.GranularGranularPair | Physics.GranularBody.CachedGranularContactPtr" mode="READ_WRITE" typedef="ParticleParticleContactTable"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>

@@ -1,0 +1,6 @@
+<Kernel name="FillBound1d">
+	<Parameter.Array type="Real" name="buffer" mode="WRITE"/>
+	<Parameter.Scalar type="Real" name="min"/>
+	<Parameter.Scalar type="Real" name="max"/>
+	<Parameter.Scalar type="UInt" name="numPoints"/>
+</Kernel>

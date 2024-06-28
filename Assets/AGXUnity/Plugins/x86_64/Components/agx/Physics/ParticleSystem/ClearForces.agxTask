@@ -1,0 +1,4 @@
+<Task name="ClearForces" source="Math.Set">
+	<Parameter.Array instance="result" bind="@Particle.force"/>
+	<Parameter.Scalar instance="arg" value="Vec3(0,0,0)"/>
+</Task>

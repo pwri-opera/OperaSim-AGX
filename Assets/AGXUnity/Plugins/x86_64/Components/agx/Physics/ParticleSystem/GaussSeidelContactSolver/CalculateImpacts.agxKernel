@@ -1,0 +1,5 @@
+<Kernel name="CalculateImpacts" implementation="ContactZone">
+  <Parameter.Array name="@ContactZone.isImpacting" type="Bool" mode="WRITE"/>
+  <Parameter.Array name="@ContactZone.contactList" type="Array<UInt:32bit>" mode="READ"/>
+  <Parameter.Array name="constraint_isImpacting" type="Bool" mode="READ" bind="@ParticleParticleContactConstraint.isImpacting"/>
+</Kernel>

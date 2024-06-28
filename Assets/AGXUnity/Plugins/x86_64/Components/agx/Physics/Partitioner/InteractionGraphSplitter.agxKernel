@@ -1,0 +1,9 @@
+<Kernel name="InteractionGraphSplitter" device="CPU" dispatch="serial">
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="instance" write="type, state, tag, edges, source"/>
+  
+  <!-- <Parameter.EntityData name="@Geometry" type="Geometry" read="body" write=""/> -->
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, instance" write="graphNode, numConstraints"/>
+
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+  
+</Kernel>

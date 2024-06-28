@@ -1,0 +1,35 @@
+<SolveKernel name="PrepareDirectSolvers" costPerElement="600">
+  <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
+
+  <!-- Bodies in a direct solve -->
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="directBodies"/>
+
+  <!-- General constraint buffers -->
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance"/>
+  <Parameter.EntityData name="@StrongInteraction" type="StrongInteraction" read="instance"/>
+
+  <!-- Contacts -->
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="numRows, rowIndex, jacobianIndex, body1, body2, contactPointRange" write="blockRowIndex"/>
+  <!-- <Parameter.Array name="@SolveIsland.directIterativeProjectedConeFrictionGroup"  type="Physics.InteractionGroupPtr"      mode="READ"/> -->
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction, model"/>
+
+  <Parameter.EntityData name="@ContactConstraintRow"  type="ConstraintRow" read="epsilon, rhs, bound, indexSetState"/>
+  <Parameter.EntityData name="@BinaryConstraintRow"   type="ConstraintRow" read="epsilon, rhs, bound, indexSetState"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="epsilon, rhs, bound, indexSetState"/>
+
+  <!-- Used in: write jacobian matrix (push matrix data) -->
+  <Parameter.Array name="@ContactConstraintJacobian"                  type="Jacobian6DOFElement"    mode="READ"/>
+  <Parameter.Array name="@BinaryConstraintJacobian"                   type="Jacobian6DOFElement"    mode="READ"/>
+  <Parameter.Array name="@ManyBodyConstraintJacobian"                 type="Jacobian6DOFElement"    mode="READ"/>
+
+  <!-- Used in: prepare rhs -->
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, solveIndex, effectiveWorldMassMatrix, effectiveWorldInertia, linearAcceleration, angularAcceleration, worldMassMatrix, worldInertia"/>
+
+  <!-- Used in: Push bounds for contacts. -->
+  <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="point, normal, depth, velocity, tangentU, tangentV"/>
+
+  <Parameter.Scalar name="stabilityReportEnable" type="Bool" bind="@Solver.stabilityReportEnable"/>
+
+  <Parameter.Scalar name="@useComplexImpactStage" type="Bool"/>
+</SolveKernel>

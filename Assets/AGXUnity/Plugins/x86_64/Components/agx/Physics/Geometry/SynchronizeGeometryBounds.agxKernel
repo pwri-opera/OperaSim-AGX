@@ -1,0 +1,4 @@
+<Kernel name="SynchronizeGeometryBounds">
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="shape" write="boundingAABB"/>
+  <!-- TODO List of implicitly used shape transform buffers -->
+</Kernel>

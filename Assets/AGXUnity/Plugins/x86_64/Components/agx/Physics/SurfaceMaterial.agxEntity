@@ -1,0 +1,9 @@
+<Entity name="SurfaceMaterial" source="Referenced">
+	<Attribute.Scalar name="roughness" type="Real"/>
+	<Attribute.Scalar name="adhesion" type="Real"/>
+	<Attribute.Scalar name="adhesiveOverlap" type="Real"/>
+	<Attribute.Scalar name="viscosity" type="Real"/>
+	<Attribute.Scalar name="frictionEnabled" type="Bool" value="true"/>
+	<Attribute.Scalar name="dirty" type="Bool"/>
+  <!-- <Attribute.Scalar name="contactReduction" type="Bool" value="false"/> -->
+</Entity>

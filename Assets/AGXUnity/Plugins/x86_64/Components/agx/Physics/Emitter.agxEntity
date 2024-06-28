@@ -1,0 +1,17 @@
+<Entity name="Emitter" source="Referenced">
+	<Attribute.Scalar name="id" type="UInt:32bit"/>
+	<Attribute.Scalar name="name" type="Name"/>
+	<Attribute.Scalar name="geometry" type="Physics.GeometryPtr"/>
+
+	<!-- Flow Quantities -->
+	<Attribute.Scalar name="collisionGroupSet" type="Physics.CollisionGroupSetPtr"/>
+	<Attribute.Scalar name="velocity" type="Vec3"/>
+	<Attribute.Scalar name="rate" type="Real"/>
+	<Attribute.Scalar name="emittedQuantity" type="Real"/>
+	<Attribute.Scalar name="emittedQuantityMaximum" type="Real"/>
+	<Attribute.Scalar name="emittedCount" type="UInt"/>
+	<Attribute.Scalar name="seed" type="UInt:32bit"/>
+
+	<!-- High level body -->
+	<Attribute.Pointer name="model" type="agx::Emitter"/>
+</Entity>

@@ -1,0 +1,6 @@
+<Entity name="ShapeGroup" source="Shape">
+  <Attribute.Scalar name="tag" type="UInt"/>
+	
+	<Attribute.Vector name="childShapes" type="Physics.Geometry.ShapePtr"/>
+	<Attribute.Vector name="childTransforms" type="AffineMatrix4x4"/>
+</Entity>

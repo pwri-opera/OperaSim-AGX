@@ -1,0 +1,9 @@
+<Kernel name="RefreshTierAssignments" implementation="Particle">
+  <Parameter.EntityData name="@Particle" type="Particle" read="position, radius, tier" write="tier"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="size"/>
+</Kernel>
+
+<Kernel name="RefreshTierAssignments" implementation="Geometry">
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="transform, boundingRadius, tier, state" write="tier"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="size"/>
+</Kernel>

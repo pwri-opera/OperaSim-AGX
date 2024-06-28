@@ -1,0 +1,3 @@
+<Entity name="Box" source="Shape">
+	<Attribute.Scalar name="halfExtents" type="Vec3"/>
+</Entity>

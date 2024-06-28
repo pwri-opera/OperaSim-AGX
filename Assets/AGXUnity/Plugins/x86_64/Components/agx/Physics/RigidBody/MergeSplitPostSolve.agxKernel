@@ -1,0 +1,21 @@
+<Kernel name="MergeSplitPostSolve" device="CPU" dispatch="serial">
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, source"/>
+
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="solveModel, body1, body2, jacobianIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="lambda"/>
+  <Parameter.Array  name="@BinaryConstraintJacobian"          type="Jacobian6DOFElement"    mode="READ"/>
+
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="solveModel, bodies, jacobianIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" write="lambda"/>
+  <Parameter.Array  name="@ManyBodyConstraintJacobian"        type="Jacobian6DOFElement"    mode="READ"/>
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, jacobianIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" write="lambda"/>
+  <Parameter.Array  name="@ContactConstraintJacobian"         type="Jacobian6DOFElement"    mode="READ"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="points, solveModel"/>
+  
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="graphNode, state"/>
+
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>

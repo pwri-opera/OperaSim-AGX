@@ -1,0 +1,5 @@
+<Kernel name="RemoveInvalidContacts" dispatch="serial">
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, body1, body2, points, material"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state"/>
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

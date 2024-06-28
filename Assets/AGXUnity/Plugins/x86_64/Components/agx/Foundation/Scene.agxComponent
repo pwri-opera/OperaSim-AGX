@@ -1,0 +1,19 @@
+<Component name="Scene">
+	
+	<!-- Gravity -->
+	<Value name="gravity" type="Vec3" value="0,0,-9.82"/>
+
+	<Clock name="clock" synchronize="@realTime">
+		<Value instance="frequency" value="720"/>
+	</Clock>
+	
+	<!-- Cameras -->
+	<Component name="Cameras">
+		<!-- <Camera name="default"/> -->
+	</Component>
+
+	<!-- Visualizations -->
+	<Component name="Visualizations">
+	</Component>
+	
+</Component>

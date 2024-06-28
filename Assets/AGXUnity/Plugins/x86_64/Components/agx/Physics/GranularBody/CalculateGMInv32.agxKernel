@@ -1,0 +1,11 @@
+<Kernel name="CalculateGMInv32" implementation="GranularGranularContact">
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint32" read="body1, body2" write=""/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow32" read="epsilon" write="invD"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="invMass, invInertia, state"/>
+    <!-- New Jacobian -->
+  <Parameter.Array name="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement:32bit"/>
+  <Parameter.Array name="granularGranularGMinvStorage" bind="@GranularGranularContactConstraintGMInvStorage" mode="WRITE" type="Jacobian6DOFElement:32bit"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+
+

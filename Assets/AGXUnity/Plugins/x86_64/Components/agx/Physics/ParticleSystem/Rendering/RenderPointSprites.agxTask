@@ -1,0 +1,75 @@
+<Task name="RenderPointSprites" source="Foundation.Rendering.RenderPointSprites">
+  <Parameter.Array instance="positions" bind="@Particle.position"/>
+  <Parameter.Array instance="radius" bind="@Particle.radius"/>
+  <Parameter.Array instance="color" bind="@Particle.color"/>
+  <Parameter.Array instance="enableRendering" bind="@Particle.enableRendering"/>
+  <!-- <Parameter.Scalar instance="radiusScaling" value="Real(1.0)"/> -->
+</Task>
+
+<Task name="RenderPointSprites" source="Foundation.Rendering.RenderQuadPointSprites" implementation="QuadSprites">
+  <Parameter.Array instance="positions" bind="@Particle.position"/>
+  <Parameter.Array instance="radius" bind="@Particle.radius"/>
+  <Parameter.Array instance="color" bind="@Particle.color"/>
+  <Parameter.Array instance="enableRendering" bind="@Particle.enableRendering"/>
+  <!-- <Parameter.Scalar instance="radiusScaling" value="Real(1.0)"/> -->
+</Task>
+
+<Task name="RenderPointSprites" source="Foundation.Rendering.RenderRotatingPointSprites" implementation="GranularBody">
+  <Parameter.Array instance="positions" bind="@GranularBody.position"/>
+  <Parameter.Array instance="rotations" bind="@GranularBody.rotation"/>
+  <Parameter.Array instance="radius" bind="@GranularBody.radius"/>
+  <Parameter.Array instance="color" bind="@GranularBody.color"/>
+  <Parameter.Array instance="enableRendering" bind="@Particle.enableRendering"/>
+  <Parameter.Scalar instance="radiusScaling" value="Real(1.0)"/>
+</Task>
+
+<Task name="RenderPointSprites" source="Foundation.Rendering.RenderQuadRotatingPointSprites" implementation="QuadRotatingSprites">
+  <Parameter.Array instance="positions" bind="@GranularBody.position"/>
+  <Parameter.Array instance="radius" bind="@GranularBody.radius"/>
+  <Parameter.Array instance="color" bind="@GranularBody.color"/>
+  <Parameter.Array instance="rotations" bind="@GranularBody.rotation"/>
+  <Parameter.Array instance="enableRendering" bind="@Particle.enableRendering"/>
+  <!-- <Parameter.Scalar instance="radiusScaling" value="Real(1.0)"/> -->
+</Task>
+
+<Task name="RenderPointSprites" implementation="GranularBody_AlphaSorting">
+
+  <Buffer name="ParticleCameraDistances" type="Real" numElements="@Particle.numElements"/>
+  <Buffer name="SortedRenderParticles" type="UInt:32bit" numElements="@Particle.numElements"/>
+
+  <Task source="Physics.ParticleSystem.Rendering.CalculateCameraDistances"/>
+  <Task source="Physics.ParticleSystem.Rendering.SortRenderParticles"/>
+
+  <Task source="Foundation.Rendering.RenderRotatingPointSprites">
+    <Parameter.Array instance="indices" bind="@SortedRenderParticles"/>
+
+    <Parameter.Array instance="positions" bind="@GranularBody.position"/>
+    <Parameter.Array instance="rotations" bind="@GranularBody.rotation"/>
+    <Parameter.Array instance="radius" bind="@GranularBody.radius"/>
+    <Parameter.Array instance="color" bind="@GranularBody.color"/>
+    <Parameter.Array instance="enableRendering" bind="@Particle.enableRendering"/>
+    <Parameter.Scalar instance="radiusScaling" value="Real(1.0)"/>
+  </Task>
+
+</Task>
+
+<Task name="RenderPointSprites" implementation="QuadRotatingSprites_AlphaSorting">
+
+  <Buffer name="ParticleCameraDistances" type="Real" numElements="@Particle.numElements"/>
+  <Buffer name="SortedRenderParticles" type="UInt:32bit" numElements="@Particle.numElements"/>
+
+  <Task source="Physics.ParticleSystem.Rendering.CalculateCameraDistances"/>
+  <Task source="Physics.ParticleSystem.Rendering.SortRenderParticles"/>
+
+  <Task source="Foundation.Rendering.RenderQuadRotatingPointSprites">
+    <Parameter.Array instance="indices" bind="@SortedRenderParticles"/>
+
+    <Parameter.Array instance="positions" bind="@GranularBody.position"/>
+    <Parameter.Array instance="rotations" bind="@GranularBody.rotation"/>
+    <Parameter.Array instance="radius" bind="@GranularBody.radius"/>
+    <Parameter.Array instance="color" bind="@GranularBody.color"/>
+    <Parameter.Array instance="enableRendering" bind="@Particle.enableRendering"/>
+    <Parameter.Scalar instance="radiusScaling" value="Real(2.0)"/>
+  </Task>
+
+</Task>

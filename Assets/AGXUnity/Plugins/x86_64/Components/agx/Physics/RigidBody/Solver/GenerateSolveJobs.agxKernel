@@ -1,0 +1,34 @@
+<Kernel name="GenerateSolveJobs" dispatch="serial">
+  <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
+  <!-- <Parameter.Pointer name="rangeJobBuffer" bind="@SolveJobs" type="agxData::Buffer"/>
+  <Parameter.Pointer name="wrapperJobBuffer" bind="@SolveWrapperJobs" type="agxData::Buffer"/>
+
+  <Parameter.Array name="@SolveJobs" type="SolveJob" mode="READ_WRITE"/>
+  <Parameter.Array name="@SolveWrapperJobs" type="JobGroup" mode="READ_WRITE"/> -->
+  
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="instance, isImpacting, groups, directBodies"/>
+  <Parameter.EntityData name="@SolveGroup" type="SolveGroup" read="nodes"/>
+  
+  
+  
+  <!-- Parallel PGS -->
+  <!-- <Parameter.Pointer name="pgsRangeJobBuffer" bind="@PgsSolveJobs" type="agxData::Buffer"/>
+  <Parameter.Pointer name="pgsWrapperJobBuffer" bind="@PgsSolveWrapperJobs" type="agxData::Buffer"/>
+
+  <Parameter.Array name="@PgsSolveJobs" type="SolveJob" mode="READ_WRITE"/>
+  <Parameter.Array name="@PgsSolveWrapperJobs" type="JobGroup" mode="READ_WRITE"/> -->
+  
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+
+  <Parameter.EntityData name="zone" bind="@Space.HierarchicalGrid.ContactZone" type="Physics.HierarchicalGrid.ContactZone" read="type, particleParticleContacts, particleGeometryContacts, geometryGeometryContacts" required="false"/>
+  
+  <Parameter.EntityData name="zoneDependency" bind="@Space.HierarchicalGrid.ContactZoneDependency" type="Physics.HierarchicalGrid.ContactZoneDependency" read="parent, child" required="false"/>
+  
+  <Parameter.Scalar name="iterationStartZone" bind="@Space.HierarchicalGrid.IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="iterationEndZone" bind="@Space.HierarchicalGrid.IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  
+  <Parameter.Scalar name="numTiers" bind="@Space.HierarchicalGrid.GridTier.numElements" type="UInt" mode="READ" required="false"/>
+  
+</Kernel>
+

@@ -1,0 +1,12 @@
+<Entity name="Contact" source="Interaction">
+  <Attribute.Scalar name="constraintIndex" type="UInt:32bit" value="InvalidIndex"/>
+	<Attribute.Scalar name="material" type="Physics.ContactMaterialPtr"/>
+	
+  <!-- <Attribute.Scalar name="contactZone" type="Physics.HierarchicalGrid.ContactZoneInstance"/> -->
+  <Attribute.Scalar name="contactZoneIndex" type="UInt:32bit" value="InvalidIndex"/>
+	<Attribute.Scalar name="contactZoneSlot" type="UInt:16bit" value="InvalidIndex"/>
+
+  <!-- Rendering -->
+	<!--<Attribute.Scalar name="line" type="Line:32bit"/>
+	<Attribute.Scalar name="color" type="Vec4:32bit" numElements="2"/>-->
+</Entity>

@@ -1,0 +1,10 @@
+<Entity name="WarmStartingData">
+
+  <Attribute.Scalar name="localForce"   type="Vec3" />
+  <Attribute.Scalar name="indexSet"     type="Vec4i:8bit" />
+
+  <Attribute.Scalar name="shape1pos"    type="Vec3" />
+  <Attribute.Scalar name="shape2pos"    type="Vec3" />
+  <Attribute.Scalar name="shape1normal" type="Vec3" />
+
+</Entity>

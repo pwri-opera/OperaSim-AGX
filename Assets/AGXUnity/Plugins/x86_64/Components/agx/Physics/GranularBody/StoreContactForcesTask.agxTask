@@ -1,0 +1,51 @@
+<Task name="StoreContactForcesTask" source="StoreContactForces:GranularGranularContact" implementation="GranularGranularContact">  
+  <Parameter.EntityData instance="contact"         bind="@ParticlePairContact"/>
+  <Parameter.EntityData instance="constraint"      bind="@GranularGranularContactConstraint"/>
+  <Parameter.EntityData instance="constraintRow"   bind="@GranularGranularContactConstraint.Row"/> 
+
+  <!--New jacobian-->
+  <Parameter.Array instance="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage"/>
+
+  <Parameter.Scalar instance="timeStep" bind="@clock.timeStep"/>
+</Task>
+
+<Task name="StoreContactForcesTask" source="StoreContactForces:GranularGeometryContact" implementation="GranularGeometryContact">
+  <Parameter.EntityData instance="contact"       bind="@ParticleGeometryContact" />
+  <Parameter.EntityData instance="constraint"    bind="@GranularBodyContactConstraint" />
+  <Parameter.EntityData instance="constraintRow" bind="@GranularBodyContactConstraint.Row"/> 
+  <Parameter.EntityData instance="geometry"      bind="@Geometry"/>
+  
+  <!--New jacobian-->
+  <Parameter.Array instance="granularGeometryJacobianStorage" bind="@GranularGeometryContactConstraintJacobianStorage"/>
+
+  <Parameter.Scalar instance="timeStep" bind="@clock.timeStep"/>
+</Task>
+
+<Task name="StoreContactForcesTask" source="StoreContactForces:GranularGranularContact32" implementation="GranularGranularContact32">
+  <Parameter.EntityData instance="contact"         bind="@ParticlePairContact"/>
+  <Parameter.EntityData instance="constraint"      bind="@GranularGranularContactConstraint"/>
+  <Parameter.EntityData instance="constraintRow"   bind="@GranularGranularContactConstraint.Row"/> 
+
+  <!--New jacobian-->
+  <Parameter.Array instance="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage"/>
+
+  <Parameter.Scalar instance="timeStep" bind="@clock.timeStep"/>
+</Task>
+
+<Task name="StoreContactForcesTask" source="StoreContactForces:GranularGranularContact_LocalJacobians" implementation="GranularGranularContact_LocalJacobians">
+  <Parameter.EntityData instance="contact"       bind="@ParticlePairContact"                   />
+  <Parameter.EntityData instance="constraint"    bind="@GranularGranularContactConstraint"     />
+  <Parameter.EntityData instance="constraintRow" bind="@GranularGranularContactConstraint.Row" /> 
+  <Parameter.Scalar instance="contactMode"       bind="@contactMode" />
+  
+  <Parameter.Scalar instance="timeStep"          bind="@clock.timeStep"/>
+</Task>
+
+<Task name="StoreContactForcesTask" source="StoreContactForces:GranularGranularContact_LocalJacobians32" implementation="GranularGranularContact_LocalJacobians32">
+  <Parameter.EntityData instance="contact"       bind="@ParticlePairContact"                   />
+  <Parameter.EntityData instance="constraint"    bind="@GranularGranularContactConstraint"     />
+  <Parameter.EntityData instance="constraintRow" bind="@GranularGranularContactConstraint.Row" /> 
+  <Parameter.Scalar instance="contactMode"       bind="@contactMode" />
+  
+  <Parameter.Scalar instance="timeStep"          bind="@clock.timeStep"/>
+</Task>

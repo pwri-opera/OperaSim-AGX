@@ -1,0 +1,17 @@
+<Kernel name="GenerateBoxesFromBoxes" implementation="RenderBox">
+  <Parameter.Array name="@halfExtents" type="Vec3" mode="READ"/>
+  <Parameter.Array name="@transforms" type="AffineMatrix4x4" mode="READ"/>
+
+  <Parameter.Array name="@RenderBox.vertices" type="agxGL.RenderBoxVertices" mode="WRITE"/>
+  <Parameter.Array name="@RenderBox.normals" type="agxGL.RenderBoxNormals" mode="WRITE"/>
+  <Parameter.Array name="@RenderBox.outlines" type="agxGL.RenderBoxOutlines" mode="WRITE"/>
+</Kernel>
+
+
+<Kernel name="GenerateBoxesFromBoxes" implementation="Line">
+  <Parameter.Array name="@halfExtents" type="Vec3" mode="READ"/>
+  <Parameter.Array name="@transforms" type="AffineMatrix4x4" mode="READ"/>
+
+  <Parameter.Array name="@Line" type="Line:32bit" mode="WRITE"/>
+
+</Kernel>

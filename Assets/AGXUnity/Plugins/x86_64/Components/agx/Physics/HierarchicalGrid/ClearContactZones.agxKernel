@@ -1,0 +1,4 @@
+<Kernel name="ClearContactZones">
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="numParticleParticleContacts, numParticleGeometryContacts, numGeometryContacts" write="numParticleParticleContacts, numParticleGeometryContacts, numGeometryContacts"/>
+  
+</Kernel>

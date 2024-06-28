@@ -1,0 +1,7 @@
+<Kernel name="TransformConstraints" implementation="BinaryConstraint">
+  <Parameter.Array    name="@BinaryConstraint.instance"                                           type="Physics.BinaryConstraintPtr" mode="READ"/>
+</Kernel>
+
+<Kernel name="TransformConstraints" implementation="ManyBodyConstraint">
+  <Parameter.Array    name="@ManyBodyConstraint.instance"                                         type="Physics.ManyBodyConstraintPtr" mode="READ"/>
+</Kernel>

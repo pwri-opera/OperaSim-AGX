@@ -1,0 +1,5 @@
+<Kernel name="ClearGeometryContacts" dispatch="serial">
+	<Parameter.Pointer name="@ActiveGeometryContacts" type="agxData::Buffer"/>
+	<Parameter.Pointer name="@GeometryContact" type="agxData::EntityStorage"/>
+	<Parameter.Pointer name="@Space" type="agxCollide::Space" include="agxCollide/Space.h"/>
+</Kernel> 

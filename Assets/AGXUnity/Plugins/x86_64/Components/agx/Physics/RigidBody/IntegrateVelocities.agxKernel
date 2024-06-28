@@ -1,0 +1,5 @@
+<Kernel name="IntegrateVelocities">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, linearVelocityDamping, angularVelocityDamping, worldInertia, worldMassMatrix, invWorldMassMatrix, effectiveInvWorldMassMatrix, invWorldInertia, effectiveInvWorldInertia, force, torque, velocity, angularVelocity" write="velocity, angularVelocity"/>
+  
+  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel>

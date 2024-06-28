@@ -1,0 +1,4 @@
+<Entity name="GeometryPair">
+	<Attribute.Scalar name="geometry1" type="Physics.GeometryPtr"/>
+	<Attribute.Scalar name="geometry2" type="Physics.GeometryPtr"/>
+</Entity>

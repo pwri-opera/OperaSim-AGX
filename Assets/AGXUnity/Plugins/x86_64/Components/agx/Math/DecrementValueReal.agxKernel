@@ -1,0 +1,4 @@
+<Kernel name="DecrementValueRealKernel" device="OpenCL">
+	<Parameter.Array name="buffer" type="Real" mode="READ_WRITE"/>
+	<Parameter.Scalar name="value" type="Real"/>
+</Kernel>

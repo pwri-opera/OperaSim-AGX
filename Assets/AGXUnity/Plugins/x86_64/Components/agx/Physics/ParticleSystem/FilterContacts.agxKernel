@@ -1,0 +1,13 @@
+<Kernel name="FilterContacts" dispatch="serial" implementation="ParticlePair">
+  <Parameter.EntityData name="@Particle" type="Particle" read="mass" />
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="enabled" write="particle1, particle2"/>
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>
+
+<Kernel name="FilterContacts" dispatch="serial" implementation="ParticleGeometry">
+  <Parameter.EntityData name="@Particle" type="Particle" mode="READ" />
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="enabled, geometry, particleId" write="particle"/>/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="state"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" mode="READ"/>
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

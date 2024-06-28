@@ -1,0 +1,13 @@
+<Kernel name="GenerateLinesFromJacobians">
+  <!-- <Parameter.Array name="JacobianElements" type="Vec3" mode="READ" bind="@ParticleParticleContactConstraint.JacobianElements"/> -->
+  <!-- <Parameter.Array name="@contact_point"    type="Vec3"     mode="READ"/> -->
+  <!-- <Parameter.Array name="@lines" type="Line" mode="WRITE"/> -->
+</Kernel>
+
+
+
+<Kernel name="GenerateLinesFromJacobians" implementation="BodyRotation">
+  <!-- <Parameter.Array name="JacobianElements" type="Vec3" mode="READ" bind="@ParticleParticleContactConstraint.JacobianElements"/> -->
+  <!-- <Parameter.Array name="@contact_point"    type="Vec3"     mode="READ"/> -->
+  <!-- <Parameter.Array name="@lines" type="Line" mode="WRITE"/> -->
+</Kernel>

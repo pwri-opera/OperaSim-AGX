@@ -1,0 +1,30 @@
+<SolveKernel name="SynchronizeIterativeSolver">
+  <Parameter.Pointer name="@Solver" type="agx::Solver"/>
+
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" write="lambda"/>
+  
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" write="lambda"/>
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="blockRowIndex, rowIndex, numRows, contactPointRange"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" write="lambda"/>
+</SolveKernel>
+
+<!-- <SolveKernel name="SynchronizeIterativeSolver" implementation="ContactConstraint">
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" write="lambda"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="points"/>
+</SolveKernel>
+
+<SolveKernel name="SynchronizeIterativeSolver" implementation="BinaryConstraint">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" write="lambda"/>
+</SolveKernel>
+
+<SolveKernel name="SynchronizeIterativeSolver" implementation="ManyBodyConstraint">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="blockRowIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" write="lambda"/>
+</SolveKernel> -->

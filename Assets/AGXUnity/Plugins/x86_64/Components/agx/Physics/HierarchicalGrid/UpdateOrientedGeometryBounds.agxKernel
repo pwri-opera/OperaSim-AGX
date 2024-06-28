@@ -1,0 +1,12 @@
+<Kernel name="UpdateOrientedGeometryBounds" dispatch="parallel">
+
+  <description>
+  
+  The purpose of this kernel is to use the current transformations of the
+  geometries to update the oriented bounds. 
+
+  </description>
+
+  <Parameter.EntityData name="@OrientedGeometryBound" type="OrientedGeometryBound" read="geometry, localBound" write="invTransform"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="transform"/>
+</Kernel>

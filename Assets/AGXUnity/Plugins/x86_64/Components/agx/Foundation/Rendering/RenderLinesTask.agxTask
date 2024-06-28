@@ -1,0 +1,21 @@
+<Task name="RenderLinesTask">
+	<Parameter.Scalar name="scale" type="Real" value="1"/>
+	<Parameter.Scalar name="color" value="Vec4(1,1,1,1)"/>
+	<Parameter.Array name="positions" type="Vec3" mode="READ"/>
+	<Parameter.Array name="offsets" type="Vec3:32bit" mode="READ"/>
+
+  <Buffer name="lines" type="Line" numElements="@positions.numElements"/>
+
+  <Task source="Foundation.Rendering.GenerateLines">
+    <Parameter.Array instance="result" bind="@lines"/>
+    <Parameter.Array instance="positions" bind="@positions"/>
+    <Parameter.Array instance="offsets" bind="@offsets"/>
+		<Parameter.Scalar instance="scale" bind="@scale"/>
+  </Task>
+
+
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@lines"/>
+		<Parameter.Scalar instance="color" value="@color"/>
+  </Task>
+</Task>

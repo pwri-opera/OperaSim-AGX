@@ -1,0 +1,23 @@
+<SolveKernel name="GaussSeidelIteration" implementation="ParticlePairContact">
+  <Parameter.EntityData name="constraint" bind="@ParticleParticleContactConstraint" type="Particle.ContactConstraint" read="G, GMInv, particle1, particle2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleParticleContactConstraint.Row" type="Particle.ContactConstraintRow" read="rhs, lambda, epsilon, invD" write="lambda"/>
+  
+  <Parameter.EntityData name="@Particle" type="Particle" read="velocity" write="velocity"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion, friction"/>
+  
+  
+  <Parameter.Scalar name="timeStep" bind="@clock.timeStep" type="Real"/>
+</SolveKernel>
+
+<SolveKernel name="GaussSeidelIteration" implementation="ParticleGeometryContact">
+  <Parameter.EntityData name="constraint" bind="@ParticleBodyContactConstraint" type="Particle.ParticleBodyContactConstraint" read="G, GMInv, particle, body, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleBodyContactConstraint.Row" type="Particle.ContactConstraintRow" read="rhs, lambda, epsilon, invD" write="lambda"/>
+
+  <Parameter.EntityData name="@Particle" type="Particle" read="velocity" write="velocity"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion, friction"/>
+
+  <Parameter.Scalar name="timeStep" bind="@clock.timeStep" type="Real"/>
+</SolveKernel>
+

@@ -1,0 +1,3 @@
+<Kernel name="ClearBuffer" dispatch="serial">
+  <Parameter.Pointer name="buffer" type="agxData::Buffer"/>
+</Kernel>

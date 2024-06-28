@@ -1,0 +1,10 @@
+<Kernel.Scalar name="SetPosition">
+  <Parameter.EntityInstance name="particle" type="Particle" write="position"/>
+  <Parameter.Scalar name="position" type="Vec3" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="SetPosition">
+  <Parameter.EntityPtr name="particle" type="Particle" write="position"/>
+  <Parameter.Scalar name="position" type="Vec3" mode="READ"/>
+</Kernel.Scalar>
+

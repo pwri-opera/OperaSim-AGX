@@ -1,0 +1,59 @@
+<!-- ParticleParticle -->
+<SolveModel name="ParticlePairContact.Iterative_NORMAL" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGranularContact_NORMAL"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGranularContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGranularContact_LocalJacobians"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGranularContact_LocalJacobians"/>
+</SolveModel>
+
+<SolveModel name="ParticlePairContact.Iterative_FRICTION" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGranularContact_FRICTION"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGranularContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGranularContact_LocalJacobians"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGranularContact_LocalJacobians"/>
+</SolveModel>
+
+<SolveModel name="ParticlePairContact.Iterative_ROLLING_RESISTANCE" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGranularContact_ROLLING_RESISTANCE"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGranularContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGranularContact_LocalJacobians"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGranularContact_LocalJacobians"/>
+</SolveModel>
+
+<SolveModel name="ParticlePairContact.Iterative_TWIST_RESISTANCE" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGranularContact_TWIST_RESISTANCE"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGranularContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGranularContact_LocalJacobians"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGranularContact_LocalJacobians"/>
+</SolveModel>
+
+
+<!-- ParticleGeometry -->
+<SolveModel name="ParticleGeometryContact.Iterative_NORMAL" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGeometryContact_NORMAL"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGeometryContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGeometryContact"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGeometryContact"/>
+</SolveModel>
+
+<SolveModel name="ParticleGeometryContact.Iterative_FRICTION" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGeometryContact_FRICTION"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGeometryContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGeometryContact"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGeometryContact"/>
+</SolveModel>
+
+<SolveModel name="ParticleGeometryContact.Iterative_ROLLING_RESISTANCE" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGeometryContact_ROLLING_RESISTANCE"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGeometryContact"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGeometryContact"/>
+  <ResidualKernel source="Physics.GranularBody.StoreContactForces : GranularGeometryContact"/>
+</SolveModel>
+
+<SolveModel name="ParticleGeometryContact.Iterative_TWIST_RESISTANCE" solveType="ITERATIVE" constraintType="CONTACT_CONSTRAINT">
+  <IterationKernel source="Physics.GranularBody.ParallelPGS.GaussSeidelIteration : GranularGeometryContact_TWIST_RESISTANCE"/>
+  <UpdateRhsKernel source="Physics.GranularBody.ParallelPGS.CalculateRHS : GranularGeometryContact"/>
+  <ResidualKernel source="Physics.GranularBody.CalculateContactResiduals : GranularGeometryContact"/>
+  <StoreContactForcesKernel source="Physics.GranularBody.StoreContactForces : GranularGeometryContact"/>
+</SolveModel>
+

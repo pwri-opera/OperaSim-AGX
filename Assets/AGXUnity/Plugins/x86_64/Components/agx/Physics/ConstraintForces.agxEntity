@@ -1,0 +1,25 @@
+<Entity name="ConstraintForces">
+  <Attribute.Scalar name="name" type="Name"/>
+  <Attribute.Scalar name="type" type="Name"/>
+  
+  <Attribute.Scalar name="body1Force" type="Vec3"/>
+  <Attribute.Scalar name="body2Force" type="Vec3"/>
+
+  <Attribute.Scalar name="body1Torque" type="Vec3"/>
+  <Attribute.Scalar name="body2Torque" type="Vec3"/>
+
+  <Attribute.Scalar name="motor1Force" type="Real"/>
+  <Attribute.Scalar name="motor2Force" type="Real"/>
+
+  <Attribute.Scalar name="lock1Force" type="Real"/>
+  <Attribute.Scalar name="lock2Force" type="Real"/>
+
+  <Attribute.Scalar name="range1Force" type="Real"/>
+  <Attribute.Scalar name="range2Force" type="Real"/>
+
+  <Attribute.Scalar name="angle1" type="Real"/>
+  <Attribute.Scalar name="angle2" type="Real"/>
+
+  <Attribute.Scalar name="currentSpeed1" type="Real"/>
+  <Attribute.Scalar name="currentSpeed2" type="Real"/>
+</Entity>

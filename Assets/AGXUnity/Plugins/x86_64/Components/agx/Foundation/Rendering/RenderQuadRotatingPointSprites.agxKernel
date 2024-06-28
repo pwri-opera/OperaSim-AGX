@@ -1,0 +1,59 @@
+<Kernel name="RenderQuadPointSprites" device="OpenGL" primitive="Points">
+  <Attribute name="positions" type="Vec3" variableName="a_position"/>
+  <Attribute name="radius" type="Real" variableName="a_radius" value="0.0625"/>
+  <Attribute name="rotations" type="Quat" variableName="a_rotation"/>
+  <Attribute name="color" type="Vec4" variableName="a_color" value="Vec4(1, 1, 1, 0.8)"/>
+  <Attribute name="enableRendering" type="Real:32bit" variableName="a_enableRendering" value="1.0"/>
+
+  <Parameter.Scalar name="blend" type="Bool" value="true"/>
+  <Parameter.Scalar name="depthTest" type="Bool" value="true"/>
+
+  <Uniform name="radiusScaling" type="Real" variableName="radiusScaling" value="2.0"/>
+  <Uniform name="projectionScaling" type="Real" variableName="projectionScaling" value="Math.Div(Real(@camera.windowHeight), Math.Tan(Math.Mul(@camera.fovY, Real(0.0087266))))"/>
+
+  <!--<Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>-->
+  <Uniform name="modelView" type="Matrix4x4" variableName="u_modelViewMatrix" bind="@camera.view"/>
+  <Uniform name="projection" type="Matrix4x4" variableName="u_projection" bind="@camera.projection"/>
+  <Uniform name="lightPos" type="Vec4"       variableName="u_light0_pos" bind="@lights.light0_pos"/>
+
+
+  <State type="Capability" capability="GL_BLEND" bind="@blend"/>
+  <State type="Capability" capability="GL_LIGHTING" value="false"/>
+  <State type="Capability" capability="GL_TEXTURE_2D" value="false"/>
+  <State type="Capability" capability="GL_POINT_SPRITE_ARB" value="false"/>
+  <State type="Setting3" feature="glTexEnvi" value1="GL_POINT_SPRITE_ARB" value2="GL_COORD_REPLACE_ARB" value3="GL_FALSE"/>
+  <State type="Setting" feature="glDepthMask" value="GL_TRUE"/>
+  <State type="Capability" capability="GL_DEPTH_TEST" bind="@depthTest"/>
+  <State type="Setting" feature="glPointSize" value="1"/>
+</Kernel>
+
+<Kernel name="RenderQuadPointSprites" device="OpenGL" primitive="Points" buildFlags="#define ALPHA_SAMPLING 1">
+  <Attribute name="positions" type="Vec3" variableName="a_position"/>
+  <Attribute name="radius" type="Real" variableName="a_radius" value="0.0625"/>
+  <Attribute name="rotations" type="Quat" variableName="a_rotation"/>
+  <Attribute name="color" type="Vec4" variableName="a_color" value="Vec4(1, 1, 1, 0.8)"/>
+  <Attribute name="enableRendering" type="Real:32bit" variableName="a_enableRendering" value="true"/>
+
+  <Indices type="UInt:32bit"/> <!-- INDIRECT INDEXING, TODO: All other parameters are the same, indices should be optional, implicit argument -->
+
+  <Parameter.Scalar name="blend" type="Bool" value="true"/>
+  <Parameter.Scalar name="depthTest" type="Bool" value="true"/>
+
+  <Uniform name="radiusScaling" type="Real" variableName="radiusScaling" value="2.0"/>
+  <Uniform name="projectionScaling" type="Real" variableName="projectionScaling" value="Math.Div(Real(@camera.windowHeight), Math.Tan(Math.Mul(@camera.fovY, Real(0.0087266))))"/>
+
+  <!--<Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>-->
+  <Uniform name="modelView" type="Matrix4x4" variableName="u_modelViewMatrix" bind="@camera.view"/>
+  <Uniform name="projection" type="Matrix4x4" variableName="u_projection" bind="@camera.projection"/>
+  <Uniform name="lightPos" type="Vec4"       variableName="u_light0_pos" bind="@lights.light0_pos"/>
+
+
+  <State type="Capability" capability="GL_BLEND" bind="@blend"/>
+  <State type="Capability" capability="GL_LIGHTING" value="false"/>
+  <State type="Capability" capability="GL_TEXTURE_2D" value="false"/>
+  <State type="Capability" capability="GL_POINT_SPRITE_ARB" value="false"/>
+  <State type="Setting3" feature="glTexEnvi" value1="GL_POINT_SPRITE_ARB" value2="GL_COORD_REPLACE_ARB" value3="GL_FALSE"/>
+  <State type="Setting" feature="glDepthMask" value="GL_TRUE"/>
+  <State type="Capability" capability="GL_DEPTH_TEST" bind="@depthTest"/>
+  <State type="Setting" feature="glPointSize" value="1"/>
+</Kernel>

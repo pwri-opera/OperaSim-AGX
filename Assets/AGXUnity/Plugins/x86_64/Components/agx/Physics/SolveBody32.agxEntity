@@ -1,0 +1,14 @@
+<Entity name="SolveBody32" useInstanceTable="false">
+  <Attribute.Scalar name="velocity" type="Vec3:32bit"/>
+  <Attribute.Scalar name="angularVelocity" type="Vec3:32bit"/>
+
+  <Attribute.Scalar name="oldVelocity" type="Vec3:32bit"/>
+  <Attribute.Scalar name="oldAngularVelocity" type="Vec3:32bit"/>
+  
+  <Attribute.Scalar name="invMass" type="Real:32bit"/>
+  <Attribute.Scalar name="invInertia" type="Real:32bit"/>
+  
+  <Attribute.Scalar name="solveMutex" type="SpinMutex"/>
+  <!-- <Attribute.Scalar name="currentInteraction" type="UInt:32bit"/> -->
+  <!-- <Attribute.Scalar name="zone" type="Physics.HierarchicalGrid.ContactZonePtr"/> -->
+</Entity>

@@ -1,0 +1,4 @@
+<Kernel name="ClearForces">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="force, torque" write="force, torque, lastForce, lastTorque"/>
+</Kernel>
+

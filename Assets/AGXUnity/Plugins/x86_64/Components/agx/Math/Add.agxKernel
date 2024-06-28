@@ -1,0 +1,62 @@
+<Kernel.Scalar name="Add" inline="true" templatePermutation="Math.TemplatePermutations.Add">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="arg2" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="Add" inline="true" templatePermutation="Math.TemplatePermutations.Add">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Array name="arg2" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Add" inline="true" templatePermutation="Math.TemplatePermutations.Add">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="arg2" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Add" inline="true" templatePermutation="Math.TemplatePermutations.Add">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Array name="arg2" type="Auto" mode="READ"/>
+</Kernel>
+
+
+
+
+<!-- Old -->
+<Kernel name="Add" device="OpenCL" buildOptions="-DRESULT_TYPE=Real4 -DARG1_TYPE=Real4 -DARG2_TYPE=Real4 -DARG1_VECTOR -DARG2_VECTOR">
+	<Parameter.Array name="result" type="Vec3" mode="WRITE"/>
+	<Parameter.Array name="arg1" type="Vec3" mode="READ"/>
+	<Parameter.Array name="arg2" type="Vec3" mode="READ"/>
+	<Parameter.Scalar name="numElements" type="UInt" bind="@result.numElements"/>
+</Kernel>
+
+<Kernel name="Add" device="OpenCL" buildOptions="-DRESULT_TYPE=Real4 -DARG1_TYPE=Real4 -DARG2_TYPE=Real4 -DARG1_VECTOR">
+	<Parameter.Array name="result" type="Vec3" mode="WRITE"/>
+	<Parameter.Array name="arg1" type="Vec3" mode="READ"/>
+	<Parameter.Scalar name="arg2" type="Vec3"/>
+	<Parameter.Scalar name="numElements" type="UInt" bind="@result.numElements"/>
+</Kernel>
+
+<Kernel name="Add" device="OpenCL" buildOptions="-DRESULT_TYPE=Real -DARG1_TYPE=Real -DARG2_TYPE=Real -DARG1_VECTOR -DARG2_VECTOR">
+	<Parameter.Array name="result" type="Real" mode="WRITE"/>
+	<Parameter.Array name="arg1" type="Real" mode="READ"/>
+	<Parameter.Array name="arg2" type="Real" mode="READ"/>
+	<Parameter.Scalar name="numElements" type="UInt" bind="@result.numElements"/>
+</Kernel>
+
+<Kernel name="Add" device="OpenCL" buildOptions="-DRESULT_TYPE=Real -DARG1_TYPE=Real -DARG2_TYPE=Real -DARG1_VECTOR">
+	<Parameter.Array name="result" type="Real" mode="WRITE"/>
+	<Parameter.Array name="arg1" type="Real" mode="READ"/>
+	<Parameter.Scalar name="arg2" type="Real"/>
+	<Parameter.Scalar name="numElements" type="UInt" bind="@result.numElements"/>
+</Kernel>
+
+<Kernel name="Add" device="OpenCL" buildOptions="-DRESULT_TYPE=UInt -DARG1_TYPE=UInt -DARG2_TYPE=UInt -DARG1_VECTOR -DARG2_VECTOR">
+	<Parameter.Array name="result" type="UInt" mode="WRITE"/>
+	<Parameter.Array name="arg1" type="UInt" mode="READ"/>
+	<Parameter.Array name="arg2" type="UInt" mode="READ"/>
+	<Parameter.Scalar name="numElements" type="UInt" bind="@result.numElements"/>
+</Kernel>

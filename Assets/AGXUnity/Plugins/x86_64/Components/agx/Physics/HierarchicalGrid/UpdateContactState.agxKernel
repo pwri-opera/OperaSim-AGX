@@ -1,0 +1,21 @@
+<Kernel name="UpdateContactState" implementation="Pass1">
+  
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="geometry1, geometry2, broadPhasePair"/>
+	<Parameter.EntityData name="@BroadPhasePair" type="BroadPhasePair" write="state"/>
+  
+  <Parameter.HashTable name="@ContactTable" bucketType="GeometryPair | Physics.GeometryContactPtr" mode="READ_WRITE" typedef="ContactTable"/>
+  <Parameter.Scalar name="@NumPersistentContacts" type="AtomicValue" mode="READ_WRITE"/>
+</Kernel>
+
+
+<Kernel name="UpdateContactState" dispatch="serial" implementation="Pass2">
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, geometry1, geometry2"/>
+  <Parameter.EntityData name="@SeparationPair" type="GeometryPair" read="geometry1, geometry2" write="geometry1, geometry2"/>
+  <Parameter.Array name="@SeparationPair.globalOrder" type="UInt:32bit" mode="WRITE"/>
+  <!-- <Parameter.EntityData name="@BroadPhasePair" type="BroadPhasePair" read="geometry1, geometry2" write="state"/> -->
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="body"/>
+
+  <Parameter.HashTable name="@ContactTable" bucketType="GeometryPair | Physics.GeometryContactPtr" mode="READ_WRITE" typedef="ContactTable"/>
+  <Parameter.Scalar name="@NumPersistentContacts" type="AtomicValue" mode="READ_WRITE"/>
+</Kernel>

@@ -1,0 +1,30 @@
+<Entity name="Geometry" source="Referenced">
+  <Attribute.Scalar name="name" type="Name"/>
+  <Attribute.Scalar name="state" type="GeometryState"/>
+  <Attribute.Scalar name="shape" type="Physics.Geometry.ShapePtr"/>
+  <Attribute.Scalar name="transform" type="AffineMatrix4x4"/>
+  <Attribute.Scalar name="localTransform" type="AffineMatrix4x4"/>
+  <Attribute.Scalar name="boundingAABB" type="BoundingAABB"/>
+
+  <!-- Grid collision detection -->
+  <Attribute.Scalar name="boundingRadius" type="Real"/>
+  <Attribute.Scalar name="localBoundCenter" type="Vec3"/>
+  <Attribute.Scalar name="tier" type="UInt:8bit" value="InvalidIndex"/>
+  <Attribute.Scalar name="cellIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="cellSlot" type="UInt:16bit"/>
+  <Attribute.Scalar name="oldCell" type="UInt:32bit" value="InvalidIndex"/>
+  <Attribute.Scalar name="orientedBoundId" type="UInt" value="InvalidIndex"/>
+  <Attribute.Scalar name="collisionGroupSet" type="Physics.CollisionGroupSetPtr"/>
+
+  <!-- <Attribute.Scalar name="material" type="Physics.MaterialPtr"/> -->
+  <Attribute.Scalar name="sweepAndPruneIndex" type="UInt:32bit" value="InvalidIndex"/>
+  <Attribute.Scalar name="body" type="Physics.RigidBodyPtr"/>
+
+  <Attribute.Scalar name="surfaceVelocity" type="Vec3:32bit"/>
+  <Attribute.Scalar name="material" type="Physics.MaterialPtr"/>
+
+  <Attribute.Pointer name="model" type="agxCollide::Geometry"/>
+
+  <!-- Linked list of geometries connected to a body -->
+  <Attribute.Scalar name="next" type="Physics.GeometryPtr"/>
+</Entity>

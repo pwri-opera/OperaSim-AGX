@@ -1,0 +1,8 @@
+<Kernel name="ReorderStorage">
+	<Parameter.Array name="permutation" type="UInt:32bit" mode="READ"/>
+	<Parameter.Pointer name="storage" type="agxData::EntityStorage"/>
+	
+	
+	<PreJob name="prepare"/>
+	<PostJob name="commit"/>
+</Kernel>

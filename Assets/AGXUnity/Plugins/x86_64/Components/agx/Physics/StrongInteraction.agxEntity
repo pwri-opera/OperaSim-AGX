@@ -1,0 +1,5 @@
+<Entity name="StrongInteraction" source="Interaction">
+  <Attribute.Pointer name="model" type="agx::StrongInteraction"/>
+  <Attribute.Scalar name="body1"  type="UInt"/>
+  <Attribute.Scalar name="body2"  type="UInt"/>
+</Entity>

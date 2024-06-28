@@ -1,0 +1,45 @@
+<Component name="ParticleSystem" source="Physics.System">
+  
+  <!-- Access data from grid -->
+  <Pointer name="ParticlePairOverlap" bind="@Space.HierarchicalGrid.ParticlePairOverlap"/>
+  <Pointer name="ParticleGeometryOverlap" bind="@Space.HierarchicalGrid.ParticleGeometryOverlap"/>
+  <Pointer name="CollisionObject" bind="@Space.HierarchicalGrid.CollisionObject"/>
+  <Pointer name="OrientedGeometryBound" bind="@Space.OrientedGeometryBound"/>
+
+
+  <!-- Storages -->
+  <Storage entity="Physics.Particle"/>
+  
+  <!-- Contacts -->
+  <Storage entity="Physics.ParticlePairContact" numElements="@ParticlePairOverlap.numElements"/>
+  <Storage entity="Physics.ParticleGeometryContact"/>
+  
+  <Buffer name="ActiveParticlePairContacts" type="UInt:32bit"/>
+  <Buffer name="ActiveParticleGeometryContacts" type="UInt:32bit"/>
+  
+  <!-- Contact constraints -->
+  <Storage name="ParticleParticleContactConstraint" entity="Physics.Particle.ContactConstraint"/>
+  <Storage name="ParticleBodyContactConstraint" entity="Physics.Particle.ParticleBodyContactConstraint"/>
+
+  <!-- Sorted particles -->
+  <Buffer name="SortedParticles" type="UInt:32bit" numElements="@Particle.numElements"/>
+
+  <!-- Dead particles -->
+  <Buffer name="DeadParticles" type="UInt:32bit"/>
+  
+  <!-- Missing contact materials -->
+  <Buffer name="MissingParticlePairContactMaterials" type="UInt:32bit"/>
+  <Buffer name="MissingParticleGeometryContactMaterials" type="UInt:32bit"/>
+
+
+  <!-- Bounding volume -->
+  <Value name="bound" type="Bound3"/>
+
+
+
+  <Task name="Render">
+    <!-- <Task source="Rendering.RenderParticleContacts"/> -->
+  </Task>
+  
+</Component>
+

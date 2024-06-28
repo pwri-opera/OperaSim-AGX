@@ -1,0 +1,10 @@
+<Kernel name="RandomizeSubsystems" dispatch="serial">
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex, cellSlot" required="false"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="cellIndex, cellSlot"/>
+
+  <Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" write="sourceIndex"/>
+  
+  <Parameter.Array name="@ParticleSystem.SortedParticles" type="UInt:32bit" mode="WRITE" required="false"/>
+  <Parameter.Array name="@SortedGeometries" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

@@ -1,0 +1,7 @@
+<Entity name="CollisionGroupSet">
+  <Attribute.Vector name="groups" type="Physics.CollisionGroupPtr"/>
+  <Attribute.HashSet name="groupIdHash" type="UInt:32bit"/>
+
+  <Attribute.Scalar name="refCount" type="UInt"/>
+  <Attribute.Pointer name="manager" type="agxCollide::CollisionGroupManager"/>
+</Entity>

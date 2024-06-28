@@ -1,0 +1,6 @@
+<Kernel name="FillBound2d">
+	<Parameter.Array type="Vec2" name="buffer" mode="WRITE"/>
+	<Parameter.Scalar type="Vec2" name="min"/>
+	<Parameter.Scalar type="Vec2" name="max"/>
+	<Parameter.Scalar type="Vec2i" name="numPoints"/>
+</Kernel>

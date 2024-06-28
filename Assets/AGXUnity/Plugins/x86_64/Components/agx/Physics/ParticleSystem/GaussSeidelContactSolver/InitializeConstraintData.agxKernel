@@ -1,0 +1,11 @@
+<Kernel name="InitializeConstraintData" implementation="ParticlePairContact">
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material"/>
+  <Parameter.EntityData name="constraint" bind="@ParticleParticleContactConstraint" type="Particle.ContactConstraint" read="" write="particle1, particle2, materialIndex"/>
+</Kernel>
+
+<Kernel name="InitializeConstraintData" implementation="ParticleGeometryContact">
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, material"/>
+  <Parameter.EntityData name="constraint" bind="@ParticleBodyContactConstraint" type="Particle.ParticleBodyContactConstraint" read="" write="particle, body, materialIndex"/>
+</Kernel>

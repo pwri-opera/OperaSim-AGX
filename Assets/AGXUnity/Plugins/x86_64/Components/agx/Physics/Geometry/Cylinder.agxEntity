@@ -1,0 +1,4 @@
+<Entity name="Cylinder" source="Shape">
+	<Attribute.Scalar name="height" type="Real"/>
+	<Attribute.Scalar name="radius" type="Real"/>
+</Entity>

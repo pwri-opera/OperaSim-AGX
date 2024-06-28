@@ -1,0 +1,6 @@
+<Kernel name="RandomizeVec3Kernel" device="OpenCL">
+  <Parameter.Array name="buffer" type="Vec3" mode="WRITE"/>
+  <Parameter.Scalar name="min" type="Vec3" value="0, 0, 0"/>
+  <Parameter.Scalar name="max" type="Vec3" value="1, 1, 1"/>
+  <Parameter.Scalar name="numElements" bind="@buffer.numElements" type="UInt"/>
+</Kernel>

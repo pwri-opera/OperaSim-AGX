@@ -1,0 +1,26 @@
+<Kernel name="InsertParticles">
+  
+  <description>
+
+    Parallel kernel run with one work item per particle that copies
+    information from the particles into the collision objects. The destination
+    index is calculated using the data generated in
+    CalculateParticleCellAssignments, CountCellOccupancy, and
+    AllocateCellContents.
+  
+  </description>
+  
+  <Parameter.EntityData name="@Particle" type="Particle" read="radius, position, cellIndex, cellSlot"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="sourceIndex, subsystem, radius, position, obbIndex, collisionGroupSet" write="sourceIndex, subsystem, radius, position, obbIndex, collisionGroupSet"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects"/>
+</Kernel>
+
+
+
+<Kernel name="InsertParticles" implementation="Sorted">
+  <Parameter.Array name="@ParticleSystem.SortedParticles" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex, cellSlot, radius, position"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="sourceIndex, subsystem, radius, position, obbIndex, collisionGroupSet" write="sourceIndex, subsystem, radius, position, obbIndex, collisionGroupSet"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects"/>
+</Kernel>
+

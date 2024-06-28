@@ -1,0 +1,14 @@
+<Kernel.Scalar name="IntegratePosition">
+  <Parameter.EntityInstance name="particle" type="Physics.Particle" read="position, velocity" write="position"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="IntegratePosition">
+  <Parameter.EntityPtr name="particle" type="Physics.Particle" read="position, velocity" write="position"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel.Scalar>
+
+<Kernel name="IntegratePosition">
+  <Parameter.EntityData name="@Particle" type="Physics.Particle" read="position, velocity" write="position"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel>

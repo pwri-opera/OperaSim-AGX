@@ -1,0 +1,14 @@
+<Entity name="CornerZone">
+  <Attribute.Scalar name="id" type="Vec3i"/>
+  
+  <Attribute.Scalar name="diagonal1" type="Physics.HierarchicalGrid.ContactZonePtr"/>
+  <Attribute.Scalar name="diagonal2" type="Physics.HierarchicalGrid.ContactZonePtr"/>
+
+  <Attribute.Scalar name="internalZones" type="Physics.HierarchicalGrid.ContactZonePtr" numElements="4"/>
+  
+  <Attribute.Array name="particleParticleContacts" type="UInt:32bit"/>
+  <Attribute.Array name="particleGeometryContacts" type="UInt:32bit"/>
+  <Attribute.Array name="geometryGeometryContacts" type="UInt:32bit"/>
+  
+  <Attribute.Pointer name="job" type="agx::Job"/>
+</Entity>

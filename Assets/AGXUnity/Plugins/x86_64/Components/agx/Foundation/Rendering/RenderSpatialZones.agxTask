@@ -1,0 +1,15 @@
+<Task name="RenderSpatialZones">
+	<Parameter.Scalar name="color" value="Vec4(0.7, 1, 0.7, 1)"/>
+	<Parameter.Pointer name="ZoneEntity"/>
+	
+	<Buffer name="BoxVertices" type="agxGL.RenderBoxVertices" numElements="@ZoneEntity.numElements"/>
+	<Buffer name="BoxIndices" type="agxGL.RenderBoxIndices" numElements="@ZoneEntity.numElements"/>
+	
+	<Task source="Foundation.Rendering.GenerateRenderBoxesFromSpatialZones"/>
+
+	<Task source="Foundation.Rendering.RenderBoxes">
+		<Parameter.Array instance="vertices" bind="@BoxVertices"/>
+		<Parameter.Array instance="indices" bind="@BoxIndices"/>
+		<Parameter.Scalar instance="color" value="@color"/>
+	</Task>
+</Task>

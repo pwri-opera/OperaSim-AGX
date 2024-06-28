@@ -1,0 +1,10 @@
+<Kernel.Scalar name="SetAngularVelocity">
+  <Parameter.EntityInstance name="particle" type="GranularBody" write="angularVelocity"/>
+  <Parameter.Scalar name="angularVelocity" type="Vec3" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="SetAngularVelocity">
+  <Parameter.EntityPtr name="particle" type="GranularBody" write="angularVelocity"/>
+  <Parameter.Scalar name="angularVelocity" type="Vec3" mode="READ"/>
+</Kernel.Scalar>
+

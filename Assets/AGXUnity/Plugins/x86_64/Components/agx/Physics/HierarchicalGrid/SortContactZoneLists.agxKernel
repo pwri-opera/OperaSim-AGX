@@ -1,0 +1,15 @@
+<!-- Parallel determinism debugging -->
+<Kernel name="SortContactZoneLists" implementation="ParticlePairContact">
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="READ"/>
+  
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" write="constraintIndex"/>
+  <Parameter.Array name="@SortedParticleParticleContacts" type="UInt:32bit" mode="WRITE"/>
+  
+</Kernel>
+
+<Kernel name="SortContactZoneLists" implementation="ParticleGeometryContact">
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+  
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" write="constraintIndex"/>
+  <Parameter.Array name="@SortedParticleGeometryContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

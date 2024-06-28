@@ -1,0 +1,6 @@
+<Entity name="HollowCone" source="Shape">
+	<Attribute.Scalar name="height"       type="Real"/>
+	<Attribute.Scalar name="topRadius"    type="Real"/>
+	<Attribute.Scalar name="bottomRadius" type="Real"/>
+  <Attribute.Scalar name="thickness"    type="Real"/>
+</Entity>

@@ -1,0 +1,14 @@
+<Kernel name="VerifyGridStructure" dispatch="serial">
+  
+  <Parameter.Array name="@Cell.state" type="UInt:8bit" mode="READ"/>  
+  <Parameter.Array name="@Cell.tier" type="UInt:8bit" mode="READ"/>  
+  <Parameter.Array name="@Cell.id" type="Vec3i" mode="READ"/>
+  <Parameter.Array name="@Cell.parent" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@Cell.children" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@Cell.numChildren" type="UInt:8bit" mode="READ"/>
+  <Parameter.Array name="@Cell.neighbors" type="UInt:32bit" mode="READ"/>
+  
+  <Parameter.Array name="@GridTier.cellTable" type="agx::GridCellTable*" mode="READ" include="agx/Physics/HierarchicalGrid/Common.h"/>
+  
+  <!-- <Parameter.Pointer name="cellStorage" bind="@Cell" type="agxData::EntityStorage"/> -->
+</Kernel>

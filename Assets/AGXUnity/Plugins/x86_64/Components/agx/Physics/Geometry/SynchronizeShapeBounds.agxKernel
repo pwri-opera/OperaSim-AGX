@@ -1,0 +1,64 @@
+<Kernel name="SynchronizeShapeBounds" implementation="Sphere">
+  <Parameter.EntityData name="@Sphere" type="Sphere" read="transform, radius" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="Box">
+  <Parameter.EntityData name="@Box" type="Box" read="transform, halfExtents" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="Capsule">
+  <Parameter.EntityData name="@Capsule" type="Capsule" read="transform, height, radius" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="WireShape">
+  <Parameter.Array name="@WireShape.boundingAABB" type="BoundingAABB" mode="WRITE"/>
+  <Parameter.Array name="@WireShape.transform" type="AffineMatrix4x4" mode="READ"/>
+  <Parameter.Array name="@WireShape.height" type="Real" mode="READ"/>
+  <Parameter.Array name="@WireShape.radius" type="Real" mode="READ"/>
+  <Parameter.Array name="@WireShape.previousPoint0" type="Vec3" mode="READ"/>
+  <Parameter.Array name="@WireShape.previousPoint1" type="Vec3" mode="READ"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="Cone">
+  <Parameter.EntityData name="@Cone" type="Cone" read="transform, height, bottomRadius" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="HollowCone">
+  <Parameter.EntityData name="@HollowCone" type="HollowCone" read="transform, height, bottomRadius" write="boundingAABB"/>
+</Kernel>
+
+
+<Kernel name="SynchronizeShapeBounds" implementation="Cylinder">
+  <Parameter.EntityData name="@Cylinder" type="Cylinder" read="transform, height, radius" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="HollowCylinder">
+  <Parameter.EntityData name="@HollowCylinder" type="HollowCylinder" read="transform, height, radius" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="Line">
+  <Parameter.EntityData name="@Line" type="Line" read="transform, line" write="boundingAABB"/>
+</Kernel>
+
+
+<Kernel name="SynchronizeShapeBounds" implementation="Plane">
+  <Parameter.EntityData name="@Plane" type="Plane" read="transform, plane" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="Trimesh">
+  <Parameter.EntityData name="@Trimesh" type="Trimesh" read="transform, model" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="HeightField">
+  <Parameter.EntityData name="@HeightField" type="HeightField" read="transform, model" write="boundingAABB"/>
+</Kernel>
+
+<Kernel name="SynchronizeShapeBounds" implementation="Convex">
+  <Parameter.EntityData name="@Convex" type="Convex" read="transform, model" write="boundingAABB"/>
+</Kernel>
+
+<!-- Assume all non-groups are synchronized before this is executed -->
+<Kernel name="SynchronizeShapeBounds" implementation="ShapeGroup">
+  <Parameter.EntityData name="@ShapeGroup" type="ShapeGroup" read="childShapes, inGroup" write="boundingAABB"/>
+</Kernel>
+

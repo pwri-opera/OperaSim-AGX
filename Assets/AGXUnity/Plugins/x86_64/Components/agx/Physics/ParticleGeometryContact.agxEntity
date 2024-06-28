@@ -1,0 +1,34 @@
+<Entity name="ParticleGeometryContact" source="Contact">
+  <Attribute.Scalar name="particle" type="UInt:32bit"/>
+  <Attribute.Scalar name="geometry" type="UInt:32bit"/>
+  <Attribute.Scalar name="body" type="UInt:32bit"/>
+  <!-- <Attribute.Scalar name="list" type="Physics.GeometryParticleContactListPtr"/> --> <!-- The list which this contact is part of -->
+  
+  <!-- Id instead of index -->
+  <Attribute.Scalar name="particleId" type="UInt:32bit"/>
+  <Attribute.Scalar name="geometryId" type="UInt:32bit"/>
+  <Attribute.Scalar name="geometryPtr" type="Physics.GeometryPtr"/> 
+
+  <Attribute.Scalar name="faceIndex" type="UInt:32bit" value="InvalidIndex" doc="The face index of shape 2 in contact (e.g. index of triangle for trimesh)."/>
+  <Attribute.Scalar name="faceFeature" type="UInt:8bit" value="InvalidIndex" doc="The face feature of shape 2 in contact (e.g. voronoi region on triangle for trimesh)."/>
+
+  <Attribute.Scalar name="enabled" type="Bool" value="true"/>
+
+  <Attribute.Scalar name="point" type="Vec3"/>
+  <Attribute.Scalar name="normal" type="Vec3:32bit"/>
+  <Attribute.Scalar name="tangentU" type="Vec3:32bit"/>
+  <Attribute.Scalar name="tangentV" type="Vec3:32bit"/>
+  <Attribute.Scalar name="depth" type="Real"/>
+  <Attribute.Scalar name="velocity" type="Vec3:32bit"/>
+  <Attribute.Scalar name="localForce" type="Vec3"/>
+  <Attribute.Scalar name="impactNormalForce" type="Real"/>
+  <Attribute.Scalar name="contactEnergy" type="Real"/>
+  <Attribute.Scalar name="isImpacting" type="Bool" value="false"/>
+  <Attribute.Scalar name="timeStamp"   type="Real:32bit"/>
+  <Attribute.Scalar name="charContactTime" type="Real:32bit"/>
+  
+  <!-- For rolling resistance -->
+  <!-- <Attribute.Scalar name="effectiveRadius" type="Real"/> -->
+
+  <Attribute.Scalar name="next" type="Int"/> <!-- Used when iterating contacts from particle point of view -->
+</Entity>

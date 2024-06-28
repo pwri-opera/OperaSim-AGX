@@ -1,0 +1,13 @@
+<Task name="RenderBounds">
+	<Parameter.Scalar name="color" value="Vec4(0.5, 0.5, 0.5, 0.7)"/>
+
+	<Storage entity="RenderBox" numElements="@CollisionBox.numElements"/>
+	
+	<Task source="Geometry.Rendering.GenerateRenderBoxesFromBounds"/>
+
+
+	<Task source="Foundation.Rendering.RenderBoxOutlines">
+		<Parameter.Scalar instance="color" value="@color"/>
+	</Task>
+	
+</Task>

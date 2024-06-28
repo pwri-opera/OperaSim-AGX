@@ -1,0 +1,8 @@
+<Kernel name="MatchContactStates" dispatch="parallel">
+
+  <Parameter.EntityData name="@GeometryContact"  type="GeometryContact"  read="instance, points" />
+  <Parameter.EntityData name="@ContactPoint"     type="ContactPoint"     read="instance" write="localForce" />
+
+  <Parameter.EntityData name="@WarmStartingData" type="WarmStartingData" read="instance, localForce" />
+
+</Kernel>

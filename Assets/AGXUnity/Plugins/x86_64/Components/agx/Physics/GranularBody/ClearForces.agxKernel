@@ -1,0 +1,3 @@
+<Kernel name="ClearForces">
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="" write="force, torque"/>
+</Kernel>

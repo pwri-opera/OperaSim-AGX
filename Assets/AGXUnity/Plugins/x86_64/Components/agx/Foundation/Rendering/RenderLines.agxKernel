@@ -1,0 +1,29 @@
+<Kernel name="RenderLines" device="OpenGL" primitive="Lines" sourcePath="Foundation.Rendering.Basic" numPrimitivesPerElement="2">
+  <Attribute name="vertices" type="Line" variableName="a_vertex" bind="@Line"/> <!-- TODO Remove auto bind -->
+	<SharedAttribute name="color" type="Vec4" variableName="a_color" value="1, 1, 1, 1"/>
+	
+  <Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>
+
+	<State type="Setting" feature="glLineWidth" value="2"/>  
+</Kernel>
+
+<!-- TODO Remove -->
+<Kernel name="RenderLines" device="OpenGL" primitive="Lines" sourcePath="Foundation.Rendering.Basic" numPrimitivesPerElement="2">
+  <Attribute name="vertices" type="Line:32bit" variableName="a_vertex"/>
+	<Attribute name="color" type="Vec4:32bit" variableName="a_color"/>
+	
+  <Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>
+
+	<State type="Setting" feature="glLineWidth" value="2"/>  
+</Kernel>
+
+
+<Kernel name="RenderLines" device="OpenGL" primitive="Lines" numPrimitivesPerElement="12" sourcePath="Foundation.Rendering.Basic">
+  <Attribute name="vertices" type="agxGL.RenderBoxVertices" variableName="a_vertex" bind="@RenderBox.vertices"/>
+  <Indices type="agxGL.RenderBoxOutlines" bind="@RenderBox.outlines"/>
+  <SharedAttribute name="color" type="Vec4" variableName="a_color" value="Vec4(1, 1, 1, 1)"/>
+
+  <Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>
+  
+	<State type="Setting" feature="glLineWidth" value="2"/>
+</Kernel>

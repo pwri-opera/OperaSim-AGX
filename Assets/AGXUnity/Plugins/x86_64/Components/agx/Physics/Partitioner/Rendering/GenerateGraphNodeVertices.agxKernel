@@ -1,0 +1,18 @@
+<Kernel name="GenerateGraphNodeVertices">
+  <Parameter.Array name="@GraphNodeVertices" type="Vec3" mode="WRITE"/>
+  <Parameter.Array name="@GraphNodeColors" type="Vec4" mode="WRITE"/>
+  <Parameter.Array name="@GraphNode.type" type="UInt:8bit" mode="READ"/>
+  <Parameter.Array name="@GraphNode.source" type="EntityPtr" mode="READ"/>
+  <!-- <Parameter.Array name="@GraphNode.edges" type="Array<UInt>" mode="READ"/> -->
+  <!-- <Parameter.Array name="@Particle.radius" type="Real" mode="READ"/> -->
+  <Parameter.Array name="@Geometry.transform" type="AffineMatrix4x4" mode="READ"/>
+  <Parameter.Array name="@Particle.position" type="Vec3" mode="READ" required="false"/>
+  
+  <!-- Implicitly used -->
+  <Parameter.Array name="@RigidBody.cmTransform" type="AffineMatrix4x4" mode="READ" implicit="true"/>
+  <Parameter.Array name="@GeometryContact.body1" type="Physics.RigidBodyPtr" mode="READ" implicit="true"/>
+  <Parameter.Array name="@GeometryContact.body2" type="Physics.RigidBodyPtr" mode="READ" implicit="true"/>
+  <Parameter.Array name="@GeometryContact.geometry2" type="Physics.GeometryPtr" mode="READ" implicit="true"/>
+</Kernel>
+
+

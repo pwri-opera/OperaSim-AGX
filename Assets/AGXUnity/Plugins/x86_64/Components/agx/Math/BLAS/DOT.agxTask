@@ -1,0 +1,58 @@
+<!-- scalar = scalar buffer   .* scalar buffer -->
+<Task name="DOT">
+
+  <!-- Input -->
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@source1.numElements"/>
+  <Parameter.Array name="source1"      type="Real" mode="READ"/>
+  <Parameter.Array name="source2"      type="Real" mode="READ"/>
+
+  <!-- Output -->
+  <Parameter.Scalar name="result" type="Real"/>
+
+  <!-- Internal data. -->
+  <Buffer name="PartialSums" type="Real" numElements="80"/>
+
+  <!-- Local reductions in work groups -->
+  <Task source="Math.BLAS.DOT_reducer">
+		<Parameter.Array instance="source1" bind="@source1"/>
+		<Parameter.Array instance="source2" bind="@source2"/>
+		<Parameter.Array instance="result" bind="@PartialSums"/>
+	</Task>
+	
+	<!-- Final reduction on CPU -->
+  <Task source="Math.Sum">
+    <Parameter.Array instance="source" bind="@PartialSums"/>
+    <Parameter.Scalar    instance="result" bind="@result"/>
+  </Task>
+</Task>
+
+
+<!-- scalar = real3 buffer  .* real3 buffer -->
+<Task name="DOT">
+
+  <!-- Input -->
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@source1.numElements"/>
+  <Parameter.Array name="source1"      type="Vec3" mode="READ"/>
+  <Parameter.Array name="source2"      type="Vec3" mode="READ"/>
+
+  <!-- Output -->
+  <Parameter.Scalar name="result" type="Real"/>
+
+  <!-- Internal data. -->
+  <Buffer name="PartialSums" type="Real" numElements="80"/>
+
+  <!-- Local reductions in work groups -->
+  <Task source="Math.BLAS.DOT_reducer">
+		<Parameter.Array instance="source1" bind="@source1"/>
+		<Parameter.Array instance="source2" bind="@source2"/>
+		<Parameter.Array instance="result" bind="@PartialSums"/>
+	</Task>
+	
+	<!-- Final reduction on CPU -->
+  <Task source="Math.Sum">
+    <Parameter.Array instance="source" bind="@PartialSums"/>
+    <Parameter.Scalar    instance="result" bind="@result"/>
+  </Task>
+</Task>
+
+
