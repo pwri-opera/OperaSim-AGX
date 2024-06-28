@@ -1,0 +1,21 @@
+<Kernel name="AllocateContactZones" dispatch="serial">
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="READ" required="false"/>
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ" required="false"/>
+
+  <!-- <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact"/> -->
+  <!-- <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact"/> -->
+  <!-- <Parameter.EntityData name="@GeometryContact" type="GeometryContact"/> -->
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="numParticleParticleContacts, numParticleGeometryContacts, numGeometryContacts" write="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts"/>
+
+  <!-- <Parameter.Pointer name="@ContactZoneListElements" type="agxData::Buffer"/> -->
+  <Parameter.Pointer name="listElementsBufferPP" bind="@ContactZone.particleParticleContacts.elements" type="agxData::Buffer"/>
+  <Parameter.Pointer name="listElementsBufferPG" bind="@ContactZone.particleGeometryContacts.elements" type="agxData::Buffer"/>
+  <Parameter.Pointer name="listElementsBufferGG" bind="@ContactZone.geometryGeometryContacts.elements" type="agxData::Buffer"/>
+
+  <Parameter.Array name="@EmptyZones" type="Physics.HierarchicalGrid.ContactZonePtr" globalResult="TRUNCATE"/>
+	<Parameter.Scalar name="@NumGeometryContactsUsingPPGS" type="UInt" mode="WRITE"/>
+	
+</Kernel>
+

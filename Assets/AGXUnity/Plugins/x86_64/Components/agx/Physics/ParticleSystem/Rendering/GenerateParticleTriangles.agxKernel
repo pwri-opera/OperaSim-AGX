@@ -1,0 +1,12 @@
+<Kernel name="GenerateParticleTriangles"> 
+  <Parameter.EntityData name="@Particle" type="Particle" read="position, radius, color"/>
+	
+	<!-- Camera matrices used for frustum culling and triangle distance computations -->
+  <!-- <Parameter.Scalar name="cameraViewMatrix" type="AffineMatrix4x4" bind="@camera.view"/> -->
+  <!-- <Parameter.Scalar name="cameraProjectionViewMatrix" type="Matrix4x4" bind="@camera.modelViewProjection"/> -->
+
+
+	<Parameter.EntityData name="@Triangle" type="Geometry.Triangle" write="vertices, normals, colors, cameraDistance" globalResult="TRUNCATE"/>
+	
+	<PreJob name="loadModels"/>
+</Kernel>

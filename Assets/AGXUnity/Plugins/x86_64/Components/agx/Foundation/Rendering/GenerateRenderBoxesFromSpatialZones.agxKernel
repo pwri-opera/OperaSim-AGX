@@ -1,0 +1,9 @@
+<Kernel name="GenerateRenderBoxesFromSpatialZones" device="OpenCL">
+	
+	<Parameter.Array name="zoneIds" type="Vec3i" mode="READ" bind="@ZoneEntity.id"/>
+	<Parameter.Scalar name="numZones" type="UInt" bind="@ZoneEntity.numElements"/>
+	<Parameter.Scalar name="zoneSize" type="Real" bind="@ZoneEntity.size"/>
+	
+	<Parameter.Array name="boxes" type="agxGL.RenderBox" mode="WRITE" bind="@BoxVertices"/>
+	<Parameter.Array name="indexBuffer" type="agxGL.RenderBoxIndices" mode="WRITE" bind="@BoxIndices"/>
+</Kernel>

@@ -1,0 +1,40 @@
+<Kernel name="GatherDryFrictionConstraints" dispatch="serial">
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="groups, nodes" write="iterativeFrictionRefinement"/>
+</Kernel>
+
+
+<Kernel name="GatherDryFrictionConstraints" implementation="old" dispatch="serial">
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="groups, nodes"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+  
+  <!-- <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, source"/> -->
+  
+  <Parameter.Pointer name="dryFrictionConstraintElementBuffer" bind="@DryFrictionConstraintGroup.nodes.elements" type="agxData::Buffer"/>
+  <Parameter.EntityData name="@DryFrictionConstraintGroup" type="SolveGroup" write="nodes, solveModel"/>
+  <!-- <Parameter.Pointer name="dryFrictionConstraintGroupStorage" bind="@DryFrictionConstraintGroup" type="agxData::EntityStorage"/> -->
+  <!-- <Parameter.Array name="@DryFrictionConstraintGroup.nodes.elements" type="UInt" mode="WRITE"/> -->
+  
+  <!-- Debug rendering -->
+  <Parameter.Scalar name="generateDebugRendering" type="Bool" mode="READ" value="false"/>
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="points"/>
+  <!-- <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="point, normal" implicit="true"/> -->
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="model"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="model"/>
+</Kernel>
+
+<Kernel name="GatherDryFrictionConstraints" implementation="oldest" dispatch="serial">
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="graphNode, solveModel"/>
+  
+  
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, source, edges"/>
+  
+  
+  <Parameter.Pointer name="dryFrictionConstraintGroupStorage" bind="@DryFrictionConstraintGroup" type="agxData::EntityStorage"/>
+  <Parameter.Pointer name="dryFrictionConstraintElementBuffer" bind="@DryFrictionConstraintGroup.nodes.elements" type="agxData::Buffer"/>
+  <Parameter.Array name="@DryFrictionConstraintGroup.nodes" type="Array<UInt>" mode="WRITE"/>
+  <Parameter.Array name="@DryFrictionConstraintGroup.solveModel" type="agx::SolveModel *" mode="WRITE"/>
+  
+  <Parameter.Array name="@DryFrictionConstraintGroup.nodes.elements" type="UInt" mode="WRITE"/>
+  
+  <Parameter.Scalar name="generateDebugRendering" type="Bool" mode="READ" value="false"/>
+</Kernel>

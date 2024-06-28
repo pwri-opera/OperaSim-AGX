@@ -1,0 +1,10 @@
+<Kernel name="GenerateParticleGeometryContacts">
+  <Parameter.EntityData name="@ParticleGeometryOverlap" type="Physics.HierarchicalGrid.GridOverlap" read="collisionObject1, collisionObject2"/>
+  <Parameter.EntityData name="@CollisionObject" type="Physics.HierarchicalGrid.CollisionObject" read="position, radius, sourceIndex, subsystem, obbIndex"/>
+  <Parameter.EntityData name="@OrientedGeometryBound" type="Physics.HierarchicalGrid.OrientedGeometryBound" read="halfExtents, invTransform"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="instance, body, transform"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="instance, position, radius"/>
+  <Parameter.Pointer name="@ParticleSystem" type="agx::ParticleSystem" include="agx/ParticleSystem.h"/>
+
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" write="particle, geometry, particleId, geometryId, geometryPtr, body, point, normal, tangentU, tangentV, depth, next, velocity, faceIndex, faceFeature, localForce, constraintIndex, contactEnergy, isImpacting, timeStamp" globalResult="TRUNCATE, ORDER"/>
+</Kernel>

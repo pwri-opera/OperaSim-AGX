@@ -1,0 +1,10 @@
+<Kernel.Scalar name="SetMaterial">
+  <Parameter.EntityInstance name="particle" type="GranularBody" read="radius" write="material, mass, invMass, inertia, invInertia"/>
+  <Parameter.Scalar name="material" type="Physics.MaterialPtr" mode="READ"/>
+</Kernel.Scalar>
+
+
+<Kernel.Scalar name="SetMaterial">
+  <Parameter.EntityPtr name="particle" type="GranularBody" read="radius" write="material, mass, invMass, inertia, invInertia"/>
+  <Parameter.Scalar name="material" type="Physics.MaterialPtr" mode="READ"/>
+</Kernel.Scalar>

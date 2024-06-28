@@ -1,0 +1,28 @@
+<Kernel name="CalculateCellAssignments" implementation="Particle">
+  <description>
+    
+    Parallel kernel that searches for the cell where each particle resides. If
+    the cell in question hasn't been created yet, then the particle index is
+    stored so that the missing cells can be created by the CreateMissingCells
+    kernel later.
+
+  </description>
+
+  <Parameter.EntityData name="@Particle" type="Particle" read="position, radius, tier, oldCell" write="tier, cellIndex, oldCell"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="size, invSize, cellTable"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="id, neighbors, tier"/>
+
+  <Parameter.Array name="@ParticlesWithMissingTargetCell" type="UInt:32bit" globalResult="TRUNCATE, SORT"/>
+</Kernel>
+
+<Kernel name="CalculateCellAssignments" implementation="Geometry">
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="transform, boundingRadius, state, tier, oldCell, localBoundCenter" write="tier, cellIndex, oldCell"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state" implicit="true"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="size, invSize, cellTable"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="id, neighbors, tier"/>
+
+  <Parameter.Array name="@GeometriesWithMissingTargetCell" type="UInt:32bit" globalResult="TRUNCATE, SORT"/>
+  <Parameter.Array name="@InfiniteGeometries" type="UInt:32bit" globalResult="TRUNCATE, SORT"/>
+  <Parameter.Array name="@DisabledGeometries" type="UInt:32bit" globalResult="TRUNCATE, SORT"/>
+  <Parameter.Array name="@ZeroSizedGeometries" type="UInt:32bit" globalResult="TRUNCATE, SORT"/>
+</Kernel>

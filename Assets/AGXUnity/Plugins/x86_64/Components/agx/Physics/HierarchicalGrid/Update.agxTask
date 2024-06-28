@@ -1,0 +1,90 @@
+<Task name="Update" implementation="TopDown">
+  
+  <Task name="ClearSeparations" source="Foundation.ClearStorage">
+    <Parameter.Pointer instance="storage" bind="@SeparationPair"/>
+  </Task>
+
+  <Task source="TriggerCellReordering"/>
+  <Task source="ReorderCells"/>
+
+  <Task source="ClearCells"/>
+  
+  <Task source="DisconnectDeadCells"/>
+  <!-- <Task source="RemoveDeadCells"/> -->
+  
+  <Task source="CalculateCellAssignments:Particle"/>
+  <Task source="CalculateCellAssignments:Geometry"/>
+  
+  
+  <Task source="CreateMissingCells:Particles"/>
+  <Task source="CreateMissingCells:Geometries"/>
+  
+  
+  <Task source="InitializeNewCells"/>
+	
+	<Task name="RefreshTierAssignments" enable="@HasNewTiers">
+	  <Task source="RefreshTierAssignments : Particle"/>
+	  <Task source="RefreshTierAssignments : Geometry"/>
+	</Task>
+	
+
+  <!-- <Task source="VerifyGridStructure"/> -->
+  
+  <Task source="SortCells"/>
+  <!-- <Task source="RandomizeCells"/> -->
+  
+  <Task source="CountCellOccupancy:Particles"/>
+  <Task source="CountCellOccupancy:Geometries"/>
+  
+  <Task source="AllocateCellContents"/>
+  
+  <!-- <Task source="SortParticles"/> -->
+  
+  <Task source="InsertParticles"/>
+  <Task source="InsertGeometries"/>
+
+  <Task source="TriggerSubsystemReordering"/>
+  <Task source="ReorderSubsystems"/>
+
+  <Task source="UpdateOrientedGeometryBounds"/>
+  <Task source="FindOverlapPairs:IterateCells"/>
+  <Task source="CreateOverlapsWithInfiniteObjects"/>  
+  <Task source="FilterOverlaps"/>
+  
+  <Task source="GenerateGeometryBroadPhasePairs"/>
+
+  <!-- <Task source="SortBroadPhaseOverlaps"/> -->
+  
+  <!-- <Task source="VerifyOverlaps:Particle"/> -->
+  
+  <!-- <Task source="Foundation.ValuePrinter">
+    <Parameter.Scalar name="@Cell.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@NewCells.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@GridTier.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@GridOverlap.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@GeometryPairOverlap.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@ParticlePairOverlap.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@ParticleGeometryOverlap.numElements" type="UInt" mode="READ"/>
+    <Parameter.Scalar name="@BroadPhasePair.numElements" type="UInt" mode="READ"/>
+  </Task> -->
+
+  <!-- <Task source="Foundation.BufferPrinter">
+    <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ"/>
+  </Task> -->
+  
+</Task>
+
+
+
+
+
+<Task name="Update" implementation="Print">
+  <Task source="Foundation.BufferPrinter">
+    <Parameter.Array name="@Particle.cellIndex" type="UInt:32bit" mode="READ"/>
+    <Parameter.Array name="@Particle.cornerCellIndices" type="UInt:32bit" mode="READ"/>
+    <Parameter.Array name="@CollisionObject.sourceIndex" type="UInt:32bit" mode="READ"/>
+    <Parameter.Array name="@CollisionObject.cellIndex" type="UInt:32bit" mode="READ"/>
+    <Parameter.Array name="@Cell.collisionObjects" type="IndexRange:32bit" mode="READ"/>
+    <Parameter.Array name="@Cell.neighbors" type="UInt:32bit" mode="READ"/>
+  </Task>
+</Task>

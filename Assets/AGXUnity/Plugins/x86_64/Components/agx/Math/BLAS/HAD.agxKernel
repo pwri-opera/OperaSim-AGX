@@ -1,0 +1,51 @@
+
+
+<!--
+  CPU implementation.
+-->
+
+<!-- scalar buffer = scalar buffer   .*   scalar buffer -->
+<Kernel name="HAD" implementation="REALn">
+  <Parameter.Scalar    name="scale1"       type="Real" value="1"/>
+  <Parameter.Array name="source1"      type="Real" mode="READ" />
+  <Parameter.Scalar    name="scale2"       type="Real" value="1"/>
+  <Parameter.Array name="source2"      type="Real" mode="READ" />
+  <Parameter.Array name="target"       type="Real" mode="WRITE"/>
+</Kernel> 
+
+
+<!-- vector buffer = vector buffer   .*   vector buffer -->
+<Kernel name="HAD" implementation="REAL3n">
+  <Parameter.Scalar    name="scale1"       type="Real" value="1"/>
+  <Parameter.Array name="source1"      type="Vec3" mode="READ" />
+  <Parameter.Scalar    name="scale2"       type="Real" value="1"/>
+  <Parameter.Array name="source2"      type="Vec3" mode="READ" />
+  <Parameter.Array name="target"       type="Vec3" mode="WRITE"/>
+</Kernel> 
+
+
+
+<!--
+  OpenCL implementation.
+-->
+
+<!-- scalar buffer = scalar buffer   .*   scalar buffer -->
+<Kernel name="HAD" device="OpenCL" buildOptions="-DREALn">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@target.numElements"/>
+  <Parameter.Scalar    name="scale1"       type="Real" value="Real(1)"/>
+  <Parameter.Array name="source1"      type="Real" mode="READ" />
+  <Parameter.Scalar    name="scale2"       type="Real" value="Real(1)"/>
+  <Parameter.Array name="source2"      type="Real" mode="READ" />
+  <Parameter.Array name="target"       type="Real" mode="WRITE"/>
+</Kernel> 
+
+
+<!-- vector buffer = vector buffer   .*   vector buffer -->
+<Kernel name="HAD" device="OpenCL" buildOptions="-DREAL3n">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@target.numElements"/>
+  <Parameter.Scalar    name="scale1"       type="Real" value="Real(1)"/>
+  <Parameter.Array name="source1"      type="Vec3" mode="READ" />
+  <Parameter.Scalar    name="scale2"       type="Real" value="Real(1)"/>
+  <Parameter.Array name="source2"      type="Vec3" mode="READ" />
+  <Parameter.Array name="target"       type="Vec3" mode="WRITE"/>
+</Kernel> 

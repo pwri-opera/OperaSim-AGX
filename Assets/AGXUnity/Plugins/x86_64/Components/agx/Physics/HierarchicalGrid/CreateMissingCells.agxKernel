@@ -1,0 +1,41 @@
+<Kernel name="CreateMissingCells" dispatch="serial" implementation="Geometries">
+  <Parameter.Array name="@GeometriesWithMissingTargetCell" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="transform, boundingRadius, tier, cellIndex, oldCell" write="tier, cellIndex, oldCell"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="size, invSize, boundingRadius, cellTable" write="size, invSize, boundingRadius, cellTable"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="state, tier, id, position, parent, children, numChildren, neighbors, sizeAlignment" write="state, tier, id, position, parent, children, numChildren, neighbors"/>
+
+
+  <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ_WRITE"/>
+
+  <Parameter.Array name="@DeadCells" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.Array name="@NewCells" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.Array name="@EmptyZones" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+
+  <Parameter.Scalar name="@HasNewTiers" type="Bool" mode="READ_WRITE"/>
+
+  <Parameter.Pointer name="@SolveBodyManager" type="agx::Physics::HierarchicalGrid::SolveBodyManager" include="agx/Physics/HierarchicalGrid/SolveBodyManager.h"/>
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>
+
+
+<Kernel name="CreateMissingCells" dispatch="serial" implementation="Particles">
+  <Parameter.Array name="@ParticlesWithMissingTargetCell" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@Particle" type="Particle" read="position, radius, tier, cellIndex, oldCell" write="tier, cellIndex, oldCell"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="size, invSize, boundingRadius, cellTable" write="size, invSize, boundingRadius, cellTable"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="state, tier, id, position, parent, children, numChildren, neighbors, sizeAlignment" write="state, tier, id, position, parent, children, numChildren, neighbors"/>
+
+  <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ_WRITE"/>
+
+  <Parameter.Array name="@DeadCells" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.Array name="@NewCells" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.Array name="@EmptyZones" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.Scalar name="@HasNewTiers" type="Bool" mode="READ_WRITE"/>
+
+  <Parameter.Pointer name="@SolveBodyManager" type="agx::Physics::HierarchicalGrid::SolveBodyManager" include="agx/Physics/HierarchicalGrid/SolveBodyManager.h"/>
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>
+

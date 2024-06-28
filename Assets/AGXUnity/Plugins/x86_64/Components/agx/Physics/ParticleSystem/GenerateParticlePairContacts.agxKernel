@@ -1,0 +1,9 @@
+<Kernel name="GenerateParticlePairContacts">
+  <Parameter.EntityData name="@ParticlePairOverlap" type="Physics.HierarchicalGrid.GridOverlap" read="collisionObject1, collisionObject2"/>
+  <Parameter.EntityData name="@CollisionObject" type="Physics.HierarchicalGrid.CollisionObject" read="sourceIndex, position, radius"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="instance, position, radius"/>
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" write="particle1, particle2, particleId1, particleId2, point, normal, tangentU, tangentV, depth, localForce, constraintIndex, timeStamp"/>
+  
+	<PreJob name="resizeStorage"/>
+  
+</Kernel>

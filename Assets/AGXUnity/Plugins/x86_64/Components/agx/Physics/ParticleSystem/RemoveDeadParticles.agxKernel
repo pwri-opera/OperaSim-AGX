@@ -1,0 +1,9 @@
+<Kernel name="RemoveDeadParticles" dispatch="serial">
+  
+  <description>
+  Takes a list of indices and a removes those particles from the given particle storage. Then clears the list of dead particles.
+  </description>
+
+  <Parameter.Array name="@DeadParticles" type="UInt:32bit" mode="WRITE"/>
+  <Parameter.Pointer name="@ParticleSystem.Particle" type="agxData::EntityStorage" include="agxData/EntityStorage.h"/>
+</Kernel>

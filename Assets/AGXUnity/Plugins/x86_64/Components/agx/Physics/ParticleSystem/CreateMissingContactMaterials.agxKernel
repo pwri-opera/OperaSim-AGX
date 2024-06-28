@@ -1,0 +1,19 @@
+<Kernel name="CreateMissingContactMaterials" dispatch="serial" implementation="ParticlePairContact">
+  <Parameter.Array name="@MissingParticlePairContactMaterials" type="UInt:32bit" mode="READ"/>
+  
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material" write="material"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="material"/>
+
+  <Parameter.Pointer name="materialManager" bind="@Simulation.MaterialManager" type="agxSDK::MaterialManager" include="agxSDK/MaterialManager.h"/>
+</Kernel>
+
+
+<Kernel name="CreateMissingContactMaterials" dispatch="serial" implementation="ParticleGeometryContact">
+  <Parameter.Array name="@MissingParticleGeometryContactMaterials" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, geometry, material" write="material"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="material"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="material"/>
+  
+  <Parameter.Pointer name="materialManager" bind="@Simulation.MaterialManager" type="agxSDK::MaterialManager" include="agxSDK/MaterialManager.h"/>
+</Kernel>

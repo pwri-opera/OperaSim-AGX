@@ -1,0 +1,36 @@
+<Kernel name="CalculateJacobians" implementation="Contact" costPerElement="50">
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, jacobianIndex, rowIndex, numRows, materialIndex" write="isImpacting"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, points, material, geometry1, geometry2"/>
+  <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="point, normal, depth, maxNormalForce, velocity, state" write="tangentU, tangentV"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="restitution, viscosity, youngsModulus, damping, minElasticRestLength, maxElasticRestLength, adhesiveOverlap, adhesion, model"/>
+
+  <Parameter.Array  name="@ContactConstraintJacobian" type="Jacobian6DOFElement" mode="WRITE"/>
+
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="" write="impactSpeed, holonomic, damping, violation, velocity, epsilon, bound, lambda, rhs"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="mass, cmTransform, linearAcceleration, angularAcceleration"/>
+
+  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
+</Kernel>
+
+<Kernel name="CalculateJacobians" implementation="BinaryConstraint" costPerElement="50">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance, jacobianIndex, rowIndex, numRows" write="isImpacting"/>
+
+  <Parameter.Array  name="@BinaryConstraintJacobian"       type="Jacobian6DOFElement" mode="WRITE"/>
+
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="" write="holonomic, damping, violation, velocity, epsilon, bound, rhs"/>
+
+  <Parameter.Scalar name="@clock.timeStep"                 type="Real"/>
+</Kernel>
+
+<Kernel name="CalculateJacobians" implementation="ManyBodyConstraint" costPerElement="50">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance, jacobianIndex, rowIndex, numRows" write="isImpacting"/>
+
+  <Parameter.Array  name="@ManyBodyConstraintJacobian"       type="Jacobian6DOFElement"   mode="WRITE"/>
+
+	<Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="" write="holonomic, damping, violation, velocity, epsilon, bound, rhs"/>
+
+  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
+
+</Kernel>

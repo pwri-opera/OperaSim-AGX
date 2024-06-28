@@ -1,0 +1,8 @@
+<Kernel name="RenderMultiLineStrips" device="OpenGL" primitive="LineStrip" sourcePath="Foundation.Rendering.Basic" multiDraw="true">
+  <Attribute name="vertices" type="Vec3:32bit" variableName="a_vertex"/>
+  <Attribute name="color" type="Vec4:32bit" variableName="a_color"/>
+  <!--<SharedAttribute name="color" type="Vec4" variableName="a_color" value="Vec4(1, 1, 1, 1)"/>-->
+  <Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>
+  
+	<State type="Setting" feature="glLineWidth" value="1"/>
+</Kernel>

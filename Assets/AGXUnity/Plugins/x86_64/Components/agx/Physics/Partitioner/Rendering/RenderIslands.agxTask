@@ -1,0 +1,26 @@
+<Task name="RenderIslands">
+  <Buffer name="GraphNodeVertices" type="Vec3" numElements="@GraphNode.numElements"/>
+  <Buffer name="GraphEdgeLines" type="Line:32bit" numElements="@GraphNode.edgesElements.numElements"/>
+  <Buffer name="GraphNodeColors" type="Vec4" numElements="@GraphNodeVertices.numElements"/>
+  <Buffer name="GraphEdgeColors" type="Vec4" numElements="@GraphEdgeLines.numElements"/>
+  
+  <Task source="GenerateGraphNodeVertices"/>
+  <Task source="GenerateGraphEdgeLines"/>
+  <Task source="AssignIslandVertexColors"/>
+  <!-- <Task source="AssignIslandEdgeColors"/> -->
+  
+  
+
+  <Task source="Foundation.Rendering.RenderPointSprites">
+    <Parameter.Array instance="vertices" bind="@GraphNodeVertices"/>
+    <Parameter.Array instance="color" bind="@GraphNodeColors"/>
+    <Parameter.Scalar instance="radius" value="Real(0.1)"/>
+  </Task>
+  
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@GraphEdgeLines"/>
+    <!-- <Parameter.Array instance="color" bind="@GraphEdgeColors"/> -->
+    <Parameter.Scalar instance="color" value="Vec4(1, 1, 1, 1)"/>
+  </Task>
+
+</Task>

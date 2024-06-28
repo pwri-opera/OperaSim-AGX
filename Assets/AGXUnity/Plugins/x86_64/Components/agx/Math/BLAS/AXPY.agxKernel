@@ -1,0 +1,141 @@
+
+<!-- 
+
+
+The following is only partially true.
+
+Implementation naming convention is a two-word name separated by _. The first
+word describe the type of the factor and the second the type of the buffer
+operated on. Both the source and the target must have the same type. The word
+'REAL' is used to denote a single Real, and the word REAL3 is a Vec3. Appeding a
+'n' indicates that the argument is a Array argument, bound to a buffer, rather
+than a single value.
+
+For example, REAL_REALn is a implementation that multiplies a single Real into a
+pair of Real buffers, while REAL_REAL3, is a implementation that multiplies a
+buffer of Vec3s with a single Real.
+
+-->
+
+
+
+<!-- 
+  CPU kernels.
+-->
+
+
+<!-- scalar buffer += scalar*scalar buffer -->
+<Kernel name="AXPY" implementation="REALn__REAL_REALn">
+  <Parameter.Scalar name="factor" type="Real"/>
+  <Parameter.Array  name="source" type="Real" mode="READ"/>
+  <Parameter.Array  name="target" type="Real" mode="READ_WRITE"/>
+</Kernel>
+
+<!-- vec3 buffer += scalar*vec3 buffer -->
+<Kernel name="AXPY" implementation="REAL3n_REAL_REAL3n">
+  <Parameter.Scalar name="factor" type="Real"/>
+  <Parameter.Array  name="source" type="Vec3" mode="READ"/>
+  <Parameter.Array  name="target" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+
+<!-- vec3 buffer += vec3*vec3 buffer -->
+<Kernel name="AXPY" implementation="REAL3n_REAL3_REAL3n">
+  <Parameter.Scalar name="factor" type="Vec3"/>
+  <Parameter.Array  name="source" type="Vec3" mode="READ"/>
+  <Parameter.Array  name="target" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+<!-- vec3 buffer += scalar buffer * vec3 buffer -->
+<Kernel name="AXPY" implementation="REAL3n_REAL_REAL3">
+  <Parameter.Array name="factor" type="Real" mode="READ"/>
+  <Parameter.Array name="source" type="Vec3" mode="READ"/>
+  <Parameter.Array name="target" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+
+<!-- scalar buffer += scalar*scalar buffer -->   <!-- With offsets. -->
+<Kernel name="AXPY" implementation="REALn_REAL_REALn_offset">
+  <Parameter.Scalar name="factor" type="Real"/>
+  <Parameter.Array  name="source" type="Real" mode="READ"/>
+  <Parameter.Scalar name="sourceOffset" type="UInt"/>
+  <Parameter.Array  name="target" type="Real" mode="READ_WRITE"/>
+  <Parameter.Scalar name="targetOffset" type="UInt"/>
+</Kernel>
+
+<!-- vec3 buffer += scalar*vec3 buffer -->   <!-- With offsets. -->
+<Kernel name="AXPY" implementation="REAL3n_REAL_REAL3n_offset">
+  <Parameter.Scalar name="factor" type="Real"/>
+  <Parameter.Array  name="source" type="Vec3" mode="READ"/>
+  <Parameter.Scalar name="sourceOffset" type="UInt"/>
+  <Parameter.Array   name="target" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Scalar  name="targetOffset" type="UInt"/>
+</Kernel>
+
+<!-- vec3 buffer += scalar buffer*vec3 buffer -->   <!-- With offsets. -->
+<Kernel name="AXPY" implementation="REAL3n_REALn_REAL3n_offset">
+  <Parameter.Array  name="factor"        type="Real" mode="READ"/>
+  <Parameter.Scalar name="factorOffset" type="UInt"/>
+  <Parameter.Array  name="source"        type="Vec3" mode="READ"/>
+  <Parameter.Scalar name="sourceOffset"  type="UInt"/>
+  <Parameter.Array  name="target"        type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Scalar name="targetOffset"  type="UInt"/>
+</Kernel>
+
+
+<!-- vec3 buffer += 3x3 buffer * vec3 buffer -->
+<Kernel name="AXPY" implementation="REAL3n_3x3n_REAL3n">
+  <Parameter.Array name="@target" type="Vec3"      mode="READ_WRITE"/>
+  <Parameter.Array name="@factor" type="Matrix3x3" mode="READ"/>
+  <Parameter.Array name="@source" type="Vec3"      mode="READ"/>
+</Kernel>
+
+
+<!--
+  OpenCL kernels.
+-->
+
+
+<!-- scalar buffer += scalar*scalar buffer --> <!-- With offsets -->
+<Kernel name="AXPY" device="OpenCL" buildOptions="-DREAL_REALn_offset">
+  <Parameter.Scalar name="sourceSize"   type="UInt" bind="@source.numElements"/>
+  <Parameter.Scalar name="targetSize"   type="UInt" bind="@target.numElements"/>
+  <Parameter.Scalar name="factor"       type="Real"/>
+  <Parameter.Array  name="source"       type="Real" mode="READ"/>
+  <Parameter.Scalar name="sourceOffset" type="UInt"/>
+  <Parameter.Array  name="target"       type="Real" mode="READ_WRITE"/>
+  <Parameter.Scalar name="targetOffset" type="UInt"/>
+</Kernel>
+
+<!-- scalar buffer += scalar*scalar buffer -->
+<Kernel name="AXPY" device="OpenCL" buildOptions="-DREAL_REALn">
+  <Parameter.Scalar name="numElements"  type="UInt" bind="@source.numElements"/>
+  <Parameter.Scalar name="factor"       type="Real"/>
+  <Parameter.Array  name="source"       type="Real" mode="READ"/>
+  <Parameter.Array  name="target"       type="Real" mode="READ_WRITE"/>
+</Kernel>
+
+
+<!-- vector buffer += scalar*vector buffer -->
+<Kernel name="AXPY" device="OpenCL" buildOptions="-DREAL_REAL3n">
+  <Parameter.Scalar name="numElements"  type="UInt" bind="@source.numElements"/>
+  <Parameter.Scalar name="factor"       type="Real"/>
+  <Parameter.Array  name="source"       type="Vec3" mode="READ"/>
+  <Parameter.Array  name="target"       type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+<!-- scalar buffer += scalar buffer*scalar buffer -->
+<Kernel name="AXPY" device="OpenCL" buildOptions="-DREALn_REALn">
+  <Parameter.Scalar name="numElements"  type="UInt" bind="@source.numElements"/>
+  <Parameter.Array  name="factor"       type="Real" mode="READ"/>
+  <Parameter.Array  name="source"       type="Real" mode="READ"/>
+  <Parameter.Array  name="target"       type="Real" mode="READ_WRITE"/>
+</Kernel>
+
+<!-- vector buffer += scalar buffer*vector buffer -->
+<Kernel name="AXPY" device="OpenCL" buildOptions="-DREALn_REAL3n">
+  <Parameter.Scalar name="numElements"  type="UInt" bind="@source.numElements"/>
+  <Parameter.Array  name="factor"       type="Real" mode="READ"/>
+  <Parameter.Array  name="source"       type="Vec3" mode="READ"/>
+  <Parameter.Array  name="target"       type="Vec3" mode="READ_WRITE"/>
+</Kernel>

@@ -1,0 +1,29 @@
+<!-- GranularGranularContact -->
+<SolveKernel name="GaussSeidelIteration32" implementations="GranularGranularContact_NORMAL, GranularGranularContact_FRICTION, GranularGranularContact_ROLLING_RESISTANCE, GranularGranularContact_TWIST_RESISTANCE">
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint32" read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow32" read="rhs, lambda, epsilon, invD" write="lambda"/>
+  
+  <!--New jacobian-->
+  <Parameter.Array name="jacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement:32bit"/>
+  <Parameter.Array name="GMinvStorage" bind="@GranularGranularContactConstraintGMInvStorage" mode="READ" type="Jacobian6DOFElement:32bit"/>
+
+  <Parameter.EntityData name="particle" bind="@SolveBody" type="SolveBody32" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  
+  <Parameter.EntityData name="solveMaterial" bind="@SolveMaterial32" type="SolveMaterial32" read="adhesiveImpulse, friction"/>
+</SolveKernel>
+
+
+<!-- GranularGeometryContact -->
+<SolveKernel name="GaussSeidelIteration32" implementations="GranularGeometryContact_NORMAL, GranularGeometryContact_FRICTION, GranularGeometryContact_ROLLING_RESISTANCE, GranularGeometryContact_TWIST_RESISTANCE">
+  <Parameter.EntityData name="constraint" bind="@GranularBodyContactConstraint" type="ContactConstraint" read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularBodyContactConstraint.Row" type="Particle.ContactConstraintRow" read="rhs, lambda, epsilon, invD" write="lambda"/>
+
+  <!--New jacobian-->
+  <Parameter.Array name="jacobianStorage" bind="@GranularGeometryContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement"/>
+  <Parameter.Array name="GMinvStorage" bind="@GranularGeometryContactConstraintGMInvStorage" mode="READ" type="Jacobian6DOFElement"/>
+
+  <Parameter.EntityData name="particle" bind="@SolveBody" type="SolveBody32" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+
+  <Parameter.EntityData name="@SolveMaterial" type="SolveMaterial" read="adhesiveImpulse, friction"/>
+</SolveKernel>

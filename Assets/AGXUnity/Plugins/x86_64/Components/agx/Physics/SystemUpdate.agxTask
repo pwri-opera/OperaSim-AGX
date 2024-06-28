@@ -1,0 +1,39 @@
+<Task name="SystemUpdate" dispatch="parallel">
+  <Task source="Physics.RigidBody.ExpandConstraints"/>
+  <Task source="Prototyping.Partitioner.GenerateInteractionSolveTags : GeometryContact"/>
+  <Task source="Prototyping.Partitioner.GenerateInteractionSolveTags : BinaryConstraint" depends="ExpandConstraints"/>
+  <Task source="Prototyping.Partitioner.GenerateInteractionSolveTags : ManyBodyConstraint" depends="ExpandConstraints"/>
+  <Task source="Prototyping.Partitioner.RemoveInvalidContacts"/>
+  <Task source="Prototyping.Partitioner.BuildInteractionGraph" depends="ExpandConstraints; RemoveInvalidContacts"/>
+  <Task source="Prototyping.Partitioner.BuildIslands" depends="BuildInteractionGraph"/>
+  <Task source="Prototyping.Partitioner.BuildInternalIslandGroups" depends="BuildIslands; GenerateInteractionSolveTags[0]; GenerateInteractionSolveTags[1]; GenerateInteractionSolveTags[2]"/>
+  <Task source="Prototyping.Partitioner.SortIslandGroups" depends="BuildInternalIslandGroups"/>
+  <Task source="Prototyping.Partitioner.CalculateIslandImpacts" depends="BuildIslands;PrepareContacts.CalculateJacobians;PrepareConstraints.CalculateJacobians[0];PrepareConstraints.CalculateJacobians[1]"/>
+  <Task source="Prototyping.Solver.GenerateSolveJobs" depends="SortIslandGroups;CalculateIslandImpacts;PrepareDirectSolvers"/>
+  <Task source="new Solver" depends="GenerateSolveJobs;PrepareDirectSolvers"/>
+  <Task source="Physics.RigidBody.UpdateWorldMassAndInertia"/>
+  <Task source="new UpdateInteractionForces"
+  depends="UpdateWorldMassAndInertia"/>
+  <Task source="new ApplyGravity" depends="UpdateInteractionForces"/>
+  <Task source="Prototyping.Solver.IntegrateVelocities" depends="ApplyGravity"/>
+  <Task source="Prototyping.Solver.PrepareConstraints" depends="IntegrateVelocities;ExpandConstraints"/>
+  <Task source="Prototyping.Solver.PrepareContacts" depends="IntegrateVelocities;RemoveInvalidContacts"/>
+  <Task source="Prototyping.Solver.PrepareDirectSolvers" depends="PrepareContacts;PrepareConstraints"/>
+  
+  <Task source="Prototyping.Solver.PostSolveContactMagnitude" depends="Solver"/>
+  <Task source="Prototyping.Solver.PostSolveCallback : BinaryConstraint" depends="Solver"/>
+  <Task source="Prototyping.Solver.PostSolveCallback : ManyBodyConstraint" depends="Solver"/>
+  <Task source="Prototyping.Solver.ClearDirectSolvers" depends="PostSolveCallback[0]; PostSolveCallback[1]"/>
+  <!-- <Task source="Prototyping.Solver.AnalyzeSolverPerformance" depends="Solver" condition="Solver.AnalyzeSolverPerformance"/> -->
+  <Task source="Physics.RigidBody.ClearForces" depends="Solver"/>
+  <Task source="Physics.RigidBody.IntegratePositions" depends="PostSolveCallback[0];PostSolveCallback[1]"/>
+  <Task source="Physics.RigidBody.UpdateFrames" depends="IntegratePositions"/>
+  <Task source="Physics.RigidBody.PostSystemCallback" depends="UpdateFrames"/>
+  <Task source="new UpdateTimeStamp" depends="UpdateFrames"/>
+  <Task source="new CommitRemovedBodies" depends="UpdateTimeStamp"/>
+</Task>
+
+<Task name="SystemUpdate" source="SystemUpdate : SSE">
+  <Task instance="UpdateWorldMassAndInertia" implementation="SSE"/>
+  <Task instance="UpdateFrames" implementation="SSE"/>
+</Task>

@@ -1,0 +1,5 @@
+<Kernel name="RandomizeReal">
+	<Parameter.Array type="Real" name="buffer" mode="WRITE"/>
+	<Parameter.Scalar type="Real" name="min"/>
+	<Parameter.Scalar type="Real" name="max"/>
+</Kernel>

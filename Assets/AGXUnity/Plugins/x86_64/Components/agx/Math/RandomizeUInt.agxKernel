@@ -1,0 +1,5 @@
+<Kernel name="RandomizeUInt">
+	<Parameter.Array type="UInt:32bit" name="buffer" mode="WRITE"/>
+	<Parameter.Scalar type="UInt:32bit" name="min"/>
+	<Parameter.Scalar type="UInt:32bit" name="max"/>
+</Kernel>

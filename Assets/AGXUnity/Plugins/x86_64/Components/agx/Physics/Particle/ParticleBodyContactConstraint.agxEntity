@@ -1,0 +1,13 @@
+<Entity name="ParticleBodyContactConstraint" source="Physics.Interaction">
+  <Attribute.Scalar name="particle" type="UInt:32bit"/>
+	<Attribute.Scalar name="body" type="UInt:32bit"/>
+
+  <Attribute.Scalar name="contactIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="materialIndex" type="UInt:32bit"/>
+	
+  <Attribute.Scalar name="isImpacting" type="Bool"/>
+  <Attribute.Scalar name="G" type="ParticleBodyContactJacobian"/>
+  <Attribute.Scalar name="GMInv" type="ParticleBodyContactJacobian"/>
+
+  <Shared.Storage entity="Physics.Particle.ContactConstraintRow" name="Row"/>
+</Entity>

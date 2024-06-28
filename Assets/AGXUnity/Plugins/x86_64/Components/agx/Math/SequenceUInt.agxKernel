@@ -1,0 +1,6 @@
+<Kernel name="SequenceUIntKernel" device="OpenCL">
+	<Parameter.Array name="buffer" type="UInt" mode="WRITE"/>
+	<Parameter.Scalar name="startValue" type="UInt" value="0"/>
+	<Parameter.Scalar name="stride" type="UInt" value="1"/>
+	<Parameter.Scalar name="numElements" bind="@buffer.numElements" type="UInt"/>
+</Kernel>

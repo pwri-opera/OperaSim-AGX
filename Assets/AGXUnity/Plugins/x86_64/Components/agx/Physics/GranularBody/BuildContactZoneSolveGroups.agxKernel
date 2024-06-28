@@ -1,0 +1,17 @@
+<Kernel name="BuildContactZoneSolveGroups">
+  <Parameter.EntityData name="@ContactZone" type="HierarchicalGrid.ContactZone" read="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts" write="solveGroups"/>
+  
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="solveModel"/>
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="solveModel"/>
+  
+  <Parameter.EntityData name="@GranularGranularContactConstraint" type="ContactConstraint" read="contactIndex"/>
+  <Parameter.EntityData name="@GranularBodyContactConstraint" type="ContactConstraint" read="contactIndex"/>
+  
+
+  <Parameter.EntityData name="solveGroup" type="SolveGroup" bind="@ContactZone.SolveGroup" read="" write="nodes, solveModel" globalResult="TRUNCATE"/>
+  <Parameter.Array name="solveGroupElements" bind="@ContactZone.SolveGroup.nodes.elements" type="UInt:32bit" globalResult="TRUNCATE"/>
+  
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+  
+  <PostJob name="overflowCleanup"/>
+</Kernel>

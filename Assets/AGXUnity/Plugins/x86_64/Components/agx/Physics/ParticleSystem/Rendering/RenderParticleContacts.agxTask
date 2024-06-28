@@ -1,0 +1,16 @@
+<Task name="RenderParticleContacts">
+  <Value name="defaultRadius" type="Real" value="Math.Mul(@Particle.defaultRadius, Real(0.15))"/>
+  
+  <Task source="Foundation.Rendering.RenderPointSprites">
+		<Parameter.Array instance="vertices" bind="@ParticlePairContact.point"/>
+		<Parameter.Scalar instance="color" value="Vec4(1, 0, 0, 1)"/>
+		<Parameter.Scalar instance="defaultRadius" value="@defaultRadius"/>
+	</Task>
+
+  <Task source="Foundation.Rendering.RenderPointSprites">
+		<Parameter.Array instance="vertices" bind="@ParticleGeometryContact.point"/>
+		<Parameter.Scalar instance="color" value="Vec4(0, 1, 0, 1)"/>
+		<Parameter.Scalar instance="defaultRadius" value="@defaultRadius"/>
+	</Task>
+
+</Task>

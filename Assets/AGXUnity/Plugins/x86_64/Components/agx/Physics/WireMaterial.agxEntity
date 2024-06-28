@@ -1,0 +1,7 @@
+<Entity name="WireMaterial" source="Referenced">
+	<Attribute.Scalar name="youngsModulusStretch" type="Real"/>
+	<Attribute.Scalar name="youngsModulusBend" type="Real"/>
+	<Attribute.Scalar name="dampingStretch" type="Real"/>
+	<Attribute.Scalar name="dampingBend" type="Real"/>
+	<Attribute.Scalar name="dirty" type="Bool"/>
+</Entity>

@@ -1,0 +1,22 @@
+<Kernel name="Madd" device="OpenCL" buildOptions="-DRESULT_TYPE=Real4 -DARG1_TYPE=Real4 -DARG2_TYPE=Real4 -DARG3_TYPE=Real -DARG1_VECTOR">
+	<Parameter.Array name="result" type="Vec3" mode="WRITE"/>
+	<Parameter.Array name="base" type="Vec3" mode="READ"/>
+	<Parameter.Scalar name="offset" type="Vec3"/>
+	<Parameter.Scalar name="scale" type="Real"/>
+	<Parameter.Scalar name="numElements" type="UInt" bind="@result.numElements"/>
+</Kernel>
+
+<Kernel name="Madd">
+	<Parameter.Array name="result" type="Vec3" mode="WRITE"/>
+	<Parameter.Array name="base" type="Vec3" mode="READ"/>
+	<Parameter.Scalar name="offset" type="Vec3"/>
+	<Parameter.Array name="scale" type="Real" mode="READ"/>
+</Kernel>
+
+<Kernel name="Madd" implementation="Real1_Real1">
+	<Parameter.Array name="result" type="Vec3" mode="WRITE"/>
+	<Parameter.Array name="base" type="Vec3" mode="READ"/>
+	<Parameter.Scalar name="offset" type="Vec3"/>
+	<Parameter.Scalar name="scale" type="Real"/>
+</Kernel>
+

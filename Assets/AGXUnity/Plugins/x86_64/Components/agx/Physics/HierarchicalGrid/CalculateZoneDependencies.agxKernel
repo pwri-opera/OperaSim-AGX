@@ -1,0 +1,84 @@
+<Kernel name="CalculateZoneDependencies">
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance, id, type"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" write="parent, child" globalResult="TRUNCATE"/>
+  <PreJob name="initializeDependencyPaths"/>
+
+  <!-- <Parameter.HashTable name="@ZoneTable" bucketType="Vec3i | Physics.HierarchicalGrid.ContactZonePtr" mode="READ" typedef="ContactZoneTable"/> -->
+  <!-- <Parameter.HashTable name="@ZoneDependencyTable" bucketType="UInt:64bit | Physics.HierarchicalGrid.ContactZoneDependencyPtr" mode="READ_WRITE" typedef="ZoneDependencyTable"/> -->
+
+  <!-- <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ"/> -->
+  <!-- <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ"/> -->
+
+</Kernel>
+
+<!-- Important that tier dependencies kernels run before the above implementation! -->
+<Kernel name="CalculateZoneDependencies" implementation="TierDependencies_Particle">
+  <Parameter.Array name="@TierDependencyParticleContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2" write=""/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance, id, type"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" write="parent, child, next" read="instance" globalResult="APPEND"/>
+
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="parent, id"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.HashTable name="@ZoneDependencyHash" bucketType="UInt:64bit | UInt:8bit" mode="READ_WRITE" typedef="GlobalDependencyHash"/>
+  <Parameter.Scalar name="@ZoneDependencyMutex" type="SpinMutex" mode="READ_WRITE"/>
+
+  <PreJob name="initializeDependencyPaths"/>
+</Kernel>
+
+<Kernel name="CalculateZoneDependencies" implementation="TierDependencies_ParticleGeometry">
+  <Parameter.Array name="@TierDependencyParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, geometry" write=""/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="cellIndex"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance, id, type"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" write="parent, child, next" read="instance" globalResult="APPEND"/>
+
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="parent, id"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.HashTable name="@ZoneDependencyHash" bucketType="UInt:64bit | UInt:8bit" mode="READ_WRITE" typedef="GlobalDependencyHash"/>
+  <Parameter.Scalar name="@ZoneDependencyMutex" type="SpinMutex" mode="READ_WRITE"/>
+
+  <PreJob name="initializeDependencyPaths"/>
+</Kernel>
+
+
+<Kernel name="CalculateZoneDependencies" implementation="TierDependencies_Geometry">
+  <Parameter.Array name="@TierDependencyGeometryContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="geometry1, geometry2" write=""/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="cellIndex" implicit="true"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance, id, type"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" write="parent, child, next" read="instance" globalResult="APPEND"/>
+
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="parent, id"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.HashTable name="@ZoneDependencyHash" bucketType="UInt:64bit | UInt:8bit" mode="READ_WRITE" typedef="GlobalDependencyHash"/>
+  <Parameter.Scalar name="@ZoneDependencyMutex" type="SpinMutex" mode="READ_WRITE"/>
+
+  <PreJob name="initializeDependencyPaths"/>
+</Kernel>

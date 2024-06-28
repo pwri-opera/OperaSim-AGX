@@ -1,0 +1,39 @@
+
+<Component name="ConstraintFluid">
+
+  <Buffer name="DirectionBuffer"  type="Real" numElements="100"/>
+  <Buffer name="GradientBuffer"   type="Real" numElements="100"/>
+  <Value  name="gamma"            type="Real" value="0"/>
+
+
+  <Task name="Update">
+    <Argument name="direction" type="Real" mode="WRITE" bind="@DirectionBuffer"/>
+    <Argument name="gradient" type="Real" mode="WRITE" bind="@GradientBuffer"/>
+    
+    <Task source="Math.Set" name="Init DirectionBuffer to 1">
+      <Value instance="arg" value="Real(1)"/>
+      <Argument instance="result" bind="@DirectionBuffer"/>
+    </Task>
+    <Task source="Math.Set" name="Init GradientBuffer to 1">
+      <Value instance="arg" value="Real(1)"/>
+      <Argument instance="result" bind="@GradientBuffer"/>
+    </Task>
+
+    <Task source="Math.BLAS.sDot" name="calcGamma">
+      <Argument instance="source1" bind="@direction"/>
+      <Argument instance="source2" bind="@gradient"/>
+      <Value instance="result" bind="@gamma"/>
+    </Task>
+
+    <Task source="Foundation.BufferPrinter" name="Print input buffers">
+      <Argument name="direction" type="Real" mode="READ" bind="@DirectionBuffer"/>
+      <Argument name="gradient"  type="Real" mode="READ" bind="@GradientBuffer"/>
+    </Task>
+    
+    <Task source="Foundation.ValuePrinter" name="Print result">
+      <Value name="Gamma" type="Real" value="@gamma"/>
+    </Task>
+    
+  </Task>
+
+</Component>

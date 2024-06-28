@@ -1,0 +1,20 @@
+<Kernel name="RemoveEmptyContactZones" dispatch="serial">
+  <Parameter.Array name="@EmptyZones" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ"/>
+  
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency"/>
+
+
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+  <!-- <Parameter.HashTable name="@ZoneTable" bucketType="Vec3i | Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE" typedef="ContactZoneTable"/> -->
+  <!-- <Parameter.HashTable name="@ZoneDependencyTable" bucketType="UInt:64bit | Physics.HierarchicalGrid.ContactZoneDependencyPtr" mode="READ_WRITE" typedef="ZoneDependencyTable"/> -->
+  
+  
+  <!--  -->
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="instance, parent"/>
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+  
+</Kernel>

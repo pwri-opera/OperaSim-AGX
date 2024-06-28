@@ -1,0 +1,8 @@
+<Task name="RenderParticleSpheres">
+  <Storage entity="Physics.Geometry.Triangle"/>
+  <Parameter.Scalar name="color" value="Vec4(1 1 0 1)"/>
+  
+  <Task source="GenerateParticleTriangles"/>
+  <!-- <Task source="Geometry.Rendering.SortTriangles"/> -->
+  <Task source="Foundation.Rendering.RenderTriangles"/>
+</Task>

@@ -1,0 +1,25 @@
+<Kernel name="BuildInteractionGraph" dispatch="serial">
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="instance" write="type, state, tag, edges, source"/>
+  
+  <Parameter.Array name="@GraphNode.edges.elements" type="UInt" mode="WRITE"/>
+  <Parameter.Pointer name="graphEdgeElementBuffer" bind="@GraphNode.edges.elements" type="agxData::Buffer"/>
+  
+  <!-- <Parameter.EntityData name="@Geometry" type="Geometry" read="body" write=""/> -->
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, instance" write="graphNode, numConstraints"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="instance" required="false"/>
+
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="READ" required="false"/>
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ" required="false"/>
+  
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, body1, body2" write="graphNode"/>
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="instance, particle1, particle2" required="false"/>
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="instance, particle, body" required="false"/>
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance, body1, body2" write="graphNode"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance, bodies" write="graphNode"/>
+  <Parameter.EntityData name="@StrongInteraction" type="StrongInteraction" read="instance, body1, body2" write="graphNode"/>
+  
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>

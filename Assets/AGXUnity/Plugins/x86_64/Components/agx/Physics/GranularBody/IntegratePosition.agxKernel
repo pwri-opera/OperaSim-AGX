@@ -1,0 +1,27 @@
+<Kernel.Scalar name="IntegratePosition">
+  <Parameter.EntityInstance name="particle" type="Physics.GranularBody" read="velocity, angularVelocity, position, rotation" write="position, rotation"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="IntegratePosition">
+  <Parameter.EntityPtr name="particle" type="Physics.GranularBody" read="velocity, angularVelocity, position, rotation" write="position, rotation"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel.Scalar>
+
+<Kernel name="IntegratePosition">
+  <Parameter.EntityData name="@Particle" type="Physics.GranularBody" read="velocity, angularVelocity, position, rotation" write="position, rotation"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel>
+
+
+<Kernel name="IntegratePosition" implementation="SolveBody">
+  <Parameter.EntityData name="@Particle" type="Physics.GranularBody" read="position, rotation, solveBodyIndex" write="position, rotation, velocity, angularVelocity"/>
+  <Parameter.EntityData name="@SolveBody" type="Physics.SolveBody" read="velocity, angularVelocity"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel>
+
+<Kernel name="IntegratePosition" implementation="SolveBody32">
+  <Parameter.EntityData name="@Particle" type="Physics.GranularBody" read="position, rotation, solveBodyIndex" write="position, rotation, velocity, angularVelocity"/>
+  <Parameter.EntityData name="@SolveBody" type="Physics.SolveBody32" read="velocity, angularVelocity"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel>

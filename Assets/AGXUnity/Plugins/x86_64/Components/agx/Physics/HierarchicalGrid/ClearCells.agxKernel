@@ -1,0 +1,11 @@
+<!-- Clear cells and tag 'dead' cells -->
+<Kernel name="ClearCells">
+  <Parameter.EntityData name="@Cell" type="Cell" read="emptyTime, state, numChildren, emptyThreshold" write="collisionObjects, emptyTime, state"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+	
+	<Parameter.Array name="@DeadCells" type="UInt:32bit" globalResult="APPEND, SORT"/>
+	<Parameter.Scalar name="@NumDisconnectedCells" type="UInt:32bit" mode="WRITE" implicit="true"/>
+	<PreJob name="StoreNumDisconnectedCells"/>
+  <Parameter.Scalar name="@HasNewTiers" type="Bool" mode="WRITE"/>
+</Kernel>
+

@@ -1,0 +1,30 @@
+<Entity name="ContactConstraint" useInstanceTable="false">
+  <Shared.Storage entity="Physics.Particle.ContactConstraintRow" name="Row"/>
+  
+  <Attribute.Scalar name="body1" type="UInt:32bit"/>
+  <Attribute.Scalar name="body2" type="UInt:32bit"/>
+	
+	<Attribute.Scalar name="solveBody1" type="UInt:32bit"/>
+	<Attribute.Scalar name="solveBody2" type="UInt:32bit"/>
+  
+  <Attribute.Scalar name="cachedContactId" type="UInt:32bit" value="InvalidIndex"/>
+
+  <Attribute.Scalar name="contactIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="jacobianIndex" type="UInt:32bit"/>
+	<Attribute.Scalar name="rowIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="materialIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="iterationCount" type="UInt:32bit"/>
+  
+  <Attribute.Scalar name="isImpacting" type="Bool"/>
+  <!-- <Attribute.Scalar name="activeCount" type="UInt"/> -->  
+  <Attribute.Scalar name="restingCompliance" type="Real"/>
+  <Attribute.Scalar name="charContactTime" type="Real"/>
+  <Attribute.Scalar name="charMass" type="Real"/>
+
+  <!-- Used for local jacobian calculations -->
+  <Attribute.Scalar name="GMeta" type="JacobianMeta"/>
+
+  <Attribute.Scalar name="nonlinearMultiplier" type="Real"/>
+  <Attribute.Scalar name="rollingResistanceMu" type="Real"/>
+  <Attribute.Scalar name="twistLimitMultiplier" type="Real"/>
+</Entity>

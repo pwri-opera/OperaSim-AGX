@@ -1,0 +1,18 @@
+<Task name="RenderCollisionBoxes">
+  <Parameter.Scalar name="color" value="Vec4(0.3, 0.3, 0.3, 1)"/>
+	<Parameter.Scalar name="enableOutlines" type="Bool" value="true"/>
+	<Parameter.Scalar name="outlineColor" value="Vec4(0.7, 0.9, 1.0, 1)"/>
+
+	<Storage entity="RenderBox" numElements="@CollisionBox.numElements"/>
+	
+	<Task source="Geometry.Rendering.GenerateRenderBoxesFromCollisionBoxes"/>
+	<Task source="Geometry.Rendering.GenerateRenderBoxOutlines"/>
+
+  <Task source="Foundation.Rendering.RenderBoxes">
+    <Parameter.Scalar instance="color" value="@color"/>
+  </Task>
+
+  <Task source="Foundation.Rendering.RenderLines" enable="@enableOutlines">
+    <Parameter.Scalar instance="color" value="@outlineColor"/>
+  </Task>
+</Task>

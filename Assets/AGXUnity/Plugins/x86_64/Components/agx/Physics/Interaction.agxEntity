@@ -1,0 +1,4 @@
+<Entity name="Interaction">
+  <Attribute.Pointer name="solveModel" type="agx::SolveModel"/>
+  <Attribute.Scalar name="graphNode" type="Physics.GraphNodePtr"/>
+</Entity>

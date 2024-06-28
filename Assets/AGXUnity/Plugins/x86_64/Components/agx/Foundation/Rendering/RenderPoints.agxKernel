@@ -1,0 +1,9 @@
+<Kernel name="RenderPoints" device="OpenGL" primitive="Points" sourcePath="Foundation.Rendering.Basic">
+  <Attribute name="vertices" type="Vec3" variableName="a_vertex"/>
+  <SharedAttribute name="color" type="Vec4" variableName="a_color" value="Vec4(1, 1, 1, 1)"/>
+
+  <Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>
+
+  <!-- <Parameter.Scalar name="color" type="Vec4" value="1, 1, 1, 1"/> -->
+  <State type="Setting" feature="glPointSize" value="10"/>
+</Kernel>

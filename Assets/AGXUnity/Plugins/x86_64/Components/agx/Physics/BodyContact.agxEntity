@@ -1,0 +1,5 @@
+<Entity name="BodyContact">
+	<Attribute.Scalar name="body1" type="Int"/>
+	<Attribute.Scalar name="body2" type="Int"/>
+	<Attribute.Scalar name="contactListOffset" type="Int"/>
+</Entity>

@@ -1,0 +1,10 @@
+<Kernel name="ExtractSolverData" dispatch="serial">
+  <Value name="createNewGroup" type="Bool" value="true"/>
+  <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="instance, isImpacting, groups, directBodies"/>
+  <Parameter.Scalar name="filename" type="agx::String"/>
+  <Parameter.Scalar name="groupname" type="agx::String"/>
+  <Parameter.Scalar name="createNewGroupValue" bind="@createNewGroup" type="agx::Bool"/>
+  <Parameter.Pointer name="createNewGroupPtr" bind="createNewGroup" type="agxData::Value"/>
+</Kernel>

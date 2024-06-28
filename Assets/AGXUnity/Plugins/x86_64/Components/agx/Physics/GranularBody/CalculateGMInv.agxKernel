@@ -1,0 +1,22 @@
+<Kernel name="CalculateGMInv" implementation="GranularGranularContact">
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint" read="body1, body2" write=""/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow" read="epsilon" write="invD"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="invMass, invInertia, state"/>
+    <!-- New Jacobian -->
+  <Parameter.Array name="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement"/>
+  <Parameter.Array name="granularGranularGMinvStorage" bind="@GranularGranularContactConstraintGMInvStorage" mode="WRITE" type="Jacobian6DOFElement"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+
+
+<Kernel name="CalculateGMInv" implementation="GranularGeometryContact">
+  <Parameter.EntityData name="constraint" bind="@GranularBodyContactConstraint" type="ContactConstraint" read="body1, body2" write=""/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularBodyContactConstraint.Row" type="Particle.ContactConstraintRow" read="epsilon" write="invD"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, effectiveInvWorldMassMatrix, effectiveInvWorldInertia"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="invMass, invInertia, state"/>
+    <!-- New Jacobian -->
+  <Parameter.Array name="granularGeometryJacobianStorage" bind="@GranularGeometryContactConstraintJacobianStorage" mode="WRITE" type="Jacobian6DOFElement"/>
+  <Parameter.Array name="granularGeometryGMinvStorage" bind="@GranularGeometryContactConstraintGMInvStorage" mode="WRITE" type="Jacobian6DOFElement"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+

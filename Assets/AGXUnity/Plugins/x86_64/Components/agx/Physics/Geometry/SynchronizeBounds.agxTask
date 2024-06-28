@@ -1,0 +1,27 @@
+<!-- Assumes that transforms already are synchronized -->
+<Task name="SynchronizeBounds">
+  
+  <!-- Primitives can be synchronized in parallel -->
+  <Task name="SynchronizePrimitives" dispatch="parallel">
+    <Task source="SynchronizeShapeBounds : Sphere"/>
+    <Task source="SynchronizeShapeBounds : Box"/>
+    <Task source="SynchronizeShapeBounds : Cone"/>
+    <Task source="SynchronizeShapeBounds : HollowCone"/>
+    <Task source="SynchronizeShapeBounds : Cylinder"/>
+    <Task source="SynchronizeShapeBounds : HollowCylinder"/>
+    <Task source="SynchronizeShapeBounds : Capsule"/>
+    <!--<Task source="SynchronizeShapeBounds : WireShape"/>-->
+    <Task source="SynchronizeShapeBounds : Line"/>
+    <Task source="SynchronizeShapeBounds : Plane"/>
+    <Task source="SynchronizeShapeBounds : Trimesh"/>
+    <Task source="SynchronizeShapeBounds : Convex"/>
+    <Task source="SynchronizeShapeBounds : HeightField"/>
+  </Task>
+  
+  <!-- Group bounds can be synchronized once all primitive bounds are up to date -->
+  <Task source="SynchronizeShapeBounds : ShapeGroup"/>
+  
+  <!-- Finally we can update the geometry bounds -->
+  <Task source="SynchronizeGeometryBounds"/>
+</Task>
+

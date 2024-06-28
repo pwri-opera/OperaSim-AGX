@@ -1,0 +1,5 @@
+<Entity name="ContactConstraint" source="BinaryConstraint">
+  <Attribute.Scalar name="contactIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="materialIndex" type="UInt:32bit"/>
+  <Attribute.Scalar name="contactPointRange" type="IndexRange"/>
+</Entity>

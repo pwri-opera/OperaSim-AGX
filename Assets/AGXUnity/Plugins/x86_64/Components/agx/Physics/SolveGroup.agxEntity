@@ -1,0 +1,4 @@
+<Entity name="SolveGroup" source="InteractionGroup">
+  <Attribute.Scalar name="island" type="Physics.SolveIslandPtr"/>
+  <Attribute.Pointer name="solveModel" type="agx::SolveModel"/>
+</Entity>

@@ -1,0 +1,12 @@
+<Kernel name="AllocateConstraintData" dispatch="serial">
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+  
+  <!-- <Parameter.Scalar name="@ParticlePairContact.numElements" type="UInt" mode="READ"/> -->
+  <!-- <Parameter.Scalar name="@ParticleGeometryContact.numElements" type="UInt" mode="READ"/> -->
+  <Parameter.Pointer name="particleParticleConstraintStorage" bind="@ParticleParticleContactConstraint" type="agxData::EntityStorage"/> 
+  <Parameter.Pointer name="particleBodyConstraintStorage" bind="@ParticleBodyContactConstraint" type="agxData::EntityStorage"/> 
+  
+  <Parameter.Pointer name="particleParticleRowStorage" bind="@ParticleParticleContactConstraint.Row" type="agxData::EntityStorage"/> 
+  <Parameter.Pointer name="particleBodyRowStorage" bind="@ParticleBodyContactConstraint.Row" type="agxData::EntityStorage"/> 
+</Kernel>

@@ -1,0 +1,15 @@
+<!--
+NOTE: Explicity setting the mass will result in non-matching material density.
+Instead it is preferred to change material density and particle radius to control the mass of particles.
+ -->
+<Kernel.Scalar name="SetMass">
+  <Parameter.EntityInstance name="particle" type="GranularBody" read="radius" write="mass, invMass, inertia, invInertia"/>
+  <Parameter.Scalar name="mass" type="Real" mode="READ"/>
+</Kernel.Scalar>
+
+
+<Kernel.Scalar name="SetMass">
+  <Parameter.EntityPtr name="particle" type="GranularBody" read="radius" write="mass, invMass, inertia, invInertia"/>
+  <Parameter.Scalar name="mass" type="Real" mode="READ"/>
+</Kernel.Scalar>
+

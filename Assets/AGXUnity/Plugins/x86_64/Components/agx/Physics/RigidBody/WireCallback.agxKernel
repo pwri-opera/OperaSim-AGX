@@ -1,0 +1,26 @@
+<Kernel name="WireCallback" implementation = "preCollide">
+  <Parameter.Array name="wireData" type="agxWire::Wire*" mode="READ_WRITE"/>
+</Kernel>
+
+<Kernel name="WireCallback" implementation = "pre">
+  <Parameter.Array name="wireData" type="agxWire::Wire*" mode="READ_WRITE"/>
+</Kernel>
+
+<Kernel name="WireCallback" implementation = "post">
+  <Parameter.Array name="wireData" type="agxWire::Wire*" mode="READ_WRITE"/>
+</Kernel>
+
+<Kernel name="WireCallback" implementation = "collide">
+  <Parameter.Array name="wireData" type="agxWire::Wire*" mode="READ_WRITE"/>
+  <Parameter.EntityData name="geometryContact" type="GeometryContact" read="instance"/>
+</Kernel>
+
+<Kernel name="WireCallback" implementation = "collide2">
+  <Parameter.EntityData name="geometryContact" type="GeometryContact" read="instance"/>
+  <Parameter.Array name="wireData" type="agxWire::Wire*" mode="READ_WRITE"/>
+</Kernel>
+
+<Kernel name="WireCallback" implementation = "collectSplitInformation">
+  <Parameter.Array name="wireData" type="agxWire::Wire*" mode="READ_WRITE"/>
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="instance, type, state, edges, source" write="tag"/>
+</Kernel>

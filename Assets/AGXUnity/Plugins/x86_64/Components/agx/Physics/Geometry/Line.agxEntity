@@ -1,0 +1,3 @@
+<Entity name="Line" source="Shape">
+	<Attribute.Scalar name="line" type="Line"/>
+</Entity>

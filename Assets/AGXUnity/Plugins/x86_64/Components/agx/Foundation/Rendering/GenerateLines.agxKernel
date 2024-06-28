@@ -1,0 +1,15 @@
+<Kernel name="GenerateLines" device="OpenCL">
+	<Parameter.Array name="positions" type="Vec3" mode="READ"/>
+	<Parameter.Array name="offsets" type="Vec3:32bit" mode="READ"/>
+  <Parameter.Array name="result" type="Line" mode="WRITE"/>
+	<Parameter.Scalar name="scale" type="Real" value="1.0"/>
+  <Parameter.Scalar name="numLines" bind="@result.numElements" type="UInt"/>
+</Kernel>
+
+
+<Kernel name="GenerateLines">
+	<Parameter.Array name="positions" type="Vec3" mode="READ"/>
+	<Parameter.Array name="offsets" type="Vec3:32bit" mode="READ"/>
+  <Parameter.Array name="result" type="Line" mode="WRITE"/>
+	<Parameter.Scalar name="scale" type="Real" value="1.0"/>
+</Kernel>

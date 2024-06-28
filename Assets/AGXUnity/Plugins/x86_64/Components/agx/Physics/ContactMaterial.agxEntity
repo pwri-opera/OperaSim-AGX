@@ -1,0 +1,39 @@
+<Entity name="ContactMaterial" source="Referenced">
+  <Attribute.Scalar name="isExplicit" type="Bool"/>
+  
+  <!-- Source materials, from which this contact material is derived -->
+  <Attribute.Scalar name="material1" type="Physics.MaterialPtr"/>
+  <Attribute.Scalar name="material2" type="Physics.MaterialPtr"/>
+  
+  <!-- Surface parameters -->
+  <Attribute.Scalar name="restitution" type="Vec3"/>
+  <Attribute.Scalar name="friction" type="Vec3"/>
+  <Attribute.Scalar name="adhesion" type="Real"/>
+  <Attribute.Scalar name="adhesiveOverlap" type="Real"/>
+  <Attribute.Scalar name="viscosity" type="Vec3"/>
+  <Attribute.Scalar name="surfaceFrictionEnabled" type="Bool" value="true"/>
+  <Attribute.Scalar name="contactReductionMode" type="UInt:8bit"/>
+  <Attribute.Scalar name="contactReductionBinResolution" type="UInt:8bit" value="0"/>
+  <Attribute.Scalar name="useContactAreaApproach" type="Bool"/>
+
+  <!-- Wire parameters -->
+  <Attribute.Scalar name="wireFriction" type="Vec3"/>
+
+  <!-- Bulk parameters -->
+  <Attribute.Scalar name="youngsModulus" type="Real"/>
+  <Attribute.Scalar name="damping" type="Real"/>
+  <Attribute.Scalar name="minElasticRestLength" type="Real" value="0.001"/>
+  <Attribute.Scalar name="maxElasticRestLength" type="Real" value="0.1"/>  
+  
+  <!-- Impact compliance - Mainly used for granulars impact stage -->
+  <Attribute.Scalar name="impactCompliance" type="Real"/>
+
+  <!-- Rolling resistance -->
+  <Attribute.Scalar name="rollingResistanceCoefficient" type="Real"/>
+  <Attribute.Scalar name="twistingResistanceCoefficient" type="Real"/>
+  <Attribute.Scalar name="rollingResistanceCompliance" type="Real"/>
+  <Attribute.Scalar name="twistingResistanceCompliance" type="Real"/>
+
+  <!-- High level material -->
+  <Attribute.Pointer name="model" type="agx::ContactMaterial"/>
+</Entity>

@@ -1,0 +1,6 @@
+<Kernel name="WorldOutOfBoundsDetection">
+  <Parameter.EntityData name="@Particle" type="Physics.Particle" read="position, radius, velocity" write="position, velocity, life"/>
+	<Parameter.Scalar name="worldRadius" type="Real" value="1"/>
+	<Parameter.Scalar name="worldCenter" type="Vec3" value="0.0"/>
+	<Parameter.Scalar name="killViolatingParticles" type="Bool" value="true"/>
+</Kernel>

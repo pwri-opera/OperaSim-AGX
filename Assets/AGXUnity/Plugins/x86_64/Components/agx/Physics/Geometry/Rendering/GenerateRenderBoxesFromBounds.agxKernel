@@ -1,0 +1,8 @@
+<Kernel name="GenerateRenderBoxesFromBounds" device="OpenCL">
+	<Parameter.Scalar name="numBoxes" type="UInt" bind="@CollisionBox.numElements"/>
+	<Parameter.Array name="bounds" type="Bound3" mode="READ" bind="@CollisionBox.bound"/>
+	
+	<Parameter.Array name="vertexBuffer" type="agxGL.RenderBoxVertices" mode="WRITE" bind="@RenderBox.vertices"/>
+	<!-- <Parameter.Array name="indexBuffer" type="agxGL.RenderBoxIndices" mode="WRITE" bind="@RenderBox.indices"/> -->
+	<Parameter.Array name="normalBuffer" type="agxGL.RenderBoxNormals" mode="WRITE" bind="@RenderBox.normals"/>
+</Kernel>

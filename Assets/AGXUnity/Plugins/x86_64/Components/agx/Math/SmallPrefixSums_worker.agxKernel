@@ -1,0 +1,6 @@
+<Kernel name="SmallPrefixSums_worker" device="OpenCL">
+  <Parameter.Array name="dst" type="UInt" mode="WRITE" bind="@target"/>
+  <Parameter.Array name="src" type="UInt" mode="READ" bind="@source"/>
+  <Parameter.Array name="local" type="UInt" localSize="2048"/>
+  <Parameter.Scalar name="arrayLength" type="UInt" bind="@arrayLength"/>
+</Kernel>

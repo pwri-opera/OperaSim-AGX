@@ -1,0 +1,5 @@
+<Kernel name="SpanBound3_spacing">
+	<Parameter.Array name="buffer" type="Vec3" mode="WRITE"/>
+	<Parameter.Scalar name="bound" type="Bound3"/>
+	<Parameter.Scalar name="spacing" type="Vec3"/>
+</Kernel>

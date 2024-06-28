@@ -1,0 +1,18 @@
+<Entity name="GridTier">
+
+  <!-- Size and invSize not stored with explicit Real32 -->
+  <Attribute.Scalar name="size" type="Real"/>
+  <Attribute.Scalar name="invSize" type="Real"/>
+  
+  <Attribute.Scalar name="boundingRadius" type="Real:32bit"/>
+  
+  <!-- Cell id -> cell -->
+  <Attribute.Pointer name="cellTable" type="agx::GridCellTable" include="agx/Physics/HierarchicalGrid/GridTables.h"/>
+  
+  <!-- Cell id pair -> ContactZone -->
+  <Attribute.Pointer name="zoneTable" type="agx::ContactZoneTable" include="agx/Physics/HierarchicalGrid/GridTables.h"/>
+  
+  <!-- Zone id pair -> ContactZoneDependency -->
+  <!-- <Attribute.Pointer name="zoneDependencyTable" type="agx::ZoneDependencyTable" include="agx/Physics/HierarchicalGrid/GridTables.h"/> -->
+
+</Entity>

@@ -1,0 +1,26 @@
+<Kernel name="ComputeNarrowPhaseContacts" costPerElement="50" minJobSize="@Space.narrowPhaseMinJobSize" customJobGenerator="true">
+
+    <Parameter.Array name="@FilteredBroadPhasePairs" type="UInt:32bit" mode="READ"/>
+
+    <Parameter.EntityData name="@BroadPhasePair" type="BroadPhasePair" read="instance, geometry1, geometry2, state" write="state, contact"/>
+    <!-- <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state" required="false"/> -->
+    <Parameter.EntityData name="@Geometry" type="Geometry" read="instance, model, state, surfaceVelocity, material, body, shape, transform"/>
+
+
+    <!-- Contact data -->
+    <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="instance" write="point, normal, depth, area, enabled, elasticRestLengthShape1, elasticRestLengthShape2, faceIndex1, faceIndex2, faceFeature1, faceFeature2, shape1, shape2, velocity, state" globalResult="TRUNCATE"/>
+    <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance" write="broadPhasePair, body1, body2, geometry1, geometry2, hasSurfaceVelocity, points, material" globalResult="TRUNCATE, ORDER"/>
+
+    <!-- Separations -->
+    <Parameter.EntityData name="@SeparationPair" type="GeometryPair" read="geometry1, geometry2" write="geometry1, geometry2" globalResult="APPEND, SORT"/>
+
+    <Parameter.Pointer name="@MaterialManager" type="agxSDK::MaterialManager" include="agxSDK/MaterialManager.h" required="false"/>
+    <Parameter.Array name="@MaterialLessGeometryContacts" type="Physics.GeometryContactPtr" globalResult="TRUNCATE, SORT"/>
+
+    <!-- Contact reduction -->
+    <Parameter.Scalar name="@contactReductionEnable" type="Bool"/>
+    <Parameter.Scalar name="@contactReductionThreshold" type="UInt"/>
+    <Parameter.Scalar name="@contactReductionBinResolution" type="UInt"/>
+
+    <PostJob name="overflowCleanup"/>
+</Kernel>

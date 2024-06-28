@@ -1,0 +1,9 @@
+<Kernel name="FilterOverlaps">
+  <Parameter.EntityData name="@GridOverlap" type="GridOverlap" read="collisionObject1, collisionObject2"/>
+  
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="subsystem"/>
+  
+  <Parameter.EntityData name="@GeometryPairOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE, ORDER"/>
+  <Parameter.EntityData name="@ParticlePairOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE, ORDER"/>
+  <Parameter.EntityData name="@ParticleGeometryOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE, ORDER"/>
+</Kernel>

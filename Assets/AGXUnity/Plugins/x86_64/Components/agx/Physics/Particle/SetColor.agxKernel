@@ -1,0 +1,9 @@
+<Kernel.Scalar name="SetColor">
+  <Parameter.EntityInstance name="particle" type="Particle" write="color"/>
+  <Parameter.Scalar name="color" type="Vec4:32bit" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="SetColor">
+  <Parameter.EntityPtr name="particle" type="Particle" write="color"/>
+  <Parameter.Scalar name="color" type="Vec4:32bit" mode="READ"/>
+</Kernel.Scalar>

@@ -1,0 +1,4 @@
+<Entity name="GridOverlap" useInstanceTable="false">
+  <Attribute.Scalar name="collisionObject1" type="UInt:32bit"/>
+  <Attribute.Scalar name="collisionObject2" type="UInt:32bit"/>
+</Entity>

@@ -1,0 +1,38 @@
+<Kernel name="UpdateGranularContactTables" implementation="GranularGranularContact_pass1">
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, point, normal, depth, material, velocity"/>
+  <Parameter.Array name="cachedContactId" bind="@GranularGranularContactConstraint.cachedContactId" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="oldVelocity, oldAngularVelocity, mass, position"/>
+  <Parameter.EntityData name="@CachedGranularGranularContacts" type="GranularBody.CachedGranularContact" write="keep" implicit="true"/>
+  <Parameter.Array name="@NewGranularGranularContacts" type="UInt:32bit" mode="READ_WRITE" globalResult="TRUNCATE"/>
+  <Parameter.HashTable  name="@GranularGranularContactTable" bucketType="Physics.GranularBody.GranularGranularPair | Physics.GranularBody.CachedGranularContactPtr" mode="READ_WRITE" typedef="ParticleParticleContactTable"/>
+</Kernel>
+
+<Kernel name="UpdateGranularContactTables" implementation="GranularGranularContact_pass2" dispatch="serial">
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, point, normal, depth, material, velocity"/>
+  <Parameter.Array name="cachedContactId" bind="@GranularGranularContactConstraint.cachedContactId" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="oldVelocity, oldAngularVelocity, mass, position"/>
+  <Parameter.EntityData name="@CachedGranularGranularContacts" type="GranularBody.CachedGranularContact" mode="READ_WRITE"/>
+  <Parameter.Array name="@NewGranularGranularContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.HashTable  name="@GranularGranularContactTable" bucketType="Physics.GranularBody.GranularGranularPair | Physics.GranularBody.CachedGranularContactPtr" mode="READ_WRITE" typedef="ParticleParticleContactTable"/>
+</Kernel>
+
+<Kernel name="UpdateGranularContactTables" implementation="GranularGeometryContact_pass1">
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, point, normal, material, velocity"/>
+  <Parameter.Array name="cachedContactId" bind="@GranularBodyContactConstraint.cachedContactId" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="oldVelocity, oldAngularVelocity, mass, position"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="instance, body, transform"/>
+  <Parameter.EntityData name="@CachedGranularGeometryContacts" type="GranularBody.CachedGranularContact" write="keep" implicit="true"/>
+  <Parameter.Array name="@NewGranularGeometryContacts" type="UInt:32bit" mode="READ_WRITE" globalResult="TRUNCATE"/>
+  <Parameter.HashTable  name="@GranularGeometryContactTable" bucketType="Physics.GranularBody.GranularGeometryPair | Physics.GranularBody.CachedGranularContactPtr" mode="READ_WRITE" typedef="ParticleGeometryContactTable"/>
+
+</Kernel>
+
+<Kernel name="UpdateGranularContactTables" implementation="GranularGeometryContact_pass2" dispatch="serial">
+  <Parameter.EntityData name="contact" bind="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, body, point, normal, material, velocity"/>
+    <Parameter.Array name="cachedContactId" bind="@GranularBodyContactConstraint.cachedContactId" type="UInt:32bit" mode="READ_WRITE"/>
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="oldVelocity, oldAngularVelocity, mass, position"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="instance, body, transform"/>
+  <Parameter.EntityData name="@CachedGranularGeometryContacts" type="GranularBody.CachedGranularContact" mode="READ_WRITE"/>
+  <Parameter.Array name="@NewGranularGeometryContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.HashTable  name="@GranularGeometryContactTable" bucketType="Physics.GranularBody.GranularGeometryPair | Physics.GranularBody.CachedGranularContactPtr" mode="READ_WRITE" typedef="ParticleGeometryContactTable"/>
+</Kernel>

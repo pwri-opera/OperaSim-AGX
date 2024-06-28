@@ -1,0 +1,16 @@
+<Entity name="SolveIsland" source="InteractionGroup">
+
+  <Attribute.Scalar name="isImpacting" type="Bool"/>
+  <Attribute.Scalar name="iterativeFrictionRefinement" type="Bool"/>
+  <Attribute.Scalar name="directSolveCostEstimate" type="UInt"/>
+  <Attribute.Scalar name="currentIteration" type="UInt"/>
+  
+  <!-- List of groups, split by solve type -->
+  <Attribute.Array name="groups" type="Physics.SolveGroupPtr"/>
+  
+  <!-- List of bodies to be solved with direct matrix solver -->
+  <Attribute.Array name="directBodies" type="UInt:32bit"/>
+  
+  <!-- Now stored in hash table in agx::Solver due to FMI solver support -->
+  <!-- <Attribute.Pointer name="directSolverData" type="agx::DirectSolverData"/> -->
+</Entity>

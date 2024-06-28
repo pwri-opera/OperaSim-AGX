@@ -1,0 +1,109 @@
+<Task name="Solver" implementation="StaticGeometry">
+  <description>
+    Solver loop that does not take the Zorro solver into account. All geometries
+    are assumed to be static.
+  </description>
+  
+  <!-- Configuration. -->
+  <Parameter.Scalar name="compliance" value="Real(5e-10)"/>
+  <Parameter.Scalar name="damping" value="Math.Mul(Real(4.5), @clock.timeStep)"/>
+  <Parameter.Scalar name="numIterations" value="UInt(5)"/>
+  
+  <!-- Work areas. -->
+  <!-- <Storage name="ParticleParticleContactConstraint" entity="Physics.ContactConstraint" numElements="@ParticlePairContact.numElements"/> -->
+  <!-- <Storage name="ParticleBodyContactConstraint" entity="Physics.ContactConstraint" numElements="@ParticleGeometryContact.numElements"/> -->
+  
+  <!-- 
+    Actual tasks starts here
+  -->
+  <Task source="Particle.IntegrateVelocity"/>
+  
+  <Task source="InitRowParameters : ParticleParticleContacts"/>
+  <Task source="InitRowParameters : ParticleGeometryContacts"/>
+  
+  
+  <Task source="CalculateJacobians : ParticleParticleContacts"/>
+  <Task source="CalculateJacobians : ParticleGeometryContacts"/>
+  
+  <Task source="CalculateGMInv : ParticleParticleContacts"/>
+  <Task source="CalculateGMInv : ParticleGeometryContacts"/>
+  
+  <Task source="CalculateRHS : ParticleParticleContacts"/>
+  <Task source="CalculateRHS : ParticleGeometryContacts"/>
+  
+  <Loop name="Iterations" numIterations="@numIterations">
+    <Task source="Iterate : ParticleParticleContacts"/>
+    <Task source="Iterate : ParticleGeometryContacts"/>
+  </Loop>
+  
+</Task>
+
+
+
+<Task name="Solver" implementation="ZorroIntegration">
+  <description>
+    Text here
+  </description>
+  
+  <!-- Configuration. -->
+  <Parameter.Scalar name="compliance" value="Real(5e-10)"/>
+  <Parameter.Scalar name="damping" value="Math.Mul(Real(4.5), @clock.timeStep)"/>
+  <Parameter.Scalar name="numIterations" value="UInt(20)"/>
+  <Parameter.Scalar name="kinematicIterations" value="UInt(2)"/>
+  
+  <!-- Work areas. -->
+  <!-- <Storage name="ParticleParticleContactConstraint" entity="Physics.ContactConstraint" numElements="@ParticlePairContact.numElements"/> -->
+  <!-- <Storage name="ParticleBodyContactConstraint" entity="Physics.ContactConstraint" numElements="@ParticleGeometryContact.numElements"/> -->
+  
+  <Pointer name="Zorro" bind="@Simulation.DynamicsSystem.BasicControllerSubsystem.PrimarySubsystem.ZorroSolver"/>
+  
+  
+
+  <!-- 
+    Actual tasks starts here
+  -->
+  <Task source="Particle.IntegrateVelocity"/>
+
+  <!-- Wait until Zorro has updated the velocities of the bodies, then calculate some data. -->
+  <Task source="InitRowParameters : ParticleParticleContacts" depends="@Zorro.VelocitiesIntegrated"/>
+  <Task source="InitRowParameters : ParticleBodyContacts"/>
+  
+  <Task source="CalculateJacobians : ParticleParticleContacts"/>
+  <Task source="CalculateJacobians : ParticleBodyContacts"/>
+  
+  <Task source="CalculateGMInv : ParticleParticleContacts"/>
+  <Task source="CalculateGMInv : ParticleBodyContacts"/>
+  
+  <Task source="CalculateRHS : ParticleParticleContacts"/>
+  <Task source="CalculateRHS : ParticleBodyContacts"/>
+
+
+
+
+  <!-- Zorro may be reading velocities now. If so, do not start the iterations. --> <!-- What do I mean by this? -->
+
+  <!-- First batch of solver iterations. -->
+  <Loop name="DynamicBodiesIterations" numIterations="@numIterations">
+    <Task source="Iterate : ParticleParticleContacts"/>
+    <Task source="Iterate : ParticleBodyContacts"/>
+  </Loop>
+  
+  <!-- Start Zorro and wait for it to finish its iterations. -->
+  <Task name="TriggerZorroIterations" resolve="@Zorro.PreIterations"/>
+  <Task name="InterIterationsSynch" depends="@Zorro.PostIterations"/>
+  
+  <!-- Second batch of solver iterations, geometries are now kinematic. -->
+  <Loop name="KinematicBodiesIterations" numIterations="@kinematicIterations">
+    <Task source="Iterate : ParticleParticleContacts"/>
+    <Task source="Iterate : ParticleKinematicGeometryContacts"/>
+    <!-- <Task source="Iterate : ParticleBodyContacts"/> -->
+  </Loop>
+
+
+  <!-- Update contact data with force magnitudes. -->
+  <Task source="UpdateContactData : ParticleGeometryContacts"/>
+
+  <!-- Let Zorro know that solving is done. -->
+  <Task name="PostIterationsSynch" resolve="@Zorro.PostSolve"/>
+
+</Task> 

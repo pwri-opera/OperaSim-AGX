@@ -1,0 +1,5 @@
+<Kernel name="IntegratePositions">
+	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, cmTransform, localCmTransform, velocity, angularVelocity, linearAcceleration, angularAcceleration" write="cmTransform, modelTransform, linearAcceleration, angularAcceleration"/>
+  
+	<Parameter.Scalar name="@clock.timeStep"               type="Real"/>
+</Kernel>

@@ -1,0 +1,21 @@
+<Kernel name="TriggerCellReordering" dispatch="serial">
+  <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@Cell.sortedIndex" type="UInt:32bit" mode="WRITE"/>
+  
+  <Parameter.Array name="@Particle.oldCell" type="UInt:32bit" mode="WRITE" required="false"/>
+  <Parameter.Array name="@Geometry.oldCell" type="UInt:32bit" mode="WRITE"/>
+  
+  <!-- <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ"/> -->
+  <!-- <Parameter.Pointer name="cellStorage" bind="@Cell" type="agxData::EntityStorage"/> -->
+  
+  <Parameter.Pointer name="@ReorderCells" type="agx::Task"/>
+  
+  <Parameter.Scalar name="@clock.time" type="Real" mode="READ"/>
+  <Parameter.Scalar name="@Cell.reorderingFrequency" type="Real" mode="READ"/>
+  
+  <Parameter.Array name="@GridTier.cellTable" type="agx::GridCellTable*" mode="READ_WRITE" include="agx/Physics/HierarchicalGrid/Common.h"/>
+  
+  
+  <!-- Internal value, declared as a parameter, TODO: Auto-generate parameters for internally declared values -->
+  <Parameter.Scalar name="lastReorderTime" type="Real" value="0" mode="READ_WRITE"/>
+</Kernel>

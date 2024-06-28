@@ -1,0 +1,28 @@
+<Kernel name="FillContactZones" implementation="ParticlePairContact">
+  <Parameter.Array name="@ActiveParticlePairContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="contactZoneIndex, contactZoneSlot" write="constraintIndex"/>
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts" write="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts"/>
+  <Parameter.Array name="@SortedParticleParticleContacts" type="UInt:32bit" mode="WRITE"/>
+
+</Kernel>
+
+
+<Kernel name="FillContactZones" implementation="ParticleGeometryContact">
+  <Parameter.Array name="@ActiveParticleGeometryContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="contactZoneIndex, contactZoneSlot" write="constraintIndex"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts" write="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts"/>
+
+  <Parameter.Array name="@SortedParticleGeometryContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>
+
+
+<Kernel name="FillContactZones" implementation="GeometryGeometryContact">
+  <Parameter.Array name="@ActiveGeometryContacts" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="contactZoneIndex, contactZoneSlot" write="constraintIndex"/>
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts" write="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts"/>
+  <Parameter.Array name="@SortedGeometryContacts" type="UInt:32bit" mode="WRITE"/>
+</Kernel>

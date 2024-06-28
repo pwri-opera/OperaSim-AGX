@@ -1,0 +1,10 @@
+<Entity name="ConstraintBase" source="Interaction">
+  <!-- Not assigned for contact constraints. -->
+	<Attribute.Pointer name="model"     type="agx::ConstraintImplementation"/>
+
+  <Attribute.Scalar        name="rowIndex"       type="UInt"/>
+  <Attribute.Scalar        name="numRows"        type="UInt"/>
+  <Attribute.Scalar        name="jacobianIndex"  type="UInt"/>
+  <Attribute.Scalar        name="blockRowIndex"  type="UInt"/> <!-- Block start row in global matrix (index NOT permuted) -->
+  <Attribute.Scalar        name="isImpacting"    type="Bool"/>
+</Entity>

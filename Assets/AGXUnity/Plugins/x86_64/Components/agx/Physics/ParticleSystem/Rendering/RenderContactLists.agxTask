@@ -1,0 +1,14 @@
+<Task name="RenderContactLists">
+  <!-- <Parameter.Scalar name="color" type="Vec4" value="1, 1, 1, 0.2"/> -->
+	
+	<Buffer name="Lines" type="Line:32bit" numElements="@ParticlePairContact.numElements"/>
+	<Buffer name="Colors" type="Vec4:32bit" numElements="Math.Mul(@ParticlePairContact.numElements, UInt(2))"/>
+	
+	<Task source="GenerateContactListLines"/>
+	
+	<Task source="Foundation.Rendering.RenderLines">
+		<Parameter.Array instance="vertices" bind="@Lines"/>
+    <!-- <Parameter.Scalar instance="color" bind="@color"/> -->
+    <Parameter.Array instance="color" bind="@Colors"/>
+	</Task>
+</Task>

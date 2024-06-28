@@ -1,0 +1,58 @@
+<!--  -->
+<SolveKernel name="StoreContactForces" device="CPU" implementation="GranularGranularContact">
+  <Parameter.EntityData name="contact"     type="ParticlePairContact"    bind="@ParticlePairContact"         write="localForce, contactEnergy"/>
+  <Parameter.EntityData name="constraint"  type="ContactConstraint"      bind="@GranularGranularContactConstraint"       read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" type="Particle.ContactConstraintRow" bind="@GranularGranularContactConstraint.Row" read="rhs, lambda, epsilon, invD" write="lambda"/>
+
+  <!--New jacobian-->
+  <Parameter.Array name="granularGranularJacobianStorage" mode="READ" type="Jacobian6DOFElement" bind="@GranularGranularContactConstraintJacobianStorage"/>
+
+  <Parameter.Scalar name="timeStep"  type="Real" bind="@clock.timeStep"/>
+</SolveKernel>
+
+<!--  -->
+<SolveKernel name="StoreContactForces" device="CPU" implementation="GranularGeometryContact">
+  <Parameter.EntityData name="contact"       type="ParticleGeometryContact"       bind="@ParticleGeometryContact"  write="localForce, contactEnergy"/>
+  <Parameter.EntityData name="constraint"    type="ContactConstraint"             bind="@GranularBodyContactConstraint"  read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" type="Particle.ContactConstraintRow" bind="@GranularBodyContactConstraint.Row"  read="rhs, lambda, epsilon, invD"/>
+  <Parameter.EntityData name="geometry"      type="Geometry"                      bind="@Geometry"  read="instance, state"/>
+
+  <!--New jacobian-->
+  <Parameter.Array name="granularGeometryJacobianStorage" mode="READ" type="Jacobian6DOFElement" bind="@GranularGeometryContactConstraintJacobianStorage"/>
+
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+</SolveKernel>
+
+<!--  -->
+<SolveKernel name="StoreContactForces" device="CPU" implementation="GranularGranularContact32">
+  <Parameter.EntityData name="contact"       type="ParticlePairContact"          bind="@ParticlePairContact" write="localForce, contactEnergy"/>
+  <Parameter.EntityData name="constraint"    type="ContactConstraint32"          bind="@GranularGranularContactConstraint"   read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" type="Particle.ContactConstraintRow32" bind="@GranularGranularContactConstraint.Row" read="rhs, lambda, epsilon, invD" write="lambda"/>
+
+  <!--New jacobian-->
+  <Parameter.Array name="granularGranularJacobianStorage" mode="READ" type="Jacobian6DOFElement:32bit" bind="@GranularGranularContactConstraintJacobianStorage"/>
+
+  <Parameter.Scalar name="timeStep"  type="Real" bind="@clock.timeStep"/>
+</SolveKernel>
+
+<!--  -->
+<SolveKernel name="StoreContactForces" device="CPU" implementation="GranularGranularContact_LocalJacobians">
+  <Parameter.EntityData name="contact"       type="ParticlePairContact"   bind="@ParticlePairContact"      write="localForce, contactEnergy"/>
+  <Parameter.EntityData name="constraint"    type="ContactConstraint"     bind="@GranularGranularContactConstraint"      read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" type="Particle.ContactConstraintRow" bind="@GranularGranularContactConstraint.Row" read="rhs, lambda, epsilon, invD" write="lambda"/>
+  <Parameter.Scalar name="contactMode"       type="UInt" bind="@contactMode" mode="READ"/>
+
+  <Parameter.Scalar name="timeStep"          type="Real" bind="@clock.timeStep"/>
+</SolveKernel>
+
+<!--  -->
+<SolveKernel name="StoreContactForces" device="CPU" implementation="GranularGranularContact_LocalJacobians32">
+  <Parameter.EntityData name="contact"       type="ParticlePairContact"   bind="@ParticlePairContact"          write="localForce, contactEnergy"/>
+  <Parameter.EntityData name="constraint"    type="ContactConstraint32"   bind="@GranularGranularContactConstraint"          read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" type="Particle.ContactConstraintRow32" bind="@GranularGranularContactConstraint.Row" read="rhs, lambda, epsilon, invD" write="lambda"/>
+  <Parameter.Scalar name="contactMode" type="UInt" bind="@contactMode" mode="READ"/>
+
+  <Parameter.Scalar name="timeStep"    type="Real" bind="@clock.timeStep"/>
+</SolveKernel>
+
+

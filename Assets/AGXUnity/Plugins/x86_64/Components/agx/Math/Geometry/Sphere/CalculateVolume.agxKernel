@@ -1,0 +1,4 @@
+<Kernel.Scalar name="CalculateVolume" inline="true">
+  <Parameter.Scalar name="volume" type="Real" mode="WRITE"/>
+  <Parameter.Scalar name="radius" type="Real" mode="READ"/>
+</Kernel.Scalar>

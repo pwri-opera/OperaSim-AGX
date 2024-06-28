@@ -1,0 +1,8 @@
+<Kernel name="ClearDirectSolvers" dispatch="serial">
+  <Parameter.Array name="@SolveIsland.instance" type="Physics.SolveIslandPtr" mode="READ"/>
+  <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance"/>
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="numRows, rowIndex, jacobianIndex, body1, body2, contactPointRange" write="blockRowIndex"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>

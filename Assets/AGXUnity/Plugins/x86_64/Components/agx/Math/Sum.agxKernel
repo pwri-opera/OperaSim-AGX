@@ -1,0 +1,4 @@
+<Kernel name="Sum" dispatch="serial">
+  <Parameter.Scalar name="result" type="Real" mode="WRITE"/>
+  <Parameter.Array name="source" type="Real" mode="READ"/>
+</Kernel>

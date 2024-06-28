@@ -1,0 +1,4 @@
+<Kernel name="HandleRemovedParticles" dispatch="parallel">
+  <Parameter.Array name="@Particle.state" type="ParticleState" mode="READ_WRITE"/>  
+  <Parameter.Array name="@DeadParticles" type="UInt:32bit" globalResult="APPEND"/>
+</Kernel>

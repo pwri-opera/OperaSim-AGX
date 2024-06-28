@@ -1,0 +1,23 @@
+<Kernel.Scalar name="Sub" inline="true" templatePermutation="Math.TemplatePermutations.Sub">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="arg2" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="Sub" inline="true" templatePermutation="Math.TemplatePermutations.Sub">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Array name="arg2" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Sub" inline="true" templatePermutation="Math.TemplatePermutations.Sub">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="arg2" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Sub" inline="true" templatePermutation="Math.TemplatePermutations.Sub">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg1" type="Auto" mode="READ"/>
+  <Parameter.Array name="arg2" type="Auto" mode="READ"/>
+</Kernel>

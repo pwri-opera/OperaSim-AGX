@@ -1,0 +1,8 @@
+<Kernel name="VerifyZones" dispatch="serial">
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read=""/>
+  
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="Physics.GranularBody.ContactConstraint" read="body1, body2"/>
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="constraintIndex"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex"/>
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="parent, id"/>
+</Kernel>

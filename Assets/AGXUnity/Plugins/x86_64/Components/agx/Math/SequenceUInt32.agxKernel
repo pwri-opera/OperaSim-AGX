@@ -1,0 +1,5 @@
+<Kernel name="SequenceUInt32">
+	<Parameter.Array name="buffer" type="UInt:32bit" mode="WRITE"/>
+	<Parameter.Scalar name="startValue" type="UInt:32bit" value="0"/>
+	<Parameter.Scalar name="stride" type="UInt:32bit" value="1"/>
+</Kernel>

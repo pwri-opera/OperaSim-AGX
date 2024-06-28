@@ -1,0 +1,29 @@
+<Kernel name="CalculateGMInv" implementation="Contact" costPerElement="50">
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, rowIndex, numRows, jacobianIndex, contactPointRange"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="epsilon" write="invD"/>
+
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, effectiveInvWorldMassMatrix, effectiveInvWorldInertia"/>
+
+	<Parameter.Array name="@ContactConstraintJacobian" type="Jacobian6DOFElement" mode="READ"/>
+	<Parameter.Array name="@ContactConstraintGMInv" type="Jacobian6DOFElement" mode="WRITE"/>
+</Kernel>
+
+<Kernel name="CalculateGMInv" implementation="BinaryConstraint" costPerElement="50">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="body1, body2, rowIndex, numRows, jacobianIndex"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="epsilon" write="invD"/>
+
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, effectiveInvWorldMassMatrix, effectiveInvWorldInertia"/>
+
+	<Parameter.Array name="@BinaryConstraintJacobian"               type="Jacobian6DOFElement"  mode="READ"/>
+	<Parameter.Array name="@BinaryConstraintGMInv"                  type="Jacobian6DOFElement"  mode="WRITE"/>
+</Kernel>
+
+<Kernel name="CalculateGMInv" implementation="ManyBodyConstraint" costPerElement="50">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="bodies, rowIndex, numRows, jacobianIndex"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="epsilon" write="invD"/>
+  
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, effectiveInvWorldMassMatrix, effectiveInvWorldInertia"/>
+
+	<Parameter.Array name="@ManyBodyConstraintJacobian"             type="Jacobian6DOFElement"  mode="READ"/>
+	<Parameter.Array name="@ManyBodyConstraintGMInv"                type="Jacobian6DOFElement"  mode="WRITE"/>
+</Kernel>

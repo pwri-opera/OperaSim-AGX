@@ -1,0 +1,104 @@
+<Component name="HierarchicalGrid">
+  <!-- Parameters -->
+
+  <!-- Subsystems (currently particles/geometries) can be reordered periodically for improved cache efficiency -->
+  <Value name="SubsystemReorderingFrequency" type="Real" value="2"/>
+
+  <!-- Partitioning granularity, how many tier levels to ascend from each collision cell to find the matching
+  contact zone, eg n=4 will give conact zones with 2^6 cells along each axis  -->
+  <Value name="ContactZoneAccumulationLevel" type="UInt" value="3"/>
+
+  <!----------------------------------------------------------------->
+
+
+  <!-- Spatial cells for all tiers -->
+  <Storage entity="Cell"/>
+
+  <!-- Collision objects to be tested for collisions -->
+  <Storage entity="CollisionObject"/>
+
+  <!-- Each tier contains cells twice as large as the cells in the tier below -->
+  <Storage entity="GridTier"/>
+
+  <!-- Result data -->
+  <Storage entity="GridOverlap"/>
+
+  <!-- Subsystem specific, filtered result data -->
+  <Storage entity="GridOverlap" name="GeometryPairOverlap"/>
+  <Storage entity="GridOverlap" name="ParticlePairOverlap"/>
+  <Storage entity="GridOverlap" name="ParticleGeometryOverlap"/>
+
+
+  <!-- Used to detect which cells must be created -->
+  <Buffer name="ParticlesWithMissingTargetCell" type="UInt:32bit"/>
+  <Buffer name="GeometriesWithMissingTargetCell" type="UInt:32bit"/>
+
+
+  <!-- Special geometries -->
+  <Buffer name="InfiniteGeometries" type="UInt:32bit"/>
+  <Buffer name="DisabledGeometries" type="UInt:32bit"/>
+  <Buffer name="ZeroSizedGeometries" type="UInt:32bit"/>
+
+  <!-- For incremental cell updates -->
+  <Buffer name="SortedCells" type="UInt:32bit"/>
+  <Buffer name="DeadCells" type="UInt:32bit"/>
+  <Buffer name="DeactivatedCells" type="UInt:32bit"/>
+  <Buffer name="NewCells" type="UInt:32bit"/>
+  <Value name="NumDisconnectedCells" type="UInt:32bit"/>
+
+  <Value name="NumPersistentContacts" type="AtomicValue"/>
+  <Value name="HasNewTiers" type="Bool"/>
+
+
+  <!-- Lookup table for matching contacts between time steps -->
+  <HashTable name="ContactTable" keyType="GeometryPair" valueType="Physics.GeometryContactPtr"/>
+
+  <!--
+  List of root cells. Cells on different sides of the coordinate origin can
+  never have a common parent, therefore we have one root cell per 'quadrant'
+  (4 in 2d, 8 in 3d). Tier zero can never contain more than one cell per quadrant.
+  -->
+  <Buffer name="RootCells" type="Physics.HierarchicalGrid.CellPtr" numElements="8"/>
+
+  <!----------------------------------------------------------------->
+
+  <!-- Contact zones -->
+  <Storage entity="ContactZone"/>
+  <Storage entity="ContactZoneDependency"/>
+
+  <!-- Zone id -> ContactZone -->
+  <!-- <HashTable name="ZoneTable" keyType="Vec3i" valueType="Physics.HierarchicalGrid.ContactZonePtr"/> -->
+
+  <!-- Zone-pair -> ContactZoneDependency -->
+  <!-- <HashTable name="ZoneDependencyTable" keyType="UInt:64bit" valueType="Physics.HierarchicalGrid.ContactZoneDependencyPtr"/> -->
+
+  <!-- TODO: Better solution -->
+  <Value name="IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr"/>
+  <Value name="IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr"/>
+
+  <!-- <Buffer name="ContactZoneListElements" type="UInt:32bit"/> -->
+
+  <Buffer name="MissingParticlePairContactZones" type="UInt:32bit"/>
+  <Buffer name="MissingParticleGeometryContactZones" type="UInt:32bit"/>
+  <Buffer name="MissingGeometryGeometryContactZones" type="UInt:32bit"/>
+  <Buffer name="EmptyZones" type="Physics.HierarchicalGrid.ContactZonePtr"/>
+
+  <Buffer name="TierDependencyParticleContacts" type="UInt:32bit"/>
+  <Buffer name="TierDependencyParticleGeometryContacts" type="UInt:32bit"/>
+  <Buffer name="TierDependencyGeometryContacts" type="UInt:32bit"/>
+  
+  
+  <HashTable name="ZoneDependencyHash" keyType="UInt:64bit" valueType="UInt:8bit"/>
+  <Value name="ZoneDependencyMutex" type="SpinMutex"/>
+  
+
+  <!-- NOTE: Explicity added in HierarchicalGrid constructor in cpp file -->
+  <!-- <Component source="Physics.HierarchicalGrid.SolveBodyManager"/> -->
+  <!----------------------------------------------------------------->
+
+  <!-- Debug rendering -->
+  <Task name="Render">
+    <!-- <Task source="Rendering.RenderCells:ZoneTags"/> -->
+  </Task>
+
+</Component>

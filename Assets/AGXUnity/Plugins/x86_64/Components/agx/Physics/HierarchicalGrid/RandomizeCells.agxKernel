@@ -1,0 +1,5 @@
+<Kernel name="RandomizeCells" dispatch="serial">
+  <Parameter.EntityData name="@Cell" type="Cell" read="state"/>
+  <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="WRITE"/>
+  <Parameter.Pointer name="sortedCellsBuffer" bind="@SortedCells" type="agxData::Buffer"/>
+</Kernel>

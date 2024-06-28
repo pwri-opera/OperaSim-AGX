@@ -1,0 +1,226 @@
+<Task name="Update">
+  <Task name="PreIntegratePositions" source="GranularBody.IntegratePositions : SolveBody" enable="false" depends="@Simulation.Update.UpdateEmitters" resolve="@Simulation.Update.PreSetup"/>
+
+  <!-- 
+  <Task source="ParticleSystem.RemoveDeadParticles" depends="@Simulation.Update.PreSetup" resolve="@Simulation.Update.TriggerPreCollideStepEvent"/> 
+  -->
+
+  <Task name="HandleRemovedParticlesBeforeSpace" source="ParticleSystem.HandleRemovedParticles"  depends="@Simulation.Update.TriggerPreCollideStepEvent" />
+  <Task name="RemoveDeadParticlesBeforeSpace"    source="ParticleSystem.RemoveDeadParticles"    depends="HandleRemovedParticlesBeforeSpace"  resolve="@Simulation.Update.UpdateSpace"/>
+
+
+  <Task source="ParticleSystem.GenerateParticlePairContacts" depends="@Simulation.Update.UpdateSpace"/>
+  <Task source="ParticleSystem.GenerateParticleGeometryContacts"/>
+
+  <Task source="ParticleSystem.AssignContactMaterials : ParticlePairContact" depends="@Simulation.Update.UpdateSpace.CreateMissingContactMaterials"/>
+  <Task source="ParticleSystem.AssignContactMaterials : ParticleGeometryContact"/>
+  <Task source="ParticleSystem.CreateMissingContactMaterials : ParticlePairContact"/>
+  <Task source="ParticleSystem.CreateMissingContactMaterials : ParticleGeometryContact"/>
+
+  <!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
+  <Task name="PreEventSync" resolve="@Simulation.Update.TriggerContactEventListeners"/>
+
+
+
+  <Task source="ParticleSystem.FilterContacts : ParticlePair" depends="@Simulation.Update.TriggerPreStepEvents"/>
+  <Task source="ParticleSystem.FilterContacts : ParticleGeometry" resolve="@Simulation.Update.UpdateSystem"/>
+
+  <Task source="ParticleSystem.ApplyUniformGravity"/>
+  <!-- <Task source="GranularBody.IntegrateVelocities"/> -->
+  <Task source="HierarchicalGrid.AllocateSolveBodies : Reference"/>
+  <Task source="HierarchicalGrid.AssignSolveBodies : NoReordering"/>
+  <Task source="GranularBody.InitializeSolveBodies"/>
+  <!-- <Task source="GranularBody.IntegrateVelocities : SolveBody"/> -->
+
+  <Task source="GranularBody.AllocateConstraintData" depends="@Simulation.Update.UpdateSystem.IntegrateVelocities" resolve="@Simulation.Update.UpdateSystem.BuildInteractionGraph"/>
+
+  <Task source="HierarchicalGrid.SortContactZoneLists : ParticlePairContact"/>
+  <Task source="HierarchicalGrid.SortContactZoneLists : ParticleGeometryContact"/>
+
+  <Task source="GranularBody.InitializeConstraintData : GranularGranularContact"/>
+  <Task source="GranularBody.InitializeConstraintData : GranularGeometryContact" resolve="@Simulation.Update.UpdateSystem.BuildInternalIslandGroups"/>
+  <Task source="GranularBody.InitializeSolveMaterial"/>
+
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGranularContact_pass1" enable="false"/>
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGranularContact_pass2" enable="false"/>
+
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGeometryContact_pass1" enable="false"/>
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGeometryContact_pass2" enable="false"/>
+
+
+  <Task source="GranularBody.CalculateJacobians : GranularGranularContact"/>
+  <Task source="GranularBody.CalculateJacobians : GranularGeometryContact" resolve="@Simulation.Update.UpdateSystem.CalculateIslandImpacts"/>
+
+  <Task source="GranularBody.CalculateGMInv : GranularGranularContact"/>
+  <Task source="GranularBody.CalculateGMInv : GranularGeometryContact"/>
+
+  <Task source="GranularBody.TagContacts : ParticlePairContact"/>
+  <Task source="GranularBody.TagContacts : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.BuildInternalIslandGroups"/>
+
+
+  <!-- NOTE: Solver is defined using SolveModel -->
+  <!--<Task source="GranularBody.ContactVarmStarting : GranularGranularContact" enable="false" resolve="@Simulation.Solver" />
+  <Task source="GranularBody.ContactVarmStarting : GranularGeometryContact" enable="false" resolve="@Simulation.Solver" />-->
+
+  <!-- <Task source="GranularBody.IntegratePositions" depends="@Simulation.Solver"/> -->
+  <Task source="GranularBody.IntegratePositions : SolveBody" depends="@Simulation.Solver"/>
+  <Task source="GranularBody.StoreContactLambdas : GranularGranularContact" enable="false"/>
+  <Task source="GranularBody.StoreContactLambdas : GranularGeometryContact" enable="false" />
+  <Task source="GranularBody.ClearForces" resolve="@Simulation.Update.TriggerPostStepEvents"/>
+
+
+  <!--
+  <Task source="GranularBody.StoreContactForcesTask : GranularGranularContact"/>
+  <Task source="GranularBody.StoreContactForcesTask : GranularGeometryContact"/>
+  -->
+
+  <!--
+  <Task source="GranularBody.PrintNormalForces : GranularGranularContact"/>
+  <Task source="GranularBody.PrintNormalForces : GranularGeometryContact"/>
+-->
+
+  <Task source="ParticleSystem.AgeParticles" depends="@Simulation.Update.TriggerPostStepEvents"/>
+  <Task source="ParticleSystem.HandleRemovedParticles" depends="AgeParticles"/>
+
+  <Task source="ParticleSystem.CalculateBound"/>
+  <Task source="ParticleSystem.RemoveDeadParticles"/>
+</Task>
+
+<Task name="Update" implementation="ParallelPGS">
+  <Task name="PreIntegratePositions" source="GranularBody.IntegratePositions : SolveBody" enable="false" depends="@Simulation.Update.UpdateEmitters" resolve="@Simulation.Update.PreSetup"/>
+
+  <!-- <Task source="ParticleSystem.RemoveDeadParticles" depends="@Simulation.Update.PreSetup" resolve="@Simulation.Update.TriggerPreCollideStepEvent"/> -->
+
+  <Task name="HandleRemovedParticlesBeforeSpace" source="ParticleSystem.HandleRemovedParticles"  depends="@Simulation.Update.TriggerPreCollideStepEvent" />
+  <Task name="RemoveDeadParticlesBeforeSpace"    source="ParticleSystem.RemoveDeadParticles"    depends="HandleRemovedParticlesBeforeSpace"  resolve="@Simulation.Update.UpdateSpace"/>
+
+  <Task source="ParticleSystem.GenerateParticlePairContacts" depends="@Simulation.Update.UpdateSpace"/>
+  <Task source="ParticleSystem.GenerateParticleGeometryContacts"/>
+
+
+  <Task source="ParticleSystem.AssignContactMaterials : ParticlePairContact" depends="@Simulation.Update.UpdateSpace.CreateMissingContactMaterials"/>
+  <Task source="ParticleSystem.AssignContactMaterials : ParticleGeometryContact"/>
+  <Task source="ParticleSystem.CreateMissingContactMaterials : ParticlePairContact"/>
+  <Task source="ParticleSystem.CreateMissingContactMaterials : ParticleGeometryContact"/>
+
+  <!-- Important that PreSetup does not run at the same time as AssignContactMaterials because MaterialManager is not thread safe! Also, contact data for partitioning needs synchronization. -->
+  <Task name="PreEventSync" resolve="@Simulation.Update.TriggerContactEventListeners"/>
+
+  <Task source="ParticleSystem.FilterContacts : ParticlePair" depends="@Simulation.Update.TriggerPreStepEvents"/>
+  <Task source="ParticleSystem.FilterContacts : ParticleGeometry" resolve="@Simulation.Update.UpdateSystem"/>
+
+  <!-- Buld contact zones, after contact filtering -->
+  <!-- Extending Physics.RigidBody.PreparePPGS -->
+  <Task name="BuildContactZones" bindContext="@Space.HierarchicalGrid">
+    <Task source="HierarchicalGrid.CalculateContactZoneAssignments : ParticlePairContact" depends="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.RemoveEmptyContactZones"/>
+    <Task source="HierarchicalGrid.CalculateContactZoneAssignments : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.CreateMissingContactZones"/>
+
+    <Task source="HierarchicalGrid.CreateMissingContactZones : ParticlePairContact" depends="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.CreateMissingContactZones"/>
+    <Task source="HierarchicalGrid.CreateMissingContactZones : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.AllocateContactZones"/>
+
+    <Task source="HierarchicalGrid.CalculateZoneDependencies : TierDependencies_Particle" depends="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.CalculateZoneDependencies"/>
+    <Task source="HierarchicalGrid.CalculateZoneDependencies : TierDependencies_ParticleGeometry" depends="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.CalculateZoneDependencies"/>
+
+    <Task source="HierarchicalGrid.FillContactZones : ParticlePairContact" depends="@Simulation.Update.UpdateSystem.PrepareContacts.PreparePPGS.AllocateContactZones"/>
+    <Task source="HierarchicalGrid.FillContactZones : ParticleGeometryContact"/>
+    <!-- <Task source="HierarchicalGrid.PrintContactZoneStatistics"/> -->
+  </Task>
+
+  <Task source="ParticleSystem.ApplyUniformGravity"/>
+
+  <!-- Contact zones -->
+
+  <!-- <Task source="GranularBody.IntegrateVelocities"/>
+  <Task source="HierarchicalGrid.GenerateSolveBodies"/> -->
+
+  <Task name="GenerateSolveBodies" bindContext="@Space.HierarchicalGrid">
+    <!-- <Task source="HierarchicalGrid.AllocateSolveBodies : Reference"/>
+    <Task source="HierarchicalGrid.AssignSolveBodies : NoReordering"/> -->
+
+    <Task source="HierarchicalGrid.ClearSolveBodyOffsets"/>
+    <Task source="HierarchicalGrid.CalculateContactZoneAssignments : Particle_SolveBody"/>
+    <Task source="HierarchicalGrid.AllocateSolveBodies"/>
+    <Task source="HierarchicalGrid.AssignSolveBodies"/>
+    <!-- <Task source="HierarchicalGrid.VerifySolveBodies"/> -->
+  </Task>
+
+  <!-- <Task source="GranularBody.IntegrateVelocities : SolveBody"/> -->
+  <Task source="GranularBody.InitializeSolveBodies"/>
+
+  <!-- <Task source="GranularBody.PrintSolveDataStatistics"/> -->
+
+  <Task source="GranularBody.AllocateConstraintData" depends="@Simulation.Update.UpdateSystem.IntegrateVelocities" resolve="@Simulation.Update.UpdateSystem.BuildInteractionGraph"/>
+
+  <Task source="GranularBody.InitializeConstraintData : GranularGranularContact_LocalJacobians"/>
+  <Task source="GranularBody.InitializeConstraintData : GranularGeometryContact" resolve="@Simulation.Update.UpdateSystem.BuildInternalIslandGroups"/>
+  <Task source="GranularBody.InitializeSolveMaterial"/>
+
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGranularContact_pass1" enable="false"/>
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGranularContact_pass2" enable="false"/>
+
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGeometryContact_pass1" enable="false"/>
+  <Task source="GranularBody.UpdateGranularContactTables : GranularGeometryContact_pass2" enable="false"/>
+
+  <!-- <Task source="GranularBody.CalculateJacobians : GranularGranularContact"/> -->
+  <Task source="GranularBody.CalculateJacobians : GranularGeometryContact" resolve="@Simulation.Update.UpdateSystem.CalculateIslandImpacts"/>
+
+  <!-- <Task source="GranularBody.CalculateGMInv : GranularGranularContact"/> -->
+  <Task source="GranularBody.CalculateGMInv : GranularGeometryContact"/>
+
+  <!-- <Task source="HierarchicalGrid.VerifyZones"/> -->
+
+  <Task source="GranularBody.TagContacts : ParticlePairContact"/>
+  <Task source="GranularBody.TagContacts : ParticleGeometryContact" resolve="@Simulation.Update.UpdateSystem.BuildInternalIslandGroups"/>
+
+  <!-- <Task source="BuildContactZoneSolveGroups" resolve="@Simulation.Update.UpdateSystem.GenerateSolveJobs"/> -->
+
+
+  <!-- NOTE: Solver is defined using SolveModel -->
+
+  <Task source="GranularBody.IntegratePositions : SolveBody" depends="@Simulation.Solver"/>
+
+  <Task source="GranularBody.StoreContactLambdas : GranularGranularContact" enable="false"/>
+  <Task source="GranularBody.StoreContactLambdas : GranularGeometryContact" enable="false"/>
+  <Task source="GranularBody.ClearForces" resolve="@Simulation.Update.TriggerPostStepEvents"/>
+
+  <!--<Task source="GranularBody.StoreContactForcesTask : GranularGranularContact_LocalJacobians"/>
+  <Task source="GranularBody.StoreContactForcesTask : GranularGeometryContact"/>-->
+
+  <Task source="ParticleSystem.AgeParticles" depends="@Simulation.Update.TriggerPostStepEvents"/>
+  <Task source="ParticleSystem.HandleRemovedParticles" depends="AgeParticles"/>
+
+  <Task source="ParticleSystem.CalculateBound"/>
+  <Task source="ParticleSystem.RemoveDeadParticles"/>
+</Task>
+
+
+<!-- Specialization for 32 bit float solver -->
+<Task name="Update" implementation="Real32" source="Update">
+
+  <Task instance="InitializeConstraintData : GranularGranularContact" source="GranularBody.InitializeConstraintData32 : GranularGranularContact"/>
+  <Task instance="InitializeSolveMaterial" source="GranularBody.InitializeSolveMaterial:Real32"/>
+  <Task instance="CalculateJacobians : GranularGranularContact" source="GranularBody.CalculateJacobians32 : GranularGranularContact"/>
+  <Task instance="CalculateGMInv : GranularGranularContact" source="GranularBody.CalculateGMInv32 : GranularGranularContact"/>
+  <!-- <Task instance="IntegrateVelocities : SolveBody" source="GranularBody.IntegrateVelocities : SolveBody32"/> -->
+  <Task instance="InitializeSolveBodies" source="GranularBody.InitializeSolveBodies : SolveBody32"/>
+  <Task instance="PreIntegratePositions : SolveBody" source="GranularBody.IntegratePositions : SolveBody32" name="PreIntegratePositions"/>
+  <Task instance="IntegratePositions : SolveBody" source="GranularBody.IntegratePositions : SolveBody32"/>
+
+  <Task instance="StoreContactLambdas : GranularGranularContact" source="GranularBody.StoreContactLambdas32 : GranularGranularContact" enable="false"/>
+  <!--<Task instance="StoreContactForcesTask : GranularGranularContact" source="GranularBody.StoreContactForcesTask : GranularGranularContact32"/>-->
+</Task>
+
+<!-- Specialization for ParallelPGS, with 32 bit float solver  -->
+<Task name="Update" implementation="ParallelPGS_Real32" source="Update : ParallelPGS">
+
+  <Task instance="GenerateSolveBodies.AllocateSolveBodies" source="HierarchicalGrid.AllocateSolveBodies : Real32"/>
+  <Task instance="InitializeConstraintData : GranularGranularContact_LocalJacobians" source="GranularBody.InitializeConstraintData32 : GranularGranularContact_LocalJacobians"/>
+  <Task instance="InitializeSolveMaterial" source="GranularBody.InitializeSolveMaterial:Real32"/>
+  <!-- <Task instance="IntegrateVelocities : SolveBody" source="GranularBody.IntegrateVelocities : SolveBody32"/> -->
+  <Task instance="InitializeSolveBodies" source="GranularBody.InitializeSolveBodies : SolveBody32"/>
+  <Task instance="PreIntegratePositions : SolveBody" source="GranularBody.IntegratePositions : SolveBody32" name="PreIntegratePositions"/>
+  <Task instance="IntegratePositions : SolveBody" source="GranularBody.IntegratePositions : SolveBody32"/>
+  <Task instance="StoreContactLambdas : GranularGranularContact" source="GranularBody.StoreContactLambdas32 : GranularGranularContact" enable="false"/>
+  <!--<Task instance="StoreContactForcesTask : GranularGranularContact_LocalJacobians" source="GranularBody.StoreContactForcesTask : GranularGranularContact_LocalJacobians32"/>-->
+
+</Task>

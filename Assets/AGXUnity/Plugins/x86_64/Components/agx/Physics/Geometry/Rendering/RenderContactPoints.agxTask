@@ -1,0 +1,23 @@
+<Task name="RenderContactPoints">
+	<Parameter.Scalar name="normalScaling" value="Real(0.2)"/>
+	<Parameter.Scalar name="color" value="Vec4(1, 0, 0, 1)"/>
+	
+	<!-- Render points -->
+	<Task source="Foundation.Rendering.RenderPointSprites">
+		<Parameter.Array instance="vertices" bind="@ContactPoint.point"/>
+		<Parameter.Scalar instance="color" value="@color"/>
+	</Task>
+	
+  
+	<!-- Render normals -->
+	<!-- Disabled beacuse it gives
+	agxAbort: Open GL error: 1282:invalid operation (C:\work\svn\AgxICE\src\agxGL\OpenGL.cpp:1022)
+	while rendering CpuParticleSystem. Find a way to disable through
+	Physics.ParticleSystem.Rendering.RenderParticleContacts instead.
+	<Task name="RenderContactNormals" source="Foundation.Rendering.RenderLines">
+		<Parameter.Scalar instance="color" value="@color"/>
+		<Parameter.Scalar instance="scale" value="@normalScaling"/>
+		<Parameter.Array instance="positions" bind="@ContactPoint.point"/>
+		<Parameter.Array instance="offsets" bind="@ContactPoint.normal"/>
+	</Task> -->
+</Task>

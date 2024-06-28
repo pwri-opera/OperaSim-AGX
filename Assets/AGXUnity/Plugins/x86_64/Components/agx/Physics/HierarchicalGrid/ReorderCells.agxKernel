@@ -1,0 +1,15 @@
+<!-- This kernel will both reorder the cell data based on spatial sorting, and also compact the storage, removing any dead cells -->
+<Kernel name="ReorderCells">
+  <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="READ"/>
+  <Parameter.Array name="@DeadCells" type="UInt:32bit" mode="READ_WRITE"/>
+	
+  <Parameter.EntityData name="@Cell" type="Cell" read="tier, id, position, emptyTime, state, parent, children, numChildren, neighbors, collisionObjects, sortedIndex"/>
+  
+  <Parameter.Pointer name="@CellReordering" type="agx::CellReordering" include="agx/Physics/HierarchicalGrid/CellReordering.h"/>
+
+	<Parameter.Pointer name="cellStorage" type="agxData::EntityStorage" bind="@Cell" implicit="true"/>
+
+  <PreJob name="setup"/>
+  <PostJob name="cleanup"/>
+</Kernel>
+

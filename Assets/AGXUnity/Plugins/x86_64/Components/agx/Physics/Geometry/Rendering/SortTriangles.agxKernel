@@ -1,0 +1,6 @@
+<Kernel name="SortTriangles" dispatch="serial">
+	<Parameter.Array name="cameraDistanceBuffer" type="Real" mode="READ" bind="@Triangle.cameraDistance"/>
+	
+	<Parameter.Array name="triangleIndicesBuffer" type="UInt:32bit" mode="WRITE" bind="@Triangle.indices"/>
+  <!-- <Parameter.Array name="triangleColors" type="Vec4:32bit" mode="WRITE" bind="@Triangle.colors"/> -->
+</Kernel>

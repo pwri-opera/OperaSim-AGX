@@ -1,0 +1,24 @@
+<Task name="RenderCells">
+  <Buffer name="GridLines" type="Line:32bit" numElements="Math.Mul( UInt(12), @Cell.numElements )"/>
+  <Buffer name="LineColors" type="Vec4:32bit" numElements="Math.Mul( UInt(24), @Cell.numElements )"/>
+
+  <Task source="GenerateCellLines"/>
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@GridLines"/>
+    <Parameter.Array instance="color" bind="@LineColors"/>
+    <!-- <Parameter.Scalar instance="color" value="Vec4(0.3, 0.3, 0.8, 0.5)"/> -->
+  </Task>
+</Task>
+
+
+<Task name="RenderCells" implementation="ZoneTags">
+  <Buffer name="GridLines" type="Line:32bit" numElements="Math.Mul( UInt(12), @Cell.numElements )"/>
+  <Buffer name="LineColors" type="Vec4:32bit" numElements="Math.Mul( UInt(24), @Cell.numElements )"/>
+
+  <Task source="GenerateCellLines:ZoneTags"/>
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@GridLines"/>
+    <Parameter.Array instance="color" bind="@LineColors"/>
+    <!-- <Parameter.Scalar instance="color" value="Vec4(0.3, 0.3, 0.8, 0.5)"/> -->
+  </Task>
+</Task>

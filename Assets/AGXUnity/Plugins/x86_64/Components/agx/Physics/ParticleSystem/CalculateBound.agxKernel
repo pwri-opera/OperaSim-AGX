@@ -1,0 +1,4 @@
+<Kernel name="CalculateBound" dispatch="serial">
+  <Parameter.EntityData name="@Particle" type="Particle" read="position, radius"/>
+  <Parameter.Scalar name="@bound" type="Bound3" mode="WRITE"/>
+</Kernel>

@@ -1,0 +1,12 @@
+<Kernel name="UpdateContactData" implementation="ParticleParticleContacts">
+  <Parameter.Array name="constraint_forceMagnitude"  type="Vec3" mode="WRITE" bind="@ParticleParticleContactConstraint.forceMagnitude"/>
+  <Parameter.Array name="constraint_lambda"          type="Real" mode="READ"  bind="@ParticleParticleContactConstraint.lambda"/>
+  <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
+</Kernel>
+
+
+<Kernel name="UpdateContactData" implementation="ParticleGeometryContacts">
+  <Parameter.Array name="constraint_forceMagnitude"  type="Vec3" mode="WRITE" bind="@ParticleBodyContactConstraint.forceMagnitude"/>
+  <Parameter.Array name="constraint_lambda"          type="Real" mode="READ"  bind="@ParticleBodyContactConstraint.lambda"/>
+  <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
+</Kernel>

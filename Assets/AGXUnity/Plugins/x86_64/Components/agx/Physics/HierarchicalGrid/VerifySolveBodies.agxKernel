@@ -1,0 +1,3 @@
+<Kernel name="VerifySolveBodies" dispatch="serial">
+  <Parameter.EntityData name="@Particle" type="Particle" read="solveBodyIndex"/>
+</Kernel>

@@ -1,0 +1,15 @@
+<Kernel.Scalar name="IntegrateVelocity">
+  <Parameter.EntityInstance name="particle" type="Physics.GranularBody" read="velocity, angularVelocity, torque, force, invMass, invInertia" write="velocity, angularVelocity, oldVelocity, oldAngularVelocity"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel.Scalar>
+
+<Kernel.Scalar name="IntegrateVelocity">
+  <Parameter.EntityPtr name="particle" type="Physics.GranularBody" read="velocity, angularVelocity, torque, force, invMass, invInertia" write="velocity, angularVelocity, oldVelocity, oldAngularVelocity"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel.Scalar>
+
+<Kernel name="IntegrateVelocity">
+  <Parameter.EntityData name="@Particle" type="Physics.GranularBody" read="velocity, angularVelocity, torque, force, invMass, invInertia" write="velocity, angularVelocity, oldVelocity, oldAngularVelocity"/>
+	<Parameter.Scalar name="@clock.timeStep" type="Real"/>
+</Kernel>
+
