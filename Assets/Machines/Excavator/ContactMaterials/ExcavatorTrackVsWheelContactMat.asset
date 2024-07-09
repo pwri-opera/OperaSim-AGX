@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa76d302d537f3643a58c6cab77fb092, type: 3}
+  m_Name: ExcavatorTrackVsWheelContactMat
+  m_EditorClassIdentifier: 
+  m_material1: {fileID: 11400000, guid: 82b172f7ace765e43bc46860443a007e, type: 2}
+  m_material2: {fileID: 11400000, guid: ac6c42d0f89a6c24dad200a268ff62f8, type: 2}
+  m_frictionModel: {fileID: 0}
+  m_youngsModulus: 400000000
+  m_surfaceViscosity: {x: 0.001, y: 0.001}
+  m_frictionCoefficients: {x: 0, y: 0}
+  m_restitution: 0
+  m_damping: 0.04
+  m_adhesiveForce: 0
+  m_adhesiveOverlap: 0
+  m_useContactArea: 0
+  m_contactReductionMode: 1
+  m_contactReductionLevel: 1
