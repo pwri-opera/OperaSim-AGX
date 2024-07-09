@@ -39,14 +39,28 @@ namespace PWRISimulator
 
         public override float CalculateCylinderRodTelescopingForce(float _force)
         {
-            return _force * 0.5f;
+            return _force * 0.5f / Mathf.Cos(currentLinkAngle);
         }
 
         protected override void FixedUpdate()
         {
-            Vector3 bladeDirection = cylinderBindPointLeft.transform.position - cylinderBindPointRight.transform.position;
-            Vector3 center = (cylinderRootLeft.transform.position + cylinderRootRight.transform.position) * 0.5f - centerOfRotation.transform.position;
-            currentLinkAngle = Mathf.Deg2Rad * (-Vector3.Angle(bladeDirection, center) + 90.0f);
+            //Vector3 bladeDirection = cylinderBindPointLeft.transform.position - cylinderBindPointRight.transform.position;
+            //Vector3 center = (cylinderRootLeft.transform.position + cylinderRootRight.transform.position) * 0.5f - centerOfRotation.transform.position;
+            //currentLinkAngle = Mathf.Deg2Rad * (-Vector3.Angle(bladeDirection, center) + 90.0f);
+
+            Vector3 left = gameObject.transform.InverseTransformPoint(cylinderBindPointLeft.transform.position);
+            Vector3 right = gameObject.transform.InverseTransformPoint(cylinderBindPointRight.transform.position);
+
+            Vector3 bladeDirection = cylinderRootLeft.transform.InverseTransformPoint(cylinderBindPointRight.transform.position) - cylinderRootLeft.transform.InverseTransformPoint(cylinderBindPointLeft.transform.position);
+            if (bladeDirection.x == 0)
+            {
+                currentLinkAngle = 0.0f;
+            }
+            else
+            {
+                currentLinkAngle = Mathf.Atan2(bladeDirection.z, bladeDirection.x);
+            }
+
         }
     }
 }

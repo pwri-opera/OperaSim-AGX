@@ -29,6 +29,7 @@ namespace PWRISimulator
             centerOfRotationToBlade = b.magnitude;
             centerOfRotationToCylinderRoot = c.magnitude;
 
+            // 回転中心から見たシリンダ根元の位置ベクトル
             Vector3 d = centerOfRotation.transform.InverseTransformPoint(cylinderRoot.transform.position);
 
             alpha = Mathf.Atan2(Mathf.Abs(d.y), Mathf.Abs(d.z));
@@ -49,14 +50,14 @@ namespace PWRISimulator
         public override float CalculateCylinderRodTelescopingVelocity(float _velocity)
         {
             float gamma = Mathf.PI - alpha - beta + currentLinkAngle;
-
             return (cylinderBindPointToCenterOfRotaion * centerOfRotationToCylinderRoot * Mathf.Sin(gamma) * _velocity) / CalculateCylinderLinkLength(currentLinkAngle);
-            //return cylinderBindPointToCenterOfRotaion * _velocity;
         }
 
         public override float CalculateCylinderRodTelescopingForce(float _force)
         {
-            return _force * cylinderBindPointToCenterOfRotaion / centerOfRotationToBlade;
+            float len = CalculateCylinderLinkLength(currentLinkAngle);
+            float delta = Mathf.Acos((Mathf.Pow(cylinderBindPointToCenterOfRotaion, 2.0f) + Mathf.Pow(len, 2.0f) - Mathf.Pow(centerOfRotationToCylinderRoot, 2.0f)) / (2 * cylinderBindPointToCenterOfRotaion * len));
+            return _force * cylinderBindPointToCenterOfRotaion / (centerOfRotationToBlade * Mathf.Cos(Mathf.PI * 0.5f - delta));
         }
     }
 }

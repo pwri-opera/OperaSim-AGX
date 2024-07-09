@@ -27,7 +27,7 @@ namespace PWRISimulator
         }
         public override float CalculateCylinderRodTelescoping(float _angle)
         {
-            return -cylinderLength - cylinderRodDefaultLength + CalculateCylinderLinkLength(_angle);
+            return CalculateCylinderLinkLength(_angle) - cylinderLength - cylinderRodDefaultLength;
         }
 
         protected override float CalculateCylinderLinkLength(float _angle)
@@ -37,8 +37,10 @@ namespace PWRISimulator
 
         public override float CalculateCylinderRodTelescopingVelocity(float _velocity)
         {
-            float term1 = centerOfRotToCylinderRoot * Mathf.Cos(currentLinkAngle);
-            float term2 = (Mathf.Pow(centerOfRotToCylinderRoot, 2.0f) * Mathf.Cos(currentLinkAngle) * Mathf.Sin(currentLinkAngle)) / Mathf.Sqrt(Mathf.Pow(centerOfRotToCylinderRoot, 2.0f) - Mathf.Pow(centerOfRotToCylinderRoot * Mathf.Cos(currentLinkAngle),2.0f));
+            float term1 = -centerOfRotToCylinderRoot * Mathf.Cos(currentLinkAngle);
+            //float term2 = (Mathf.Pow(centerOfRotToCylinderRoot, 2.0f) * Mathf.Cos(currentLinkAngle) * Mathf.Sin(currentLinkAngle)) / Mathf.Sqrt(Mathf.Pow(centerOfRotToCylinderRoot, 2.0f) - Mathf.Pow(centerOfRotToCylinderRoot * Mathf.Cos(currentLinkAngle),2.0f));
+            float term2 = (Mathf.Pow(centerOfRotToCylinderRoot, 2.0f) * Mathf.Cos(currentLinkAngle) * Mathf.Sin(currentLinkAngle)) / 
+                Mathf.Sqrt(Mathf.Pow(centerOfRotToCylinderRoot * Mathf.Sin(currentLinkAngle), 2.0f) - (Mathf.Pow(centerOfRotToCylinderRoot, 2.0f) - Mathf.Pow(rotationRadius, 2.0f)) );
 
             return (term1 + term2) * _velocity;
         }
@@ -47,9 +49,11 @@ namespace PWRISimulator
         {
             //return _force * rotationRadius / CalculateCylinderLinkLength(currentLinkAngle);
 
+            float len = CalculateCylinderLinkLength(currentLinkAngle);
+            float alpha = Mathf.Acos( (Mathf.Pow(rotationRadius, 2.0f) + Mathf.Pow(len, 2.0f) - Mathf.Pow(centerOfRotToCylinderRoot, 2.0f)) / (2 * rotationRadius * len));
+            float beta = Mathf.PI * 0.5f - alpha;
 
-
-            return _force * rotationRadius / CalculateCylinderLinkLength(currentLinkAngle);
+            return _force / Mathf.Cos(beta);
         }
         protected override void FixedUpdate()
         {
