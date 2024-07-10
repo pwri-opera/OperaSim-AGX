@@ -15,7 +15,7 @@ namespace PWRISimulator
         /// <summary>
         /// 対象のExcvatorコンポネント。
         /// </summary>
-        public Excavator excavator;
+        public ExcavatorJoints excavator;
 
         public bool printDebugMessages = false;
 
@@ -23,43 +23,43 @@ namespace PWRISimulator
         {
             if (excavator != null)
             {
-                SetExcavatorConstraintVelocityControl(excavator.leftSprocket);
-                SetExcavatorConstraintVelocityControl(excavator.rightSprocket);
-                SetExcavatorConstraintVelocityControl(excavator.swing);
-                SetExcavatorConstraintVelocityControl(excavator.boomTilt);
-                SetExcavatorConstraintVelocityControl(excavator.armTilt);
-                SetExcavatorConstraintVelocityControl(excavator.bucketTilt);
+                SetExcavatorConstraintVelocityControl(excavator.leftSprocket.actuator);
+                SetExcavatorConstraintVelocityControl(excavator.rightSprocket.actuator);
+                SetExcavatorConstraintVelocityControl(excavator.swing.actuator);
+                SetExcavatorConstraintVelocityControl(excavator.boomTilt.actuator);
+                SetExcavatorConstraintVelocityControl(excavator.armTilt.actuator);
+                SetExcavatorConstraintVelocityControl(excavator.bucketTilt.actuator);
             }
         }
 
         public void OnLeftSprocket(InputValue value)
         {
-            SetExcavatorInputValue(excavator?.leftSprocket, value.Get<float>());
+            SetExcavatorInputValue(excavator?.leftSprocket.actuator, value.Get<float>());
         }
 
         public void OnRightSprocket(InputValue value)
         {
-            SetExcavatorInputValue(excavator?.rightSprocket, value.Get<float>());
+            SetExcavatorInputValue(excavator?.rightSprocket.actuator, value.Get<float>());
         }
 
         public void OnSwing(InputValue value)
         {
-            SetExcavatorInputValue(excavator?.swing, value.Get<float>());
+            SetExcavatorInputValue(excavator?.swing.actuator, value.Get<float>());
         }
 
         public void OnBoomTilt(InputValue value)
         {
-            SetExcavatorInputValue(excavator?.boomTilt, value.Get<float>());
+            SetExcavatorInputValue(excavator?.boomTilt.actuator, value.Get<float>());
         }
 
         public void OnArmTilt(InputValue value)
         {
-            SetExcavatorInputValue(excavator?.armTilt, value.Get<float>());
+            SetExcavatorInputValue(excavator?.armTilt.actuator, value.Get<float>());
         }
 
         public void OnBucketTilt(InputValue value)
         {
-            SetExcavatorInputValue(excavator?.bucketTilt, value.Get<float>());
+            SetExcavatorInputValue(excavator?.bucketTilt.actuator, value.Get<float>());
         }
         
         protected void SetExcavatorInputValue(ConstraintControl constraintControl, double value)

@@ -1,30 +1,20 @@
-using UnityEngine;
-using RosSharp;
-using RosSharp.RosBridgeClient;
-using HeaderMsg = RosSharp.RosBridgeClient.MessageTypes.Std.Header;
-using TimeMsg = RosSharp.RosBridgeClient.MessageTypes.Std.Time;
-using Float64Msg = RosSharp.RosBridgeClient.MessageTypes.Std.Float64;
-using TwistMsg = RosSharp.RosBridgeClient.MessageTypes.Geometry.Twist;
-using Vector3Msg = RosSharp.RosBridgeClient.MessageTypes.Geometry.Vector3;
-using WrenchMsg = RosSharp.RosBridgeClient.MessageTypes.Geometry.Wrench;
-using WrenchStampedMsg = RosSharp.RosBridgeClient.MessageTypes.Geometry.WrenchStamped;
+using System.Data.SqlTypes;
+using Unity.Robotics.ROSTCPConnector.MessageGeneration;
+using RosMessageTypes.BuiltinInterfaces;
+using RosMessageTypes.Std;
+using agxROS2;
 
 namespace PWRISimulator.ROS
 {
     public static class MessageUtil
     {
-        public const string DefaultFrameId = "map";
-        public const string WorldFrameId = "world";
-
-        public static void ConvertTwistToAngularWheelVelocity(TwistMsg msg, double separation, double radius,
-            out double angularVelocityLeftWheel, out double angularVelocityRightWheel)
-        {
-            double angularFromTwistLinear = radius != 0.0 ? msg.linear.x / radius : 0.0;
-            double angularFromTwistAngular = radius != 0.0 ? msg.angular.z * separation * 0.5 / radius : 0.0;
-            angularVelocityLeftWheel = angularFromTwistLinear - angularFromTwistAngular;
-            angularVelocityRightWheel = angularFromTwistLinear + angularFromTwistAngular;
-        }
-
+        /// <summary>
+        /// メッセージを文字列に変換します
+        /// Float64Msgは変換できますが、他のメッセージは変換できる保証がありません
+        /// </summary>
+        /// <typeparam name="T">メッセージの型</typeparam>
+        /// <param name="msg">変換したいメッセージ</param>
+        /// <returns>変換した文字列</returns>
         public static string MessageToString<T>(T msg) where T : Message
         {
             if (msg == null)
@@ -35,48 +25,63 @@ namespace PWRISimulator.ROS
                 return msg != null ? msg.ToString() : "null";
         }
 
+        /// <summary>
+        /// Float64Msgの内容を文字列に変換します
+        /// </summary>
+        /// <param name="msg">変換したいメッセージ</param>
+        /// <returns>変換した文字列</returns>
         public static string MessageToString(Float64Msg msg)
         {
             return msg.data.ToString();
         }
 
+        /// <summary>
+        /// 2つのFloat64msg型メッセージの線形補間を行います
+        /// </summary>
+        /// <param name="msgA">1つ目のメッセージです</param>
+        /// <param name="msgB">2つ目のメッセージです</param>
+        /// <param name="t">補間係数. 0.0~1.0で指定する. 0.0の場合msgAを返す. 1.0の場合msgBを返す</param>
+        /// <returns>補間した値</returns>
         public static Float64Msg Interpolate(Float64Msg msgA, Float64Msg msgB, double t)
         {
             return new Float64Msg(MathUtil.Lerp(msgA.data, msgB.data, t));
         }
 
-        public static Vector3Msg ToVector3Msg(Vector3 unityVector)
+        /// <summary>
+        /// 指定した時刻のパラメータを持つHeaderMsgを生成します.
+        /// ROS1とROS2に対応しています
+        /// </summary>
+        /// <param name="time">HeaderMsgに設定したい時刻</param>
+        /// <param name="frameId">ヘッダー名</param>
+        /// <returns>生成したHeaderMsg</returns>
+        public static HeaderMsg ToHeadermessage(double time, string frameId)
         {
-            Vector3 rosVector = unityVector.Unity2Ros();
-            return new Vector3Msg(rosVector.x, rosVector.y, rosVector.z);
-        }
-
-        public static HeaderMsg ToHeaderMessage(double time, string frameId)
-        {
+        #if !ROS2
             uint secs = (uint)time;
             uint nsecs = (uint)((time - secs) * 1e+9);
-            // RosBridge(?)は自動的にseqを生成するようなので、0に設定してtime、frameIdだけに更新
+
             return new HeaderMsg(0, new TimeMsg(secs, nsecs), frameId);
+        #else
+            int secs = (int)time;
+            uint nsecs = (uint)(time - secs * 1e+9);
+
+            return new HeaderMsg(new TimeMsg(secs, nsecs), frameId);
+        #endif
         }
 
+        /// <summary>
+        /// 引数で入力したmsgのパラメータをtimeを使って更新します.
+        /// ROS1とROS2に対応しています
+        /// </summary>
+        /// <param name="msg">更新したいTimeMsg型メッセージです</param>
+        /// <param name="time">メッセージに設定したい時刻です</param>
         public static void UpdateTimeMsg(TimeMsg msg, double time)
         {
-            msg.secs = (uint)time;
-            msg.nsecs = (uint)((time - msg.secs) * 1e+9);
-        }
-
-        public static WrenchMsg ToWrenchMsg(Vector3 forceUnity, Vector3 torqueUnity)
-        {
-            Vector3 forceRos = forceUnity.Unity2Ros();
-            Vector3 torqueRos = torqueUnity.Unity2Ros();
-            return new WrenchMsg(ToVector3Msg(forceRos), ToVector3Msg(torqueRos));
-        }
-
-        public static WrenchStampedMsg ToWrenchStampedMsg(Vector3 forceUnity, Vector3 torqueUnity, double time, string frameId)
-        {
-            HeaderMsg header = ToHeaderMessage(time, frameId);
-            WrenchMsg wrench = ToWrenchMsg(forceUnity, torqueUnity);
-            return new WrenchStampedMsg(header, wrench);
+        #if !ROS2
+            msg = new((uint)time, (uint)((time - (uint)time) * 1e+9));
+        #else
+            msg = new((int)time, (uint)((time - (uint)time) * 1e+9));
+        #endif
         }
     }
 }

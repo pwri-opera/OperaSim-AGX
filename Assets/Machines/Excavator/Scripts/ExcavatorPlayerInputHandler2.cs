@@ -15,7 +15,7 @@ namespace PWRISimulator
         /// <summary>
         /// 対象のExcvatorコンポネント。
         /// </summary>
-        public Excavator excavator;
+        public ExcavatorJoints excavator;
 
         [Header("Input Action Map")]
         public InputActionAsset inputActionAsset;
@@ -52,12 +52,12 @@ namespace PWRISimulator
 
                 if (excavator != null)
                 {
-                    SetExcavatorConstraintVelocityControl(excavator.leftSprocket);
-                    SetExcavatorConstraintVelocityControl(excavator.rightSprocket);
-                    SetExcavatorConstraintVelocityControl(excavator.swing);
-                    SetExcavatorConstraintVelocityControl(excavator.boomTilt);
-                    SetExcavatorConstraintVelocityControl(excavator.armTilt);
-                    SetExcavatorConstraintVelocityControl(excavator.bucketTilt);
+                    SetExcavatorConstraintVelocityControl(excavator.leftSprocket.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.rightSprocket.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.swing.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.boomTilt.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.armTilt.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.bucketTilt.actuator);
                 }
             }
         }
@@ -68,22 +68,22 @@ namespace PWRISimulator
                 return;
 
             if (leftSprocketAction != null)
-                SetExcavatorInputValue(excavator.leftSprocket, leftSprocketAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.leftSprocket.actuator, leftSprocketAction.ReadValue<float>());
 
             if (rightSprocketAction != null)
-                SetExcavatorInputValue(excavator.rightSprocket, rightSprocketAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.rightSprocket.actuator, rightSprocketAction.ReadValue<float>());
 
             if (swingAction != null)
-                SetExcavatorInputValue(excavator.swing, swingAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.swing.actuator, swingAction.ReadValue<float>());
 
             if (boomTiltAction != null)
-                SetExcavatorInputValue(excavator.boomTilt, boomTiltAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.boomTilt.actuator, boomTiltAction.ReadValue<float>());
 
             if (armTiltAction != null)
-                SetExcavatorInputValue(excavator.armTilt, armTiltAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.armTilt.actuator, armTiltAction.ReadValue<float>());
 
             if (bucketTiltAction != null)
-                SetExcavatorInputValue(excavator.bucketTilt, bucketTiltAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.bucketTilt.actuator, bucketTiltAction.ReadValue<float>());
         }
 
         protected void SetExcavatorInputValue(ConstraintControl constraintControl, double value)

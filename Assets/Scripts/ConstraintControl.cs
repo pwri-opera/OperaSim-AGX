@@ -11,8 +11,6 @@ namespace PWRISimulator
     [Serializable]
     public class ConstraintControl
     {
-        #region Public
-
         /// <summary>
         /// 対象のConstraint。
         /// </summary>
@@ -44,15 +42,15 @@ namespace PWRISimulator
         [ConditionalHide("controlEnabled", true)]
         public double controlMaxForce = double.PositiveInfinity;
 
-        public double currentPosition
+        public double CurrentPosition
         {
             get { return nativeConstraint != null ? nativeConstraint.getAngle() : 0.0; }
         }
-        public double currentSpeed
+        public double CurrentSpeed
         {
             get { return nativeConstraint != null ? nativeConstraint.getCurrentSpeed() : 0.0; }
         }
-        public double currentForce
+        public double CurrentForce
         {
             get { return (lockController != null ? lockController.getCurrentForce() : 0.0) +
                          (targetSpeedController != null ? targetSpeedController.getCurrentForce() : 0.0); }
@@ -100,18 +98,14 @@ namespace PWRISimulator
                 UpdateControlValue();
         }
 
-        #endregion
+        private ControlType? controlTypePrev = null;
+        private double? controlValuePrev = null;// controlValueが変わったか検知するための値。
+        private double? controlMaxForcePrev = null;
 
-        #region Private
-
-        ControlType? controlTypePrev = null;
-        double? controlValuePrev = null;　// controlValueが変わったか検知するための値。
-        double? controlMaxForcePrev = null;
-
-        agx.Constraint1DOF nativeConstraint;
-        agx.LockController lockController;
-        agx.TargetSpeedController targetSpeedController;
-        agx.ElementaryConstraint activeController;
+        private agx.Constraint1DOF nativeConstraint;
+        private agx.LockController lockController;
+        private agx.TargetSpeedController targetSpeedController;
+        private agx.ElementaryConstraint activeController;
 
         /// <summary>
         /// controlTypeによって、lockControllerかtargetSpeedControllerをEnable
@@ -125,7 +119,10 @@ namespace PWRISimulator
                 lockController.setEnable(activeController == lockController);
 
             if (targetSpeedController != null)
+                { 
                 targetSpeedController.setEnable(activeController == targetSpeedController);
+                targetSpeedController.setLockedAtZeroSpeed(activeController == targetSpeedController);
+                }
 
             controlTypePrev = controlType;
             controlValuePrev = null;
@@ -163,7 +160,5 @@ namespace PWRISimulator
             }
             controlValuePrev = controlValue;
         }
-
-        #endregion
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DumpTruckTrackProps
   m_EditorClassIdentifier: 
   m_hingeComplianceTranslational: {x: 1e-10, y: 1e-10, z: 1e-10}
-  m_hingeDampingTranslational: {x: 1, y: 1, z: 1}
+  m_hingeDampingTranslational: {x: 0.1, y: 0.1, z: 0.1}
   m_hingeComplianceRotational: {x: 1e-10, y: 1e-10}
   m_hingeDampingRotational: {x: 1, y: 1}
   m_hingeRangeEnabled: 1

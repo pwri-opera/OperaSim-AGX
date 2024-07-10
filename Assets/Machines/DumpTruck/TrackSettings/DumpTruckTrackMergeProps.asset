@@ -16,6 +16,6 @@ MonoBehaviour:
   m_numNodesPerMergeSegment: 2
   m_contactReduction: 0
   m_lockToReachMergeConditionEnabled: 1
-  m_lockToReachMergeConditionCompliance: 1e-11
-  m_lockToReachMergeConditionDamping: 0.06
+  m_lockToReachMergeConditionCompliance: 0
+  m_lockToReachMergeConditionDamping: 0.05
   m_maxAngleMergeCondition: 0.0006
