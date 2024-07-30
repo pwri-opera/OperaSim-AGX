@@ -1,0 +1,20 @@
+<Kernel name="ExpandConstraints" dispatch="serial">
+  <Parameter.Pointer name="@DynamicsSystem" type="agx::DynamicsSystem" include="agx/DynamicsSystem.h"/>
+
+  <Parameter.Pointer name="binaryConstraintStorage"   bind="@BinaryConstraint"   type="agxData::EntityStorage"/>
+  <Parameter.Pointer name="manyBodyConstraintStorage" bind="@ManyBodyConstraint" type="agxData::EntityStorage"/>
+  <Parameter.Pointer name="strongInteractionStorage"  bind="@StrongInteraction"  type="agxData::EntityStorage"/>
+
+  <Parameter.EntityData name="@BinaryConstraint"   type="BinaryConstraint"   read="instance" write="body1, body2"/>
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance" write="bodies"/>
+  <Parameter.EntityData name="@StrongInteraction"  type="StrongInteraction"  read="instance" write="body1, body2"/>
+
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state"/>
+
+  <Parameter.Pointer name="manyBodyConstraint_bodyElementBuffer" bind="@ManyBodyConstraint.bodies.elements"  type="agxData::Buffer"/>
+
+  <!-- Implicit parameters -->
+  <!-- <Parameter.Array name="@Constraint.constraint" type="agx::ConstraintImplementation" mode="WRITE"/> -->
+	<Parameter.Array   name="@ManyBodyConstraint.bodies.elements"                                              type="UInt"                  mode="WRITE" implicit="true"/>
+</Kernel>
+

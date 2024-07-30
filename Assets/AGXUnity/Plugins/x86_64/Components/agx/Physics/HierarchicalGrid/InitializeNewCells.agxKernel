@@ -1,0 +1,9 @@
+<Kernel name="InitializeNewCells" minJobSize="16">
+  <Parameter.Array name="@NewCells" type="UInt:32bit" mode="READ"/>
+  
+  <!-- Tier and id are already written -->
+  <Parameter.EntityData name="@Cell" type="Cell" read="tier, id, parent, children, numChildren, state, position, neighbors, searchCost" write="state, position, neighbors, searchCost, zoneType"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="cellTable, size"/>
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>
+

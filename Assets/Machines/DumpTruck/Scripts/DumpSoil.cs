@@ -12,14 +12,14 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ƒpƒtƒH[ƒ}ƒ“ƒX‚Ì‚½‚ß‚ÉA‚±‚ÌƒNƒ‰ƒX‚ª‹LÚ‚·‚éMerge Zone‚Æ‚¢‚¤ƒ{ƒbƒNƒX‚É—±q‚ğ“ü‚ê‚é‚ÆA—±q‚ğˆê“I‚ÉÁ‚µ‚Ä‘S‚Ä“ü‚ê‚½—±q
-    /// ‚Ì‘—Ê‚ğˆê‚Â•\–Ê‚Å‰Â‹‰»‚·‚éB“ü‚ê‚½—±q‚Ì‘—Ê‚É‚æ‚Á‚Ä•\–Ê‚Ì‚‚³‚ª•Ï‚í‚éBMerge Zone‚ª•t‚¢‚Ä‚¢‚é‰×‘ä„‘Ì‚ªÎ‚ß‚Æ‚È‚é‚æ‚¤
-    /// ‚É¸~‚³‚ê‚é‚ÆAÁ‚µ‚½—±q‚Ì‘—Ê‚É‘Î‚µ‚ÄŒã‚ë‚ÌoŒû‚©‚ç—±q‚ªÄ¶¬‚³‚ê‚Äo‚éB
+    /// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹ã®ãŸã‚ã«ã€ã“ã®ã‚¯ãƒ©ã‚¹ãŒè¨˜è¼‰ã™ã‚‹Merge Zoneã¨ã„ã†ãƒœãƒƒã‚¯ã‚¹ã«ç²’å­ã‚’å…¥ã‚Œã‚‹ã¨ã€ç²’å­ã‚’ä¸€æ™‚çš„ã«æ¶ˆã—ã¦å…¨ã¦å…¥ã‚ŒãŸç²’å­
+    /// ã®ç·é‡ã‚’ä¸€ã¤è¡¨é¢ã§å¯è¦–åŒ–ã™ã‚‹ã€‚å…¥ã‚ŒãŸç²’å­ã®ç·é‡ã«ã‚ˆã£ã¦è¡¨é¢ã®é«˜ã•ãŒå¤‰ã‚ã‚‹ã€‚Merge ZoneãŒä»˜ã„ã¦ã„ã‚‹è·å°å‰›ä½“ãŒæ–œã‚ã¨ãªã‚‹ã‚ˆã†
+    /// ã«æ˜‡é™ã•ã‚Œã‚‹ã¨ã€æ¶ˆã—ãŸç²’å­ã®ç·é‡ã«å¯¾ã—ã¦å¾Œã‚ã®å‡ºå£ã‹ã‚‰ç²’å­ãŒå†ç”Ÿæˆã•ã‚Œã¦å‡ºã‚‹ã€‚
     /// </summary>
     /// <remarks>
-    /// “y»•\–Ê‚ğ‰Â‹‰»‚·‚é‚½‚ß‚ÉA‚±‚ÌComponent‚Æ“¯‚¶GameObject‚ÉˆÈ~‚Ì‚Q‚ÂComponent‚ª‘}“ü‚³‚ê‚Ä‚¢‚é•K—v‚ª‚ ‚éF
-    /// 1. DumpSoil.obj‚Æ‚¢‚¤Mesh‚ªİ’è‚³‚ê‚Ä‚¢‚éMesh Filter
-    /// 2. DumpSoilMat‚Æ‚¢‚¤MaterialA‚Ü‚½‚ÍDumpSoilShader‚ğg‚¤‘¼‚ÌMaterialA‚ªİ’è‚³‚ê‚Ä‚¢‚éMesh Renderer
+    /// åœŸç ‚è¡¨é¢ã‚’å¯è¦–åŒ–ã™ã‚‹ãŸã‚ã«ã€ã“ã®Componentã¨åŒã˜GameObjectã«ä»¥é™ã®ï¼’ã¤ComponentãŒæŒ¿å…¥ã•ã‚Œã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚‹ï¼š
+    /// 1. DumpSoil.objã¨ã„ã†MeshãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹Mesh Filter
+    /// 2. DumpSoilMatã¨ã„ã†Materialã€ã¾ãŸã¯DumpSoilShaderã‚’ä½¿ã†ä»–ã®Materialã€ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹Mesh Renderer
     /// </remarks>
     [RequireComponent(typeof(MeshFilter)), RequireComponent(typeof(MeshRenderer))]
     public class DumpSoil : ScriptComponent
@@ -28,33 +28,33 @@ namespace PWRISimulator
 
         [Header("Loading")]
 
-        [Tooltip("‰×‘ä‚Éƒ}[ƒW‚³‚ê‚½“y»‚Ì‘—Ê‚ªŒš‹@‚ğ‰e‹¿‚·‚é‚©‚Ç‚¤‚©i‰×‘äRigidBody‚ÆƒWƒ‡ƒCƒ“ƒg‚ÅŒq‚ª‚éRigidBody‚Æ‚µ‚Äˆµ‚¤j")]
+        [Tooltip("è·å°ã«ãƒãƒ¼ã‚¸ã•ã‚ŒãŸåœŸç ‚ã®ç·é‡ãŒå»ºæ©Ÿã‚’å½±éŸ¿ã™ã‚‹ã‹ã©ã†ã‹ï¼ˆè·å°RigidBodyã¨ã‚¸ãƒ§ã‚¤ãƒ³ãƒˆã§ç¹‹ãŒã‚‹RigidBodyã¨ã—ã¦æ‰±ã†ï¼‰")]
         public bool addSoilMassRigidBody = true;
 
 
         [Header("Unloading")]
 
-        [Tooltip("Œã‚ë‚©‚ç—±q‚ª¶¬‚Å‚«‚é‚©‚Ç‚¤‚©BPlay‚ÉƒhƒA‚ÌƒƒbƒNó‘Ô‚É‚æ‚Á‚ÄTrue/False‚É’²®‚·‚é‚Í‚¸‚¾")]
+        [Tooltip("å¾Œã‚ã‹ã‚‰ç²’å­ãŒç”Ÿæˆã§ãã‚‹ã‹ã©ã†ã‹ã€‚Playæ™‚ã«ãƒ‰ã‚¢ã®ãƒ­ãƒƒã‚¯çŠ¶æ…‹ã«ã‚ˆã£ã¦True/Falseã«èª¿æ•´ã™ã‚‹ã¯ãšã ")]
         public bool spawnParticlesEnabled = true;
 
         [Range(0.1f, 1)]
-        [Tooltip("SpawnZone‚Ì•‚ÌƒXƒP[ƒ‹A1.0‚ÍMergeZone•‚Æ“¯ˆê‚Æ‚È‚é")]
+        [Tooltip("SpawnZoneã®å¹…ã®ã‚¹ã‚±ãƒ¼ãƒ«ã€1.0ã¯MergeZoneå¹…ã¨åŒä¸€ã¨ãªã‚‹")]
         public float spawnZoneWidthScale = 0.9f;
 
         [Range(0, 90)]
-        [Tooltip("Å’á‚Ì•ú“yŠp“xB‰×‘ä¸~‚ª‚±‚ÌŠp“x‚ğ’´‚¦‚½‚ç•ú“y‹@”\‚ª—LŒø‚É‚È‚é‚ªA–€C‚È‚Ç‚É‚æ‚Á‚Ä‚æ‚è‘å‚«‚¢Šp“x‚Ì•K—v‚Ì‚±‚Æ‚ª‚ ‚éB")]
+        [Tooltip("æœ€ä½ã®æ”¾åœŸè§’åº¦ã€‚è·å°æ˜‡é™ãŒã“ã®è§’åº¦ã‚’è¶…ãˆãŸã‚‰æ”¾åœŸæ©Ÿèƒ½ãŒæœ‰åŠ¹ã«ãªã‚‹ãŒã€æ‘©æ“¦ãªã©ã«ã‚ˆã£ã¦ã‚ˆã‚Šå¤§ãã„è§’åº¦ã®å¿…è¦ã®ã“ã¨ãŒã‚ã‚‹ã€‚")]
         public float mininumDumpAngle = 10.0f;
 
         [Range(0.01f, 10.0f)]
-        [Tooltip("•ú“y‚Ì‘¬“x‚ÌãŒÀim/sj")]
+        [Tooltip("æ”¾åœŸã®é€Ÿåº¦ã®ä¸Šé™ï¼ˆm/sï¼‰")]
         public float maximumSoilSpeed = 2.0f;
 
         [Range(0, 1)]
-        [Tooltip("‰×‘ä‚ÌüˆÍ‚Æ’†‚É“ü‚Á‚Ä‚¢‚é“y»‚ÌŠÔ‚Ì–€CŒW”B•ú“y‘¬“x‚ğ‰e‹¿‚·‚éB")]
+        [Tooltip("è·å°ã®å‘¨å›²ã¨ä¸­ã«å…¥ã£ã¦ã„ã‚‹åœŸç ‚ã®é–“ã®æ‘©æ“¦ä¿‚æ•°ã€‚æ”¾åœŸé€Ÿåº¦ã‚’å½±éŸ¿ã™ã‚‹ã€‚")]
         public float frictionCoefficient = 0.4f;
 
         [Range(0, 100)]
-        [Tooltip("SpawnZone‚ÌoŒû‚É‹l‚Ü‚Á‚½—±q‚ª‘½‚·‚¬‚½‚çAfrictionCoefficient‚ğ‚©‚¯‚é”’li•ú“y‘¬“x‚ª‰º‚ª‚é‚½‚ß‚Éj")]
+        [Tooltip("SpawnZoneã®å‡ºå£ã«è©°ã¾ã£ãŸç²’å­ãŒå¤šã™ããŸã‚‰ã€frictionCoefficientã‚’ã‹ã‘ã‚‹æ•°å€¤ï¼ˆæ”¾åœŸé€Ÿåº¦ãŒä¸‹ãŒã‚‹ãŸã‚ã«ï¼‰")]
         public float fullSpawnZoneFrictionScale = 3.0f;
 
         [Range(0, 1)]
@@ -68,29 +68,29 @@ namespace PWRISimulator
         [Range(0, 10000)]
         public float pushForceMaxSoilMass = 1000.0f;
 
-        [Tooltip("•ú“y‚ÉoŒû‚É¶¬‚µ‚½—±q‚ÉŒã‚ë•ûŒü‚Ì—Í‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©")]
+        [Tooltip("æ”¾åœŸæ™‚ã«å‡ºå£ã«ç”Ÿæˆã—ãŸç²’å­ã«å¾Œã‚æ–¹å‘ã®åŠ›ã‚’ã‹ã‘ã‚‹ã‹ã©ã†ã‹")]
         public bool particlesPushForceEnabled = true;
 
         [Range(0.1f, 10f)]
         public float particlesPushForceScale = 1.0f;
 
-        [Tooltip("•ú“y‚ÉƒhƒA‚Ì„‘Ì‚ÉŒã‚ë•ûŒü‚Ì—Í‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©")]
+        [Tooltip("æ”¾åœŸæ™‚ã«ãƒ‰ã‚¢ã®å‰›ä½“ã«å¾Œã‚æ–¹å‘ã®åŠ›ã‚’ã‹ã‘ã‚‹ã‹ã©ã†ã‹")]
         public bool doorPushForceEnabled = true;
 
         [Range(0.1f, 10f)]
         public float doorPushForceScale = 1.0f;
 
-        [Tooltip("•ú“y‚ÉƒhƒA‚Ì„‘Ì‚ÉŒã‚ë•ûŒü‚Ì—Í‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©")]
+        [Tooltip("æ”¾åœŸæ™‚ã«ãƒ‰ã‚¢ã®å‰›ä½“ã«å¾Œã‚æ–¹å‘ã®åŠ›ã‚’ã‹ã‘ã‚‹ã‹ã©ã†ã‹")]
         [ConditionalHide(nameof(doorPushForceEnabled), hideCompletely = true)]
         public RigidBody doorBody;
         
 
         [Header("Visuals")]
 
-        [Tooltip("SceneƒEƒBƒ“ƒhƒE‚ÉMergeZone‚ğ•\¦‚·‚é‚©")]
+        [Tooltip("Sceneã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«MergeZoneã‚’è¡¨ç¤ºã™ã‚‹ã‹")]
         public bool showMergeZone = true;
 
-        [Tooltip("SceneƒEƒBƒ“ƒhƒE‚ÉSpawnZone‚ğ•\¦‚·‚é‚©iPlay‚Ì‚İj")]
+        [Tooltip("Sceneã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«SpawnZoneã‚’è¡¨ç¤ºã™ã‚‹ã‹ï¼ˆPlayæ™‚ã®ã¿ï¼‰")]
         public bool showSpawnZone = true;
 
         [Range(0, 2)]
@@ -111,10 +111,10 @@ namespace PWRISimulator
 
         #region Properties
 
-        // ‰×‘ä‚Æƒ}[ƒW‚µ‚½—±q‚Ì‘—ÊB
+        // è·å°ã¨ãƒãƒ¼ã‚¸ã—ãŸç²’å­ã®ç·é‡ã€‚
         public double soilMass { get; private set; } = 0.0;
 
-        // Œ»İ‚Ì•ú“y‘¬“xB
+        // ç¾åœ¨ã®æ”¾åœŸé€Ÿåº¦ã€‚
         public double soilSpeed { get; private set; } = 0.0;
 
         public double soilHeight { get { return mergeZoneHorizontalArea != 0.0 ? soilVolume / mergeZoneHorizontalArea : 0.0; } }
@@ -151,43 +151,43 @@ namespace PWRISimulator
 
         #region Private Fields
 
-        // AgxDynamics‚Ì“à‘ ‚ÌTerrainƒIƒuƒWƒFƒNƒgB
+        // AgxDynamicsã®å†…è”µã®Terrainã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
         agxTerrain.Terrain terrainNative;
 
-        // Terrain‚ÌÅ‘å”¼Œa‚Ì‚ ‚é—±q‚É‘Î‚µ‚Ä—±qƒf[ƒ^iTerrain‚ÌgetParticleNominalRadius()AgetMaterial()‚©‚çŒvZ‚³‚ê‚½jB
+        // Terrainã®æœ€å¤§åŠå¾„ã®ã‚ã‚‹ç²’å­ã«å¯¾ã—ã¦ç²’å­ãƒ‡ãƒ¼ã‚¿ï¼ˆTerrainã®getParticleNominalRadius()ã€getMaterial()ã‹ã‚‰è¨ˆç®—ã•ã‚ŒãŸï¼‰ã€‚
         ParticleData nominalParticleData;
 
-        // ‰×‘ä‚©‚ç•ú“y‚·‚é—±q‚Ìƒf[ƒ^B
+        // è·å°ã‹ã‚‰æ”¾åœŸã™ã‚‹ç²’å­ã®ãƒ‡ãƒ¼ã‚¿ã€‚
         ParticleData spawnParticleData;
 
-        // ‰×‘ä‚Æƒ}[ƒW‚µ‚½—±q‚Ì‘Œv¿—Ê‚ğ‚Ü‚Ë‚·‚é„‘ÌB‰×‘ä„‘Ì‚ÆLockƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ÅŒq‚ª‚Á‚Ä‚¢‚éB
+        // è·å°ã¨ãƒãƒ¼ã‚¸ã—ãŸç²’å­ã®ç·è¨ˆè³ªé‡ã‚’ã¾ã­ã™ã‚‹å‰›ä½“ã€‚è·å°å‰›ä½“ã¨Lockã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã§ç¹‹ãŒã£ã¦ã„ã‚‹ã€‚
         RigidBody soilMassBody;
 
-        // MergeZone‚ÌŒ³X‚Ì¡–@iEditor‚Åİ’è‚µ‚½‚ÌjB
+        // MergeZoneã®å…ƒã€…ã®å¯¸æ³•ï¼ˆEditorã§è¨­å®šã—ãŸã®ï¼‰ã€‚
         Bounds mergeZoneOriginalBoundsLocal = new Bounds();
         
-        // ‚±‚ÌGameObject‚ÌƒyƒAƒŒƒ“ƒg‰×‘ä„‘Ì‚É‘Î‚µ‚ÄŒ³X‚Ì‘Š‘Î“I‚ÈˆÊ’uA‰ñ“]B
+        // ã“ã®GameObjectã®ãƒšã‚¢ãƒ¬ãƒ³ãƒˆè·å°å‰›ä½“ã«å¯¾ã—ã¦å…ƒã€…ã®ç›¸å¯¾çš„ãªä½ç½®ã€å›è»¢ã€‚
         agx.AffineMatrix4x4 transformRelativeToContainerBody;
 
-        // Merge‚ÆSpawn‚ÌXV‚ª•K—v‚©‚Ç‚¤‚©B
+        // Mergeã¨Spawnã®æ›´æ–°ãŒå¿…è¦ã‹ã©ã†ã‹ã€‚
         bool needsUpdate = true;
 
-        // Spawn‚ªÅV‚ÉXV‚³‚ê‚½GameTime‚ÌB
+        // SpawnãŒæœ€æ–°ã«æ›´æ–°ã•ã‚ŒãŸGameTimeã®æ™‚åˆ»ã€‚
         double lastSpawnUpdateTime = 0.0;
         
-        // ƒ}[ƒW‚³‚ê‚Ä‚¢‚È‚¢icanMerge=false‚Ì‚¹‚¢‚ÅjMergeZone‚É“ü‚Á‚Ä‚¢‚éB
+        // ãƒãƒ¼ã‚¸ã•ã‚Œã¦ã„ãªã„ï¼ˆcanMerge=falseã®ã›ã„ã§ï¼‰MergeZoneã«å…¥ã£ã¦ã„ã‚‹ã€‚
         int numUnmergedParticlesInMergeZone = 0;
 
-        // Œ»İ‚Ì¸~Šp“xŸ‘æ‚Ì•ú“yÅ‘å‘¬“xB
+        // ç¾åœ¨ã®æ˜‡é™è§’åº¦æ¬¡ç¬¬ã®æ”¾åœŸæœ€å¤§é€Ÿåº¦ã€‚
         double maxPotentialSoilSpeed = 0.0;
         
-        // ParticleEmitter‚ª—±q‚ğ¶¬‚·‚éƒ][ƒ“‚ğ’è‹`‚·‚éƒ{ƒbƒNƒXB
+        // ParticleEmitterãŒç²’å­ã‚’ç”Ÿæˆã™ã‚‹ã‚¾ãƒ¼ãƒ³ã‚’å®šç¾©ã™ã‚‹ãƒœãƒƒã‚¯ã‚¹ã€‚
         agxCollide.Box emitterBox;
 
-        // “à‘ ‚ÌAgxDynamics‚ÌParticleEmitterB
+        // å†…è”µã®AgxDynamicsã®ParticleEmitterã€‚
         agx.ParticleEmitter emitter;
 
-        // ParticleEmitter‚ªŠJn‚©‚ç¡‚Ü‚Å¶¬‚µ‚½—±q‚Ì”B
+        // ParticleEmitterãŒé–‹å§‹ã‹ã‚‰ä»Šã¾ã§ç”Ÿæˆã—ãŸç²’å­ã®æ•°ã€‚
         double emittedQuantity = 0.0;
 
         #endregion
@@ -210,7 +210,7 @@ namespace PWRISimulator
 
         protected override bool Initialize()
         {
-            // ©“®“I‚ÉComponent‚ğæ“¾F
+            // è‡ªå‹•çš„ã«Componentã‚’å–å¾—ï¼š
 
             if (terrain == null)
                 terrain = FindObjectOfType<DeformableTerrain>();
@@ -218,7 +218,7 @@ namespace PWRISimulator
             if (containerBody == null)
                 containerBody = GetComponentInParent<RigidBody>();
 
-            // ƒGƒ‰[ƒ`ƒFƒbƒNF
+            // ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯ï¼š
 
             if (terrain?.GetInitialized<DeformableTerrain>() == null)
                 return false;
@@ -229,7 +229,7 @@ namespace PWRISimulator
             if (Simulation.Instance?.GetInitialized<Simulation>() == null)
                 return false;
 
-            // ƒf[ƒ^‚Ì‰ŠúF
+            // ãƒ‡ãƒ¼ã‚¿ã®åˆæœŸï¼š
 
             mergeZoneOriginalBoundsLocal = new Bounds(mergeZoneOriginalLocalCenterUnscaled, Vector3.one);
             transformRelativeToContainerBody = AgxUtil.GetRelativeAgxTransform(containerBody.transform, transform);
@@ -253,9 +253,9 @@ namespace PWRISimulator
             if (!addSoilMassRigidBody)
                 return true;
 
-            // ƒ_ƒ“ƒv“y»‚Ì¿—Ê‚ğˆµ‚¤RigidBody‚ğì¬iÕ“Ë•s‰Â”\j
+            // ãƒ€ãƒ³ãƒ—åœŸç ‚ã®è³ªé‡ã‚’æ‰±ã†RigidBodyã‚’ä½œæˆï¼ˆè¡çªä¸å¯èƒ½ï¼‰
             GameObject bodyObject = new GameObject(name + "_SoilMassBody", typeof(RigidBody));
-            bool asChild = GetComponentInParent<ArticulatedRoot>() == null; // ArticulatedRoot‚Ìq‚É‚·‚é‚Æ–â‘è‚ª”­¶‚·‚é‚©‚ç
+            bool asChild = GetComponentInParent<ArticulatedRoot>() == null; // ArticulatedRootã®å­ã«ã™ã‚‹ã¨å•é¡ŒãŒç™ºç”Ÿã™ã‚‹ã‹ã‚‰
             if (asChild)
             {
                 bodyObject.transform.parent = gameObject.transform;
@@ -272,25 +272,25 @@ namespace PWRISimulator
                 bodyObject.transform.rotation = transform.rotation;
             }
 
-            // ¿—Êİ’è‚Ì‰Šú‰»
+            // è³ªé‡è¨­å®šã®åˆæœŸåŒ–
             soilMassBody = bodyObject.GetComponent<RigidBody>().GetInitialized<RigidBody>();
             MassProperties massProps = soilMassBody.MassProperties;
             massProps.Mass.UseDefault = false;
             massProps.CenterOfMassOffset.UseDefault = false;
             massProps.InertiaDiagonal.UseDefault = false;
-            UpdateSoilMassBody(); // ‚±‚ê‚©‚çAŠeUpdate‚ÉŒÄ‚Ño‚µ‚Ä¿—Êİ’è‚ğXV‚³‚¹‚é
+            UpdateSoilMassBody(); // ã“ã‚Œã‹ã‚‰ã€å„Updateã«å‘¼ã³å‡ºã—ã¦è³ªé‡è¨­å®šã‚’æ›´æ–°ã•ã›ã‚‹
             
-            // soilMassBody‚Æ‰×‘ä‚ÌRigidBody‚ğŒq‚®Constraint‚ğì¬
+            // soilMassBodyã¨è·å°ã®RigidBodyã‚’ç¹‹ãConstraintã‚’ä½œæˆ
             GameObject constraintObject = Factory.Create(ConstraintType.LockJoint, Vector3.zero, Quaternion.identity,
                                                          soilMassBody, containerBody);
             constraintObject.name = name + "_SoilMassJoint";
             constraintObject.transform.parent = bodyObject.transform.parent;
-            constraintObject.GetComponent<Constraint>().GetInitialized<Constraint>(); // ‰Šú‰»‚³‚¹‚é‚½‚ß
+            constraintObject.GetComponent<Constraint>().GetInitialized<Constraint>(); // åˆæœŸåŒ–ã•ã›ã‚‹ãŸã‚
             return true;
         }
 
         /// <summary>
-        /// Œ»İ‚Ìƒ_ƒ“ƒv“y»‚Ì¿—Ê‚É‡‚í‚¹‚ÄAƒ_ƒ“ƒv“y»‚ğˆµ‚¤RigidBody‚Ì¿—Êİ’è‚ğ’²®‚·‚éB
+        /// ç¾åœ¨ã®ãƒ€ãƒ³ãƒ—åœŸç ‚ã®è³ªé‡ã«åˆã‚ã›ã¦ã€ãƒ€ãƒ³ãƒ—åœŸç ‚ã‚’æ‰±ã†RigidBodyã®è³ªé‡è¨­å®šã‚’èª¿æ•´ã™ã‚‹ã€‚
         /// </summary>
         void UpdateSoilMassBody()
         {
@@ -298,7 +298,7 @@ namespace PWRISimulator
                 return;
 
             Vector3 size = mergeZoneCurrentSize;
-            float mass = Mathf.Max((float)soilMass, 1f); // •¨—ƒGƒ“ƒWƒ“‚É–â‘è‚ª”­¶‚µ‚È‚¢‚½‚ßA¿—Ê‚ªƒ[ƒ‚É‚È‚ç‚È‚¢‚æ‚¤‚É
+            float mass = Mathf.Max((float)soilMass, 1f); // ç‰©ç†ã‚¨ãƒ³ã‚¸ãƒ³ã«å•é¡ŒãŒç™ºç”Ÿã—ãªã„ãŸã‚ã€è³ªé‡ãŒã‚¼ãƒ­ã«ãªã‚‰ãªã„ã‚ˆã†ã«
             float inertiaMassFactor = mass / 12f;
 
             MassProperties massProps = soilMassBody.MassProperties;
@@ -311,13 +311,13 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// AgxDynamics‚ÌParticleEmitter‚ğ¶¬‚·‚éB‚»‚ê‚ÉAParticleEmitter‚ª—±q‚ğ¶¬‚·‚éƒ][ƒ“‚ğ’è‹`‚·‚éBox‚àì¬B‚±‚Ì
-        /// Box‚Ì‚‚ÍAŒã‚Å‰×‘ä‚Ì“y»‘—Ê‚ª•Ï‚í‚é‚Æ‡‚í‚¹‚Ä’²®‚³‚ê‚é(UpdateEmitterPositionAndSize‚Æ‚¢‚¤ƒƒ\ƒbƒh‚©‚ç)B
+        /// AgxDynamicsã®ParticleEmitterã‚’ç”Ÿæˆã™ã‚‹ã€‚ãã‚Œã«ã€ParticleEmitterãŒç²’å­ã‚’ç”Ÿæˆã™ã‚‹ã‚¾ãƒ¼ãƒ³ã‚’å®šç¾©ã™ã‚‹Boxã‚‚ä½œæˆã€‚ã“ã®
+        /// Boxã®é«˜ã¯ã€å¾Œã§è·å°ã®åœŸç ‚ç·é‡ãŒå¤‰ã‚ã‚‹ã¨åˆã‚ã›ã¦èª¿æ•´ã•ã‚Œã‚‹(UpdateEmitterPositionAndSizeã¨ã„ã†ãƒ¡ã‚½ãƒƒãƒ‰ã‹ã‚‰)ã€‚
         /// </summary>
         /// <returns></returns>
         bool CreateEmitter()
         {
-            // —±qEmitter‚ğì¬
+            // ç²’å­Emitterã‚’ä½œæˆ
             var granularBodySystem = terrainNative.getSoilSimulationInterface().getGranularBodySystem();
             emitter = new agx.ParticleEmitter(granularBodySystem, agx.Emitter.Quantity.QUANTITY_COUNT);
             emitter.setRate(0);
@@ -330,7 +330,7 @@ namespace PWRISimulator
             emitter.setDistributionTable(distTable);
             Simulation.Instance.GetInitialized<Simulation>().Native.add(emitter);
 
-            // —±qEmitter‚ÌƒGƒŠƒA‚ğ‹LÚ‚·‚éBox ShapeiÕ“Ë•s‰Â”\j‚ğì¬‚µA‰×‘ä‚ÌRigidBody‚É’Ç‰ÁBƒ}[ƒWƒGƒŠƒA‚ÌŒã‚ë‚É’u‚­B
+            // ç²’å­Emitterã®ã‚¨ãƒªã‚¢ã‚’è¨˜è¼‰ã™ã‚‹Box Shapeï¼ˆè¡çªä¸å¯èƒ½ï¼‰ã‚’ä½œæˆã—ã€è·å°ã®RigidBodyã«è¿½åŠ ã€‚ãƒãƒ¼ã‚¸ã‚¨ãƒªã‚¢ã®å¾Œã‚ã«ç½®ãã€‚
             emitterBox = new agxCollide.Box(0.1, 0.1, 0.1);
             agxCollide.Geometry geometry = new agxCollide.Geometry(emitterBox);
             geometry.setEnableCollisions(false);
@@ -338,7 +338,7 @@ namespace PWRISimulator
             containerBody.Native.add(geometry);
             UpdateEmitterPositionAndSize();
 
-            // Box‚ğEmitter‚É’Ç‰Á
+            // Boxã‚’Emitterã«è¿½åŠ 
             granularBodySystem.setEnableCollisions(geometry, false);
             emitter.setGeometry(geometry);
 
@@ -346,7 +346,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// •ú“y‚ÉA¶¬‚µ‚½—±q‚Ü‚½‚ÍƒhƒA‚É‚©‚¯‚é—Í‚ğŒvZB‰×‘ä‚Ì“y»‘—Ê‚¨‚æ‚Ñ‰×‘ä‚Ì¸~Šp“x‚É‚æ‚Á‚Ä•Ï‚í‚éB
+        /// æ”¾åœŸæ™‚ã«ã€ç”Ÿæˆã—ãŸç²’å­ã¾ãŸã¯ãƒ‰ã‚¢ã«ã‹ã‘ã‚‹åŠ›ã‚’è¨ˆç®—ã€‚è·å°ã®åœŸç ‚ç·é‡ãŠã‚ˆã³è·å°ã®æ˜‡é™è§’åº¦ã«ã‚ˆã£ã¦å¤‰ã‚ã‚‹ã€‚
         /// </summary>
         /// <returns></returns>
         double CalcPushForce()
@@ -358,7 +358,7 @@ namespace PWRISimulator
         }
         
         /// <summary>
-        /// Unity‚ªŠeFrame‚Éˆê‰ñŒÄ‚Ño‚·ƒƒ\ƒbƒhB
+        /// UnityãŒå„Frameã«ä¸€å›å‘¼ã³å‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰ã€‚
         /// </summary>
         void Update()
         {
@@ -374,7 +374,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// •ú“y‚Ì‚½‚ßAƒhƒA‚É—Í‚ğ‚©‚¯‚éB
+        /// æ”¾åœŸã®ãŸã‚ã€ãƒ‰ã‚¢ã«åŠ›ã‚’ã‹ã‘ã‚‹ã€‚
         /// </summary>
         void UpdateDoorForce()
         {
@@ -392,7 +392,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// AgxUnity‚ªŠeƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ƒXƒeƒbƒv‚ÌŒã‚ÉŒÄ‚Ño‚·ƒƒ\ƒbƒhB‚±‚ÌƒNƒ‰ƒX‚ÌOnEnable()‚©‚çƒR[ƒ‹ƒoƒbƒN‚Æ‚µ‚Ä“o˜^‚³‚ê‚éB
+        /// AgxUnityãŒå„ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒƒãƒ—ã®å¾Œã«å‘¼ã³å‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ã“ã®ã‚¯ãƒ©ã‚¹ã®OnEnable()ã‹ã‚‰ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã¨ã—ã¦ç™»éŒ²ã•ã‚Œã‚‹ã€‚
         /// </summary>
         void OnPostStepForward()
         {
@@ -402,7 +402,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ‚±‚ÌƒXƒNƒŠƒvƒg‚ªEnable‚É‚È‚é‚Æ‚«Unity‚ªŒÄ‚Ño‚·ƒƒ\ƒbƒhB
+        /// ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒEnableã«ãªã‚‹ã¨ãUnityãŒå‘¼ã³å‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰ã€‚
         /// </summary>
         protected override void OnEnable()
         {
@@ -412,7 +412,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ‚±‚ÌƒXƒNƒŠƒvƒg‚ªDisable‚É‚È‚é‚Æ‚«Unity‚ªŒÄ‚Ño‚·ƒƒ\ƒbƒhB
+        /// ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒDisableã«ãªã‚‹ã¨ãUnityãŒå‘¼ã³å‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰ã€‚
         /// </summary>
         protected override void OnDisable()
         {
@@ -422,9 +422,9 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// MergeZone‚É“ü‚Á‚Ä‚¢‚é—±q‚ğŒŸ’m‚µ‚ÄA“K“–‚Ès“®‚ğs‚¤F
-        /// * •ú“y‚ğs‚Á‚Ä‚¢‚È‚¢ê‡‚ÍA—±q‚ğÁ‚µ‚Ä¿—Ê‚ğ‰×‘ä“y—Ê‚É’Ç‰Á‚·‚éB‚Â‚Ü‚èA‰×‘ä“y»‚Æƒ}[ƒW‚·‚éB
-        /// * •ú“y‚ğs‚Á‚Ä‚¢‚éê‡‚ÍAƒ}[ƒW‚µ‚È‚­‚ÄA‰×‘ä‚ÌŒã‚ë•ûŒü‚É—±q‚É—Í‚ğ‚©‚¯‚éB
+        /// MergeZoneã«å…¥ã£ã¦ã„ã‚‹ç²’å­ã‚’æ¤œçŸ¥ã—ã¦ã€é©å½“ãªè¡Œå‹•ã‚’è¡Œã†ï¼š
+        /// * æ”¾åœŸã‚’è¡Œã£ã¦ã„ãªã„å ´åˆã¯ã€ç²’å­ã‚’æ¶ˆã—ã¦è³ªé‡ã‚’è·å°åœŸé‡ã«è¿½åŠ ã™ã‚‹ã€‚ã¤ã¾ã‚Šã€è·å°åœŸç ‚ã¨ãƒãƒ¼ã‚¸ã™ã‚‹ã€‚
+        /// * æ”¾åœŸã‚’è¡Œã£ã¦ã„ã‚‹å ´åˆã¯ã€ãƒãƒ¼ã‚¸ã—ãªãã¦ã€è·å°ã®å¾Œã‚æ–¹å‘ã«ç²’å­ã«åŠ›ã‚’ã‹ã‘ã‚‹ã€‚
         /// </summary>
         void UpdateMerge()
         {
@@ -432,27 +432,27 @@ namespace PWRISimulator
                 transform.rotation.ToHandedQuat(),
                 transform.position.ToHandedVec3()).inverse();
 
-            // ƒ[ƒ‹ƒhƒoƒEƒ“ƒfƒBƒ“ƒOƒ{ƒbƒNƒX‚ğŒvZiŒ»İ‚Ì“y»‚‚³‚ğ–³‹‚·‚éj
+            // ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒã‚¦ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒœãƒƒã‚¯ã‚¹ã‚’è¨ˆç®—ï¼ˆç¾åœ¨ã®åœŸç ‚é«˜ã•ã‚’ç„¡è¦–ã™ã‚‹ï¼‰
             agx.Vec3 aabbMin, aabbMax;
             AgxUtil.ToAgxMinMax(mergeZoneOriginalBoundsWorld, out aabbMin, out aabbMax);
             aabbMin -= new agx.Vec3(nominalParticleData.radius);
             aabbMax += new agx.Vec3(nominalParticleData.radius);
 
-            // ƒ[ƒJƒ‹ƒoƒEƒ“ƒfƒBƒ“ƒOƒ{ƒbƒNƒX‚ğŒvZiŒ»İ‚Ì“y»‚‚³‚ÅY²‚ÌƒTƒCƒY‚ğİ’èj
-            agx.Vec3 localAABBMin = new agx.Vec3(-mergeZoneCurrentSize.x * 0.5, 0, 0);
-            agx.Vec3 localAABBMax = new agx.Vec3(mergeZoneCurrentSize.x * 0.5, soilHeight, mergeZoneCurrentSize.z);
+            // ãƒ­ãƒ¼ã‚«ãƒ«ãƒã‚¦ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒœãƒƒã‚¯ã‚¹ã‚’è¨ˆç®—ï¼ˆç¾åœ¨ã®åœŸç ‚é«˜ã•ã§Yè»¸ã®ã‚µã‚¤ã‚ºã‚’è¨­å®šï¼‰
+            agx.Vec3 localAABBMin = new agx.Vec3(-mergeZoneCurrentSize.x * 0.5, soilHeight, 0);
+            agx.Vec3 localAABBMax = new agx.Vec3(mergeZoneCurrentSize.x * 0.5, mergeZoneCurrentSize.y, mergeZoneCurrentSize.z);
 
-            bool canMerge = (soilSpeed == 0.0 && tiltAngle < mininumDumpAngle) || !spawnParticlesEnabled; // •ú“y‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚¾‚¯‚Éƒ}[ƒW‚³‚¹‚é
-            double maxPotentialSoilSpeedSqrd = maxPotentialSoilSpeed * maxPotentialSoilSpeed; // •ú“y‚Ì“y»‚ÌÅ‘å‘¬“x
+            bool canMerge = (soilSpeed <= 0.1 && tiltAngle < mininumDumpAngle) || !spawnParticlesEnabled; // æ”¾åœŸã—ã¦ã„ãªã„ã¨ãã ã‘ã«ãƒãƒ¼ã‚¸ã•ã›ã‚‹
+            double maxPotentialSoilSpeedSqrd = maxPotentialSoilSpeed * maxPotentialSoilSpeed; // æ”¾åœŸã®åœŸç ‚ã®æœ€å¤§é€Ÿåº¦
             agx.Vec3 pushForce = forwardDir.ToHandedVec3() * -CalcPushForce() * particlesPushForceScale;
-            numUnmergedParticlesInMergeZone = 0; // Merge Zone‚É“ü‚Á‚Ä‚¢‚é‚¯‚Çƒ}[ƒW‚µ‚È‚¢—±q‚Ì”
+            numUnmergedParticlesInMergeZone = 0; // Merge Zoneã«å…¥ã£ã¦ã„ã‚‹ã‘ã©ãƒãƒ¼ã‚¸ã—ãªã„ç²’å­ã®æ•°
 
-            // ‘S‚Ä‚Ì—±q‚ğæ“¾
+            // å…¨ã¦ã®ç²’å­ã‚’å–å¾—
             var soilSimulation = terrainNative.getSoilSimulationInterface();
             var granulars = soilSimulation.getSoilParticles();
             int granularsCount = (int)granulars.size();
 
-            // Še—±q‚ğ”½•œ
+            // å„ç²’å­ã‚’åå¾©
             for (int i = 0; i < granularsCount; ++i)
             {
                 var granule = granulars.at((uint)i);
@@ -478,18 +478,18 @@ namespace PWRISimulator
                     continue;
                 }
 
-                if (canMerge) // •ú“y‚µ‚Ä‚¢‚È‚¢
+                if (canMerge) // æ”¾åœŸã—ã¦ã„ãªã„æ™‚
                 {
-                    // —±q‚ğ‰×‘ä“y»‚Éƒ}[ƒWA‚Â‚Ü‚è—±q‚ğÁ‚µ‰×‘ä“y»—Ê‚ğXV
+                    // ç²’å­ã‚’è·å°åœŸç ‚ã«ãƒãƒ¼ã‚¸ã€ã¤ã¾ã‚Šç²’å­ã‚’æ¶ˆã—è·å°åœŸç ‚é‡ã‚’æ›´æ–°
                     soilMass += granule.getMass();
                     soilSimulation.removeSoilParticle(granule);
                 }
-                else  // •ú“y
+                else  // æ”¾åœŸæ™‚
                 {
-                    // ‚»‚ç‚ÉA‹l‚Ü‚è‚ğŒŸ’m‚·‚é‚½‚ß‚É—±q‚ğ”‚¦‚éB
+                    // ãã‚‰ã«ã€è©°ã¾ã‚Šã‚’æ¤œçŸ¥ã™ã‚‹ãŸã‚ã«ç²’å­ã‚’æ•°ãˆã‚‹ã€‚
                     numUnmergedParticlesInMergeZone += 1;
 
-                    // •ú“y‚ÉMergeZone‚É“ü‚Á‚Ä‚µ‚Ü‚¤—±q‚ÉŒã‚ë•ûŒü‚É—Í‚ğ‚©‚¯‚éB
+                    // æ”¾åœŸæ™‚ã«MergeZoneã«å…¥ã£ã¦ã—ã¾ã†ç²’å­ã«å¾Œã‚æ–¹å‘ã«åŠ›ã‚’ã‹ã‘ã‚‹ã€‚
                     if (particlesPushForceEnabled &&
                         granule.getVelocity().length2() <= maxPotentialSoilSpeedSqrd)
                     {
@@ -503,47 +503,47 @@ namespace PWRISimulator
         }
         
         /// <summary>
-        /// ‰×‘ä‚ÌŒã‚ë‚Ì—±qEmitter‚Ì¶¬—¦A‘¬“x‚ğXVB‚»‚ê‚ÉA¶¬‚µ‚½—±q—Ê‚É‡‚í‚¹‚Ä‰×‘ä“y»‚Ì—Ê‚ğXVB
+        /// è·å°ã®å¾Œã‚ã®ç²’å­Emitterã®ç”Ÿæˆç‡ã€é€Ÿåº¦ã‚’æ›´æ–°ã€‚ãã‚Œã«ã€ç”Ÿæˆã—ãŸç²’å­é‡ã«åˆã‚ã›ã¦è·å°åœŸç ‚ã®é‡ã‚’æ›´æ–°ã€‚
         /// </summary>
         void UpdateSpawn()
         {
             float timeSinceLastUpdate = (float)(Time.timeAsDouble - lastSpawnUpdateTime);
             lastSpawnUpdateTime = Time.timeAsDouble;
 
-            // ‘O‰ñ‚ÌUpdate‚©‚ç¶¬‚³‚ê‚½—±q‚Ì¿—Ê‚ğ‰×‘ä¿—Ê‚©‚çˆø‚­
+            // å‰å›ã®Updateã‹ã‚‰ç”Ÿæˆã•ã‚ŒãŸç²’å­ã®è³ªé‡ã‚’è·å°è³ªé‡ã‹ã‚‰å¼•ã
             double emittedQuantityPrev = emittedQuantity;
             emittedQuantity = emitter.getEmittedQuantity();
             double deltaEmittedQuantity = emittedQuantity - emittedQuantityPrev;
             soilMass -= deltaEmittedQuantity * spawnParticleData.mass;
 
-            // ¡‚©‚ç¶¬‚·‚é—±q‚Ì¿—Ê‚È‚Ç‚ğŠo‚¦‚é
+            // ä»Šã‹ã‚‰ç”Ÿæˆã™ã‚‹ç²’å­ã®è³ªé‡ãªã©ã‚’è¦šãˆã‚‹
             spawnParticleData = nominalParticleData;
 
-            // ‰×‘ä“y»—Ê‚ªƒ[ƒA‚Ü‚½‚Í‰×‘äŠp“x‚ª‰ºŒÀ‚æ‚è¬‚³‚¢ê‡‚Í—±q¶¬‚ğ‚Æ‚ß‚é
+            // è·å°åœŸç ‚é‡ãŒã‚¼ãƒ­ã€ã¾ãŸã¯è·å°è§’åº¦ãŒä¸‹é™ã‚ˆã‚Šå°ã•ã„å ´åˆã¯ç²’å­ç”Ÿæˆã‚’ã¨ã‚ã‚‹
             bool canSpawn = spawnParticlesEnabled && 
                             soilMass > 0.0 && 
                             tiltAngle >= mininumDumpAngle;
             if (canSpawn)
             {
-                // Šp“xŸ‘æ‚Ì‰Á‘¬“x‚ğŒvZ
+                // è§’åº¦æ¬¡ç¬¬ã®åŠ é€Ÿåº¦ã‚’è¨ˆç®—
                 float gravityAcc = 9.81f * Mathf.Sin(tiltAngle * Mathf.Deg2Rad);
                 float frictionAcc = 9.81f * Mathf.Cos(tiltAngle * Mathf.Deg2Rad) * frictionCoefficient;
 
-                // Spawn Zone‚ª—±q‚Å‹l‚Ü‚Á‚Ä‚¢‚éê‡‚ÍAgravity‚ğ¬‚³‚­‚µAfriction‚ğ‘å‚«‚­‚·‚é
+                // Spawn ZoneãŒç²’å­ã§è©°ã¾ã£ã¦ã„ã‚‹å ´åˆã¯ã€gravityã‚’å°ã•ãã—ã€frictionã‚’å¤§ããã™ã‚‹
                 float particlesInSpawnZoneRatio = numUnmergedParticlesInMergeZone / (float)maxNumParticlesInSpawnZone;
                 if (particlesInSpawnZoneRatio > 1.0f)
                 {
                     float effect = fullSpawnZoneMarginFactor > 0 ?
                         Mathf.Clamp01((particlesInSpawnZoneRatio - 1f) / fullSpawnZoneMarginFactor) : 1f;
-                    frictionAcc *= fullSpawnZoneFrictionScale * (1f + effect); // effect‚ª1.0‚É‚È‚é‚ÆfrictionAcc‚ªŠ®—¹‚ÉƒXƒP[ƒ‹
-                    gravityAcc *= 1f - effect; // effect‚ª1.0‚É‚È‚é‚ÆgravityAcc‚ª0.0‚É‚È‚é
+                    frictionAcc *= fullSpawnZoneFrictionScale * (1f + effect); // effectãŒ1.0ã«ãªã‚‹ã¨frictionAccãŒå®Œäº†ã«ã‚¹ã‚±ãƒ¼ãƒ«
+                    gravityAcc *= 1f - effect; // effectãŒ1.0ã«ãªã‚‹ã¨gravityAccãŒ0.0ã«ãªã‚‹
                 }
 
-                // ‰Á‘¬“x‚Å‘¬“x‚ğXVB ƒlƒKƒeƒBƒu‚É‚È‚ç‚È‚¢‚æ‚¤‚ÉŠm”F
+                // åŠ é€Ÿåº¦ã§é€Ÿåº¦ã‚’æ›´æ–°ã€‚ ãƒã‚¬ãƒ†ã‚£ãƒ–ã«ãªã‚‰ãªã„ã‚ˆã†ã«ç¢ºèª
                 soilSpeed += (gravityAcc - frictionAcc) * timeSinceLastUpdate;
                 soilSpeed = Math.Max(soilSpeed, 0);
 
-                // Šp“x‚É‚æ‚Á‚ÄÅ‘å‘¬“x‚É§ŒÀ
+                // è§’åº¦ã«ã‚ˆã£ã¦æœ€å¤§é€Ÿåº¦ã«åˆ¶é™
                 maxPotentialSoilSpeed = Mathf.Sin(tiltAngle * Mathf.Deg2Rad) * maximumSoilSpeed;
                 soilSpeed = Math.Min(soilSpeed, maxPotentialSoilSpeed);
             }
@@ -553,26 +553,26 @@ namespace PWRISimulator
                 soilSpeed = 0.0;
             }
 
-            // —±qEmitter‚Ì¶¬—¦A—±q‰Šú‘¬“xA—±q”ãŒÀ‚ğ’²®
+            // ç²’å­Emitterã®ç”Ÿæˆç‡ã€ç²’å­åˆæœŸé€Ÿåº¦ã€ç²’å­æ•°ä¸Šé™ã‚’èª¿æ•´
             double flowVolume = soilSpeed * spawnZoneVerticalArea;
             double flowParticles = spawnParticleData.volume != 0.0 ? flowVolume / spawnParticleData.volume : 0.0;
             agx.Vec3 initParticleVelocity = soilSpeed * emitterBox.getGeometry().getFrame().transformVectorToLocal(-forwardDir.ToHandedVec3());
             double numSpawnableParticles = spawnParticleData.mass != 0.0 ? soilMass / spawnParticleData.mass : 0.0;
             double maximimuEmittedQuantity = emitter.getEmittedQuantity() + numSpawnableParticles;
 
-            // AGX Emitter‚ªØ‚èã‚°‚é‚æ‚¤‚È‚½‚ß
+            // AGX EmitterãŒåˆ‡ã‚Šä¸Šã’ã‚‹ã‚ˆã†ãªãŸã‚
             maximimuEmittedQuantity = Math.Max(0.0, Math.Floor(maximimuEmittedQuantity));
 
             emitter.setRate(flowParticles);
             emitter.setVelocity(initParticleVelocity);
             emitter.setMaximumEmittedQuantity(maximimuEmittedQuantity);
 
-            // —±qEmitter‚Ì‚‚³‚ğ‰×‘ä‚É“ü‚Á‚Ä‚¢‚é“y»‚Ì—Ê‚É‡‚í‚¹‚ÄXV
+            // ç²’å­Emitterã®é«˜ã•ã‚’è·å°ã«å…¥ã£ã¦ã„ã‚‹åœŸç ‚ã®é‡ã«åˆã‚ã›ã¦æ›´æ–°
             UpdateEmitterPositionAndSize();
         }
 
         /// <summary>
-        /// ‰×‘ä‚É“ü‚Á‚Ä‚¢‚é“y»‚Ì—Ê‚É‡‚í‚¹‚Ä—±qEmitter‚Ì‚‚³‚ğ’²®B
+        /// è·å°ã«å…¥ã£ã¦ã„ã‚‹åœŸç ‚ã®é‡ã«åˆã‚ã›ã¦ç²’å­Emitterã®é«˜ã•ã‚’èª¿æ•´ã€‚
         /// </summary>
         void UpdateEmitterPositionAndSize()
         {
@@ -594,9 +594,9 @@ namespace PWRISimulator
         }
         
         /// <summary>
-        /// AGXUnity‚ÌTerrain‚ÌParticleMaterial‚ª•ÏX‚³‚ê‚½‚Ì‚©ŒŸ’m‚µA•ÏX‚³‚ê‚½ê‡‚ÍŠÖŒW‚Ì‚ ‚é—±qƒf[ƒ^‚ğ‡‚í‚¹‚ÄXV‚·‚éB
+        /// AGXUnityã®Terrainã®ParticleMaterialãŒå¤‰æ›´ã•ã‚ŒãŸã®ã‹æ¤œçŸ¥ã—ã€å¤‰æ›´ã•ã‚ŒãŸå ´åˆã¯é–¢ä¿‚ã®ã‚ã‚‹ç²’å­ãƒ‡ãƒ¼ã‚¿ã‚’åˆã‚ã›ã¦æ›´æ–°ã™ã‚‹ã€‚
         /// </summary>
-        /// <param name="updateInterval">ParticleMaterial‚ğƒ`ƒFƒbƒN‚·‚éüŠú(•b)</param>
+        /// <param name="updateInterval">ParticleMaterialã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹å‘¨æœŸ(ç§’)</param>
         System.Collections.IEnumerator UpdateParticleDataCoroutine(float updateInterval)
         {
             if (terrain?.GetInitialized<DeformableTerrain>()?.Native == null)
@@ -625,15 +625,15 @@ namespace PWRISimulator
 
         #region Visuals
 
-        // ƒrƒWƒ…ƒAƒ‹—p‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgAMaterialƒvƒƒpƒeƒB
+        // ãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«ç”¨ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã€Materialãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
         MeshRenderer meshRenderer;
         MaterialPropertyBlock materialPropertyBlock;
         double soilVisualMovedDistance = 0.0;
 
         /// <summary>
-        /// “y—ÊA•ú“y‘¬“x‚È‚Ç‚É‡‚í‚¹‚ÄA“y»•\–ÊƒƒbƒVƒ…‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒOƒ}ƒeƒŠƒAƒ‹‚Ìƒpƒ‰ƒ[ƒ^‚ğXV‚·‚éB
+        /// åœŸé‡ã€æ”¾åœŸé€Ÿåº¦ãªã©ã«åˆã‚ã›ã¦ã€åœŸç ‚è¡¨é¢ãƒ¡ãƒƒã‚·ãƒ¥ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒãƒ†ãƒªã‚¢ãƒ«ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ›´æ–°ã™ã‚‹ã€‚
         /// </summary>
-        /// <param name="deltaTime">‘O‰ñ‚ÉŒÄ‚Ño‚µ‚½‚Æ‚«‚©‚ç‚©‚©‚Á‚½GameŠÔ</param>
+        /// <param name="deltaTime">å‰å›ã«å‘¼ã³å‡ºã—ãŸã¨ãã‹ã‚‰ã‹ã‹ã£ãŸGameæ™‚é–“</param>
         void UpdateVisualMaterial(double deltaTime)
         {
             if (meshRenderer == null)
@@ -663,7 +663,7 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ƒfƒoƒbƒMƒ“ƒO‚·‚é‚½‚ß‚ÉAMerge ZoneASpawn Zone‚ğSceneƒEƒBƒ“ƒhƒE“à‚É•\¦‚·‚éB
+        /// ãƒ‡ãƒãƒƒã‚®ãƒ³ã‚°ã™ã‚‹ãŸã‚ã«ã€Merge Zoneã€Spawn Zoneã‚’Sceneã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å†…ã«è¡¨ç¤ºã™ã‚‹ã€‚
         /// </summary>
         void OnDrawGizmos()
         {
@@ -672,10 +672,10 @@ namespace PWRISimulator
             {
                 if (showMergeZone)
                 {
-                    // Box‚ÌˆÊ’uA‰ñ“]AƒXƒP[ƒ‹‚ğİ’è
+                    // Boxã®ä½ç½®ã€å›è»¢ã€ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
                     Gizmos.matrix = transform.localToWorldMatrix;
 
-                    // Play‚Ìê‡‚ÍABox‚Ì‚‚³‚ğŒ»İ‚Ì“y»‚‚³‚É‡‚í‚¹‚Ä’²®
+                    // Playæ™‚ã®å ´åˆã¯ã€Boxã®é«˜ã•ã‚’ç¾åœ¨ã®åœŸç ‚é«˜ã•ã«åˆã‚ã›ã¦èª¿æ•´
                     Vector3 localScale = Application.isPlaying ?
                         new Vector3(1, Mathf.Max(0.001f, (float)soilHeight / transform.localScale.y), 1) :
                         Vector3.one;
@@ -684,11 +684,11 @@ namespace PWRISimulator
                         mergeZoneCurrentLocalCenterUnscaled :
                         mergeZoneOriginalLocalCenterUnscaled;
 
-                    // Box‚Ì•\–Ê‚ğ•\¦
+                    // Boxã®è¡¨é¢ã‚’è¡¨ç¤º
                     Gizmos.color = new Color(0.1f, 1.0f, 0.1f, 0.2f);
                     Gizmos.DrawCube(localPos, localScale);
 
-                    // Box‚ÌƒGƒbƒW‚ğ•\¦
+                    // Boxã®ã‚¨ãƒƒã‚¸ã‚’è¡¨ç¤º
                     Gizmos.color = Gizmos.color * 2.0f;
                     Gizmos.DrawWireCube(localPos, localScale);
                 }
@@ -697,18 +697,18 @@ namespace PWRISimulator
                 {
                     if (Application.isPlaying && emitterBox != null)
                     {
-                        // Box‚ÌˆÊ’uA‰ñ“]AƒXƒP[ƒ‹‚ğİ’è
+                        // Boxã®ä½ç½®ã€å›è»¢ã€ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
                         Gizmos.matrix = Matrix4x4.TRS(emitterBox.getGeometry().getPosition().ToHandedVector3(),
                                                       emitterBox.getGeometry().getRotation().ToHandedQuaternion(),
                                                       Vector3.one);
                         
                         Vector3 size = emitterBox.getHalfExtents().ToVector3() * 2.0f;
 
-                        // Box‚Ì•\–Ê‚ğ•\¦
+                        // Boxã®è¡¨é¢ã‚’è¡¨ç¤º
                         Gizmos.color = new Color(1.0f, 0.1f, 0.1f, 0.2f);
                         Gizmos.DrawCube(Vector3.zero, size);
 
-                        // Box‚ÌƒGƒbƒW‚ğ•\¦
+                        // Boxã®ã‚¨ãƒƒã‚¸ã‚’è¡¨ç¤º
                         Gizmos.color = Gizmos.color * 2.0f;
                         Gizmos.DrawWireCube(Vector3.zero, size);
                     }
@@ -721,7 +721,7 @@ namespace PWRISimulator
     }
 
     /// <summary>
-    /// Terrain—±q‚ÌƒvƒƒpƒeƒB‚ğ•Û‘¶‚·‚éƒXƒgƒ‰ƒNƒ`ƒƒ[B
+    /// Terrainç²’å­ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ä¿å­˜ã™ã‚‹ã‚¹ãƒˆãƒ©ã‚¯ãƒãƒ£ãƒ¼ã€‚
     /// </summary>
     struct ParticleData
     {
@@ -782,7 +782,7 @@ namespace PWRISimulator
 
         public override void OnInspectorGUI()
         {
-            // •W€‚ÌGUI‚ğ•\¦
+            // æ¨™æº–ã®GUIã‚’è¡¨ç¤º
             base.OnInspectorGUI();
 
             var data = (DumpSoil)target;

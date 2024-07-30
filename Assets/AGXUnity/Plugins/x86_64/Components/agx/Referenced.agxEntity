@@ -1,0 +1,5 @@
+<Entity name="Referenced">
+  <Attribute.Scalar name="referenceCount" type="UInt:32bit"/>
+  <Attribute.Scalar name="observerMutex" type="SpinMutex"/>
+  <Attribute.Vector name="observers" type="agxData::EntityPtr *"/>
+</Entity>

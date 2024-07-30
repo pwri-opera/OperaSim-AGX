@@ -1,0 +1,14 @@
+<Kernel.Scalar name="Inv" inline="true" templatePermutation="Math.TemplatePermutations.Inv">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="Inv" inline="true" templatePermutation="Math.TemplatePermutations.Inv">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Inv" inline="true" templatePermutation="Math.TemplatePermutations.Inv">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg" type="Auto" mode="READ"/>
+</Kernel>

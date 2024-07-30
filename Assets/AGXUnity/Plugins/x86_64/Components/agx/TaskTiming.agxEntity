@@ -1,0 +1,12 @@
+<Entity name="TaskTiming">
+  <Attribute.Scalar name="name" type="Name"/>
+  <Attribute.Scalar name="implementation" type="Name"/>
+  <Attribute.Scalar name="numSubtasks" type="UInt"/>
+  <Attribute.Scalar name="wallTime" type="Real:64bit"/>
+  <Attribute.Scalar name="computeCost" type="Real:64bit"/>
+  <Attribute.Scalar name="overheadTime" type="Real:64bit"/>
+
+  <!-- <Attribute.Scalar name="accumulatedWallTime" type="Real:64bit"/>
+  <Attribute.Scalar name="accumulatedComputeCost" type="Real:64bit"/>
+  <Attribute.Scalar name="accumulatedOverheadTime" type="Real:64bit"/> -->
+</Entity>

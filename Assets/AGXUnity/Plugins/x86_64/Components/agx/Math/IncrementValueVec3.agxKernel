@@ -1,0 +1,4 @@
+<Kernel name="IncrementValueVec3Kernel" device="OpenCL">
+	<Parameter.Array name="buffer" type="Vec3" mode="READ_WRITE"/>
+	<Parameter.Scalar name="value" type="Vec3"/>
+</Kernel>

@@ -1,46 +1,43 @@
 using System;
-using RosSharp.RosBridgeClient;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PWRISimulator.ROS
 {
     /// <summary>
-    /// Unity�̃��C�����[�v�̎d�g�݂̐�����AUnity��GameTime��FixedTime�����A���^�C���ƊO��Ă���BUnity��GameTime��
-    /// FixedTime�͌p���I�ȃ��A���^�C���ɑ΂��Ēx��A���U�I�ȃX�e�b�v�Ői�߂���B���̃X�N���v�g��Unity��GameTime�ƃ��A���^�C��
-    /// �̊֌W�𑪂�A�Q�̃^�C�����C���̊ԕϊ��ł���@�\��񋟂���B
+    /// Unityのメインループの仕組みの性質上、UnityのGameTimeとFixedTimeがリアルタイムと外れている。UnityのGameTimeと
+    /// FixedTimeは継続的なリアルタイムに対して遅れ、離散的なステップで進められる。このスクリプトはUnityのGameTimeとリアルタイム
+    /// の関係を測り、２つのタイムラインの間変換できる機能を提供する。
     /// 
-    /// �O���̃V�X�e������l�b�g���[�N�f�[�^�������I�ɓ͂��A���̃f�[�^�𐳂���GameTime�Ɏg�p�������ꍇ�ɖ��ɗ��B
-    /// RealTimeDataBuffer�ƈꏏ�Ɏg�p������ƁA���A���^�C���̎��_�ɓ͂����l�b�g���[�N�f�[�^�����̎��_�ɑ΂��ēK����
-    /// GameTime���_����擾���邱�Ƃ��ł���悤�ɂȂ�B
+    /// 外部のシステムからネットワークデータが周期的に届き、そのデータを正しいGameTimeに使用したい場合に役に立つ。
+    /// RealTimeDataBufferと一緒に使用したらと、リアルタイムの時点に届いたネットワークデータがその時点に対して適当な
+    /// GameTime時点から取得することができるようになる。
     /// 
-    /// ��F
-    /// 1. �������ɁA�e�f�[�^���Ƃ�RealTimeDataBuffer�Ƃ����o�b�t�@�I�u�W�F�N�g���쐬(generic�d�g�݂�K�p�̂ŁA�^�͂Ȃ�ł�OK�j
-    /// 2. �ʓr�ȃX���b�h�Ƀl�b�g���[�N�f�[�^���͂��ƁARealTimeTracker.Realtime�̃^�C���X�^���v��RealTimeDataBuffer
-    ///    �o�b�t�@�Ƀf�[�^��}���B
-    /// 3. ���C���X���b�h��FixedUpdate���\�b�h����ARealTimeTracker.ConvertUnityTimeToRealTime()���\�b�h���g���Č��݂�
-    ///    FixedTime���_��΂��郊�A���^�C�����_�ɕϊ����A���̃^�C���X�^���v��RealTimeDataBuffer�o�b�t�@������f�[�^���擾��,
-    ///    ���̃f�[�^�őΏۂ�Unity�p�����[�^�[���X�V����B�i��v����^�C���X�^���v�o�b�t�@�ɂȂ��ꍇ�́A�I�v�V�����ɂ���ėׂ�
-    ///    �^�C���X�^���v�̃f�[�^���擾����A�܂��͎���̂Q�̃f�[�^�Ɋ�Â��ĕ�Ԃ���j
+    /// 例：
+    /// 1. 初期化に、各データごとにRealTimeDataBufferというバッファオブジェクトを作成(generic仕組みを適用ので、型はなんでもOK）
+    /// 2. 別途なスレッドにネットワークデータが届くと、RealTimeTracker.RealtimeのタイムスタンプでRealTimeDataBuffer
+    ///    バッファにデータを挿入。
+    /// 3. メインスレッドのFixedUpdateメソッドから、RealTimeTracker.ConvertUnityTimeToRealTime()メソッドを使って現在の
+    ///    FixedTime時点を対するリアルタイム時点に変換し、そのタイムスタンプでRealTimeDataBufferバッファからをデータを取得し,
+    ///    そのデータで対象のUnityパラメーターを更新する。（一致するタイムスタンプバッファにない場合は、オプションによって隣の
+    ///    タイムスタンプのデータを取得する、または周りの２つのデータに基づいて補間する）
     /// </summary>
-    [DefaultExecutionOrder(-32000)] // �eFrame�̊J�n�Ɏ��Ԃ𑪂邽�߂ɁA���̃X�N���v�g��葁�����s�����悤��Order���Œ�ɐݒ�
+    [DefaultExecutionOrder(-32000)] // 各Frameの開始に時間を測るために、他のスクリプトより早く実行されるようにOrderを最低に設定
     public class RealTimeTracker : MonoBehaviour
     {
         /// <summary>
-        /// �f�o�b�O�p�̃��b�Z�[�W���R���\�[���E�B���h�E�Ƀv�����g���邩�B
+        /// デバッグ用のメッセージをコンソールウィンドウにプリントするか。
         /// </summary>
         public bool printToLog = false;
 
         /// <summary>
-        /// ���A���^�C����Unity�̃^�C�����C���̎��ԍ��B0�ɂ��Ă����C�����[�v�̎d�g�݂�Unity�̃^�C�����C�������A���^�C�����P��
-        /// ���C�����[�v�t���[���x���̂ŁA��ʓI��0���傫�����Ȃ��Ă�OK�B�������A�l�b�g���[�N�f�[�^���Ⴂ���g���œ͂��Ă���ꍇ�́A
-        /// ��Ԃ��邽�߂̃f�[�^�͈͂��\���ɂȂ�悤�ɂO��菭���傫���ݒ肵�Ă��ǂ����A���R�I�ɂɒx������������B
+        /// リアルタイムとUnityのタイムラインの時間差。0にしてもメインループの仕組みでUnityのタイムラインがリアルタイムより１つ
+        /// メインループフレーム遅いので、一般的に0より大きくしなくてもOK。ただし、ネットワークデータが低い周波数で届いている場合は、
+        /// 補間するためのデータ範囲が十分になるように０より少し大きく設定しても良いが、自然的にに遅延が発生する。
         /// </summary>
         public double inputValueDelay = 0.0;
 
         /// <summary>
-        /// ���Frame�̊J�n����|���������C���^�C���i�b�j�B
+        /// 第一Frameの開始から掛かったライルタイム（秒）。
         /// </summary>
         public double RealTime
         {
@@ -48,7 +45,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// ���Frame���猻�݂�Frame�̊J�n�܂ł����������C���^�C���i�b�j�B
+        /// 第一Frameから現在のFrameの開始までかかったライルタイム（秒）。
         /// </summary>
         public double RealTimeAtStartOfFrame
         {
@@ -61,7 +58,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// Unity���J�b�g����GameTime(�܂�A���A���^�C���ɑ΂��đ��ΓI�ȑ��v���Ԃ̍�)�B�eFrame�Ɉ��X�V�����(���Frame�ȊO)�B
+        /// UnityがカットしたGameTime(つまり、リアルタイムに対して相対的な総計時間の差)。各Frameに一回更新される(第一Frame以外)。
         /// </summary>
         public double SkippedGameTime
         {
@@ -69,9 +66,9 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// inputValueDelay�y��Unity���J�b�g����GameTime�ɑΉ����āAUnity��GameTime�̎��_�����A���^�C�����_�֕ϊ�����B
+        /// inputValueDelay及びUnityがカットしたGameTimeに対応して、UnityのGameTimeの時点をリアルタイム時点へ変換する。
         /// </summary>
-        /// <param name="gameTimeOrFixedTime">Unity��GameTime�܂���FixedTime</param>
+        /// <param name="gameTimeOrFixedTime">UnityのGameTimeまたはFixedTime</param>
         public double ConvertUnityTimeToRealTime(double gameTimeOrFixedTime)
         {
             return gameTimeOrFixedTime - inputValueDelay + skippedGameTime;
@@ -79,25 +76,25 @@ namespace PWRISimulator.ROS
 
         #region Private
 
-        // �ŏ���Frame�̎n�߂���̃��A���^�C���𑪂�Watch
+        // 最初のFrameの始めからのリアルタイムを測るWatch
         System.Diagnostics.Stopwatch realTimeWatch = new System.Diagnostics.Stopwatch();
 
-        // realTimeWatch�͊J�n������
+        // realTimeWatchは開始したか
         bool watchStarted = false;
 
-        double realtimeAtStartOfFrame = 0.0;  // ���݂�Frame�̊J�n�ɑ�����realTimeWatch�l
+        double realtimeAtStartOfFrame = 0.0;  // 現在のFrameの開始に測ったrealTimeWatch値
         double realtimeAtStartOfFramePrev = 0.0;
         bool realtimeAtStartOfFrameIsUpToDate = false;
 
-        double skippedGameTime = 0.0; // �p�t�H�[�}���X�Ȃǂ̂�����Unity���J�b�g����GameTime�i��FixedTime�j�B 
+        double skippedGameTime = 0.0; // パフォーマンスなどのせいでUnityがカットしたGameTime（とFixedTime）。 
         double skippedGameTimePrev = 0.0;
 
-        bool resyncRequested = true;  // unscaledTimeCorrection���܂��v�Z���čX�V���������ǂ���
-        double unscaledTimeCorrection = 0.0; //�@Time.unscaledTime��realTimeWatch�̍�
+        bool resyncRequested = true;  // unscaledTimeCorrectionをまた計算して更新したいかどうか
+        double unscaledTimeCorrection = 0.0; //　Time.unscaledTimeとrealTimeWatchの差
 
         void Update()
         {
-            // �����Frame��FixedUpdate���Ăяo����Ȃ������ꍇ�́AUpdate����J�n���Ԃ𑪂�B
+            // 今回のFrameにFixedUpdateが呼び出されなかった場合は、Updateから開始時間を測る。
             MeasureRealTimeAtBeginFrame();
 
             if (printToLog)
@@ -115,7 +112,7 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// �܂��s���Ă��Ȃ��ꍇ�́A���݂�Frame�̊J�n����(���A���^�C���j�𑪂�B
+        /// まだ行っていない場合は、現在のFrameの開始時間(リアルタイム）を測る。
         /// </summary>
         void MeasureRealTimeAtBeginFrame()
         {
@@ -136,26 +133,26 @@ namespace PWRISimulator.ROS
 
         void LateUpdate()
         {
-            // skippedGameTime���X�V
+            // skippedGameTimeを更新
             UpdateSkippedGameTime();
 
-            // realtimeAtStartOfFrame������Frame�̊J�n�ɑ�����悤��
+            // realtimeAtStartOfFrameが次のFrameの開始に測られるように
             realtimeAtStartOfFrameIsUpToDate = false;
         }
 
         /// <summary>
-        /// skippedGameTime���v�Z����BLateUpdate�܂���Update����Ăяo���K�v�i���FixedUpdate������s���Ȃ��j�B
+        /// skippedGameTimeを計算する。LateUpdateまたはUpdateから呼び出す必要（絶対FixedUpdateから実行しない）。
         /// </summary>
         void UpdateSkippedGameTime()
         {
             skippedGameTimePrev = skippedGameTime;
 
-            // ���Frame�ɁA���A���^�C���Ɣ�ׂ�unscaledTime���������������Ă���̂Ŏg���Ȃ��BFrame�Q���烊�A���^�C���Ɠ���
-            // �悤�ɑ�����̂ŁAFrame2����unscaledTime��time���ׂ�skippedGameTime���v�Z�ł���B
+            // 第一Frameに、リアルタイムと比べてunscaledTimeがおかしく増えてくるので使えない。Frame２からリアルタイムと同じ
+            // ように増えるので、Frame2からunscaledTimeとtimeを比べてskippedGameTimeを計算できる。
             if (Time.frameCount >= 2)
             {
-                // ���Frame��unscaledTime���������������Ă����̂ŁAFrame2��unscaledTime�ƃ��A���^�C���̍���ۑ����āA���ꂩ��
-                // unscaledTime��time���ׂ�̂ɂ��̍����܂ށB
+                // 第一FrameにunscaledTimeがおかしく増えてくたので、Frame2にunscaledTimeとリアルタイムの差を保存して、これから
+                // unscaledTimeとtimeを比べるのにその差を含む。
                 if (resyncRequested)
                 {
                     unscaledTimeCorrection = Time.unscaledTimeAsDouble - RealTimeAtStartOfFrame;

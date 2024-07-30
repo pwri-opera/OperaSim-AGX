@@ -7,6 +7,7 @@ namespace AGXUnity.IO.URDF
   /// Base URDF element with either required or optional "name" attribute.
   /// </summary>
   [DoNotGenerateCustomEditor]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#urdf-import" )]
   public class Element : ScriptableObject
   {
     public static T Instantiate<T>()
@@ -28,7 +29,7 @@ namespace AGXUnity.IO.URDF
     /// Name attribute of the element.
     /// </summary>
     [HideInInspector]
-    public string Name { get { return m_name; } private set { m_name = value; } }
+    public string Name { get { return m_name; } private set { name = m_name = value; } }
 
     /// <summary>
     /// Line number this element is located in the read URDF document.

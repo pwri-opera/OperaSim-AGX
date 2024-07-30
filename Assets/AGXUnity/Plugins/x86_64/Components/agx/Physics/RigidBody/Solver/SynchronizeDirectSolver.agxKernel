@@ -1,0 +1,32 @@
+<SolveKernel name="SynchronizeDirectSolver">
+  <Parameter.Pointer name="@Solver" type="agx::Solver"/>
+  
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, source"/>
+
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="solveModel, body1, body2, jacobianIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="lambda"/>
+  <Parameter.Array  name="@BinaryConstraintJacobian"          type="Jacobian6DOFElement"    mode="READ"/>
+
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="solveModel, bodies, jacobianIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" write="lambda"/>
+  <Parameter.Array  name="@ManyBodyConstraintJacobian"        type="Jacobian6DOFElement"    mode="READ"/>
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, jacobianIndex, rowIndex, numRows"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" write="lambda"/>
+  <Parameter.Array  name="@ContactConstraintJacobian"         type="Jacobian6DOFElement"    mode="READ"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="points, solveModel"/>
+  
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="graphNode, state"/>
+
+
+  <Parameter.Array name="@ParticleBodyContactConstraint.G" type="ParticleBodyContactJacobian" mode="READ" required="false"/>
+  <Parameter.Array name="@ParticleBodyContactConstraint.Row.lambda" type="Real" mode="READ" required="false"/>
+
+ 
+  <Parameter.Array name="granularGeometryJacobianStorage" bind="@GranularGeometryContactConstraintJacobianStorage" mode="READ" type="Jacobian6DOFElement" required="false"/>
+  <Parameter.Array name="@GranularBodyContactConstraint.rowIndex" type="UInt:32bit" mode="READ" required="false"/>
+  <Parameter.Array name="@GranularBodyContactConstraint.jacobianIndex" type="UInt:32bit" mode="READ" required="false"/>
+  <Parameter.Array name="@GranularBodyContactConstraint.Row.lambda" type="Real" mode="READ" required="false"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ" required="false"/>
+</SolveKernel>

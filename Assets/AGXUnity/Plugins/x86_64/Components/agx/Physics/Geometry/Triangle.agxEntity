@@ -1,0 +1,9 @@
+<Entity name="Triangle">
+	<Attribute.Scalar name="vertices" type="Vec3:32bit" numElements="3"/>
+	<Attribute.Scalar name="normals" type="Vec3:32bit" numElements="3"/>
+	<Attribute.Scalar name="colors" type="Vec4:32bit" numElements="3"/>
+	
+	<Attribute.Scalar name="indices" type="UInt:32bit" numElements="3"/>
+	
+	<Attribute.Scalar name="cameraDistance" type="Real"/>
+</Entity>

@@ -1,0 +1,4 @@
+<Kernel name="PrintContactZoneStatistics" dispatch="serial">
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts" write="particleParticleContacts, particleGeometryContacts, geometryGeometryContacts"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" read="instance" write="parent, child"/>
+</Kernel>

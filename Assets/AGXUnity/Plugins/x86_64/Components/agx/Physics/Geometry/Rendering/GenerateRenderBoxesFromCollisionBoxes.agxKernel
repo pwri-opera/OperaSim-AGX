@@ -1,0 +1,17 @@
+<Kernel name="GenerateRenderBoxesFromCollisionBoxes" device="OpenCL">
+	<Parameter.Scalar name="numBoxes" type="UInt" bind="@CollisionBox.numElements"/>
+	<Parameter.Array name="transforms" type="AffineMatrix4x4" mode="READ" bind="@CollisionBox.transform"/>
+	<Parameter.Array name="halfExtentsBuffer" type="Vec3" mode="READ" bind="@CollisionBox.halfExtents"/>
+	
+	<Parameter.Array name="vertexBuffer" type="agxGL.RenderBoxVertices" mode="WRITE" bind="@RenderBox.vertices"/>
+	<Parameter.Array name="normalBuffer" type="agxGL.RenderBoxNormals" mode="WRITE" bind="@RenderBox.normals"/>
+</Kernel>
+
+<Kernel name="GenerateRenderBoxesFromCollisionBoxes">
+
+	<Parameter.Array name="transforms" type="AffineMatrix4x4" mode="READ" bind="@CollisionBox.transform"/>
+	<Parameter.Array name="halfExtentsBuffer" type="Vec3" mode="READ" bind="@CollisionBox.halfExtents"/>
+	
+	<Parameter.Array name="vertexBuffer" type="agxGL.RenderBoxVertices" mode="WRITE" bind="@RenderBox.vertices"/>
+	<Parameter.Array name="normalBuffer" type="agxGL.RenderBoxNormals" mode="WRITE" bind="@RenderBox.normals"/>
+</Kernel>

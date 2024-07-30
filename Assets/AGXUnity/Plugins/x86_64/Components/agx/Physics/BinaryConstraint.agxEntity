@@ -1,0 +1,4 @@
+<Entity name="BinaryConstraint" source="ConstraintBase">
+  <Attribute.Scalar name="body1"     type="UInt"/>
+  <Attribute.Scalar name="body2"     type="UInt"/>
+</Entity>

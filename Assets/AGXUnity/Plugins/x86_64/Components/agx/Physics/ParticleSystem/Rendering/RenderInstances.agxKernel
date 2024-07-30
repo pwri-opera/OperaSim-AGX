@@ -1,0 +1,21 @@
+<Kernel name="RenderInstances" device="OpenGL" primitive="Triangles" numPrimitivesPerElement="3" numInstances="@Particle.numElements" sourcePath="Physics.ParticleSystem.Rendering.InstanceShader">
+  <Attribute name="vertices" type="Vec3:32bit" variableName="a_vertex" bind="@Triangle.vertices"/>
+  <Attribute name="normals" type="Vec3:32bit" variableName="a_normal" bind="@Triangle.normals"/>
+  <!-- <Attribute.Scalar name="colors" type="Vec4:32bit" variableName="a_color" bind="@Triangle.colors"/> -->
+  <!-- <Indices type="UInt:32bit" bind="@Triangle.indices"/> -->
+
+  <Attribute name="positions" type="Vec3:32bit" variableName="a_position" bind="@Particle.position" divisor="1"/>
+  <Attribute name="radius" type="Real" variableName="a_radius" bind="@Particle.radius" divisor="1"/>
+	
+	<SharedAttribute name="color" type="Vec4" variableName="a_color" value="Vec4(1, 1, 0, 1)"/>
+	
+  <Uniform name="modelViewProjection" type="Matrix4x4" variableName="u_modelViewProjectionMatrix" bind="@camera.modelViewProjection"/>
+  <Uniform name="modelView" type="Matrix4x4" variableName="u_modelViewMatrix" bind="@camera.view"/>
+  <Uniform name="normalProjection" type="Matrix3x3" variableName="u_normalMatrix" bind="@camera.view"/>
+  <!--<Uniform name="defaultRadius" type="Real" variableName="u_defaultRadius" bind="@Particle.defaultRadius"/>-->
+  
+	<State type="Setting2" feature="glPolygonMode" face="GL_FRONT_AND_BACK" mode="GL_FILL"/>
+	<State type="Capability" capability="GL_BLEND" value="false"/>
+	<State type="Capability" capability="GL_CULL_FACE" value="true"/>
+	<!-- <State type="Capability" capability="GL_DEPTH_TEST" value="false"/> -->
+</Kernel>

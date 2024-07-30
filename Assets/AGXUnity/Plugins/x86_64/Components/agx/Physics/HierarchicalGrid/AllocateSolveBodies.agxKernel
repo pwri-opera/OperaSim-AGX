@@ -1,0 +1,17 @@
+<Kernel name="AllocateSolveBodies" dispatch="serial">
+  <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="children, numChildren, collisionObjects, solveBodyOffsets" write="solveBodyOffsets"/>
+  <Parameter.EntityData name="@SolveBody" type="SolveBody"/>
+</Kernel>
+
+<Kernel name="AllocateSolveBodies" dispatch="serial" implementation="Real32">
+  <Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="children, numChildren, collisionObjects, solveBodyOffsets" write="solveBodyOffsets"/>
+  <Parameter.EntityData name="@SolveBody" type="SolveBody32"/>
+</Kernel>
+
+<Kernel name="AllocateSolveBodies" dispatch="serial" implementation="Reference">
+  <Parameter.Pointer name="@Particle" type="agxData::EntityStorage"/>
+  <Parameter.Pointer name="@SolveBody" type="agxData::EntityStorage"/>
+</Kernel>
+

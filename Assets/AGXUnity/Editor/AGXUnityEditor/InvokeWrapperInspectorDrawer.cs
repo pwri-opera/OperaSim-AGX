@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using UnityEngine;
-using UnityEditor;
-using AGXUnity;
+﻿using AGXUnity;
 using AGXUnity.Model;
 using AGXUnity.Utils;
-
-using GUI    = AGXUnity.Utils.GUI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using UnityEditor;
+using UnityEngine;
+using GUI = AGXUnity.Utils.GUI;
 using Object = UnityEngine.Object;
 
 namespace AGXUnityEditor
@@ -93,8 +92,22 @@ namespace AGXUnityEditor
     [InspectorDrawer( typeof( int ) )]
     public static object IntDrawer( object[] objects, InvokeWrapper wrapper )
     {
-      return EditorGUILayout.IntField( InspectorGUI.MakeLabel( wrapper.Member ).text,
+      return EditorGUILayout.IntField( InspectorGUI.MakeLabel( wrapper.Member ),
                                        wrapper.Get<int>( objects[ 0 ] ) );
+    }
+
+    [InspectorDrawer( typeof( Vector2Int ) )]
+    public static object Vector2IntDrawer( object[] objects, InvokeWrapper wrapper )
+    {
+      return InspectorGUI.Vector2IntField( InspectorGUI.MakeLabel( wrapper.Member ),
+                                           wrapper.Get<Vector2Int>( objects[ 0 ] ) );
+    }
+
+    [InspectorDrawer( typeof( Vector3Int ) )]
+    public static object Vector3IntDrawer( object[] objects, InvokeWrapper wrapper )
+    {
+      return InspectorGUI.Vector3IntField( InspectorGUI.MakeLabel( wrapper.Member ),
+                                           wrapper.Get<Vector3Int>( objects[ 0 ] ) );
     }
 
     [InspectorDrawer( typeof( bool ) )]
@@ -109,6 +122,194 @@ namespace AGXUnityEditor
     {
       return EditorGUILayout.ColorField( InspectorGUI.MakeLabel( wrapper.Member ),
                                          wrapper.Get<Color>( objects[ 0 ] ) );
+    }
+
+    [InspectorDrawer( typeof( OptionalOverrideValue<float> ) )]
+    [InspectorDrawerResult( HasCopyOp = true )]
+    public static object OptionalOverrideFloatDrawer( object[] objects, InvokeWrapper wrapper )
+    {
+      var result = HandleOptionalOverride<float>( objects, wrapper );
+      return result.ContainsChanges ? (object)result : null;
+    }
+
+    public static void OptionalOverrideFloatDrawerCopyOp( object source, object destination )
+    {
+      var s = (OptionalOverrideValueResult)source;
+      var d = destination as OptionalOverrideValue<float>;
+      s.PropagateChanges( d );
+    }
+
+    [InspectorDrawer( typeof( OptionalOverrideValue<Vector3> ) )]
+    [InspectorDrawerResult( HasCopyOp = true )]
+    public static object OptionalOverrideVector3Drawer( object[] objects, InvokeWrapper wrapper )
+    {
+      return HandleOptionalOverride<Vector3>( objects, wrapper );
+    }
+
+    public static void OptionalOverrideVector3DrawerCopyOp( object source, object destination )
+    {
+      var s = (OptionalOverrideValueResult)source;
+      var d = destination as OptionalOverrideValue<Vector3>;
+      s.PropagateChanges( d );
+    }
+
+    private static OptionalOverrideValueResult HandleOptionalOverride<ValueT>( object[] objects, InvokeWrapper wrapper )
+      where ValueT : struct
+    {
+      if ( s_floatFieldMethod == null )
+        s_floatFieldMethod = typeof( EditorGUI ).GetMethod( "FloatField",
+                                                            new[]
+                                                            {
+                                                              typeof( Rect ),
+                                                              typeof( string ),
+                                                              typeof( float )
+                                                            } );
+      if ( s_vector3FieldMethod == null )
+        s_vector3FieldMethod = typeof( EditorGUI ).GetMethod( "Vector3Field",
+                                                              new[]
+                                                              {
+                                                                typeof( Rect ),
+                                                                typeof( string ),
+                                                                typeof( Vector3 )
+                                                              } );
+
+      var method = typeof( ValueT ) == typeof( float ) ?
+                      s_floatFieldMethod :
+                    typeof( ValueT ) == typeof( Vector3 ) ?
+                      s_vector3FieldMethod :
+                      null;
+
+      if ( method == null )
+        throw new NullReferenceException( "Unknown OptionalOverrideValue type: " + typeof( ValueT ).Name );
+
+      var rect = EditorGUILayout.GetControlRect();
+
+      // We don't want the tooltip of the toggle to show when
+      // hovering the update button or float field(s) so use
+      // xMax as label width minus some magic number
+      var widthUntilButton = rect.xMax;
+      rect.xMax = EditorGUIUtility.labelWidth;
+
+      var result = new OptionalOverrideValueResult();
+      var instance = wrapper.Get<OptionalOverrideValue<ValueT>>( objects[ 0 ] );
+
+      var hasMixedUseOverride = !CompareMulti<ValueT>( objects,
+                                                       wrapper,
+                                                       other => other.UseOverride == instance.UseOverride );
+      EditorGUI.showMixedValue = hasMixedUseOverride;
+
+      var toggleInput = hasMixedUseOverride ?
+                          false :
+                          instance.UseOverride;
+
+      // During showMixedValue - Toggle will always return true (enabled)
+      // when the user clicks regardless of instance.UseOverride.
+      var toggleOutput = EditorGUI.ToggleLeft( rect,
+                                               InspectorGUI.MakeLabel( wrapper.Member),
+                                               toggleInput );
+      if ( toggleOutput != toggleInput ) {
+        result.UseOverrideToggleChanged = true;
+        result.UseOverride = toggleOutput;
+      }
+
+      // Restore width and calculate new start of the float
+      // field(s). Start is label width but we have to remove
+      // the current indent level since label width is independent
+      // of the indent level. Unsure why we have to add LayoutMagicNumber pixels...
+      // could be float field(s) default minimum label size.
+      rect.xMax = widthUntilButton;
+      rect.xMin = EditorGUIUtility.labelWidth - InspectorGUI.IndentScope.PixelLevel + InspectorGUI.LayoutMagicNumber;
+
+      s_fieldMethodArgs[ 0 ] = rect;
+      s_fieldMethodArgs[ 2 ] = instance.OverrideValue;
+      var newValue = default( ValueT );
+
+      EditorGUI.showMixedValue = !CompareMulti<ValueT>( objects,
+                                                        wrapper,
+                                                        other => instance.OverrideValue.Equals( other.OverrideValue ) );
+      using ( new GUI.EnabledBlock( UnityEngine.GUI.enabled &&
+                                    instance.UseOverride &&
+                                    !hasMixedUseOverride ) ) {
+        EditorGUI.BeginChangeCheck();
+        newValue = (ValueT)method.Invoke( null, s_fieldMethodArgs );
+        if ( EditorGUI.EndChangeCheck() ) {
+          // Validate input here so that, e.g., 0 isn't propagated. It's
+          // not possible to check this in the CopyOp callback.
+          var clampAttribute = wrapper.GetAttribute<ClampAboveZeroInInspector>();
+          if ( clampAttribute == null || clampAttribute.IsValid( newValue ) )
+            result.OnChange<ValueT>( instance.OverrideValue, newValue );
+        }
+      }
+
+      return result;
+    }
+
+    private struct OptionalOverrideValueResult
+    {
+      public bool UseOverrideToggleChanged;
+      public bool UseOverride;
+
+      public bool[] ValuesChanged;
+      public float[] Values;
+
+      public void OnChange<ValueT>( object oldValueObject, object newValueObject )
+        where ValueT : struct
+      {
+        if ( typeof( ValueT ) == typeof( float ) ) {
+          ValuesChanged = new bool[] { true };
+          Values = new float[] { (float)newValueObject };
+        }
+        else if ( typeof( ValueT ) == typeof( Vector3 ) ) {
+          var oldValue = (Vector3)oldValueObject;
+          var newValue = (Vector3)newValueObject;
+          ValuesChanged = new bool[] { false, false, false };
+          Values = new float[] { newValue.x, newValue.y, newValue.z };
+          for ( int i = 0; i < 3; ++i )
+            ValuesChanged[ i ] = !oldValue[ i ].Equals( Values[ i ] );
+        }
+      }
+
+      public void PropagateChanges( OptionalOverrideValue<float> destination )
+      {
+        if ( !ContainsChanges )
+          return;
+
+        PropagateChangesT( destination );
+
+        if ( ValuesChanged != null && ValuesChanged[ 0 ] )
+          destination.OverrideValue = Values[ 0 ];
+      }
+
+      public void PropagateChanges( OptionalOverrideValue<Vector3> destination )
+      {
+        if ( !ContainsChanges )
+          return;
+
+        PropagateChangesT( destination );
+
+        if ( ValuesChanged != null && ValuesChanged.Contains( true ) ) {
+          var newValue = new Vector3();
+          for ( int i = 0; i < 3; ++i )
+            newValue[ i ] = ValuesChanged[ i ] ? Values[ i ] : destination.OverrideValue[ i ];
+          destination.OverrideValue = newValue;
+        }
+      }
+
+      private void PropagateChangesT<ValueT>( OptionalOverrideValue<ValueT> destination )
+        where ValueT : struct
+      {
+        if ( UseOverrideToggleChanged )
+          destination.UseOverride = UseOverride;
+      }
+
+      public bool ContainsChanges
+      {
+        get
+        {
+          return UseOverrideToggleChanged ||
+                 ( ValuesChanged != null && ValuesChanged.Contains( true ) );
+        }
+      }
     }
 
     [InspectorDrawer( typeof( DefaultAndUserValueFloat ) )]
@@ -229,6 +430,17 @@ namespace AGXUnityEditor
       return identical;
     }
 
+    private static bool CompareMulti<ValueT>( object[] objects,
+                                              InvokeWrapper wrapper,
+                                              Func<OptionalOverrideValue<ValueT>, bool> validator )
+      where ValueT : struct
+    {
+      var identical = true;
+      for ( int i = 1; i < objects.Length; ++i )
+        identical = identical && validator( wrapper.Get<OptionalOverrideValue<ValueT>>( objects[ i ] ) );
+      return identical;
+    }
+
     private static DefaultAndUserValueResult HandleDefaultAndUserValue<ValueT>( object[] objects,
                                                                                 InvokeWrapper wrapper )
       where ValueT : struct
@@ -260,11 +472,12 @@ namespace AGXUnityEditor
         throw new NullReferenceException( "Unknown DefaultAndUserValue type: " + typeof( ValueT ).Name );
 
       var updateButtonWidth = 20.0f;
+      var updateButtonWidthAndMargin = updateButtonWidth + 4.0f;
       var rect = EditorGUILayout.GetControlRect();
 
       // Now we know the total width if the Inspector. Remove
       // width of button and right most spacing.
-      rect.xMax -= updateButtonWidth;
+      rect.xMax -= updateButtonWidthAndMargin;
 
       // We don't want the tooltip of the toggle to show when
       // hovering the update button or float field(s) so use
@@ -277,7 +490,6 @@ namespace AGXUnityEditor
       var result = new DefaultAndUserValueResult();
       var instance = wrapper.Get<DefaultAndUserValue<ValueT>>( objects[ 0 ] );
 
-      UnityEngine.GUI.changed = false;
       var hasMixedUseDefault = !CompareMulti<ValueT>( objects,
                                                        wrapper,
                                                        other => other.UseDefault == instance.UseDefault );
@@ -314,7 +526,9 @@ namespace AGXUnityEditor
       EditorGUI.showMixedValue = !CompareMulti<ValueT>( objects,
                                                         wrapper,
                                                         other => instance.Value.Equals( other.Value ) );
-      using ( new GUI.EnabledBlock( !instance.UseDefault && !hasMixedUseDefault ) ) {
+      using ( new GUI.EnabledBlock( UnityEngine.GUI.enabled &&
+                                    !instance.UseDefault &&
+                                    !hasMixedUseDefault ) ) {
         EditorGUI.BeginChangeCheck();
         newValue = (ValueT)method.Invoke( null, s_fieldMethodArgs );
         if ( EditorGUI.EndChangeCheck() ) {
@@ -328,14 +542,13 @@ namespace AGXUnityEditor
 
       rect.x = rect.xMax;
       rect.width = updateButtonWidth;
-      rect.height = EditorGUIUtility.singleLineHeight -
-                                    EditorGUIUtility.standardVerticalSpacing;
+      rect.height = EditorGUIUtility.singleLineHeight;
       result.UpdateDefaultClicked = InspectorGUI.Button( rect,
                                                          MiscIcon.Update,
                                                          instance.UseDefault,
                                                          InspectorEditor.Skin.ButtonRight,
                                                          "Force update of default value.",
-                                                         1.2f );
+                                                         0.9f );
 
       return result;
     }
@@ -384,20 +597,21 @@ namespace AGXUnityEditor
       if ( InspectorGUI.Foldout( EditorData.Instance.GetData( objects[ 0 ] as Object, wrapper.Member.Name ),
                                  InspectorGUI.MakeLabel( wrapper.Member ) ) ) {
         using ( InspectorGUI.IndentScope.Single ) {
-          data.Value.Enabled = InspectorGUI.Toggle( GUI.MakeLabel( "Enabled" ),
+          EditorGUI.BeginChangeCheck();
+          data.Value.Enabled = InspectorGUI.Toggle( GUI.MakeLabel( "Enabled", false, "Whether this excavation mode should be enabled, creating dynamic mass and generating force feedback. " ),
                                                                       data.Value.Enabled );
-          data.EnabledChanged = UnityEngine.GUI.changed;
-          UnityEngine.GUI.changed = false;
-          data.Value.CreateDynamicMassEnabled = InspectorGUI.Toggle( GUI.MakeLabel( "Create Dynamic Mass Enabled" ),
+          data.EnabledChanged = EditorGUI.EndChangeCheck();
+
+          EditorGUI.BeginChangeCheck();
+          data.Value.CreateDynamicMassEnabled = InspectorGUI.Toggle( GUI.MakeLabel( "Create Dynamic Mass Enabled", false, "Whether this excavation mode should create dynamic mass. " ),
                                                                       data.Value.CreateDynamicMassEnabled );
-          data.CreateDynamicMassEnabledChanged = UnityEngine.GUI.changed;
-          UnityEngine.GUI.changed = false;
-          data.Value.ForceFeedbackEnabled = InspectorGUI.Toggle( GUI.MakeLabel( "Force Feedback Enabled" ),
+          data.CreateDynamicMassEnabledChanged = EditorGUI.EndChangeCheck();
+
+          EditorGUI.BeginChangeCheck();
+          data.Value.ForceFeedbackEnabled = InspectorGUI.Toggle( GUI.MakeLabel( "Force Feedback Enabled", false, "Whether this excavation mode should generate force feedback from created aggregates. " ),
                                                                       data.Value.ForceFeedbackEnabled );
-          data.ForceFeedbackEnabledChanged = UnityEngine.GUI.changed;
-          UnityEngine.GUI.changed = false;
+          data.ForceFeedbackEnabledChanged = EditorGUI.EndChangeCheck();
         }
-        UnityEngine.GUI.changed = data.ContainsChanges;
       }
       return data;
     }
@@ -559,7 +773,7 @@ namespace AGXUnityEditor
       Object valInField = wrapper.Get<Object>( objects[ 0 ] );
       bool recursiveEditing = wrapper.HasAttribute<AllowRecursiveEditing>();
 
-      if ( recursiveEditing ) {
+      if ( recursiveEditing && wrapper.AreValuesEqual( objects ) ) {
         result = InspectorGUI.FoldoutObjectField( InspectorGUI.MakeLabel( wrapper.Member ),
                                                   valInField,
                                                   type,
@@ -594,6 +808,51 @@ namespace AGXUnityEditor
         return;
 
       using ( InspectorGUI.IndentScope.Single ) {
+        if ( element is AGXUnity.IO.URDF.Model model ) {
+          var isSelectedPrefab = PrefabUtility.GetPrefabInstanceStatus( Selection.activeGameObject ) == PrefabInstanceStatus.Connected;
+          var modelAssetPath = AssetDatabase.GetAssetPath( element );
+
+          var savePrefabRect = EditorGUI.IndentedRect( EditorGUILayout.GetControlRect() );
+          savePrefabRect.width = InspectorGUISkin.ToolButtonSize.x;
+          savePrefabRect.height = InspectorGUISkin.ToolButtonSize.y;
+          var savePrefab = InspectorGUI.Button( savePrefabRect,
+                                                MiscIcon.Locate,
+                                                !isSelectedPrefab,
+                                                "Save game object as prefab and all URDF elements, STL meshes and render materials in project.",
+                                                1.1f );
+          savePrefabRect.x += savePrefabRect.width;
+          savePrefabRect.xMax += savePrefabRect.width;
+          savePrefabRect.width = InspectorGUISkin.ToolButtonSize.x;
+          var saveAssets = false;
+          using ( new GUI.EnabledBlock( string.IsNullOrEmpty( modelAssetPath ) ) ) {
+            saveAssets = UnityEngine.GUI.Button( savePrefabRect,
+                                                 GUI.MakeLabel( "",
+                                                                false,
+                                                                "Save all URDF elements, STL meshes and render materials in project." ),
+                                                 InspectorEditor.Skin.ButtonMiddle );
+
+            savePrefabRect.x -= 6.0f;
+            savePrefabRect.y -= 4.0f;
+            InspectorGUI.ButtonIcon( savePrefabRect,
+                                     MiscIcon.Locate,
+                                     UnityEngine.GUI.enabled,
+                                     0.75f );
+            savePrefabRect.x += 2.0f * 6.0f - 1.0f;
+            savePrefabRect.y += 2.0f * 4.0f - 2.0f;
+            InspectorGUI.ButtonIcon( savePrefabRect,
+                                     MiscIcon.Locate,
+                                     UnityEngine.GUI.enabled,
+                                     0.75f );
+          }
+
+          if ( savePrefab )
+            IO.URDF.Prefab.Create( model );
+          if ( saveAssets )
+            IO.URDF.Prefab.CreateAssets( model );
+
+          InspectorGUI.SelectableTextField( GUI.MakeLabel( "Asset Path" ), modelAssetPath );
+        }
+
         var ignoreName = element is AGXUnity.IO.URDF.Inertial;
         if ( !ignoreName ) {
           var nameRect = EditorGUILayout.GetControlRect();
@@ -650,7 +909,9 @@ namespace AGXUnityEditor
 
     public static void DrawUrdfPose( AGXUnity.IO.URDF.Pose pose )
     {
-      EditorGUILayout.PrefixLabel( GUI.MakeLabel( "Origin", true ) );
+      UnityEngine.GUI.Label( EditorGUI.IndentedRect( EditorGUILayout.GetControlRect() ),
+                             GUI.MakeLabel( "Origin", true ),
+                             InspectorEditor.Skin.Label );
       using ( new InspectorGUI.IndentScope() ) {
         InspectorGUI.Vector3Field( GUI.MakeLabel( "Position" ), pose.Xyz );
         InspectorGUI.Vector3Field( GUI.MakeLabel( "Roll, Pitch, Yaw" ), pose.Rpy, "R,P,Y" );
@@ -718,7 +979,8 @@ namespace AGXUnityEditor
       var enabledFieldOrProperty = fieldsAndProperties.FirstOrDefault( wrapper => wrapper.Member.Name == "Enabled" );
       if ( enabledFieldOrProperty == null )
         return;
-      var enabled = enabledFieldOrProperty.Get<bool>( jointData );
+      var enabled = UnityEngine.GUI.enabled &&
+                    enabledFieldOrProperty.Get<bool>( jointData );
       using ( new GUI.EnabledBlock( enabled ) ) {
         if ( !InspectorGUI.Foldout( GetEditorData( parent, member.Name ), InspectorGUI.MakeLabel( member ) ) )
           return;

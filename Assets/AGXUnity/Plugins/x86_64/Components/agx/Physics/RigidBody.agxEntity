@@ -1,0 +1,74 @@
+<Entity name="RigidBody" source="Referenced">
+
+	<Attribute.Scalar name="id" type="UInt:32bit"/>
+	<Attribute.Scalar name="state" type="RigidBodyState"/>
+	<Attribute.Scalar name="name" type="Name"/>
+	
+	<!-- Mass -->
+	<Attribute.Scalar name="mass" type="Real"/>
+	<Attribute.Scalar name="invMass" type="Real"/>
+	<Attribute.Scalar name="effectiveMass" type="Vec3"/>
+	<Attribute.Scalar name="effectiveMassCoefficients" type="Vec3"/>
+	<Attribute.Scalar name="effectiveMassTransformDiagonal" type="Vec3"/>
+	
+	<!-- Inertia -->
+	<Attribute.Scalar name="inertia" type="SPDMatrix3x3"/>
+	<Attribute.Scalar name="effectiveInertia" type="SPDMatrix3x3"/>
+	<Attribute.Scalar name="effectiveInertiaCoefficients" type="Vec3"/>
+	
+	<!-- World mass matrix -->
+	<Attribute.Scalar name="worldMassMatrix" type="Matrix3x3"/>
+	<Attribute.Scalar name="invWorldMassMatrix" type="Matrix3x3"/>
+	<Attribute.Scalar name="effectiveWorldMassMatrix" type="Matrix3x3"/>
+	<Attribute.Scalar name="effectiveInvWorldMassMatrix" type="Matrix3x3"/>
+	
+	<!-- World inertia -->
+	<Attribute.Scalar name="worldInertia" type="Matrix3x3"/>
+	<Attribute.Scalar name="invWorldInertia" type="Matrix3x3"/>
+	<Attribute.Scalar name="effectiveWorldInertia" type="Matrix3x3"/>
+	<Attribute.Scalar name="effectiveInvWorldInertia" type="Matrix3x3"/>
+	
+	<!-- Force/Torque -->
+	<Attribute.Scalar name="force" type="Vec3"/>
+	<Attribute.Scalar name="torque" type="Vec3"/>
+	<Attribute.Scalar name="lastForce" type="Vec3"/>
+	<Attribute.Scalar name="lastTorque" type="Vec3"/>
+	
+	<!-- Transform -->
+	<Attribute.Scalar name="modelTransform" type="AffineMatrix4x4"/>
+	<Attribute.Scalar name="localModelTransform" type="AffineMatrix4x4"/>
+	<Attribute.Scalar name="cmTransform" type="AffineMatrix4x4"/>
+	<Attribute.Scalar name="localCmTransform" type="AffineMatrix4x4"/>
+	
+	<!-- Velocity -->
+	<Attribute.Scalar name="velocity" type="Vec3"/>
+	<Attribute.Scalar name="angularVelocity" type="Vec3"/>
+	
+	<!-- Acceleration -->
+	<Attribute.Scalar name="linearAcceleration" type="Vec3"/>
+	<Attribute.Scalar name="angularAcceleration" type="Vec3"/>
+	
+	
+	<!-- Damping -->
+	<Attribute.Scalar name="linearVelocityDamping" type="Vec3:32bit"/>
+	<Attribute.Scalar name="angularVelocityDamping" type="Vec3:32bit"/>
+	<Attribute.Scalar name="linearVelocityZeroDamping" type="Vec3:32bit"/>
+	<Attribute.Scalar name="angularVelocityZeroDamping" type="Vec3:32bit"/>
+	
+	
+	<Attribute.Scalar name="geometry" type="Physics.GeometryPtr"/>
+	
+	<Attribute.Scalar name="graphNode" type="Physics.GraphNodePtr"/>
+
+	<Attribute.Scalar name="velocityRanges" type="Range6"/>
+	
+	<!-- High level body -->
+	<Attribute.Pointer name="model" type="agx::RigidBody"/>
+
+  <!-- Direct solver index -->
+  <Attribute.Scalar name="solveIndex" type="UInt:32bit"/>
+  
+	<!-- TODO remove? -->
+	<Attribute.Scalar name="numConstraints" type="UInt:16bit"/>
+	
+</Entity>

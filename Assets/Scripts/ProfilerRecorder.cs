@@ -10,13 +10,13 @@ using System.Text;
 namespace VMT.Profiling
 {
     /// <summary>
-    /// ƒJƒXƒ^ƒ€‚ÌProfilerMarkerAUnity‚Ì•W€ProfilerƒTƒ“ƒvƒ‰[‚Ì‘ª’è’l‚ğæ“¾‚µ‚ÄƒRƒ“ƒ\[ƒ‹‚ÉƒvƒŠƒ“ƒg‚·‚éƒNƒ‰ƒXB
+    /// ã‚«ã‚¹ã‚¿ãƒ ã®ProfilerMarkerã€Unityã®æ¨™æº–Profilerã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®æ¸¬å®šå€¤ã‚’å–å¾—ã—ã¦ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
     /// </summary>
-    /// <example>FixedBehaviourUpdate‚Ìstring‚ğsamplerNames‚É‘}“ü‚µ‚ÄFixedUpdate()ƒƒ\ƒbƒh‚É‚©‚©‚éŠÔ‚ğŠm”F‚Å‚«‚é</example>
+    /// <example>FixedBehaviourUpdateã®stringã‚’samplerNamesã«æŒ¿å…¥ã—ã¦FixedUpdate()ãƒ¡ã‚½ãƒƒãƒ‰ã«ã‹ã‹ã‚‹æ™‚é–“ã‚’ç¢ºèªã§ãã‚‹</example>
     public class ProfilerRecorder : MonoBehaviour
     {
         /// <summary>
-        /// À‘ª‚·‚éƒvƒƒtƒ@ƒCƒ‹marker/sampler–¼BPlay‚É•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢B
+        /// å®Ÿæ¸¬ã™ã‚‹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«marker/sampleråã€‚Playæ™‚ã«å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ããªã„ã€‚
         /// </summary>
         public List<string> samplerNames;
         public bool printToConsole = true;

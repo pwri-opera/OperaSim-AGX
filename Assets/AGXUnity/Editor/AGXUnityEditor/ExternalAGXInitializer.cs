@@ -1,24 +1,25 @@
-﻿using System;
+﻿using AGXUnity.Utils;
+using System;
 using System.IO;
 using System.Linq;
-using AGXUnity.IO;
-using AGXUnity.Utils;
-using UnityEngine;
+using System.Text.RegularExpressions;
 using UnityEditor;
-
+using UnityEngine;
 using Environment = AGXUnity.IO.Environment;
 
 namespace AGXUnityEditor
 {
-  public class ExternalAGXInitializer : ScriptableObject
+  [PreviousSettingsFile( FileName = "AGXInitData.asset" )]
+  public class ExternalAGXInitializer : AGXUnitySettings<ExternalAGXInitializer>
   {
     public string AGX_DIR         = string.Empty;
     public string AGX_DATA_DIR    = string.Empty;
     public string AGX_PLUGIN_PATH = string.Empty;
     public string[] AGX_BIN_PATH  = new string[] { };
 
-    [NonSerialized]
-    public static bool IsApplied = false;
+    public static bool IsApplied { get; private set; } = false;
+
+    public static string AppliedAGXVersion { get; private set; } = string.Empty;
 
     public bool HasData
     {
@@ -36,9 +37,20 @@ namespace AGXUnityEditor
       IsApplied = true;
 
       Environment.Set( Environment.Variable.AGX_DIR, AGX_DIR );
-      Environment.Set( Environment.Variable.AGX_PLUGIN_PATH, AGX_PLUGIN_PATH );
-      foreach ( var path in AGX_BIN_PATH )
-        Environment.AddToPath( path );
+      Environment.Set( Environment.Variable.AGX_PLUGIN_PATH, AGX_PLUGIN_PATH ); 
+      foreach ( var path in AGX_BIN_PATH ) {
+        var dir = new DirectoryInfo( path );
+        var isValidPath = dir.Exists || dir.Name.StartsWith( "agxTerrain_" );
+        if ( isValidPath ) {
+          if ( dir.Exists )
+            Environment.AddToPath( path );
+        }
+        else {
+          Debug.LogWarning( $"WARNING: AGX binary path \"{path}\" doesn't exist. This could result in DllNotFoundException when calls are made to AGX Dynamics." );
+          Debug.LogWarning( "         Select new AGX Dynamics checkout/install directory using AGXUnity -> Settings -> \"Select AGX Dynamics root folder\" " +
+                            "or delete \"Assets/AGXUnity/Editor/Data/AGXInitData.asset.\"" );
+        }
+      }
 
       // All binaries should be in path, try initialize agx.
       try {
@@ -62,8 +74,22 @@ namespace AGXUnityEditor
         return false;
       }
 
+      AppliedAGXVersion = Regex.Match( agx.agxSWIG.agxGetVersion( false ), @".*(\d+\.\d+\.\d+\.\d+)" ).Groups[ 1 ].Value;
+
+      if ( !AppliedVersionCompatible && IgnoreIncompatibleVersion != PackageManifest.Instance.agx ) {
+        if ( EditorUtility.DisplayDialog( "Incompatible AGX versions",
+                                          $"The AGX version ({AppliedAGXVersion}) specified under AGXUnity > Settings > AGX Dynamics directory does not match the version that AGXUnity was built against ({PackageManifest.Instance.agx}). This might cause incorrect behaviour or crashes. Please select a compatible AGX Dynamics directory.",
+                                          "Open Settings",
+                                          "Ignore" ) )
+          SettingsService.OpenProjectSettings( "Project/AGXSettings" );
+        else
+          IgnoreIncompatibleVersion = PackageManifest.Instance.agx;
+      }
+
       return true;
     }
+
+    public static bool AppliedVersionCompatible => AppliedAGXVersion == PackageManifest.Instance.agx;
 
     public void Clear()
     {
@@ -92,29 +118,23 @@ namespace AGXUnityEditor
       return AGXDirectoryType.Unknown;
     }
 
-    public static ExternalAGXInitializer Instance
-    {
-      get
-      {
-        return EditorSettings.GetOrCreateEditorDataFolderFileInstance<ExternalAGXInitializer>( "/AGXInitData.asset",
-                                                                                               () => UserSaidNo = false );
-      }
-    }
+    protected override void OnCreated() => UserSaidNo = false;
 
     public static bool UserSaidNo
     {
-      get
-      {
-        return EditorData.Instance.GetStaticData( "ExternalAGXInitializer_UserSaidNo" ).Bool;
-      }
-      set
-      {
-        EditorData.Instance.GetStaticData( "ExternalAGXInitializer_UserSaidNo" ).Bool = value;
-      }
+      get => EditorData.Instance.GetStaticData( "ExternalAGXInitializer_UserSaidNo" ).Bool;
+      set => EditorData.Instance.GetStaticData( "ExternalAGXInitializer_UserSaidNo" ).Bool = value;
+    }
+
+    public static string IgnoreIncompatibleVersion
+    {
+      get => EditorData.Instance.GetStaticData( "ExternalAGXInitializer_IgnoreIncompatibleVersion" ).String;
+      set => EditorData.Instance.GetStaticData( "ExternalAGXInitializer_IgnoreIncompatibleVersion" ).String = value;
     }
 
     public static bool Initialize()
     {
+#if UNITY_EDITOR_WIN
       // Dependencies dir set and we're certain setup_env has been executed.
       if ( Environment.IsSet( Environment.Variable.AGX_DEPENDENCIES_DIR ) )
         return true;
@@ -161,10 +181,14 @@ namespace AGXUnityEditor
       else
         instance.Clear();
 
-      EditorUtility.SetDirty( instance );
-      AssetDatabase.SaveAssets();
+      Instance.Save();
 
       return success;
+#else
+      // No support for local setup in Linux/OSX and we're reaching this during
+      // package updates. Avoid users to have to answer "No" to local installs.
+      return false;
+#endif
     }
 
     public static void ChangeRootDirectory( DirectoryInfo newAgxDir )
@@ -179,10 +203,9 @@ namespace AGXUnityEditor
         Environment.RemoveFromPath( path );
 
       Instance.Clear();
-
-      EditorUtility.SetDirty( Instance );
+      Instance.Save();
       AssetDatabase.SaveAssets();
-      
+
       var success = false;
       if ( type == AGXDirectoryType.Checkout )
         success = Instance.InitializeCheckout( newAgxDir.FullName );
@@ -190,9 +213,7 @@ namespace AGXUnityEditor
         success = Instance.InitializeInstalled( newAgxDir.FullName );
 
       if ( success ) {
-        EditorUtility.SetDirty( Instance );
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
+        Instance.Save();
         EditorApplication.OpenProject( Path.Combine( Application.dataPath, ".." ) );
       }
     }
@@ -214,7 +235,8 @@ namespace AGXUnityEditor
         },
         new BinDirData()
         {
-          CMakeKey = "TERRAIN_DEPENDENCY_DATE:STRING="
+          CMakeKey = "TERRAIN_DEPENDENCY_DATE:STRING=",
+          IsOptional = true
         },
         new BinDirData()
         {
@@ -232,7 +254,7 @@ namespace AGXUnityEditor
         }
       }
 
-      if ( !binData.All( data => data.HasValue ) ) {
+      if ( !binData.All( data => data.IsOptional || data.HasValue ) ) {
         foreach ( var data in binData )
           if ( !data.HasValue )
             Debug.LogError( $"{"ERROR".Color( Color.red )}: {data.CMakeKey}null" );
@@ -248,7 +270,8 @@ namespace AGXUnityEditor
       }
 
       binData[ AGX_DEPENDENCIES ].Directory = dependenciesDir.GetDirectories( $"agx_dependencies_{binData[ AGX_DEPENDENCIES ].Value}*" ).FirstOrDefault();
-      binData[ AGXTERRAIN_DEPENDENCIES ].Directory = dependenciesDir.GetDirectories( $"agxTerrain_dependencies_{binData[ AGXTERRAIN_DEPENDENCIES ].Value}*" ).FirstOrDefault();
+      if ( binData[ AGXTERRAIN_DEPENDENCIES ].HasValue )
+        binData[ AGXTERRAIN_DEPENDENCIES ].Directory = dependenciesDir.GetDirectories( $"agxTerrain_dependencies_{binData[ AGXTERRAIN_DEPENDENCIES ].Value}*" ).FirstOrDefault();
 
       // Handle both absolute and relative CMAKE_INSTALL_PREFIX
       var installPath = binData[ INSTALLED ].Value;
@@ -259,17 +282,19 @@ namespace AGXUnityEditor
                                                             Path.DirectorySeparatorChar +
                                                             installPath );
 
-      if ( binData.Any( data => data.Directory == null || !data.Directory.Exists ) ) {
+      if ( binData.Any( data => !data.IsOptional && ( data.Directory == null || !data.Directory.Exists ) ) ) {
         foreach ( var data in binData )
-          if ( data.Directory == null || !data.Directory.Exists )
+          if ( !data.IsOptional && ( data.Directory == null || !data.Directory.Exists ) )
             Debug.LogError( $"{"ERROR".Color( Color.red )}: Unable to find directory for key {data.CMakeKey}." );
         return false;
       }
 
-      AGX_BIN_PATH    = ( from data in binData
-                          select $"{data.Directory.FullName}{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}x64" ).ToArray();
-      AGX_PLUGIN_PATH = $"{AGX_BIN_PATH[ INSTALLED ]}{Path.DirectorySeparatorChar}plugins";
-      AGX_DATA_DIR    = $"{binData[ INSTALLED ].Directory.FullName}{Path.DirectorySeparatorChar}data";
+      AGX_BIN_PATH        = ( from data in binData
+                              where data.Directory != null
+                              select $"{data.Directory.FullName}{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}x64" ).ToArray();
+      var installedBinDir = $"{binData[ INSTALLED ].Directory.FullName}{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}x64";
+      AGX_PLUGIN_PATH     = $"{installedBinDir}{Path.DirectorySeparatorChar}plugins";
+      AGX_DATA_DIR        = $"{installedBinDir}{Path.DirectorySeparatorChar}data";
 
       return true;
     }
@@ -280,6 +305,7 @@ namespace AGXUnityEditor
       AGX_DATA_DIR    = $"{AGX_DIR}{Path.DirectorySeparatorChar}data";
       AGX_BIN_PATH    = new string[] { $"{AGX_DIR}{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}x64" };
       AGX_PLUGIN_PATH = $"{AGX_BIN_PATH[ 0 ]}{Path.DirectorySeparatorChar}plugins";
+
       return true;
     }
 
@@ -288,6 +314,7 @@ namespace AGXUnityEditor
       public string CMakeKey         = string.Empty;
       public string Value            = string.Empty;
       public DirectoryInfo Directory = null;
+      public bool IsOptional         = false;
 
       public bool HasValue { get { return !string.IsNullOrEmpty( Value ); } }
 

@@ -1,0 +1,13 @@
+<Kernel name="PostSolveCallback" implementation="BinaryConstraint" costPerElement="30">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="instance, rowIndex, jacobianIndex"/>
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="lambda, totalLambda" write="totalLambda"/>
+  <Parameter.Array  name="@BinaryConstraintJacobian"        type="Jacobian6DOFElement"  mode="READ"/>
+  <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
+</Kernel>
+
+<Kernel name="PostSolveCallback" implementation="ManyBodyConstraint" costPerElement="30">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="instance, rowIndex, jacobianIndex"/>
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="lambda, totalLambda" write="totalLambda"/>
+  <Parameter.Array  name="@ManyBodyConstraintJacobian"        type="Jacobian6DOFElement"    mode="WRITE"/>
+  <Parameter.Scalar name="@clock.timeStep"                    type="Real"/>
+</Kernel>

@@ -1,0 +1,58 @@
+<Component name="Root">
+	
+	<RealTimeClock name="realTime" resolution="720"/>
+	<Clock name="clock" frequency="@realTime.frequency" synchronize="@realTime"/>
+
+	<Component name="View">
+		<Value name="width" type="UInt" value="1024"/>
+		<Value name="height" type="UInt" value="768"/>
+	</Component>
+	
+	<Component name="System">
+	  <Value name="numThreads" type="UInt"/>
+	  <Value name="useSSE" type="Bool"/>
+	</Component>
+	
+  <!-- <Component name="Entity"/> -->
+	
+	<!--   <Component name="Key">
+	   <Key name="a"/>
+	   <Key name="b"/>
+	   <Key name="c"/>
+	   <Key name="d"/>
+	   <Key name="e"/>
+	   <Key name="f"/>
+	   <Key name="g"/>
+	   <Key name="h"/>
+	   <Key name="i"/>
+	   <Key name="j"/>
+	   <Key name="k"/>
+	   <Key name="l"/>
+	   <Key name="m"/>
+	   <Key name="n"/>
+	   <Key name="o"/>
+	   <Key name="p"/>
+	   <Key name="q"/>
+	   <Key name="r"/>
+	   <Key name="s"/>
+	   <Key name="t"/>
+	   <Key name="u"/>
+	   <Key name="v"/>
+	   <Key name="x"/>
+	   <Key name="y"/>
+	   <Key name="z"/>
+	   <Key name="0"/>
+	   <Key name="1"/>
+	   <Key name="2"/>
+	   <Key name="3"/>
+	   <Key name="4"/>
+	   <Key name="5"/>
+	   <Key name="6"/>
+	   <Key name="7"/>
+	   <Key name="8"/>
+	   <Key name="9"/>
+	 </Component>
+	  -->
+	  
+</Component>
+

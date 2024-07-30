@@ -1,0 +1,53 @@
+<SolveKernel name="GaussSeidelIteration" implementation="ContactConstraint_IterativeProjectedConeFriction" costPerElement="50">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+  
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, rowIndex, numRows, jacobianIndex, materialIndex, contactPointRange"/>
+  <Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
+  <Parameter.Array  name="@ContactConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
+  
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction"/>
+  
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
+</SolveKernel>
+
+<SolveKernel name="GaussSeidelIteration" implementation="ContactConstraint_BoxFrictionModel" costPerElement="50">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, rowIndex, numRows, jacobianIndex, materialIndex, contactPointRange"/>
+  <Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
+  <Parameter.Array  name="@ContactConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
+
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction"/>
+
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
+</SolveKernel>
+
+<SolveKernel name="GaussSeidelIteration" implementation="ContactConstraint_ScaleBoxFrictionModel" costPerElement="50">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="body1, body2, rowIndex, numRows, jacobianIndex, materialIndex, contactPointRange"/>
+  <Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
+  <Parameter.Array  name="@ContactConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
+
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction"/>
+
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
+</SolveKernel>
+
+<SolveKernel name="GaussSeidelIteration" implementation="BinaryConstraint" costPerElement="50">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="body1, body2, rowIndex, numRows, jacobianIndex"/>
+	<Parameter.Array name="@BinaryConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
+	<Parameter.Array name="@BinaryConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
+
+  <Parameter.EntityData name="@BinaryConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+</SolveKernel>
+
+<SolveKernel name="GaussSeidelIteration" implementation="ManyBodyConstraint" costPerElement="50">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="bodies, rowIndex, numRows, jacobianIndex"/>
+	<Parameter.Array name="@ManyBodyConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
+	<Parameter.Array name="@ManyBodyConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
+
+  <Parameter.EntityData name="@ManyBodyConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, velocity, angularVelocity" write="velocity, angularVelocity"/>
+</SolveKernel>

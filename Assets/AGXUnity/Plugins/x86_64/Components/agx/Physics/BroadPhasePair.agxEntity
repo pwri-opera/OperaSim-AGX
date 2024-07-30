@@ -1,0 +1,6 @@
+<Entity name="BroadPhasePair" source="GeometryPair">
+	<Attribute.Scalar name="state" type="UInt:8bit"/>
+	<Attribute.Scalar name="contact" type="Physics.GeometryContactPtr"/>
+
+  <Attribute.Array  name="warmStartingData" type="Physics.WarmStartingDataPtr" doc="" />
+</Entity>

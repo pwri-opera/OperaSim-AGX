@@ -1,0 +1,29 @@
+<Kernel name="CalculateIslandImpacts">
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="nodes" write="isImpacting"/>
+  <Parameter.EntityData name="@GraphNode" type="GraphNode" read="type, source" write=""/>
+  
+  <Parameter.Array name="@ContactConstraint.isImpacting" type="Bool" mode="READ"/>
+  <Parameter.Array name="@BinaryConstraint.isImpacting" type="Bool" mode="READ"/>
+  <Parameter.Array name="@ManyBodyConstraint.isImpacting" type="Bool" mode="READ"/>
+  <Parameter.Array name="@ParticleParticleContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+  <Parameter.Array name="@ParticleBodyContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+  
+  <!-- Ugh: TODO Cleaner, more generic handling -->
+  <Parameter.Array name="@GranularGranularContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+  <Parameter.Array name="@GranularBodyContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+</Kernel>
+
+
+<Kernel name="CalculateIslandImpacts" dispatch="serial" implementation="ParallelPGS">
+  <Parameter.EntityData name="@SolveIsland" type="SolveIsland" read="" write="isImpacting"/>
+  
+  <Parameter.Array name="@ContactConstraint.isImpacting" type="Bool" mode="READ"/>
+  <Parameter.Array name="@BinaryConstraint.isImpacting" type="Bool" mode="READ"/>
+  <Parameter.Array name="@ManyBodyConstraint.isImpacting" type="Bool" mode="READ"/>
+  <Parameter.Array name="@ParticleParticleContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+  <Parameter.Array name="@ParticleBodyContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+  
+  <!-- Ugh: TODO Cleaner, more generic handling -->
+  <Parameter.Array name="@GranularGranularContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+  <Parameter.Array name="@GranularBodyContactConstraint.isImpacting" type="Bool" mode="READ" required="false"/>
+</Kernel>

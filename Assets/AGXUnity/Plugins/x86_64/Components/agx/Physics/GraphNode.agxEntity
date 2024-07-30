@@ -1,0 +1,13 @@
+<Entity name="GraphNode">
+  <Attribute.Scalar name="source" type="EntityPtr"/>
+
+  <Attribute.Scalar name="type" type="UInt:8bit"/>
+  <Attribute.Scalar name="state" type="UInt:8bit"/>
+  <Attribute.Scalar name="color" type="UInt:32bit"/>
+  <Attribute.Scalar name="tag" type="UInt:32bit"/>
+  <Attribute.Array name="edges" type="UInt"/>
+
+
+  <Attribute.Scalar name="island" type="UInt:32bit"/>
+  <Attribute.Scalar name="subindex" type="UInt:32bit"/>
+</Entity>

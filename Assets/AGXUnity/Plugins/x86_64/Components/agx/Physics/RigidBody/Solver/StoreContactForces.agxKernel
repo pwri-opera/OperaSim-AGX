@@ -1,0 +1,8 @@
+<SolveKernel name="StoreContactForces">
+  <Parameter.Pointer name="@Solver" type="agx::Solver"/>
+  
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="solveModel" write="points"/>
+  <Parameter.EntityData name="@ContactConstraint" type="ContactConstraint" read="numRows, rowIndex, blockRowIndex"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" write="lambda"/>
+  <Parameter.Scalar name="@clock.timeStep"                                        type="Real"/>
+</SolveKernel>

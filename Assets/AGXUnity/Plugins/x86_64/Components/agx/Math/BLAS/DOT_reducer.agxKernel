@@ -1,0 +1,14 @@
+<Kernel name="DOT_reducer" device="OpenCL" numGroups="@PartialSums.numElements" localRange="128" buildOptions="-DSDOT_GROUP_SIZE=128 -DREALn">
+  <Parameter.Scalar    name="numElements"  type="UInt"   bind="@source1.numElements"/>
+  <Parameter.Array name="source1"      type="Real"   mode="READ"/>
+  <Parameter.Array name="source2"      type="Real"   mode="READ"/>
+  <Parameter.Array name="result"       type="Real"   mode="WRITE"/>
+</Kernel>
+
+
+<Kernel name="DOT_reducer" device="OpenCL" numGroups="@PartialSums.numElements" localRange="128" buildOptions="-DSDOT_GROUP_SIZE=128  -DREAL3n">
+  <Parameter.Scalar    name="numElements"  type="UInt"   bind="@source1.numElements"/>
+  <Parameter.Array name="source1"      type="Vec3"   mode="READ"/>
+  <Parameter.Array name="source2"      type="Vec3"   mode="READ"/>
+  <Parameter.Array name="result"       type="Real"   mode="WRITE"/>
+</Kernel>

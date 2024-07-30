@@ -25,3 +25,4 @@ MonoBehaviour:
   m_useContactArea: 0
   m_contactReductionMode: 0
   m_contactReductionLevel: 1
+  m_wireFrictionCoefficients: {x: 0.41667, y: 0.41667}

@@ -1,0 +1,3 @@
+<Kernel name="RandomShuffleUInt32" dispatch="serial">
+	<Parameter.Array type="UInt:32bit" name="buffer" mode="READ_WRITE"/>
+</Kernel>

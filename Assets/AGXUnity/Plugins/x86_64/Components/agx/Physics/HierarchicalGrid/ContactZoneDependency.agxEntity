@@ -1,0 +1,11 @@
+<Entity name="ContactZoneDependency">
+  
+  <Attribute.Scalar name="parent" type="Physics.HierarchicalGrid.ContactZoneInstance"/>
+  <Attribute.Scalar name="child" type="Physics.HierarchicalGrid.ContactZoneInstance"/>
+  
+  <!-- These are needed for incremental dependencies living across multiple time steps -->
+  <!-- <Attribute.Scalar name="parent" type="Physics.HierarchicalGrid.ContactZonePtr"/> -->
+  <!-- <Attribute.Scalar name="child" type="Physics.HierarchicalGrid.ContactZonePtr"/> -->
+
+  <Attribute.Scalar name="next" type="Physics.HierarchicalGrid.ContactZoneDependencyPtr"/>
+</Entity>

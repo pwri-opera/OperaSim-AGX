@@ -4,18 +4,18 @@ using UnityEngine.InputSystem;
 namespace PWRISimulator
 {
     /// <summary>
-    /// Excavator—p‚ÌInputActionMap‚ÌActions‚ğExcavator.cs‚ÌƒRƒ“ƒXƒgƒŒƒCƒ“ƒgƒCƒ“ƒ^ƒtƒF[ƒX‚ÆŒq‚®ƒXƒNƒŠƒvƒgB
+    /// Excavatorç”¨ã®InputActionMapã®Actionsã‚’Excavator.csã®ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ç¹‹ãã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚
     /// 
-    /// ŠeUpdate‚Éw¦‚µ‚½InputActionMap‚ÌAction‚²‚Æ‚Ì’l‚ğæ“¾‚·‚éA‚È‚Ì‚ÅAUnity‚ÌPlayerInputƒRƒ“ƒ|ƒlƒ“ƒg‚Í•s—vB
+    /// å„Updateã«æŒ‡ç¤ºã—ãŸInputActionMapã®Actionã”ã¨ã®å€¤ã‚’å–å¾—ã™ã‚‹ã€ãªã®ã§ã€Unityã®PlayerInputã‚³ãƒ³ãƒãƒãƒ³ãƒˆã¯ä¸è¦ã€‚
     /// </summary>
     public class ExcavatorPlayerInputHandler2 : MonoBehaviour
     {
         [Header("Target Machine")]
 
         /// <summary>
-        /// ‘ÎÛ‚ÌExcvatorƒRƒ“ƒ|ƒlƒ“ƒgB
+        /// å¯¾è±¡ã®Excvatorã‚³ãƒ³ãƒãƒãƒ³ãƒˆã€‚
         /// </summary>
-        public Excavator excavator;
+        public ExcavatorJoints excavator;
 
         [Header("Input Action Map")]
         public InputActionAsset inputActionAsset;
@@ -52,12 +52,12 @@ namespace PWRISimulator
 
                 if (excavator != null)
                 {
-                    SetExcavatorConstraintVelocityControl(excavator.leftSprocket);
-                    SetExcavatorConstraintVelocityControl(excavator.rightSprocket);
-                    SetExcavatorConstraintVelocityControl(excavator.swing);
-                    SetExcavatorConstraintVelocityControl(excavator.boomTilt);
-                    SetExcavatorConstraintVelocityControl(excavator.armTilt);
-                    SetExcavatorConstraintVelocityControl(excavator.bucketTilt);
+                    SetExcavatorConstraintVelocityControl(excavator.leftSprocket.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.rightSprocket.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.swing.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.boomTilt.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.armTilt.actuator);
+                    SetExcavatorConstraintVelocityControl(excavator.bucketTilt.actuator);
                 }
             }
         }
@@ -68,22 +68,22 @@ namespace PWRISimulator
                 return;
 
             if (leftSprocketAction != null)
-                SetExcavatorInputValue(excavator.leftSprocket, leftSprocketAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.leftSprocket.actuator, leftSprocketAction.ReadValue<float>());
 
             if (rightSprocketAction != null)
-                SetExcavatorInputValue(excavator.rightSprocket, rightSprocketAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.rightSprocket.actuator, rightSprocketAction.ReadValue<float>());
 
             if (swingAction != null)
-                SetExcavatorInputValue(excavator.swing, swingAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.swing.actuator, swingAction.ReadValue<float>());
 
             if (boomTiltAction != null)
-                SetExcavatorInputValue(excavator.boomTilt, boomTiltAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.boomTilt.actuator, boomTiltAction.ReadValue<float>());
 
             if (armTiltAction != null)
-                SetExcavatorInputValue(excavator.armTilt, armTiltAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.armTilt.actuator, armTiltAction.ReadValue<float>());
 
             if (bucketTiltAction != null)
-                SetExcavatorInputValue(excavator.bucketTilt, bucketTiltAction.ReadValue<float>());
+                SetExcavatorInputValue(excavator.bucketTilt.actuator, bucketTiltAction.ReadValue<float>());
         }
 
         protected void SetExcavatorInputValue(ConstraintControl constraintControl, double value)

@@ -7,6 +7,7 @@ namespace AGXUnity.Collide
   /// Cylinder shape object given radius and height.
   /// </summary>
   [AddComponentMenu( "AGXUnity/Shapes/Cylinder" )]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#cylinder" )]
   public sealed class Cylinder : Shape
   {
     #region Serialized Properties
@@ -30,7 +31,7 @@ namespace AGXUnity.Collide
       get { return m_radius; }
       set
       {
-        m_radius = AGXUnity.Utils.Math.ClampAbove( value, MinimumLength );
+        m_radius = AGXUnity.Utils.Math.ClampAbove( value, MinimumSize );
 
         if ( Native != null )
           Native.setRadius( m_radius );
@@ -48,7 +49,7 @@ namespace AGXUnity.Collide
       get { return m_height; }
       set
       {
-        m_height = AGXUnity.Utils.Math.ClampAbove( value, MinimumLength );
+        m_height = AGXUnity.Utils.Math.ClampAbove( value, MinimumSize );
 
         if ( Native != null )
           Native.setHeight( m_height );
@@ -61,7 +62,7 @@ namespace AGXUnity.Collide
     /// <summary>
     /// Returns the native cylinder object if created.
     /// </summary>
-    public agxCollide.Cylinder Native { get { return m_shape as agxCollide.Cylinder; } }
+    public agxCollide.Cylinder Native { get { return NativeShape?.asCylinder(); } }
 
     /// <summary>
     /// Debug rendering scale assuming the rendered cylinder has diameter 1 and height 1.
@@ -74,9 +75,10 @@ namespace AGXUnity.Collide
     /// <summary>
     /// Creates the native cylinder object given current radius and height.
     /// </summary>
-    protected override agxCollide.Shape CreateNative()
+    protected override agxCollide.Geometry CreateNative()
     {
-      return new agxCollide.Cylinder( m_radius, m_height );
+      return new agxCollide.Geometry( new agxCollide.Cylinder( m_radius, m_height ),
+                                      GetNativeGeometryOffset() );
     }
   }
 }

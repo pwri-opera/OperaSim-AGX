@@ -1,0 +1,46 @@
+{
+   "BulkProperties":{
+      "cohesion": 0.0,
+      "density": 3942.0,
+      "dilatancyAngle" : 0.0,
+      "frictionAngle": 0.87,
+      "maximumDensity" : 4000.0,
+      "poissonsRatio": 0.1,
+      "swellFactor": 1.0,
+      "youngsModulus": 4.27e10,
+      "deltaReposeAngle": 0.0
+   },
+   "CompactionProperties":{
+      "angleOfReposeCompactionRate": 1.0,
+      "bankStatePhi" : 0.6666,
+      "compactionTimeRelaxationConstant" : 0.05,
+      "compressionIndex" : 0.025,
+      "hardeningConstantKE" : 1.0,
+      "hardeningConstantNE" : 0.5,
+      "preconsolidationStress" : 98000,
+      "stressCutOffFraction" : 0.01,
+      "dilatancyAngleScalingFactor" : 0.261799
+   },
+   "ExcavationContactProperties" : {
+      "aggregateStiffnessMultiplier" : 0.0020,
+      "depthDecayFactor" : 2.0,
+      "depthIncreaseFactor" : 1.0,
+      "excavationStiffnessMultiplier" : 1.0,
+      "maximumAggregateNormalForce" : "inf",
+      "maximumContactDepth" : 1.0
+   },
+   "ParticleProperties":{
+      "adhesionOverlapFactor" : 0.0,
+      "particleCohesion" : 0.0,
+      "particleFriction" : 0.55,
+      "particleRestitution" : 0.39,
+      "particleRollingResistance" : 0.27,
+      "particleTerrainCohesion" : 0.0,
+      "particleTerrainFriction" : 1.0,
+      "particleTerrainRestitution" : 0.1,
+      "particleTerrainRollingResistance" : 0.9,
+      "particleTerrainYoungsModulus" : 4.27e10,
+      "particleYoungsModulus" : 4.27e10
+   },
+   "description" : "This material specification is named iron_pellets and aims to model the behaviour of iron pellets."
+}

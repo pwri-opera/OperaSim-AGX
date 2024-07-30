@@ -1,0 +1,69 @@
+<!-- -->
+<Kernel name="CreateMissingContactZones" dispatch="serial" implementation="ParticlePairContact">
+
+  <Parameter.Array name="@MissingParticlePairContactZones" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2" write="contactZoneIndex, contactZoneSlot"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex"/>
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="instance, parent"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance" write="spatialCell, id, type, color"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" read="instance" write="parent, child"/>
+
+
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+  <!-- <Parameter.HashTable name="@ZoneTable" bucketType="Vec3i | Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE" typedef="ContactZoneTable"/> -->
+  <!-- <Parameter.HashTable name="@ZoneDependencyTable" bucketType="UInt:64bit | Physics.HierarchicalGrid.ContactZoneDependencyPtr" mode="READ_WRITE" typedef="ZoneDependencyTable"/> -->
+
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>
+
+<!-- -->
+<Kernel name="CreateMissingContactZones" dispatch="serial" implementation="ParticleGeometryContact">
+
+  <Parameter.Array name="@MissingParticleGeometryContactZones" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, geometry" write="contactZoneIndex, contactZoneSlot"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="cellIndex"/>
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="instance, parent"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance" write="spatialCell, id, type, color"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" read="instance" write="parent, child"/>
+
+
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+  <!-- <Parameter.HashTable name="@ZoneTable" bucketType="Vec3i | Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE" typedef="ContactZoneTable"/> -->
+  <!-- <Parameter.HashTable name="@ZoneDependencyTable" bucketType="UInt:64bit | Physics.HierarchicalGrid.ContactZoneDependencyPtr" mode="READ_WRITE" typedef="ZoneDependencyTable"/> -->
+
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>
+
+<!-- -->
+<Kernel name="CreateMissingContactZones" dispatch="serial" implementation="GeometryGeometryContact">
+
+  <Parameter.Array name="@MissingGeometryGeometryContactZones" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="geometry1, geometry2" write="contactZoneIndex, contactZoneSlot"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="cellIndex" implicit="true"/>
+  <Parameter.EntityData name="@Cell" type="HierarchicalGrid.Cell" read="instance, parent"/>
+
+  <Parameter.EntityData name="@ContactZone" type="ContactZone" read="instance" write="spatialCell, id, type, color"/>
+  <Parameter.EntityData name="@ContactZoneDependency" type="ContactZoneDependency" read="instance" write="parent, child"/>
+
+
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="zoneTable" write=""/>
+  <!-- <Parameter.HashTable name="@ZoneTable" bucketType="Vec3i | Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE" typedef="ContactZoneTable"/> -->
+  <!-- <Parameter.HashTable name="@ZoneDependencyTable" bucketType="UInt:64bit | Physics.HierarchicalGrid.ContactZoneDependencyPtr" mode="READ_WRITE" typedef="ZoneDependencyTable"/> -->
+
+  <Parameter.Scalar name="@IterationStartZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+  <Parameter.Scalar name="@IterationEndZone" type="Physics.HierarchicalGrid.ContactZonePtr" mode="READ_WRITE"/>
+
+  <Parameter.Scalar name="@ContactZoneAccumulationLevel" type="UInt" mode="READ"/>
+</Kernel>

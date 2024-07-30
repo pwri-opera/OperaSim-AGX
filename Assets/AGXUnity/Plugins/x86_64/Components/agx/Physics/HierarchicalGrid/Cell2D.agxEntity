@@ -1,0 +1,53 @@
+<Entity name="Cell2D">
+  <!-- The tier (level, depth) in the grid where the cell is located -->
+  <Attribute.Scalar name="tier" type="UInt:8bit"/>
+
+  <!-- TODO Should size of the cell be stored in a tier entity (shared by all cells in the same tier) or in every cell? -->
+  <!-- <Attribute.Scalar name="size" type="Real"/> -->
+  <!-- <Attribute.Scalar name="invSize" type="Real"/> -->
+  
+  
+  <!-- Discretized coordinates for the cell -->
+  <Attribute.Scalar name="id" type="Vec2i"/>
+  
+  <!-- The position of the cell center -->
+  <Attribute.Scalar name="position" type="Vec2:32bit"/>
+  
+  <!-- Linearized index of the cell, eg Z-order or Hilbert curve index -->
+  <Attribute.Scalar name="linearId" type="UInt:64bit"/>
+
+  <!-- Cell state: ACTIVE, UNINITIALIZED, DEAD -->
+  <Attribute.Scalar name="state" type="UInt:8bit"/>
+  
+   <!-- How long the cell has been empty -->
+  <Attribute.Scalar name="emptyTime" type="Real:32bit"/>
+
+  <!-- The content of the cell, an array of collision object indices -->
+  <Attribute.Scalar name="collisionObjects" type="IndexRange:32bit"/>
+  
+
+  <Attribute.Scalar name="zoneType" type="UInt:8bit"/>
+  
+  <!-- <Attribute.Scalar name="halfExtents" type="Real"/> -->
+  
+  <!-- Index to parent cell -->
+  <Attribute.Scalar name="parent" type="UInt:32bit" value="InvalidIndex"/>
+	
+  <!-- Indices to children -->
+  <Attribute.Scalar name="children" type="UInt:32bit" numElements="4" value="InvalidIndex"/>
+  
+  <!-- Number of child cells -->
+  <Attribute.Scalar name="numChildren" type="UInt:8bit"/>
+	
+  <!-- Indices to neighbors. Nine elements is enough, but using 12 for memory alignment. -->
+	<Attribute.Scalar name="neighbors" type="UInt:32bit" numElements="12" value="InvalidIndex"/>
+	
+  <!-- The cost of searching the cell in the previous step -->
+  <Attribute.Scalar name="searchCost" type="UInt:32bit"/>
+
+  <!-- How long before an empty cell is destroyed -->
+  <Attribute.Shared name="emptyThreshold" type="Real:32bit" value="0.0"/>
+  
+  <!-- Size alignment for tuning cell fitting, zero disables alignment, then radius of first inserted object determines alignment -->
+	<Attribute.Shared name="sizeAlignment" type="Real" value="0"/>
+</Entity>

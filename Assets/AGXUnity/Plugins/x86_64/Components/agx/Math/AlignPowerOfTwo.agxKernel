@@ -1,0 +1,9 @@
+<Kernel.Scalar name="AlignPowerOfTwo" inline="true" templatePermutation="Math.TemplatePermutations.AlignPowerOfTwo">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="value" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="AlignPowerOfTwo" inline="true" templatePermutation="Math.TemplatePermutations.AlignPowerOfTwo">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="value" type="Auto" mode="READ"/>
+</Kernel>

@@ -6,8 +6,9 @@
       "frictionAngle": 0.7679,
       "maximumDensity" : 1600.0,
       "poissonsRatio": 0.1,
-      "swellFactor": 1.17,
-      "youngsModulus": 4.6e6
+      "swellFactor": 1.0,
+      "youngsModulus": 4.6e6,
+      "deltaReposeAngle": 0.0
    },
    "CompactionProperties":{
       "angleOfReposeCompactionRate": 1.0,

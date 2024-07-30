@@ -1,0 +1,30 @@
+<Kernel name="GenerateInteractionSolveTags" implementation="GeometryContact">
+  <description>
+    Generate tags based on contact material/friction model.
+  </description>
+  
+  <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="material" write="solveModel"/>
+
+  <Parameter.Scalar name="forceIterative" type="Bool" bind="@Solver.forceIterative"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>
+
+
+<Kernel name="GenerateInteractionSolveTags" implementation="BinaryConstraint">
+  <Parameter.EntityData name="@BinaryConstraint" type="BinaryConstraint" read="model" write="solveModel"/>
+  
+  <Parameter.Scalar name="forceIterative" type="Bool" bind="@Solver.forceIterative"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>
+
+<Kernel name="GenerateInteractionSolveTags" implementation="ManyBodyConstraint">
+  <Parameter.EntityData name="@ManyBodyConstraint" type="ManyBodyConstraint" read="model" write="solveModel"/>
+
+  <Parameter.Scalar name="forceIterative" type="Bool" bind="@Solver.forceIterative"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>
+
+<Kernel name="GenerateInteractionSolveTags" implementation="StrongInteraction">
+  <Parameter.EntityData name="@StrongInteraction" type="StrongInteraction" write="solveModel"/>
+  <Parameter.Pointer name="@Simulation" type="agxSDK::Simulation" include="agxSDK/Simulation.h"/>
+</Kernel>

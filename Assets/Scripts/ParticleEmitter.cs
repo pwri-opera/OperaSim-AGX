@@ -8,7 +8,7 @@ using AGXUnity.Model;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ŽwŽ¦‚µ‚½Œ`ó‚Ì’†‚É‘‚­ƒtƒŒ[ƒ€‚É­‚µ‚¸‚Â—±Žq‚ðì¬‚³‚¹‚éƒXƒNƒŠƒvƒgBŽQlFagx.ParticleEmitter
+    /// æŒ‡ç¤ºã—ãŸå½¢çŠ¶ã®ä¸­ã«æ›¸ããƒ•ãƒ¬ãƒ¼ãƒ ã«å°‘ã—ãšã¤ç²’å­ã‚’ä½œæˆã•ã›ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚å‚è€ƒï¼šagx.ParticleEmitter
     /// </summary>
     public class ParticleEmitter : ScriptComponent
     {

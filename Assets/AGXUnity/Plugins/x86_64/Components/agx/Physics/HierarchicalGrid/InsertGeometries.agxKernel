@@ -1,0 +1,7 @@
+<Kernel name="InsertGeometries">
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="state, cellIndex, cellSlot, boundingRadius, localBoundCenter, transform, collisionGroupSet, orientedBoundId"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" write="sourceIndex, subsystem, radius, position, obbIndex, collisionGroupSet"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects"/>
+  <Parameter.Pointer name="orientedGeometryBoundStorage" bind="@OrientedGeometryBound" type="agxData::EntityStorage" include="agxData/EntityStorage.h"/>
+</Kernel>
+

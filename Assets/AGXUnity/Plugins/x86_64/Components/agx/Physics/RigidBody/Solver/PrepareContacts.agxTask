@@ -1,0 +1,10 @@
+<Task name="PrepareContacts">
+  <Task source="RemoveInvalidContacts"/>
+  <Task source="GenerateInteractionSolveTags:GeometryContact"/>
+	
+  <Task source="PreparePPGS" enable="false"/>
+	
+  <Task source="AllocateConstraintData : Contact"/>
+  <Task source="CalculateJacobians : Contact"/>
+  <Task source="CalculateGMInv : Contact"/>
+</Task>

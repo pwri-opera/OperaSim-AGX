@@ -1,0 +1,21 @@
+<Entity name="GeometryContact" source="Contact">
+  <doc>A geometry contact hold contact information between two geometries.</doc>
+
+  <Attribute.Scalar name="geometry1" type="Physics.GeometryPtr"/>
+  <Attribute.Scalar name="geometry2" type="Physics.GeometryPtr"/>
+
+  <Attribute.Scalar name="body1" type="Physics.RigidBodyPtr" doc="body1 is the rigid body of geometry1, can be assumed to be a valid rigid body."/>
+  <Attribute.Scalar name="body2" type="Physics.RigidBodyPtr" doc="body2 is the rigid body of geometry2, can be NULL."/>
+
+  <Attribute.Array name="points" type="Physics.ContactPointPtr" doc="The list of contact points."/>
+
+  <Attribute.Scalar name="broadPhasePair" type="Physics.BroadPhasePairPtr"/>
+
+  <Attribute.Scalar name="enabled" type="Bool" value="true"/>
+
+  <Attribute.Scalar name="immediately" type="Bool"/>
+  <Attribute.Scalar name="hasSurfaceVelocity" type="Bool"/>
+  <Attribute.Scalar name="hasInternalMaterial" type="Bool"/>
+  <Attribute.Scalar name="usingPPGS" type="Bool"/>
+  <Attribute.Pointer name="customData" type="void"/>
+</Entity>

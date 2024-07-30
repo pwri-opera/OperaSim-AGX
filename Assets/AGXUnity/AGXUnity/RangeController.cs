@@ -8,6 +8,7 @@ namespace AGXUnity
   /// </summary>
   [AddComponentMenu( "" )]
   [HideInInspector]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#controllers" )]
   public class RangeController : ElementaryConstraintController
   {
     /// <summary>
@@ -28,6 +29,17 @@ namespace AGXUnity
         if ( Native != null )
           agx.RangeController.safeCast( Native ).setRange( m_range.Native );
       }
+    }
+
+    /// <summary>
+    /// Convenience method to get current force applied by this controller. 0 if not initialized.
+    /// </summary>
+    public float GetCurrentForce()
+    {
+      if ( Native != null )
+        return (float) agx.RangeController.safeCast( Native ).getCurrentForce( );
+      else
+        return 0;
     }
 
     protected override void Construct( agx.ElementaryConstraint tmpEc )

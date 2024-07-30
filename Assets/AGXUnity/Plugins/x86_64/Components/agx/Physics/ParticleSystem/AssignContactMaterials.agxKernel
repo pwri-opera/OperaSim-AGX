@@ -1,0 +1,16 @@
+<Kernel name="AssignContactMaterials" implementation="ParticlePairContact">
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material" write="material"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="material"/>
+  <Parameter.Array name="@MissingParticlePairContactMaterials" type="UInt:32bit" globalResult="TRUNCATE"/>
+  
+  <Parameter.Pointer name="materialManager" bind="@Simulation.MaterialManager" type="agxSDK::MaterialManager" include="agxSDK/MaterialManager.h"/>
+</Kernel>
+
+<Kernel name="AssignContactMaterials" implementation="ParticleGeometryContact">
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle, geometry, material" write="material"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="material"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="material"/>
+  <Parameter.Array name="@MissingParticleGeometryContactMaterials" type="UInt:32bit" globalResult="TRUNCATE"/>
+  
+  <Parameter.Pointer name="materialManager" bind="@Simulation.MaterialManager" type="agxSDK::MaterialManager" include="agxSDK/MaterialManager.h"/>
+</Kernel>

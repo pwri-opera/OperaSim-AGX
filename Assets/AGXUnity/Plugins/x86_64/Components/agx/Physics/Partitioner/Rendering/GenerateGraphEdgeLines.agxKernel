@@ -1,0 +1,9 @@
+<Kernel name="GenerateGraphEdgeLines">
+  <Parameter.Array name="@GraphNode.edges" type="Array<UInt>" mode="READ"/>
+  <Parameter.Array name="@GraphEdgeLines" type="Line:32bit" mode="WRITE"/>
+  <Parameter.Array name="@GraphNodeVertices" type="Vec3" mode="READ"/>
+  
+  <!-- <Parameter.Array name="@GraphNode.type" type="UInt:8bit" mode="READ"/> -->
+  <!-- <Parameter.Array name="@GraphNode.source" type="EntityPtr" mode="READ"/> -->
+  
+</Kernel>

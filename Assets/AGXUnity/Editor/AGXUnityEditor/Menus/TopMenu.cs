@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using UnityEditor;
 using AGXUnity;
 using AGXUnity.Collide;
-
-using Plane = AGXUnity.Collide.Plane;
+using AGXUnity.Model;
+using AGXUnity.Utils;
+using UnityEditor;
+using UnityEngine;
 using Mesh = AGXUnity.Collide.Mesh;
+using Plane = AGXUnity.Collide.Plane;
 
 namespace AGXUnityEditor
 {
@@ -188,110 +189,118 @@ namespace AGXUnityEditor
     #endregion
 
     #region Constraint
-    [MenuItem( "AGXUnity/Constraints/Hinge", priority = 20 )]
-    public static GameObject ConstraintHinge()
+    private static GameObject CreateConstraint( MenuCommand command, ConstraintType type )
     {
-      GameObject go = Factory.Create( ConstraintType.Hinge );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      var parent = command.context as GameObject;
+      var go = Factory.Create( type );
+      if ( go == null )
+        return null;
+
+      if ( parent != null )
+        go.transform.SetParent( parent.transform, false );
+
+      Undo.RegisterCreatedObjectUndo( go, "Constraint" );
+
+      return go;
+    }
+
+    [MenuItem( "AGXUnity/Constraints/Hinge", priority = 20 )]
+    [MenuItem( "GameObject/AGXUnity/Constraints/Hinge", validate = false, priority = 10 )]
+    public static GameObject ConstraintHinge( MenuCommand command )
+    {
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.Hinge );
     }
 
     [MenuItem( "AGXUnity/Constraints/Prismatic", priority = 20 )]
-    public static GameObject ConstraintPrismatic()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Prismatic", validate = false, priority = 10 )]
+    public static GameObject ConstraintPrismatic( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.Prismatic );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.Prismatic );
     }
 
     [MenuItem( "AGXUnity/Constraints/Lock Joint", priority = 20 )]
-    public static GameObject ConstraintLockJoint()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Lock Joint", validate = false, priority = 10 )]
+    public static GameObject ConstraintLockJoint( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.LockJoint );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.LockJoint );
     }
 
     [MenuItem( "AGXUnity/Constraints/Cylindrical Joint", priority = 20 )]
-    public static GameObject ConstraintCylindricalJoint()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Cylindrical Joint", validate = false, priority = 10 )]
+    public static GameObject ConstraintCylindricalJoint( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.CylindricalJoint );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.CylindricalJoint );
     }
 
     [MenuItem( "AGXUnity/Constraints/Ball Joint", priority = 20 )]
-    public static GameObject ConstraintBallJoint()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Ball Joint", validate = false, priority = 10 )]
+    public static GameObject ConstraintBallJoint( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.BallJoint );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.BallJoint );
     }
 
     [MenuItem( "AGXUnity/Constraints/Distance Joint", priority = 20 )]
-    public static GameObject ConstraintDistanceJoint()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Distance Joint", validate = false, priority = 10 )]
+    public static GameObject ConstraintDistanceJoint( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.DistanceJoint );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.DistanceJoint );
     }
 
     [MenuItem( "AGXUnity/Constraints/Angular Lock Joint", priority = 20 )]
-    public static GameObject ConstraintAngularLockJoint()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Angular Lock Joint", validate = false, priority = 10 )]
+    public static GameObject ConstraintAngularLockJoint( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.AngularLockJoint );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.AngularLockJoint );
     }
 
     [MenuItem( "AGXUnity/Constraints/Plane Joint", priority = 20 )]
-    public static GameObject ConstraintPlaneJoint()
+    [MenuItem( "GameObject/AGXUnity/Constraints/Plane Joint", validate = false, priority = 10 )]
+    public static GameObject ConstraintPlaneJoint( MenuCommand command )
     {
-      GameObject go = Factory.Create( ConstraintType.PlaneJoint );
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "constraint" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateConstraint( command, ConstraintType.PlaneJoint );
     }
     #endregion
 
     #region Model
-    [MenuItem( "AGXUnity/Model/Wire", priority = 50 )]
-    public static GameObject WireEmpty()
+    private static GameObject CreateModel<T>( MenuCommand command ) where T : ScriptComponent
     {
-      GameObject go = Factory.Create<Wire>();
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "New Wire" );
-      return Selection.activeGameObject = go;
+      var go = Factory.Create<T>();
+      if ( go == null )
+        return null;
+
+      var parent = command.context as GameObject;
+      if ( parent != null )
+        go.transform.SetParent( parent.transform, false );
+
+      Undo.RegisterCreatedObjectUndo( go, $"New {typeof( T ).Name}" );
+
+      return go;
+    }
+
+    [MenuItem( "AGXUnity/Model/Wire", priority = 50 )]
+    [MenuItem( "GameObject/AGXUnity/Model/Wire", validate = false, priority = 10 )]
+    public static GameObject WireEmpty( MenuCommand command )
+    {
+      return Selection.activeGameObject = CreateModel<Wire>( command );
     }
 
     [MenuItem( "AGXUnity/Model/Cable", priority = 50 )]
-    public static GameObject CableEmpty()
+    [MenuItem( "GameObject/AGXUnity/Model/Cable", validate = false, priority = 10 )]
+    public static GameObject CableEmpty( MenuCommand command )
     {
-      GameObject go = Factory.Create<Cable>();
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "New Cable" );
-
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateModel<Cable>( command );
     }
 
     [MenuItem( "AGXUnity/Model/Track", priority = 50 )]
-    public static GameObject CreateTrack()
+    [MenuItem( "GameObject/AGXUnity/Model/Track", validate = false, priority = 10 )]
+    public static GameObject CreateTrack( MenuCommand command )
     {
-      var go = Factory.Create<AGXUnity.Model.Track>();
-      if ( go != null )
-        Undo.RegisterCreatedObjectUndo( go, "New Track" );
-      return Selection.activeGameObject = go;
+      return Selection.activeGameObject = CreateModel<Track>( command );
     }
 
     [MenuItem( "AGXUnity/Model/Deformable Terrain", priority = 50 )]
-    public static GameObject CreateDeformableTerrain()
+    [MenuItem( "GameObject/AGXUnity/Model/Deformable Terrain", validate = false, priority = 10 )]
+    public static GameObject CreateDeformableTerrain( MenuCommand command )
     {
       var terrainData = new TerrainData()
       {
@@ -308,16 +317,98 @@ namespace AGXUnityEditor
       AssetDatabase.CreateAsset( terrainData, terrainDataName );
 
       var go = Terrain.CreateTerrainGameObject( terrainData );
-      go.name = Factory.CreateName<AGXUnity.Model.DeformableTerrain>();
+      go.name = Factory.CreateName<DeformableTerrain>();
       if ( go == null ) {
         AssetDatabase.DeleteAsset( terrainDataName );
         return null;
       }
 
+      AGXUnity.Utils.PrefabUtils.PlaceInCurrentStange( go );
+
       go.transform.position = new Vector3( -30, 0, -30 );
-      go.AddComponent<AGXUnity.Model.DeformableTerrain>();
+      go.AddComponent<DeformableTerrain>();
+
+      if ( command.context is GameObject ctx )
+        go.transform.SetParent( ctx.transform, false );
 
       Undo.RegisterCreatedObjectUndo( go, "New Deformable Terrain" );
+
+      return Selection.activeGameObject = go;
+    }
+
+    [MenuItem( "AGXUnity/Model/Deformable Terrain Pager", priority = 50 )]
+    [MenuItem( "GameObject/AGXUnity/Model/Deformable Terrain Pager", validate = false, priority = 10 )]
+    public static GameObject CreateTerrainPager( MenuCommand command )
+    {
+      var terrainData = new TerrainData()
+      {
+        size = new Vector3( 60 / 8.0f, 45, 60 / 8.0f ),
+        heightmapResolution = 517
+      };
+#if UNITY_2018_1_OR_NEWER
+      terrainData.SetDetailResolution( 1024, terrainData.detailResolutionPerPatch );
+#else
+      terrainData.SetDetailResolution( 1024, terrainData.detailResolution );
+#endif
+
+      var terrainDataName = AssetDatabase.GenerateUniqueAssetPath( "Assets/New Terrain.asset" );
+      AssetDatabase.CreateAsset( terrainData, terrainDataName );
+
+      var go = Terrain.CreateTerrainGameObject( terrainData );
+      go.name = Factory.CreateName<DeformableTerrainPager>();
+      if ( go == null ) { 
+        AssetDatabase.DeleteAsset( terrainDataName );
+        return null;
+      }
+
+      AGXUnity.Utils.PrefabUtils.PlaceInCurrentStange( go );
+
+      go.transform.position = new Vector3( -60, 0, -60 );
+      go.AddComponent<DeformableTerrainPager>();
+
+      if ( command.context is GameObject ctx )
+        go.transform.SetParent( ctx.transform, false );
+
+      Undo.RegisterCreatedObjectUndo( go, "New Terrain Pager" );
+
+      return Selection.activeGameObject = go;
+    }
+
+    [MenuItem( "AGXUnity/Model/Movable Terrain", priority = 50 )]
+    [MenuItem( "GameObject/AGXUnity/Model/Movable Terrain", validate = false, priority = 10 )]
+    public static GameObject CreateMovableTerrain( MenuCommand command )
+    {
+      var go = new GameObject();
+      go.name = Factory.CreateName<MovableTerrain>();
+
+      AGXUnity.Utils.PrefabUtils.PlaceInCurrentStange( go );
+
+      go.AddComponent<MeshFilter>();
+      var renderer = go.AddComponent<MeshRenderer>();
+      renderer.sharedMaterial = RenderingUtils.CreateDefaultMaterial();
+      RenderingUtils.SetMainTexture(renderer.sharedMaterial, AssetDatabase.GetBuiltinExtraResource<Texture2D>( "Default-Checker-Gray.png" ));
+      go.AddComponent<MovableTerrain>();
+
+      if ( command.context is GameObject ctx )
+        go.transform.SetParent( ctx.transform, false );
+
+      Undo.RegisterCreatedObjectUndo( go, "New Movable Terrain" );
+
+      return Selection.activeGameObject = go;
+    }
+
+    [MenuItem( "AGXUnity/Model/Terrain Material Patch", priority = 50 )]
+    [MenuItem( "GameObject/AGXUnity/Model/Terrain Material Patch", validate = false, priority = 10 )]
+    public static GameObject CreateTerrainMaterialPatch( MenuCommand command )
+    {
+      var go = CreateModel<TerrainMaterialPatch>(command);
+
+      var box = Factory.Create<Box>();
+      box.transform.SetParent( go.transform, false );
+      box.GetComponent<Box>().HalfExtents = new Vector3( 2.5f, 1.0f, 2.5f );
+      AGXUnity.Rendering.ShapeVisual.Create( box.GetComponent<Box>() );
+
+      Undo.RegisterCreatedObjectUndo( go, "New Terrain Material Patch" );
 
       return Selection.activeGameObject = go;
     }
@@ -325,46 +416,115 @@ namespace AGXUnityEditor
     #endregion
 
     #region Managers
-    [MenuItem( "AGXUnity/Managers/Debug Render Manager" ) ]
+    [MenuItem( "AGXUnity/Managers/Debug Render Manager", validate = true )]
+    private static bool DebugRendererValidate()
+    {
+      return ValidateManager<AGXUnity.Rendering.DebugRenderManager>();
+    }
+
+    [MenuItem( "AGXUnity/Managers/Debug Render Manager" )]
     public static GameObject DebugRenderer()
     {
       return Selection.activeGameObject = GetOrCreateUniqueGameObject<AGXUnity.Rendering.DebugRenderManager>().gameObject;
     }
 
+    [MenuItem( "AGXUnity/Simulation", validate = true )]
+    private static bool SimulationValidate()
+    {
+      return ValidateManager<Simulation>();
+    }
+
     [MenuItem( "AGXUnity/Simulation", priority = 66 )]
     public static GameObject Simulation()
     {
-      return Selection.activeGameObject = GetOrCreateUniqueGameObject<Simulation>().gameObject;
+      return Selection.activeGameObject = GetOrCreateUniqueGameObject<Simulation>()?.gameObject;
     }
+
+    [MenuItem( "AGXUnity/Plot", priority = 66 )]
+    public static GameObject Plot()
+    {
+      var PlotObject = new GameObject("PlotObject");
+      PlotObject.AddComponent<AGXUnity.Utils.Plot>();
+      PlotObject.AddComponent<AGXUnity.Utils.DataSeries>();
+      PlotObject.AddComponent<AGXUnity.Utils.DataSeries>();
+
+#if USE_VISUAL_SCRIPTING
+      var plotAssetPath = AGXUnityEditor.IO.Utils.AGXUnityResourceDirectory + "/Plot/TemplatePlot.Asset";
+      var targetAssetPath = AssetDatabase.GenerateUniqueAssetPath("Assets/Plot.Asset");
+      AssetDatabase.CopyAsset(plotAssetPath, targetAssetPath);
+
+      AssetDatabase.SaveAssets();
+      AssetDatabase.Refresh();
+
+      var sm = PlotObject.AddComponent<Unity.VisualScripting.ScriptMachine>();
+      sm.nest.SwitchToMacro(AssetDatabase.LoadAssetAtPath<Unity.VisualScripting.ScriptGraphAsset>(targetAssetPath));
+#endif
+
+      return Selection.activeGameObject = PlotObject.gameObject;
+    }
+
+    [MenuItem( "AGXUnity/Managers/Collision Groups Manager", validate = true )]
+    private static bool CollisionGroupsManagerValidate()
+    {
+      return ValidateManager<CollisionGroupsManager>();
+    }
+
 
     [MenuItem( "AGXUnity/Managers/Collision Groups Manager", priority = 65 )]
     public static GameObject CollisionGroupsManager()
     {
-      return Selection.activeGameObject = GetOrCreateUniqueGameObject<CollisionGroupsManager>().gameObject;
+      return Selection.activeGameObject = GetOrCreateUniqueGameObject<CollisionGroupsManager>()?.gameObject;
+    }
+
+    [MenuItem( "AGXUnity/Managers/Contact Material Manager", validate = true )]
+    private static bool ContactMaterialManagerValidate()
+    {
+      return ValidateManager<ContactMaterialManager>();
     }
 
     [MenuItem( "AGXUnity/Managers/Contact Material Manager", priority = 65 )]
     public static GameObject ContactMaterialManager()
     {
-      return Selection.activeGameObject = GetOrCreateUniqueGameObject<ContactMaterialManager>().gameObject;
+      return Selection.activeGameObject = GetOrCreateUniqueGameObject<ContactMaterialManager>()?.gameObject;
+    }
+
+    [MenuItem( "AGXUnity/Managers/Wind and Water Manager", validate = true )]
+    private static bool WindAndWaterManagerValidate()
+    {
+      return ValidateManager<WindAndWaterManager>();
     }
 
     [MenuItem( "AGXUnity/Managers/Wind and Water Manager", priority = 65 )]
     public static GameObject WindAndWaterManager()
     {
-      return Selection.activeGameObject = GetOrCreateUniqueGameObject<WindAndWaterManager>().gameObject;
+      return Selection.activeGameObject = GetOrCreateUniqueGameObject<WindAndWaterManager>()?.gameObject;
+    }
+
+    [MenuItem( "AGXUnity/Managers/Script Asset Manager", validate = true )]
+    private static bool ScriptAssetManagerValidate()
+    {
+      return ValidateManager<ScriptAssetManager>();
     }
 
     [MenuItem( "AGXUnity/Managers/Script Asset Manager", priority = 65 )]
     public static GameObject ScriptAssetManager()
     {
-      return Selection.activeGameObject = GetOrCreateUniqueGameObject<ScriptAssetManager>().gameObject;
+      return Selection.activeGameObject = GetOrCreateUniqueGameObject<ScriptAssetManager>()?.gameObject;
+    }
+
+    [MenuItem( "AGXUnity/Managers/Pick Handler (Game View)", validate = true )]
+    private static bool PickHandlerValidate()
+    {
+      return ValidateManager<PickHandler>();
     }
 
     [MenuItem( "AGXUnity/Managers/Pick Handler (Game View)", priority = 65 )]
     public static GameObject PickHandler()
     {
       var ph = GetOrCreateUniqueGameObject<PickHandler>();
+      if ( ph == null )
+        return null;
+
       if ( ph.MainCamera == null ) {
         // Check for tagged main camera.
         if ( Camera.main != null ) {
@@ -394,29 +554,38 @@ namespace AGXUnityEditor
       Utils.CustomEditorGenerator.Generate();
     }
 
-    [MenuItem( "AGXUnity/Settings...", priority = 81 )]
-    public static void FocusSettings()
+    [MenuItem( "AGXUnity/Utils/Convert Rendering Materials", priority = 80 )]
+    public static void ConvertRenderingMaterials()
     {
-      var instance = EditorSettings.Instance;
-      if ( instance == null )
-        return;
+      Windows.ConvertMaterialsWindow.Open();
+    }
 
-      EditorUtility.FocusProjectWindow();
-      Selection.activeObject = instance;
+    [MenuItem( "AGXUnity/Settings...", priority = 81 )]
+    public static void OpenSettings()
+    {
+      SettingsService.OpenProjectSettings( "Project/AGXSettings" );
     }
 
     public static T GetOrCreateUniqueGameObject<T>()
       where T : ScriptComponent
     {
-      bool hadInstance = UniqueGameObject<T>.HasInstance;
-      if ( UniqueGameObject<T>.Instance == null )
-        UniqueGameObject<T>.ResetDestroyedState();
+      bool hadInstance = UniqueGameObject<T>.HasInstanceInScene;
+      if ( !hadInstance && AGXUnity.Utils.PrefabUtils.IsEditingPrefab ) {
+        Debug.LogWarning( $"Invalid to create {typeof( T ).FullName} while editing prefabs." );
+        return null;
+      }
 
       T obj = UniqueGameObject<T>.Instance;
       if ( !hadInstance && obj != null )
         Undo.RegisterCreatedObjectUndo( obj.gameObject, "Created " + obj.name );
 
       return obj;
+    }
+
+    private static bool ValidateManager<T>()
+      where T : UniqueGameObject<T>
+    {
+      return !AGXUnity.Utils.PrefabUtils.IsEditingPrefab;
     }
     #endregion
 
@@ -433,28 +602,40 @@ namespace AGXUnityEditor
       Application.OpenURL( AGXDynamicsForUnityExamplesURL );
     }
 
-    [MenuItem("AGXUnity/AGX Dynamics Manual", priority = 2020)]
+    [MenuItem( "AGXUnity/AGX Dynamics Manual", priority = 2020 )]
     public static void AGXManual()
     {
-      Application.OpenURL(AGXUserManualURL);
+      Application.OpenURL( AGXUserManualURL );
     }
 
-    [MenuItem("AGXUnity/AGX Dynamics API Reference", priority = 2021)]
+    [MenuItem( "AGXUnity/AGX Dynamics API Reference", priority = 2021 )]
     public static void AGXAPI()
     {
-      Application.OpenURL(AGXAPIReferenceURL);
+      Application.OpenURL( AGXAPIReferenceURL );
     }
 
-    [MenuItem("AGXUnity/About AGX Dynamics for Unity", priority = 2040)]
+    [MenuItem( "AGXUnity/About AGX Dynamics for Unity", priority = 2040 )]
     public static void AboutWindow()
     {
       Windows.AboutWindow.Open();
     }
 
+    [MenuItem( "AGXUnity/License/License Manager", priority = 2041 )]
+    public static void LicenseManagerWindow()
+    {
+      Windows.LicenseManagerWindow.Open();
+    }
+
+    [MenuItem( "AGXUnity/License/Runtime Activation Generator", priority = 2042 )]
+    public static void RuntimeGeneratorWindow()
+    {
+      Windows.GenerateRuntimeLicenseActivationWindow.Open();
+    }
+
     [MenuItem( "AGXUnity/Check for Updates...", priority = 2060, validate = true )]
     public static bool CheckForUpdatesWindowValidater()
     {
-      return PackageUpdateHandler.FindCurrentVersion().IsValid;
+      return PackageManifest.Instance.GetAGXUnityVersionInfo().IsValid;
     }
 
     [MenuItem( "AGXUnity/Check for Updates...", priority = 2060 )]

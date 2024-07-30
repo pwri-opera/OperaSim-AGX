@@ -1,0 +1,7 @@
+<Entity name="CachedGranularContact">
+  <Attribute.Scalar  name="keep"            type="Bool" value="false"/>  
+  <Attribute.Scalar  name="duplicate"       type="Bool" value="false"/>  
+  <Attribute.Scalar  name="contactLambdas"  type="Physics.GranularBody.ContactLambda"/>
+  <Attribute.Scalar  name="contactNormal"   type="Vec3:32bit"/>
+  <Attribute.Scalar  name="shouldWarmStart" type="Bool" value="true"/>  
+</Entity>

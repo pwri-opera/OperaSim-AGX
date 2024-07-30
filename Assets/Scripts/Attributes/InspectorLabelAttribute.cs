@@ -7,7 +7,7 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// Inspector‚É•\¦‚³‚ê‚éƒvƒƒpƒeƒB–¼‚ğƒI[ƒoƒ‰ƒCƒh‚·‚éAttributeB
+    /// Inspectorã«è¡¨ç¤ºã•ã‚Œã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£åã‚’ã‚ªãƒ¼ãƒãƒ©ã‚¤ãƒ‰ã™ã‚‹Attributeã€‚
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class |
         AttributeTargets.Struct, Inherited = true)]

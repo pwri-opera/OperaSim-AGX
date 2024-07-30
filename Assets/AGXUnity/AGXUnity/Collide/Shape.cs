@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AGXUnity.Utils;
 using UnityEngine;
+using System.ComponentModel;
 
 namespace AGXUnity.Collide
 {
@@ -11,6 +12,7 @@ namespace AGXUnity.Collide
   /// to a native agxCollide::Geometry and an agxCollide::Shape.
   /// </summary>
   [DisallowMultipleComponent]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#shapes" )]
   public abstract class Shape : ScriptComponent
   {
     /// <summary>
@@ -63,15 +65,10 @@ namespace AGXUnity.Collide
     protected agxCollide.Geometry m_geometry = null;
 
     /// <summary>
-    /// Native shape instance.
-    /// </summary>
-    protected agxCollide.Shape m_shape = null;
-
-    /// <summary>
     /// Some value of minimum size of a shape.
     /// </summary>
     [HideInInspector]
-    public float MinimumLength { get { return 1.0E-5f; } }
+    public static float MinimumSize { get { return 1.0E-5f; } }
 
     /// <summary>
     /// Collisions of shape enabled/disabled. Default enabled.
@@ -114,13 +111,33 @@ namespace AGXUnity.Collide
       }
     }
 
-  
+    /// <summary>
+    /// Should shape be included in mass properties calculations of the parent Rigid Body?
+    /// </summary>
+    [SerializeField]
+    private bool m_enableMassProperties = true;
+
+    /// <summary>
+    /// Specify whether the shape should be included in the mass properties calculation of the parent Rigid Body.
+    /// </summary>
+    [Description("Toggle whether or not to include this geometry when automatically calculating mass properties.")]
+    public bool EnableMassProperties
+    {
+      get { return m_enableMassProperties; }
+      set
+      {
+        m_enableMassProperties = value;
+        if ( NativeGeometry != null )
+          NativeGeometry.setEnableMassProperties( m_enableMassProperties );
+      }
+    }
 
     /// <summary>
     /// Shape material instance paired with property Material.
     /// </summary>
     [SerializeField]
     private ShapeMaterial m_material = null;
+
     /// <summary>
     /// Get or set shape material instance.
     /// </summary>
@@ -142,9 +159,10 @@ namespace AGXUnity.Collide
     public agxCollide.Geometry NativeGeometry { get { return m_geometry; } }
 
     /// <summary>
-    /// Native shape objects, if initialized.
+    /// First native shape (normally the case, exception for convex decomposed meshes).
+    /// Only valid when initialized.
     /// </summary>
-    public agxCollide.Shape NativeShape { get { return m_shape; } }
+    public agxCollide.Shape NativeShape { get { return NativeGeometry?.getShapes().FirstOrDefault()?.get(); } }
 
     /// <summary>
     /// True if this shape component is enabled, active in hierarchy and if part of a rigid body,
@@ -155,20 +173,17 @@ namespace AGXUnity.Collide
     {
       get
       {
-        RigidBody rb = RigidBody;
-        return enabled && gameObject.activeInHierarchy && ( rb == null || rb.enabled );
-      }
-    }
+        // If this component is disabled or our game object or any of its
+        // parent(s) game object(s) are disabled, this shape is disabled.
+        if ( !isActiveAndEnabled )
+          return false;
 
-    /// <summary>
-    /// True if the game object this active and this component is enabled.
-    /// </summary>
-    [HideInInspector]
-    public bool IsEnabled
-    {
-      get
-      {
-        return gameObject.activeSelf && enabled;
+        // Assuming shapes are children of rigid bodies, which is per definition.
+        // 'isActiveAndEnabled' above will catch the case where the rigid body
+        // game object is inactive. We only have to check rigid body component
+        // enabled state.
+        var rb = RigidBody;
+        return rb == null || rb.enabled;
       }
     }
 
@@ -199,20 +214,23 @@ namespace AGXUnity.Collide
     public abstract Vector3 GetScale();
 
     /// <summary>
-    /// Creates an instance of the native shape and returns it. This method
+    /// Creates an instance of the native geometry and returns it. This method
     /// shouldn't store an instance to this object, simply create a new instance.
-    /// E.g., sphere "return new agxCollide.Sphere( Radius );".
+    /// E.g., sphere "return new agxCollide.Geometry( new agxCollide.Sphere( Radius ) );".
     /// </summary>
     /// <returns>An instance to the native shape.</returns>
-    protected abstract agxCollide.Shape CreateNative();
+    protected abstract agxCollide.Geometry CreateNative();
 
     /// <summary>
     /// Used to calculate things related to our shapes, e.g., CM-offset, mass and inertia.
     /// </summary>
     /// <returns>Native shape to be considered temporary (i.e., probably not defined to keep reference to this shape).</returns>
-    public virtual agxCollide.Shape CreateTemporaryNative()
+    public virtual agxCollide.Geometry CreateTemporaryNative()
     {
-      return CreateNative();
+      var temp = CreateNative();
+      temp.setEnableMassProperties( m_enableMassProperties );
+      temp.setSensor( m_isSensor );
+      return temp;
     }
 
     /// <summary>
@@ -237,8 +255,10 @@ namespace AGXUnity.Collide
         return agx.AffineMatrix4x4.identity();
 
       // Using the world position of the shape - which includes scaling etc.
-      agx.AffineMatrix4x4 shapeInWorld = new agx.AffineMatrix4x4( transform.rotation.ToHandedQuat(), transform.position.ToHandedVec3() );
-      agx.AffineMatrix4x4 rbInWorld    = new agx.AffineMatrix4x4( rb.transform.rotation.ToHandedQuat(), rb.transform.position.ToHandedVec3() );
+      var shapeInWorld = new agx.AffineMatrix4x4( transform.rotation.ToHandedQuat(),
+                                                  transform.position.ToHandedVec3() );
+      var rbInWorld    = new agx.AffineMatrix4x4( rb.transform.rotation.ToHandedQuat(),
+                                                  rb.transform.position.ToHandedVec3() );
       return shapeInWorld * rbInWorld.inverse();
     }
 
@@ -256,7 +276,7 @@ namespace AGXUnity.Collide
       if ( !rb.gameObject.HasChild( gameObject ) )
         throw new Exception( "RigidBody not parent to Shape." );
 
-      m_geometry.setEnable( IsEnabled );
+      m_geometry.setEnable( isActiveAndEnabled );
 
       rb.Native.add( m_geometry, GetNativeRigidBodyOffset( rb ) );
 
@@ -315,14 +335,13 @@ namespace AGXUnity.Collide
     {
       m_transform = transform;
       
-      m_shape = CreateNative();
+      m_geometry = CreateNative();
 
-      if ( m_shape == null )
+      if ( m_geometry == null )
         return false;
 
-      m_geometry = new agxCollide.Geometry( m_shape, GetNativeGeometryOffset() );
       m_geometry.setName( name );
-      m_geometry.setEnable( IsEnabled );
+      m_geometry.setEnable( isActiveAndEnabled );
 
       if ( Material != null )
         m_geometry.setMaterial( m_material.GetInitialized<ShapeMaterial>().Native );
@@ -390,12 +409,10 @@ namespace AGXUnity.Collide
       if ( Simulation.HasInstance )
         Simulation.Instance.StepCallbacks.PostSynchronizeTransforms -= OnPostSynchronizeTransformsCallback;
 
-      if ( m_shape != null )
-        m_shape.Dispose();
-      m_shape = null;
-
-      if ( m_geometry != null )
+      if ( m_geometry != null ) {
         m_geometry.Dispose();
+        m_geometry.ReturnToPool();
+      }
       m_geometry = null;
 
       m_transform = null;
@@ -403,7 +420,7 @@ namespace AGXUnity.Collide
       base.OnDestroy();
     }
 
-    private void Reset()
+    protected void Reset()
     {
       var shapeVisual = Rendering.ShapeVisual.Find( this );
       if ( shapeVisual != null )
@@ -421,8 +438,13 @@ namespace AGXUnity.Collide
       bool debugRenderingEnabled = Rendering.DebugRenderManager.IsActiveForSynchronize &&
                                    Rendering.DebugRenderManager.Instance.isActiveAndEnabled;
       // If we have a body the debug rendering synchronization is made from that body.
-      if ( debugRenderingEnabled && m_geometry != null && m_geometry.getRigidBody() == null )
-        Rendering.DebugRenderManager.OnPostSynchronizeTransforms( this );
+      if ( debugRenderingEnabled && m_geometry != null ) {
+        var nativeRb = m_geometry.getRigidBody();
+        if ( nativeRb == null )
+          Rendering.DebugRenderManager.OnPostSynchronizeTransforms( this );
+        else
+          nativeRb.ReturnToPool();
+      }
     }
 
     /// <summary>
@@ -431,10 +453,16 @@ namespace AGXUnity.Collide
     /// </summary>
     protected virtual void SyncNativeTransform()
     {
+      if ( m_geometry == null )
+        return;
+
       // Automatic synchronization if we have a parent.
-      if ( m_geometry != null && m_geometry.getRigidBody() == null )
+      var nativeRb = m_geometry.getRigidBody();
+      if ( nativeRb == null )
         m_geometry.setLocalTransform( new agx.AffineMatrix4x4( m_transform.rotation.ToHandedQuat(),
                                                                m_transform.position.ToHandedVec3() ) );
+      else
+        nativeRb.ReturnToPool();
     }
 
     /// <summary>

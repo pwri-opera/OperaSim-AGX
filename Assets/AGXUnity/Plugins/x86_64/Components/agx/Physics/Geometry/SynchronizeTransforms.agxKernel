@@ -1,0 +1,17 @@
+<Kernel name="SynchronizeTransforms">
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="state, localTransform, body, shape" write="transform, shape"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, modelTransform" required="false"/>
+	
+	<!-- Used indirectly -->
+  <Parameter.Array name="@Space.Box.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Sphere.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Capsule.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Cylinder.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.WireShape.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Line.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Plane.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Trimesh.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.HeightField.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.Convex.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+  <Parameter.Array name="@Space.ShapeGroup.transform" type="AffineMatrix4x4" mode="WRITE" implicit="true"/>
+</Kernel>

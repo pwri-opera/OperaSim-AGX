@@ -1,0 +1,24 @@
+<Task name="PrepareConstraints">
+
+	<Task name="GenerateInteractionSolveTags">
+		<Task source="GenerateInteractionSolveTags:BinaryConstraint"/>
+		<Task source="GenerateInteractionSolveTags:ManyBodyConstraint"/>
+		<Task source="GenerateInteractionSolveTags:StrongInteraction"/>
+	</Task>
+
+  <!-- Transforms the constraints - after these kernels, the number of rows used by the constraints are known. -->
+  <Task source="TransformConstraints : BinaryConstraint"/>
+  <Task source="TransformConstraints : ManyBodyConstraint"/>
+  
+  <!-- Count rows and allocate. Assignes indices for jacobians and rows. -->
+  <Task source="AllocateConstraintData : BinaryConstraint"/>
+  <Task source="AllocateConstraintData : ManyBodyConstraint"/>
+
+  <!-- Any body indexing has to be made before calculate jacobians. -->
+  <Task source="CalculateJacobians : BinaryConstraint"/>
+  <Task source="CalculateJacobians : ManyBodyConstraint"/>
+
+  <!-- Calculate GMInv. -->
+  <Task source="CalculateGMInv : BinaryConstraint"/>
+  <Task source="CalculateGMInv : ManyBodyConstraint"/>
+</Task>

@@ -1,0 +1,9 @@
+<Entity name="GranularBody" source="Particle">
+  <Attribute.Scalar name="angularVelocity" type="Vec3"/>
+  <Attribute.Scalar name="oldAngularVelocity" type="Vec3"/>
+	<Attribute.Scalar name="rotation" type="Quat"/>
+	<Attribute.Scalar name="torque" type="Vec3"/>
+	<!-- I = (2/5)*m*R^2 in all directions because of body symmetry -->
+  <Attribute.Scalar name="inertia" type="Real"/>
+  <Attribute.Scalar name="invInertia" type="Real"/>
+</Entity>

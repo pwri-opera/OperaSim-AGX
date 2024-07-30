@@ -1,0 +1,8 @@
+<Entity name="OrientedGeometryBound">
+  <Attribute.Scalar name="geometry" type="Physics.GeometryPtr"/>
+  <Attribute.Scalar name="localBound" type="Bound3"/>
+  
+  <!-- Oriented bound can not be explicitly 32 bit due to precision issues (specifically objects far away from origin) -->
+  <Attribute.Scalar name="halfExtents" type="Vec3"/>
+  <Attribute.Scalar name="invTransform" type="AffineMatrix4x4"/>
+</Entity>

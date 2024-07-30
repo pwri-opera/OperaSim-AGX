@@ -106,8 +106,14 @@ namespace PWRISimulator
         /// </summary>
         protected virtual void OnPreStepForward()
         {
+            RequestCommands();
             if (enabled && gameObject.activeInHierarchy && autoUpdateConstraints)
                 UpdateConstraintControls();
+        }
+
+        protected virtual void RequestCommands()
+        {
+
         }
 
         #endregion

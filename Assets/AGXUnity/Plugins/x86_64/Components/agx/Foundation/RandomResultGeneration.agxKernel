@@ -1,0 +1,10 @@
+<Kernel name="RandomResultGenerationKernel" device="OpenCL">
+	
+	<Buffer name="sizes" type="UInt" numElements="@Buffer.numElements"/>
+	
+	<Parameter.Array name="ranges" bind="@Buffer.range" type="Bound1u" mode="READ_WRITE"/>
+	<Parameter.Array name="capacities" bind="@Buffer.capacity" type="UInt" mode="READ_WRITE"/>
+	<Parameter.Array name="randomValues" bind="@Buffer.random" type="UInt" mode="READ_WRITE"/>
+	<Parameter.Array name="sizes" type="UInt" mode="READ_WRITE"/>
+	<Parameter.Scalar name="numElements" bind="@Buffer.numElements" type="UInt"/>
+</Kernel>

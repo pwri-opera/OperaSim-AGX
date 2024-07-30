@@ -1,0 +1,15 @@
+
+<Kernel name="CalculateGMInv" implementation="ParticlePairContact">
+  <Parameter.EntityData name="constraint" bind="@ParticleParticleContactConstraint" type="Particle.ContactConstraint" read="G, particle1, particle2" write="GMInv"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleParticleContactConstraint.Row" type="Particle.ContactConstraintRow" read="epsilon" write="invD"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="invMass"/>
+</Kernel>
+
+
+
+<Kernel name="CalculateGMInv" implementation="ParticleGeometryContact">
+  <Parameter.EntityData name="constraint" bind="@ParticleBodyContactConstraint" type="Particle.ParticleBodyContactConstraint" read="G, particle, body" write="GMInv"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleBodyContactConstraint.Row" type="Particle.ContactConstraintRow" read="epsilon" write="invD"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, effectiveInvWorldMassMatrix, effectiveInvWorldInertia"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="invMass"/>
+</Kernel>

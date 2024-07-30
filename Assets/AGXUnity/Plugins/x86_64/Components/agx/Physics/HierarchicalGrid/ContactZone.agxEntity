@@ -1,0 +1,36 @@
+<Entity name="ContactZone">
+  <!-- <Attribute.Array name="interactionList" type="struct<IndexArray, InteractionType>"/> -->
+  <Attribute.Array name="particleParticleContacts" type="UInt:32bit"/>
+  <Attribute.Array name="particleGeometryContacts" type="UInt:32bit"/>
+  <Attribute.Array name="geometryGeometryContacts" type="UInt:32bit"/>
+  
+  <Attribute.Scalar name="totNumContacts" type="UInt:32bit"/>
+
+  <Attribute.Scalar name="numParticleParticleContacts" type="AtomicValue"/>
+  <Attribute.Scalar name="numParticleGeometryContacts" type="AtomicValue"/>
+  <Attribute.Scalar name="numGeometryContacts" type="AtomicValue"/>
+  
+  <!-- For incremental dependency calculations, TODO: Should be possible without these -->
+  <!-- <Attribute.HashSet name="parents" type="Physics.HierarchicalGrid.ContactZonePtr"/> -->
+  <!-- <Attribute.HashSet name="children" type="Physics.HierarchicalGrid.ContactZonePtr"/> -->
+  
+  <!-- List of groups, partitioned based on solve model -->
+  <Attribute.Array name="solveGroups" type="Physics.SolveGroupPtr"/>
+  <Shared.Storage entity="Physics.SolveGroup"/>
+  
+
+  <!-- Only valid for internal zones -->
+  <Attribute.Scalar name="spatialCell" type="Physics.HierarchicalGrid.CellPtr"/>
+  
+  
+  <Attribute.Scalar name="tier" type="Physics.HierarchicalGrid.GridTierPtr"/>
+  <Attribute.Scalar name="interTierDependencyList" type="Physics.HierarchicalGrid.ContactZoneDependencyPtr"/>
+  
+  
+  <Attribute.Scalar name="type" type="UInt:8bit"/>
+  <Attribute.Scalar name="id" type="Vec3i"/>
+
+  <Attribute.Pointer name="job" type="agx::Job"/>
+  
+  <Attribute.Scalar name="color" type="Vec4:32bit"/>
+</Entity>

@@ -1,0 +1,4 @@
+<Kernel name="ConnectParticleGeometryContacts">
+  <Parameter.EntityData name="@Particle" type="Particle" write="geometryContactList"/>
+  <Parameter.EntityData name="@ParticleGeometryContact" type="ParticleGeometryContact" read="particle" write="next"/>
+</Kernel>

@@ -1,0 +1,19 @@
+<Kernel name="CalculateJacobians32" implementation="GranularGranularContact">
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint32" write="isImpacting, charContactTime, charMass"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow32" write="epsilon, lambda, rhs, violation, velocity"/>
+
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, point, normal, depth, material, velocity" write="isImpacting"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="twistingResistanceCoefficient"/>
+  
+  <Parameter.EntityData name="@Particle" type="GranularBody" read="oldVelocity, oldAngularVelocity, mass, position"/>
+  <!--New jacobian-->
+  <Parameter.Array name="granularGranularJacobianStorage" bind="@GranularGranularContactConstraintJacobianStorage" mode="WRITE" type="Jacobian6DOFElement:32bit"/>
+
+  <!-- Constants -->
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+  <Parameter.Scalar name="@granularPoissonRatio" type="Real" mode="READ"/>
+  <Parameter.Scalar name="@nonlinearCoefficient" type="Real" mode="READ"/>
+</Kernel>
+

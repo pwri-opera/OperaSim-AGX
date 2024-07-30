@@ -64,12 +64,12 @@ namespace AGXUnityEditor.Tools
     private List<SelectionEntry> m_selection = new List<SelectionEntry>();
     private RigidBodySelection m_rbSelection = null;
 
-    private ShapeCreateTool ShapeCreateTool
+    private CreateOrientedShapeTool CreateOrientedShapeTool
     {
-      get { return GetChild<ShapeCreateTool>(); }
+      get { return GetChild<CreateOrientedShapeTool>(); }
       set
       {
-        RemoveChild( GetChild<ShapeCreateTool>() );
+        RemoveChild( GetChild<CreateOrientedShapeTool>() );
         AddChild( value );
       }
     }
@@ -274,11 +274,12 @@ namespace AGXUnityEditor.Tools
                                                         skin.Button,
                                                         GUILayout.Width( 128 ) );
           UnityEngine.GUI.enabled = m_selection.Count > 0 && Assembly.GetComponentInChildren<RigidBody>() != null;
-          addToExistingRigidBodyPressed = GUILayout.Button( GUI.MakeLabel( "Add to existing",
+          addToExistingRigidBodyPressed = GUILayout.Toggle( m_subMode == SubMode.SelectRigidBody,
+                                                            GUI.MakeLabel( "Add to existing",
                                                                            false,
                                                                            "Add selected objects to existing rigid body" ),
-                                                            skin.GetButton( m_subMode == SubMode.SelectRigidBody ),
-                                                            GUILayout.Width( 100 ) );
+                                                            skin.Button,
+                                                            GUILayout.Width( 100 ) ) != ( m_subMode == SubMode.SelectRigidBody );
           UnityEngine.GUI.enabled = selectionHasRigidBody;
           moveToNewRigidBodyPressed = GUILayout.Button( GUI.MakeLabel( "Move to new",
                                                                        false,
@@ -312,12 +313,12 @@ namespace AGXUnityEditor.Tools
 
     private void HandleModeShapeGUI()
     {
-      if ( ShapeCreateTool == null ) {
+      if ( CreateOrientedShapeTool == null ) {
         ChangeMode( Mode.None );
         return;
       }
 
-      ShapeCreateTool.OnInspectorGUI();
+      CreateOrientedShapeTool.OnInspectorGUI();
     }
 
     private void HandleModeConstraintGUI()
@@ -390,7 +391,7 @@ namespace AGXUnityEditor.Tools
       m_subMode = SubMode.None;
 
       if ( m_mode == Mode.Shape )
-        ShapeCreateTool = new ShapeCreateTool( Assembly.gameObject );
+        CreateOrientedShapeTool = new CreateOrientedShapeTool( Assembly.gameObject );
       else if ( m_mode == Mode.Constraint )
         ConstraintCreateTool = new ConstraintCreateTool( Assembly.gameObject, true );
     }

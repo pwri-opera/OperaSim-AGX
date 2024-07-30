@@ -1,0 +1,29 @@
+<Entity name="ParticlePairContact" source="Contact">
+	<Attribute.Scalar name="particle1" type="UInt:32bit"/>
+	<Attribute.Scalar name="particle2" type="UInt:32bit"/>
+	
+  <!-- Id instead of index -->
+	<Attribute.Scalar name="particleId1" type="UInt:32bit"/>
+	<Attribute.Scalar name="particleId2" type="UInt:32bit"/>
+  
+	<Attribute.Scalar name="enabled" type="Bool" value="true"/>
+	
+	<Attribute.Scalar name="point" type="Vec3"/>
+	<Attribute.Scalar name="normal" type="Vec3:32bit"/>
+	<Attribute.Scalar name="tangentU" type="Vec3:32bit"/>
+	<Attribute.Scalar name="tangentV" type="Vec3:32bit"/>
+	<Attribute.Scalar name="depth" type="Real"/>
+	<Attribute.Scalar name="velocity" type="Vec3:32bit"/>
+	<Attribute.Scalar name="localForce" type="Vec3"/>
+	<Attribute.Scalar name="impactNormalForce" type="Real"/>
+	<Attribute.Scalar name="contactEnergy" type="Real"/>
+	<Attribute.Scalar name="isImpacting" type="Bool" value="false"/>
+	<Attribute.Scalar name="timeStamp" type="Real:32bit"/>
+	<Attribute.Scalar name="charContactTime" type="Real:32bit"/>
+
+	<!-- For rolling resistance -->
+	<!-- <Attribute.Scalar name="effectiveRadius" type="Real"/> -->
+
+	<!-- <Attribute.Scalar name="zoneId" type="Vec3i"/> -->
+	<!-- <Attribute.Scalar name="zoneIndex" type="UInt:32bit"/> -->
+</Entity>

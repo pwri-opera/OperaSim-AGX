@@ -1,0 +1,13 @@
+<Kernel name="GenerateGeometryTriangles"> 
+	<Parameter.Array name="transformBuffer" type="AffineMatrix4x4" mode="READ" bind="@Geometry.transform"/>
+	<Parameter.Array name="shapeBuffer" type="Physics.Geometry.ShapePtr" mode="READ" bind="@Geometry.shape"/>
+	<Parameter.Scalar name="color" type="Vec4" value="0.7, 0.7, 0.7, 0.5"/>
+	
+	<!-- Camera matrices used for frustum culling and triangle distance computations -->
+  <!-- <Parameter.Scalar name="cameraViewMatrix" type="Matrix4x4" bind="@camera.view"/> -->
+	<Parameter.Scalar name="cameraProjectionViewMatrix" type="Matrix4x4" bind="@camera.modelViewProjection"/>
+
+	<Parameter.EntityData name="@Triangle" type="Triangle" write="vertices, normals, colors, cameraDistance" globalResult="TRUNCATE"/>
+	
+	<PreJob name="loadModels"/>
+</Kernel>

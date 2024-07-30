@@ -1,0 +1,5 @@
+<Kernel name="ApplyPointGravity">
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="cmTransform, state, mass, force" write="force"/>
+  <Parameter.Scalar name="gravity" type="Real"/>
+  <Parameter.Scalar name="center" type="Vec3"/>
+</Kernel>

@@ -5,7 +5,8 @@ namespace AGXUnity.Collide
   /// <summary>
   /// Hollow cylinder shape object given radius and height and wall thickness.
   /// </summary>
-  [AddComponentMenu( "AGXUnity/Shapes/HollowCylinder" )]
+  [AddComponentMenu( "AGXUnity/Shapes/Hollow Cylinder" )]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#additional-shapes" )]
   public sealed class HollowCylinder : Shape
   {
     #region Serialized Properties
@@ -34,7 +35,7 @@ namespace AGXUnity.Collide
       get { return m_thickness; }
       set
       {
-        m_thickness = Utils.Math.ClampAbove( Mathf.Min(m_radius- MinimumLength, value), MinimumLength );
+        m_thickness = Utils.Math.ClampAbove( Mathf.Min(m_radius- MinimumSize, value), MinimumSize );
 
         if ( Native != null )
           Native.setThickness( m_thickness );
@@ -52,7 +53,7 @@ namespace AGXUnity.Collide
       get { return m_radius; }
       set
       {
-        m_radius = Utils.Math.ClampAbove( value, MinimumLength );
+        m_radius = Utils.Math.ClampAbove( value, MinimumSize );
 
         if ( Native != null )
           Native.setOuterRadius( m_radius );
@@ -70,7 +71,7 @@ namespace AGXUnity.Collide
       get { return m_height; }
       set
       {
-        m_height = Utils.Math.ClampAbove( value, MinimumLength );
+        m_height = Utils.Math.ClampAbove( value, MinimumSize );
 
         if ( Native != null )
           Native.setHeight( m_height );
@@ -83,7 +84,7 @@ namespace AGXUnity.Collide
     /// <summary>
     /// Returns the native cylinder object if created.
     /// </summary>
-    public agxCollide.HollowCylinder Native { get { return m_shape as agxCollide.HollowCylinder; } }
+    public agxCollide.HollowCylinder Native { get { return NativeShape?.asHollowCylinder(); } }
 
     /// <summary>
     /// Scale of meshes are inherited by the parents and supports non-uniform scaling.
@@ -96,9 +97,10 @@ namespace AGXUnity.Collide
     /// <summary>
     /// Creates the native cylinder object given current radius and height.
     /// </summary>
-    protected override agxCollide.Shape CreateNative()
+    protected override agxCollide.Geometry CreateNative()
     {
-      return new agxCollide.HollowCylinder( m_radius, m_height, m_thickness );
+      return new agxCollide.Geometry( new agxCollide.HollowCylinder( m_radius, m_height, m_thickness ),
+                                      GetNativeGeometryOffset() );
     }
   }
 }

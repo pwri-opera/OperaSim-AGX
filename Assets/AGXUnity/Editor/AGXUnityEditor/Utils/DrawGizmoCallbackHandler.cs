@@ -157,7 +157,7 @@ namespace AGXUnityEditor.Utils
       Shape shape       = null;
       MeshFilter filter = null;
       if ( ( rb = selected.GetComponent<RigidBody>() ) != null ) {
-        if ( rb.IsEnabled )
+        if ( rb.isActiveAndEnabled )
           m_colorHandler.Highlight( rb, selectionType );
       }
       else if ( ( shape = selected.GetComponent<Shape>() ) != null ) {
@@ -176,7 +176,7 @@ namespace AGXUnityEditor.Utils
 
       Gizmos.color = manager.ContactColor;
       foreach ( var contact in manager.ContactList ) {
-        Gizmos.DrawMesh( Constraint.GetOrCreateGizmosMesh(),
+        Gizmos.DrawMesh( Constraint.GizmosMesh,
                          contact.Point,
                          Quaternion.FromToRotation( Vector3.up, contact.Normal ),
                          manager.ContactScale * Spawner.Utils.FindConstantScreenSizeScale( contact.Point, Camera.current ) * Vector3.one );

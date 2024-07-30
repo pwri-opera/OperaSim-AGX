@@ -6,6 +6,7 @@ namespace AGXUnity
   /// <summary>
   /// Shape material script asset.
   /// </summary>
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#shape-material" )]
   public class ShapeMaterial : ScriptAsset
   {
     /// <summary>
@@ -30,6 +31,7 @@ namespace AGXUnity
     /// Default value: 1000.
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip("The density of the material in kg/m^3")]
     public float Density
     {
       get { return m_density; }
@@ -53,6 +55,8 @@ namespace AGXUnity
     /// Default value: 1.0E10
     /// </summary>
     [ClampAboveZeroInInspector]
+    [InspectorGroupBegin(Name = "Wire Properties")]
+    [Tooltip("The compliance of the stretch contstraint when this material is used as a wire")]
     public float YoungsWireStretch
     {
       get { return m_youngsWireStretch; }
@@ -76,6 +80,7 @@ namespace AGXUnity
     /// Default value: 1.0E9
     /// </summary>
     [ClampAboveZeroInInspector]
+    [Tooltip( "The compliance of the bend contstraint when this material is used as a wire" )]
     public float YoungsWireBend
     {
       get { return m_youngsWireBend; }
@@ -84,6 +89,54 @@ namespace AGXUnity
         m_youngsWireBend = value;
         if ( Native != null )
           Native.getWireMaterial().setYoungsModulusBend( m_youngsWireBend );
+      }
+    }
+
+    /// <summary>
+    /// damping for wire stretching modulus stretch for wires.
+    /// Default value: 0.06
+    /// </summary>
+    [SerializeField]
+    private float m_dampingStretch = 0.06f;
+
+    /// <summary>
+    /// Get or set stretch damping for wires.
+    /// Default value: 0.06
+    /// </summary>
+    [ClampAboveZeroInInspector]
+    [Tooltip( "The damping of the stretch contstraint when this material is used as a wire" )]
+    public float DampingStretch
+    {
+      get { return m_dampingStretch; }
+      set
+      {
+        m_dampingStretch = value;
+        if ( Native != null )
+          Native.getWireMaterial().setDampingStretch( m_dampingStretch );
+      }
+    }
+
+    /// <summary>
+    /// Bend damping of this material.
+    /// Default value: 0.12
+    /// </summary>
+    [SerializeField]
+    private float m_dampingBend = 0.12f;
+
+    /// <summary>
+    /// Get or set bend damping of this material.
+    /// Default value: 0.12
+    /// </summary>
+    [ClampAboveZeroInInspector]
+    [Tooltip( "The damping of the bend contstraint when this material is used as a wire" )]
+    public float DampingBend
+    {
+      get { return m_dampingBend; }
+      set
+      {
+        m_dampingBend = value;
+        if ( Native != null )
+          Native.getWireMaterial().setDampingBend( m_dampingBend );
       }
     }
 
@@ -110,6 +163,8 @@ namespace AGXUnity
       Density           = Convert.ToSingle( native.getBulkMaterial().getDensity() );
       YoungsWireStretch = Convert.ToSingle( native.getWireMaterial().getYoungsModulusStretch() );
       YoungsWireBend    = Convert.ToSingle( native.getWireMaterial().getYoungsModulusBend() );
+      DampingStretch    = Convert.ToSingle( native.getWireMaterial().getDampingStretch() );
+      DampingBend       = Convert.ToSingle( native.getWireMaterial().getDampingBend() );
 
       return this;
     }

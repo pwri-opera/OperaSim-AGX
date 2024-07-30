@@ -1,0 +1,4 @@
+<Kernel name="WriteDetailedInteractionGraphDotFile" dispatch="serial">
+    <Parameter.EntityData name="@GraphNode" type="GraphNode" mode="READ"/>
+    <Parameter.Scalar name="filePath" type="String" value="DetailedInteractionGraph.dot"/>
+</Kernel>

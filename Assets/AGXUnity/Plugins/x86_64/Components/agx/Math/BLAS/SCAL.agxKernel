@@ -1,0 +1,84 @@
+
+
+
+<!--
+  CPU implementation.
+-->
+
+<!-- Real buffer *= scalar. -->
+<Kernel name="SCAL" implementation="REAL_REALn">
+  <Parameter.Scalar name="factor" type="Real"/>
+  <Parameter.Array  name="buffer" type="Real" mode="READ_WRITE" />
+</Kernel>
+
+
+<!-- Vec3 buffer *= Real. -->
+<Kernel name="SCAL" implementation="REAL_REAL3n">
+  <Parameter.Scalar name="factor" type="Real"/>
+  <Parameter.Array  name="buffer" type="Vec3" mode="READ_WRITE" />
+</Kernel>
+
+<!-- Vec3 buffer *= Real buffer. -->
+<Kernel name="SCAL" implementation="REALn_REAL3n">
+  <Parameter.Array name="@factor" type="Real" mode="READ"/>
+  <Parameter.Array name="@buffer" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+<!-- vec3 buffer *= mat3x3 buffer -->
+<Kernel name="SCAL" implementation="mat3x3n_REAL3n">
+  <Parameter.Array name="@factor" type="Matrix3x3" mode="READ"/>
+  <Parameter.Array name="@buffer" type="Vec3" mode="READ_WRITE"/>
+</Kernel>
+
+
+<!--
+  OpenCL kernels.
+<--
+
+<!--
+  -- single element * buffer
+  -->
+
+<!-- scalar * scalar buffer. -->
+<Kernel name="SCAL" device="OpenCL" buildOptions="-DREAL_REALn">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@buffer.numElements"/>
+  <Parameter.Scalar    name="factor"       type="Real"/>
+  <Parameter.Array name="buffer"       type="Real" mode="READ_WRITE" />
+</Kernel>
+
+<!-- vector * vector buffer. -->
+<Kernel name="SCAL" device="OpenCL" buildOptions="-DREAL3_REAL3n">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@buffer.numElements"/>
+  <Parameter.Scalar    name="factor"       type="Vec3"/>
+  <Parameter.Array name="buffer"       type="Vec3" mode="READ_WRITE" />
+</Kernel>
+
+<!-- scalar * vector buffer. -->
+<Kernel name="SCAL" device="OpenCL" buildOptions="-DREAL_REAL3n">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@buffer.numElements"/>
+  <Parameter.Scalar    name="factor"       type="Real"/>
+  <Parameter.Array name="buffer"       type="Vec3" mode="READ_WRITE" />
+</Kernel>
+
+
+
+
+
+<!--
+  -- buffer * buffer
+  -->
+  
+  
+<!-- scalar buffer * scalar buffer -->
+<Kernel name="SCAL" device="OpenCL" buildOptions="-DREALn_REALn">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@buffer.numElements"/>
+  <Parameter.Array name="factor"       type="Real" mode="READ"/>
+  <Parameter.Array name="buffer"       type="Real" mode="READ_WRITE" />
+</Kernel>
+
+<!-- vector buffer * vector buffer -->
+<Kernel name="SCAL" device="OpenCL" buildOptions="-DREAL3n_REAL3n">
+  <Parameter.Scalar    name="numElements"  type="UInt" bind="@buffer.numElements"/>
+  <Parameter.Array name="factor"       type="Vec3" mode="READ"/>
+  <Parameter.Array name="buffer"       type="Vec3" mode="READ_WRITE" />
+</Kernel>

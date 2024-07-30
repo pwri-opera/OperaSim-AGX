@@ -1,0 +1,10 @@
+<Kernel name="CountCellOccupancy" dispatch="serial" implementation="Geometries">
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="state, cellIndex" write="cellSlot"/>
+  <Parameter.EntityData name="@Cell" type="Cell" write="collisionObjects"/>
+</Kernel>
+
+<Kernel name="CountCellOccupancy" dispatch="serial" implementation="Particles">
+  <Parameter.EntityData name="@Particle" type="Particle" read="cellIndex" write="cellSlot"/>
+  <Parameter.EntityData name="@Cell" type="Cell" write="collisionObjects"/>
+</Kernel>
+

@@ -1,0 +1,6 @@
+<Kernel name="SortIslandGroups" dispatch="serial">
+  <Parameter.Array name="@SolveGroup.nodes" type="Array<UInt:32bit>" mode="READ_WRITE"/>
+  
+  <!-- Implicit parameter -->
+  <Parameter.Array name="@SolveGroup.nodes.elements" type="UInt:32bit" mode="READ_WRITE" implicit="true"/>
+</Kernel>

@@ -1,0 +1,8 @@
+<Kernel name="PrintSolveDataStatistics" dispatch="serial">
+  
+  <Parameter.EntityData name="@ContactZone" type="Physics.HierarchicalGrid.ContactZone" read="particleParticleContacts"/>
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint" read="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow" read="rhs, lambda, epsilon, invD" write="lambda"/>
+
+  <Parameter.EntityData name="@SolveBody" type="SolveBody" read="velocity, angularVelocity" write="velocity, angularVelocity"/>
+</Kernel>

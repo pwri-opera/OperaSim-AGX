@@ -1,0 +1,5 @@
+<Entity name="RenderBox">
+	<Attribute.Scalar name="vertices" type="agxGL.RenderBoxVertices"/>
+	<Attribute.Scalar name="normals" type="agxGL.RenderBoxNormals"/>
+	<Attribute.Scalar name="outlines" type="agxGL.RenderBoxOutlines"/>
+</Entity>

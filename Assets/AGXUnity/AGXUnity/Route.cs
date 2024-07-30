@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AGXUnity
 {
-  public class Route<T> : ScriptComponent, IEnumerable<T>
+  public abstract class Route<T> : ScriptComponent, IEnumerable<T>
     where T : RouteNode
   {
     public class ValidatedNode
@@ -179,6 +179,11 @@ namespace AGXUnity
         node.OnDestroy();
 
       base.OnDestroy();
+    }
+
+    protected virtual void Reset()
+    {
+      hideFlags |= HideFlags.HideInInspector;
     }
 
     private bool TryInsertAtIndex( int index, T node )

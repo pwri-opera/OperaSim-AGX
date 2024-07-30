@@ -1,0 +1,13 @@
+<!-- TODO: Merge with Physics.ConstraintRow? -->
+<Entity name="ContactConstraintRow" useInstanceTable="false">
+	<Attribute.Scalar name="lambda"          type="Real"/>
+	<Attribute.Scalar name="impactLambda"    type="Real"/>
+	<Attribute.Scalar name="rhs"             type="Real"/>
+	<Attribute.Scalar name="epsilon"         type="Real"/>
+	<Attribute.Scalar name="velocity"        type="Real"/>
+	<Attribute.Scalar name="invD"            type="Real"/>
+	<Attribute.Scalar name="violation"       type="Real"/>
+	<Attribute.Scalar name="residual"        type="Real"/>
+	<!-- <Attribute.Scalar name="bound"        type="RangeReal"/> -->
+	<!-- <Attribute.Scalar name="damping" type="Real"/> -->
+</Entity>

@@ -33,6 +33,22 @@ namespace AGXUnity
       m_ai = null;
     }
 
+    /// <summary>
+    /// This method has to be called before the first call is made to AGX
+    /// Dynamics, otherwise DllNotFoundException will/can be thrown. In
+    /// Windows, <paramref name="agxBinaryDirectory"/> is added to PATH
+    /// for the process.
+    /// </summary>
+    /// <param name="agxBinaryDirectory">Directory, relative or absolute, to the AGX Dynamics libraries.</param>
+    private void RuntimePrepareNativeLibrary( string agxBinaryDirectory )
+    {
+#if UNITY_STANDALONE_LINUX
+      // Nothing has to be made here for Linux.
+#else
+      IO.Environment.AddToPath( agxBinaryDirectory );
+#endif
+    }
+
     private void Configure()
     {
 #if AGXUNITY_UPDATING
@@ -56,7 +72,8 @@ namespace AGXUnity
         var dataPluginsPath    = IO.Environment.GetPlayerPluginPath( dataPath );
         var dataAGXRuntimePath = IO.Environment.GetPlayerAGXRuntimePath( dataPath );
 
-        IO.Environment.AddToPath( dataPluginsPath );
+        // If this fails in some way, agxIO.Environment.instance() will throw.
+        RuntimePrepareNativeLibrary( dataPluginsPath );
 
         var envInstance = agxIO.Environment.instance();
 
@@ -67,9 +84,6 @@ namespace AGXUnity
         for ( int i = 0; i < (int)agxIO.Environment.Type.NUM_TYPES; ++i )
           envInstance.getFilePath( (agxIO.Environment.Type)i ).clear();
 
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( "." );
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataPath );
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataPluginsPath );
         envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataAGXRuntimePath );
         envInstance.getFilePath( agxIO.Environment.Type.RUNTIME_PATH ).pushbackPath( dataAGXRuntimePath );
 
@@ -96,24 +110,17 @@ namespace AGXUnity
   /// </summary>
   public class NativeHandler
   {
-#region Singleton Stuff
-    private static NativeHandler m_instance = null;
-    public static NativeHandler Instance
-    {
-      get
-      {
-        if ( m_instance == null )
-          m_instance = new NativeHandler();
-        return m_instance;
-      }
-    }
-#endregion
-
-    private InitShutdownAGXDynamics m_isAgx = null;
-
     NativeHandler()
     {
       m_isAgx = new InitShutdownAGXDynamics();
+
+      var searchForLicenses = !Application.isEditor &&
+                              m_isAgx.Initialized &&
+                              // External scripts could load licenses, even before AGX
+                              // has been initialized.
+                              !LicenseManager.UpdateLicenseInformation().IsValid;
+      if ( searchForLicenses && !LicenseManager.LoadFile() )
+        LicenseManager.ActivateEncryptedRuntime( IO.Environment.GetPlayerPluginPath( Application.dataPath ) );
 
       // The environment probably hasn't been completely configured
       // when inside the editor so it's up to Manager to call
@@ -156,6 +163,12 @@ namespace AGXUnity
         agx.Thread.registerAsAgxThread();
     }
 
+    public void UnregisterCurrentThread()
+    {
+      if ( !agx.Thread.isMainThread() )
+        agx.Thread.unregisterAsAgxThread();
+    }
+
     /// <summary>
     /// Unlock AGX Dynamics using obfuscated license string.
     /// </summary>
@@ -196,7 +209,24 @@ namespace AGXUnity
         return false;
       }
 
-      return (HasValidLicense = agx.Runtime.instance().verifyAndUnlock( licenseStr ));
+      return LicenseManager.Load( licenseStr );
     }
+
+    #region Singleton Stuff
+    private static NativeHandler s_instance = null;
+    public static NativeHandler Instance
+    {
+      get
+      {
+        if ( s_instance == null )
+          s_instance = new NativeHandler();
+        return s_instance;
+      }
+    }
+
+    public static bool HasInstance => s_instance != null;
+    #endregion
+
+    private InitShutdownAGXDynamics m_isAgx = null;
   }
 }

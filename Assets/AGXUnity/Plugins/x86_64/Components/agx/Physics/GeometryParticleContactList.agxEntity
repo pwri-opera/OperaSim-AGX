@@ -1,0 +1,10 @@
+<Entity name="GeometryParticleContactList" source="Interaction">
+	<Attribute.Scalar name="geometry" type="Physics.GeometryPtr"/>
+	<Attribute.Scalar name="body" type="Physics.RigidBodyPtr"/>
+
+	<Attribute.Scalar name="bodyForce" type="Vec3"/>
+  <Attribute.Scalar name="bodyTorque" type="Vec3"/>
+  <Attribute.Scalar name="isImpacting" type="Bool"/>
+
+	<Attribute.Array name="contacts" type="Physics.ParticleGeometryContactPtr"/>
+</Entity>

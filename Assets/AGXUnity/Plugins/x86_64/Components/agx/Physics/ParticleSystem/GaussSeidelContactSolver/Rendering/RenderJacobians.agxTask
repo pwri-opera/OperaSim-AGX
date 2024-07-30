@@ -1,0 +1,22 @@
+<Task name="RenderJacobians">
+  <Parameter.Array name="JacobianElements" type="Vec3" mode="READ" bind="@ParticleParticleContactConstraint.JacobianElements"/>
+  <Parameter.Array name="contact_point"    type="Vec3"     mode="READ"/>
+  <Buffer name="lines" type="Line" numElements="Math.Mul(UInt(3),@contact_jacobian.numElements)"/>
+
+  <Task source="GenerateLinesFromJacobians"/>
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@lines"/>
+  </Task>
+</Task> 
+
+
+<Task name="RenderJacobians" implementation="BodyRotation">
+	<Parameter.Array name="JacobianElements" type="Vec3" mode="READ" bind="@ParticleParticleContactConstraint.JacobianElements"/>
+  <Parameter.Array name="contact_point"    type="Vec3"     mode="READ"/>
+  <Buffer name="lines" type="Line" numElements="Math.Mul(UInt(3),@contact_jacobian.numElements)"/>
+
+  <Task source="GenerateLinesFromJacobians : BodyRotation"/>
+  <Task source="Foundation.Rendering.RenderLines">
+    <Parameter.Array instance="vertices" bind="@lines"/>
+  </Task>
+</Task> 

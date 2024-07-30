@@ -1,0 +1,14 @@
+<Kernel.Scalar name="Tan" inline="true" templatePermutation="Math.TemplatePermutations.Tan">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="Tan" inline="true" templatePermutation="Math.TemplatePermutations.Tan">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Tan" inline="true" templatePermutation="Math.TemplatePermutations.Tan">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg" type="Auto" mode="READ"/>
+</Kernel>

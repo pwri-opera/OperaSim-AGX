@@ -12,8 +12,10 @@ namespace AGXUnity.Model
   /// Conveyor belt model using one or several neighboring AGXUnity.Model.Track
   /// instances constrained to each other.
   /// </summary>
+  [AddComponentMenu( "AGXUnity/Model/Conveyor Belt" )]
   [DoNotGenerateCustomEditor]
   [DisallowMultipleComponent]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#conveyor-belt" )]
   public class ConveyorBelt : ScriptComponent
   {
     [SerializeField]
@@ -759,7 +761,7 @@ namespace AGXUnity.Model
     private void OnDrawGizmosSelected()
     {
       if ( m_nodeGizmoMesh == null )
-        m_nodeGizmoMesh = Resources.Load<GameObject>( "Debug/BoxRenderer" ).GetComponent<MeshFilter>().sharedMesh;
+        m_nodeGizmoMesh = Resources.GetBuiltinResource<Mesh>( "Cube.fbx" );
       var initialized = m_tracks != null && m_tracks.Length > 0;
       var tracks      = initialized ? m_tracks : FindTracks();
       var color       = Color.black;
@@ -779,15 +781,9 @@ namespace AGXUnity.Model
           var renderer = track.GetComponent<Rendering.TrackRenderer>();
           if ( renderer == null )
             continue;
-          var data = renderer.GetData( track );
-          if ( data == null )
+
+          if ( !renderer.DrawGizmosUninitialized( track, color ) )
             continue;
-          foreach ( var node in data.TrackNodes ) {
-            Gizmos.DrawWireMesh( m_nodeGizmoMesh,
-                                 node.Position + node.Rotation * ( node.HalfExtents.z * Vector3.forward ),
-                                 node.Rotation,
-                                 2.0f * node.HalfExtents );
-          }
         }
         color = new Color( color.r + 1.0f / tracks.Length,
                            color.g + 1.0f / tracks.Length,

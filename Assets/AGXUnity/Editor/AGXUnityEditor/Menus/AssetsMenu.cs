@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using AGXUnity;
+﻿using AGXUnity;
 using AGXUnity.Model;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 namespace AGXUnityEditor
 {
@@ -32,6 +32,12 @@ namespace AGXUnityEditor
       return Selection.activeObject = Utils.AssetFactory.Create<CableProperties>( "cable properties" );
     }
 
+    [MenuItem( "Assets/AGXUnity/Cable Damage Properties", priority = 620 )]
+    public static Object CreateCableDamageProperties()
+    {
+      return Selection.activeObject = Utils.AssetFactory.Create<CableDamageProperties>( "cable damage properties" );
+    }
+
     [MenuItem( "Assets/AGXUnity/Geometry Contact Merge Split Thresholds", priority = 640 )]
     public static Object CreateGeometryContactMergeSplitThresholds()
     {
@@ -47,7 +53,7 @@ namespace AGXUnityEditor
     [MenuItem( "Assets/AGXUnity/Two Body Tire Properties", priority = 660 )]
     public static Object CreateTwoBodyTireProperties()
     {
-      return Selection.activeObject = Utils.AssetFactory.Create<TwoBodyTireProperties>("two body tire properties");
+      return Selection.activeObject = Utils.AssetFactory.Create<TwoBodyTireProperties>( "two body tire properties" );
     }
 
     [MenuItem( "Assets/AGXUnity/Solver Settings", priority = 680 )]
@@ -86,6 +92,12 @@ namespace AGXUnityEditor
       return Selection.activeObject = Utils.AssetFactory.Create<TrackInternalMergeProperties>( "track internal merge properties" );
     }
 
+    [MenuItem( "Assets/AGXUnity/Conveyor Belt Properties", priority = 720 )]
+    public static Object CreateConveyorBeltProperties()
+    {
+      return Selection.activeObject = Utils.AssetFactory.Create<ConveyorBeltProperties>( "conveyor belt properties" );
+    }
+
     [MenuItem( "Assets/AGXUnity/Import/Selected URDF [instance]", validate = true, priority = 550 )]
     public static bool IsUrdfSelected()
     {
@@ -100,6 +112,40 @@ namespace AGXUnityEditor
       if ( instances.Length > 0 )
         Selection.objects = instances;
       return instances;
+    }
+
+    [MenuItem( "Assets/AGXUnity/Import/Selected URDF [prefab]...", validate = true, priority = 550 )]
+    public static bool IsUrdfSelectedAsPrefab()
+    {
+      return IsUrdfSelected();
+    }
+
+    [MenuItem( "Assets/AGXUnity/Import/Selected URDF [prefab]...", priority = 550 )]
+    public static GameObject[] SelectedUrdfFilesAsPrefab()
+    {
+      var urdfFilePaths = IO.URDF.Reader.GetSelectedUrdfFiles( true );
+      var instances = IO.URDF.Reader.Instantiate( urdfFilePaths, null, false );
+      if ( instances.Length == 0 )
+        return instances;
+
+      var prefabs = new List<GameObject>();
+      foreach ( var instance in instances ) {
+        var directory = IO.URDF.Prefab.OpenFolderPanel( $"Prefab and assets directory for: {instance.name}" );
+        if ( string.IsNullOrEmpty( directory ) ) {
+          Debug.Log( $"Ignoring URDF prefab {instance.name}." );
+          continue;
+        }
+        var model = AGXUnity.IO.URDF.Utils.GetElement<AGXUnity.IO.URDF.Model>( instance );
+        var prefab = IO.URDF.Prefab.Create( model,
+                                            instance,
+                                            directory );
+        if ( prefab != null )
+          prefabs.Add( prefab );
+
+        Object.DestroyImmediate( instance );
+      }
+
+      return prefabs.ToArray();
     }
 
     [MenuItem( "Assets/AGXUnity/Import/Selected STL [instance]", validate = true, priority = 551 )]

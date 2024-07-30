@@ -1,0 +1,4 @@
+<Entity name="InteractionGroup">
+  <Attribute.Array name="nodes" type="UInt:32bit"/>
+  <Attribute.Scalar name="color" type="Vec4:32bit"/> <!-- For debug rendering -->
+</Entity>

@@ -3,12 +3,12 @@
 namespace VMT.Extensions
 {
     /// <summary>
-    /// –‘«‚ÈToStringƒƒ\ƒbƒh‚ğ’ñ‹Ÿ‚µ‚Ä‚¢‚È‚¢Œ^‚ÉƒJƒXƒ^ƒ€‚ÌToStringƒƒ\ƒbƒh‚ğ’ñ‹Ÿ‚·‚éƒXƒ^ƒeƒBƒbƒNƒNƒ‰ƒXB
+    /// æº€è¶³ãªToStringãƒ¡ã‚½ãƒƒãƒ‰ã‚’æä¾›ã—ã¦ã„ãªã„å‹ã«ã‚«ã‚¹ã‚¿ãƒ ã®ToStringãƒ¡ã‚½ãƒƒãƒ‰ã‚’æä¾›ã™ã‚‹ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚¯ãƒ©ã‚¹ã€‚
     /// </summary>
     public static partial class ToStringExtensions
     {
         /// <summary>
-        /// agx.SPDMatrix3x3‚Ìƒf[ƒ^‚ğstring‚Éo—Í‚·‚éB
+        /// agx.SPDMatrix3x3ã®ãƒ‡ãƒ¼ã‚¿ã‚’stringã«å‡ºåŠ›ã™ã‚‹ã€‚
         /// </summary>
         public static string ToString(this agx.SPDMatrix3x3 matrix, string rowSeparator = " ")
         {

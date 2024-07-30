@@ -1,0 +1,47 @@
+<Component name="PrefixSumTest">
+
+  <Storage entity="CollisionCell" numElements="1025" name="OCL"/>
+  <!-- <Storage entity="CollisionCell" numElements="1024" name="CPU"/> -->
+
+  
+  <!-- Init -->
+  <Task name="Init">
+    <Task source="Math.SetValueUInt">
+			<Argument instance="buffer" bind="@OCL.offset"/>
+			<Value instance="value" value="1"/>
+		</Task>
+    
+    <!--
+    <Task source="Math.SetValueUInt">
+			<Argument instance="buffer" bind="@CPU.offset"/>
+			<Value instance="value" value="1"/>
+		</Task>
+    -->
+  </Task>
+   
+  
+
+  <!-- Rendering -->
+  <Task name="Render">
+  </Task>
+  
+  
+  <!-- Update -->
+  <Task name="Update">
+    <!-- Prefix sum -->
+    <Task source="Math.SmallPrefixSums">
+      <Argument instance="source" bind="@OCL.offset"/>
+      <Argument instance="destination" bind="@OCL.offset"/>
+      <Value instance="arrayLength" value="16"/>
+      <Value instance="numArrays" value="64"/>
+    </Task>
+    
+    <!-- -->
+    <Task source="Foundation.BufferPrinter">
+      <Argument name="OCL.offset" bind="@OCL.offset" type="UInt" mode="READ"/>
+      <Argument name="OCL.endOffset" bind="@OCL.endOffset" type="UInt" mode="READ"/>
+    </Task>
+    
+  </Task>
+   
+</Component>

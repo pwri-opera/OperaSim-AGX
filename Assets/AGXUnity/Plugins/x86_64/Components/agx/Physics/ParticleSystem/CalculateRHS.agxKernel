@@ -1,0 +1,24 @@
+<SolveKernel name="CalculateRHS" implementation="ParticlePairContact" costPerElement="30">
+  <Parameter.EntityData name="constraint" bind="@ParticleParticleContactConstraint" type="Particle.ContactConstraint" read="G, isImpacting, particle1, particle2, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleParticleContactConstraint.Row" type="Particle.ContactConstraintRow" read="violation" write="lambda, rhs"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="oldVelocity"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion"/>
+  
+  <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="damping" type="Real" value="Math.Mul(Real(4.5), @clock.timeStep)"/>
+	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+</SolveKernel>
+
+
+<SolveKernel name="CalculateRHS" implementation="ParticleGeometryContact" costPerElement="30">
+  <Parameter.EntityData name="constraint" bind="@ParticleBodyContactConstraint" type="Particle.ParticleBodyContactConstraint" read="G, isImpacting, particle, body, materialIndex"/>
+  <Parameter.EntityData name="constraintRow" bind="@ParticleBodyContactConstraint.Row" type="Particle.ContactConstraintRow" read="violation" write="lambda, rhs"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="oldVelocity"/>
+  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, linearAcceleration, angularAcceleration"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion"/>
+
+  <!-- <Parameter.Scalar name="@Particle.defaultRadius" type="Real"/> -->
+  <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="damping" type="Real" value="Math.Mul(Real(4.5), @clock.timeStep)"/>
+	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+</SolveKernel>

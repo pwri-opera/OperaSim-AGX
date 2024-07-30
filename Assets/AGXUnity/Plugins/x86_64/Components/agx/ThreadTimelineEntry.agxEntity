@@ -1,0 +1,14 @@
+<Entity name="ThreadTimelineEntry">
+  <Attribute.Scalar name="taskId" type="UInt:32bit"/>
+  <Attribute.Scalar name="startTimeGlobal" type="Real:64bit"/>
+  <Attribute.Scalar name="endTimeGlobal" type="Real:64bit"/>
+  <Attribute.Scalar name="startTimeFrame" type="Real:64bit"/>
+  <Attribute.Scalar name="endTimeFrame" type="Real:64bit"/>
+  <Attribute.Scalar name="description" type="String"/>
+  <Attribute.Scalar name="costEstimate" type="UInt:32bit"/>
+  <Attribute.Scalar name="poolSize" type="UInt:32bit"/>
+  <Attribute.Scalar name="jobType" type="UInt:8bit"/>
+  <Attribute.Scalar name="jobPtr" type="UInt:64bit"/>
+  <Attribute.Scalar name="extraDataTitle" type="String"/>
+  <Attribute.Scalar name="extraData" type="Real:64bit"/>
+</Entity>

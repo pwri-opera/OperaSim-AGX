@@ -1,0 +1,83 @@
+<Component name="GranularBodySystem">
+
+  <!-- Access data from grid -->
+  <Pointer name="ParticlePairOverlap" bind="@Space.HierarchicalGrid.ParticlePairOverlap"/>
+  <Pointer name="ParticleGeometryOverlap" bind="@Space.HierarchicalGrid.ParticleGeometryOverlap"/>
+  <Pointer name="CollisionObject" bind="@Space.HierarchicalGrid.CollisionObject"/>
+  <Pointer name="OrientedGeometryBound" bind="@Space.OrientedGeometryBound"/>
+
+  <!-- Contact zones -->
+  <Buffer name="SortedParticleParticleContacts" type="UInt:32bit" numElements="@ActiveParticlePairContacts.numElements"/>
+  <Buffer name="SortedParticleGeometryContacts" type="UInt:32bit" numElements="@ActiveParticleGeometryContacts.numElements"/>
+
+  <!-- Storages -->
+  <Storage entity="Physics.GranularBody"/>
+  <Pointer name="Particle" bind="@GranularBody"/>
+
+  <!-- Declared in Simulation.cpp -->
+  <!-- <Storage entity="Physics.SolveBody"/> -->
+  <!-- <Storage entity="Physics.SolveMaterial"/> -->
+
+
+  <Storage entity="Physics.ParticlePairContact"/>
+  <Storage entity="Physics.ParticleGeometryContact"/>
+
+  <Buffer name="ActiveParticlePairContacts" type="UInt:32bit"/>
+  <Buffer name="ActiveParticleGeometryContacts" type="UInt:32bit"/>
+
+  <Buffer name="DeadParticles" type="UInt:32bit"/>
+
+  <Storage name="GranularGranularContactConstraint" entity="GranularBody.ContactConstraint"/>
+  <Storage name="GranularBodyContactConstraint" entity="GranularBody.ContactConstraint"/>
+
+  <!-- New jacobian structure -->
+  <Buffer name="GranularGranularContactConstraintJacobianStorage" type="Jacobian6DOFElement"/>
+  <Buffer name="GranularGranularContactConstraintGMInvStorage"    type="Jacobian6DOFElement"/>
+  <Buffer name="GranularGeometryContactConstraintJacobianStorage" type="Jacobian6DOFElement"/>
+  <Buffer name="GranularGeometryContactConstraintGMInvStorage"    type="Jacobian6DOFElement"/>
+
+  <!-- New contacts -->
+  <Buffer name="NewGranularGranularContacts" type="UInt:32bit"/>
+  <Buffer name="NewGranularGeometryContacts" type="UInt:32bit"/>
+
+  <!-- Contact caching -->
+  <HashTable name="GranularGranularContactTable" keyType="Physics.GranularBody.GranularGranularPair" valueType="Physics.GranularBody.CachedGranularContactPtr"/>
+  <HashTable name="GranularGeometryContactTable" keyType="Physics.GranularBody.GranularGeometryPair" valueType="Physics.GranularBody.CachedGranularContactPtr"/>
+
+  <Storage name="CachedGranularGranularContacts"    entity="GranularBody.CachedGranularContact"/>
+  <Storage name="CachedGranularGeometryContacts"    entity="GranularBody.CachedGranularContact"/>
+
+  <!-- Residual buffer -->
+  <Buffer name="GranularGranularContactResidualBuffer"    type="Real"/>
+  <Buffer name="GranularGeometryContactResidualBuffer"    type="Real"/>
+
+  <!-- Hash Table for matching contact history between particles-->
+  <!--<HashTable name="ParticleParticleContactTable" keyType="ParticlePair" valueType="Physics.ContactHistoryPtr"/>
+  <Storage name="ParticleParticleContactHistoryStorage" entity="ContactHistory"/>
+  <!--<HashTable name="ContactTable" keyType="GeometryPair" valueType="Physics.GeometryContactPtr"/>
+
+  <!-- Sorted particles -->
+  <Buffer name="SortedParticles" type="UInt:32bit" numElements="@Particle.numElements"/>
+
+  <!-- Missing contact materials -->
+  <Buffer name="MissingParticlePairContactMaterials" type="UInt:32bit"/>
+  <Buffer name="MissingParticleGeometryContactMaterials" type="UInt:32bit"/>
+
+  <!-- Bounding volume -->
+  <Value name="bound" type="Bound3"/>
+
+
+  <Task name="Render">
+  </Task>
+
+  <Value name="contactMode" value="UInt(4)"/>
+  <Value name="nonlinearCoefficient" value="Real(1.25)"/>
+  <Value name="granularPoissonRatio" value="Real(0.30)"/>
+
+  <Value name="thetaSteppingParameter" value="Real(1.0)"/>
+
+
+  <!-- Update task -->
+  <Task source="GranularBody.Update"/>
+
+</Component>

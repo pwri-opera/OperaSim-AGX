@@ -10,7 +10,7 @@ Note: The unit comments below exists for educational purposes, the JSON format
       be used. It is instead recommended to use one of the sample preset files as a base for usage.
 
 This is a sample file for the "dirt_1" preset, augmented with unit comments.
-
+```
 {
    "BulkProperties" : {
       "adhesionOverlapFactor" : 0.050,       // Dimensionless
@@ -21,7 +21,8 @@ This is a sample file for the "dirt_1" preset, augmented with unit comments.
       "maximumDensity" : 2000.0,             // kg/m
       "poissonsRatio" : 0.150,               // Dimensionless
       "swellFactor" : 1.280,                 // Dimensionless
-      "youngsModulus" : 5000000.0            // Pa
+      "youngsModulus" : 5000000.0,            // Pa
+      "deltaRepose" : 0.15                  // Radians
    },
    "CompactionProperties" : {
       "angleOfReposeCompactionRate" : 24.0,        // Dimensionless
@@ -31,7 +32,6 @@ This is a sample file for the "dirt_1" preset, augmented with unit comments.
       "hardeningConstantKE" : 1.0,                 // Dimensionless
       "hardeningConstantNE" : 0.08333333333333333, // Dimensionless
       "preconsolidationStress" : 98000.0,          // Pa
-      "stressCutOffFraction" : 0.010               // Dimensionless
       "stressCutOffFraction" : 0.010               // Dimensionless
    },
    "ExcavationContactProperties" : {
@@ -56,4 +56,4 @@ This is a sample file for the "dirt_1" preset, augmented with unit comments.
    },
    "description" : "DIRT_1" // String
 }
-
+```

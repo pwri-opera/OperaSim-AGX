@@ -1,0 +1,10 @@
+<Task name="RenderBoxesWithLines">
+  <Parameter.Array name="halfExtents" type="Vec3:32bit" mode="READ"/>
+  <Parameter.Array name="transforms" type="AffineMatrix4x4:32bit" mode="READ"/>
+
+  <Buffer name="Line" type="Line:32bit" numElements="Math.Mul( UInt(12), @halfExtents.numElements )"/>
+
+  <Task source="Foundation.Rendering.GenerateBoxesFromBoxes : Line"/>
+  <Task source="Foundation.Rendering.RenderLines"/>
+
+</Task>

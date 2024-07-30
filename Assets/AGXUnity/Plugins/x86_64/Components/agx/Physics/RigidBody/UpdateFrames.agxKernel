@@ -1,0 +1,10 @@
+<Kernel name="UpdateFrames">
+	<Parameter.Array name="@RigidBody.instance" type="Physics.RigidBodyPtr" mode="READ"/>
+	<Parameter.Array name="@RigidBody.state" type="RigidBodyState" mode="READ"/>
+</Kernel>
+
+<Kernel name="UpdateFrames" implementation="SSE">
+	<Parameter.Array name="@RigidBody.instance" type="Physics.RigidBodyPtr" mode="READ"/>
+	<Parameter.Array name="@RigidBody.state" type="RigidBodyState" mode="READ"/>
+</Kernel>
+

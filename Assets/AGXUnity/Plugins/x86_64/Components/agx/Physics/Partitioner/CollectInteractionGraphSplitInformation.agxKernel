@@ -1,0 +1,3 @@
+<Kernel name="CollectInteractionGraphSplitInformation" device="CPU" dispatch="serial">
+  <Parameter.Pointer name="@Simulation"             type="agxSDK::Simulation"              include="agxSDK/Simulation.h"/>
+</Kernel>

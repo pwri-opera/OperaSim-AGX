@@ -1,0 +1,11 @@
+<Kernel name="GenerateGeometryBroadPhasePairs">
+
+  <Parameter.EntityData name="@GeometryPairOverlap" type="GridOverlap" read="collisionObject1, collisionObject2"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="sourceIndex, obbIndex, position, radius"/>
+  <Parameter.EntityData name="@OrientedGeometryBound" type="OrientedGeometryBound" read="halfExtents, invTransform"/>
+  <Parameter.EntityData name="@Geometry" type="Geometry" read="instance, model, body"/>
+
+  <Parameter.Pointer name="@Space" type="agxCollide::Space" include="agxCollide/Space.h"/>
+  
+  <Parameter.EntityData name="@BroadPhasePair" type="BroadPhasePair" write="geometry1, geometry2, state" globalResult="TRUNCATE, ORDER"/>
+</Kernel>

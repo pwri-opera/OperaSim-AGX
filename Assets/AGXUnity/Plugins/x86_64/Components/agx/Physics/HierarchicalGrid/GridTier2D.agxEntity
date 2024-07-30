@@ -1,0 +1,26 @@
+<Entity name="GridTier2D">
+
+  <Attribute.Scalar name="size" type="Real"/>
+  <Attribute.Scalar name="invSize" type="Real"/>
+  
+  <Attribute.Scalar name="boundingRadius" type="Real"/>
+
+  <!--  These will only be required if we do a sparse hierarchy, i.e., grids
+   where levels can be created independently of each other. If we do a
+   dense hierarhcy, then these would always be +/- the index of the
+   current GridTier -->
+  <!-- <Attribute.Scalar name="parent" type="UInt:32bit"/> -->
+  <!-- <Attribute.Scalar name="child" type="UInt:32bit"/> -->
+
+
+  <!-- We will need a hash table per grid tier, but have currently no way to express that. -->
+  <!-- TODO Implement HashTable attributes. -->
+  <!-- <Attribute.HashTable name="cellTable" keyType="Vec2i" valueType="UInt"/> -->
+
+  <Attribute.Pointer name="cellTable" type="agx::GridCell2DTable" include="agx/Physics/HierarchicalGrid/Common.h"/>
+
+
+  <!-- Attributes that seem useful but not really needed yet. -->
+  <!-- <Attribute.Scalar name="numCells" type="UInt"/> -->
+  <!-- <Attribute.Scalar name="numObjects" type="UInt"/> -->
+</Entity>

@@ -1,0 +1,26 @@
+<Kernel name="InitializeConstraintData32" implementation="GranularGranularContact">
+  <Parameter.Array name="@SortedParticleParticleContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint32" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="rollingResistanceCoefficient"/>
+  
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+</Kernel>
+
+<Kernel name="InitializeConstraintData32" implementation="GranularGranularContact_LocalJacobians">
+  <Parameter.Array name="@SortedParticleParticleContacts" type="UInt:32bit" mode="READ"/>
+  <Parameter.EntityData name="contact" bind="@ParticlePairContact" type="ParticlePairContact" read="particle1, particle2, material"/>
+  <Parameter.EntityData name="constraint" bind="@GranularGranularContactConstraint" type="ContactConstraint32" read="" write="body1, body2, materialIndex"/>
+  <Parameter.EntityData name="@GranularBody" type="GranularBody" read="solveBodyIndex"/>
+  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="rollingResistanceCoefficient"/>
+  
+  <Parameter.EntityData name="constraintRow" bind="@GranularGranularContactConstraint.Row" type="Particle.ContactConstraintRow32" write="epsilon, lambda, rhs, violation, velocity"/>
+  
+  <!-- Constants -->
+  <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep"/>
+  <Parameter.Scalar name="impactCondition" type="Real" value="@Solver.impactSpeedThreshold"/>
+	<Parameter.Scalar name="@nonlinearCoefficient" type="Real"/>
+  <Parameter.Scalar name="@contactMode" type="UInt" mode="READ"/>
+  <Parameter.Scalar name="@granularPoissonRatio" type="Real" mode="READ"/>
+</Kernel>

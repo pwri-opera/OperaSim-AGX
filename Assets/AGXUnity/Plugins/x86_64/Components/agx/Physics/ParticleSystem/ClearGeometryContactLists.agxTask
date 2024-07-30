@@ -1,0 +1,4 @@
+<Task name="ClearGeometryContactLists" source="Math.Set">
+	<Parameter.Array instance="result" bind="@Particle.geometryContactList"/>
+	<Parameter.Scalar instance="arg" value="UInt:32bit(InvalidIndex)"/>
+</Task>

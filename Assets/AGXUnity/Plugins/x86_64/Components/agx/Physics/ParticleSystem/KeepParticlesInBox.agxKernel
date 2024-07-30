@@ -1,0 +1,12 @@
+<Kernel name="KeepParticlesInBox">
+  <Parameter.Array name="@Particle.position" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Array name="@Particle.velocity" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Scalar name="bound" type="Bound3"/>
+</Kernel>
+
+<Kernel name="KeepParticlesInBox" implementation="2D">
+  <Parameter.Array name="@Particle.position" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Array name="@Particle.radius" type="Real" mode="READ"/>
+  <Parameter.Array name="@Particle.velocity" type="Vec3" mode="READ_WRITE"/>
+  <Parameter.Scalar name="bound" type="Bound3"/>
+</Kernel>

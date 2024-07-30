@@ -1,0 +1,6 @@
+<Kernel name="AllocateCellContents" dispatch="serial">
+  <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="WRITE"/>
+  <Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects" write="collisionObjects"/>
+  <Parameter.Array name="@InfiniteGeometries" type="UInt:32bit" mode="READ"/>
+  <Parameter.Pointer name="collisionObjectStorage" bind="@CollisionObject" type="agxData::EntityStorage"/>
+</Kernel>

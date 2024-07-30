@@ -1,0 +1,9 @@
+<Kernel name="GenerateContactListLines">
+  <Parameter.EntityData name="@ParticlePairContact" type="ParticlePairContact" read="contactZoneIndex, particle1, particle2"/>
+  <Parameter.EntityData name="@Particle" type="Particle" read="position"/>
+  <Parameter.EntityData name="@ContactZone" type="HierarchicalGrid.ContactZone" read="color"/>
+  
+  
+  <Parameter.Array name="@Lines" type="Line:32bit" mode="WRITE"/>
+  <Parameter.Array name="@Colors" type="Vec4:32bit" mode="WRITE"/>
+</Kernel>

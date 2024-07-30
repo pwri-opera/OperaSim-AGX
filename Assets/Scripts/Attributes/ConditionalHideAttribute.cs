@@ -7,19 +7,19 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ‘¼‚ÌboolŒ^‚Ìfield‚É‚æ‚Á‚ÄAInspector‚ÉƒvƒƒpƒeƒB‚ğ–³Œø‰»^‰B‚·AttributeB
+    /// ä»–ã®boolå‹ã®fieldã«ã‚ˆã£ã¦ã€Inspectorã«ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ç„¡åŠ¹åŒ–ï¼éš ã™Attributeã€‚
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class |
      AttributeTargets.Struct, Inherited = true)]
     public class ConditionalHideAttribute : PropertyAttribute
     {
-        // bool—vŒ‚Ìfield‚Ì–¼‘OB
+        // boolè¦ä»¶ã®fieldã®åå‰ã€‚
         public string conditionalSourceField = "";
 
-        // –³Œø‰»‚·‚é‘ã‚í‚è(false)‚ÉA‰B‚·(truej‚©‚Ç‚¤‚©boolB 
+        // ç„¡åŠ¹åŒ–ã™ã‚‹ä»£ã‚ã‚Š(false)ã«ã€éš ã™(trueï¼‰ã‹ã©ã†ã‹boolã€‚ 
         public bool hideCompletely = false;
 
-        // bool—vŒ‚ªtrue‚È‚Ì‚ÉAƒvƒƒpƒeƒB‚ª•ÒW•ø‚«‚È‚­‚ÄƒvƒƒpƒeƒB‚ğ•\¦‚·‚é‚¾‚¯B
+        // boolè¦ä»¶ãŒtrueãªã®ã«ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãŒç·¨é›†æŠ±ããªãã¦ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¡¨ç¤ºã™ã‚‹ã ã‘ã€‚
         public bool alwaysReadOnly = false;
         
         public ConditionalHideAttribute(string conditionalSourceField, bool hideCompletely = false,
@@ -72,11 +72,11 @@ namespace PWRISimulator
 
         bool GetConditionalHideAttributeResult(ConditionalHideAttribute condHAtt, SerializedProperty property)
         {
-            // —LŒø‰»^–³Œø‰»‚µ‚½‚¢ƒvƒƒpƒeƒB‚ÌƒpƒX
+            // æœ‰åŠ¹åŒ–ï¼ç„¡åŠ¹åŒ–ã—ãŸã„ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ãƒ‘ã‚¹
             string propertyPath = property.propertyPath;
-            // —LŒø‰»‚ÌğŒ‚ğ•\‚·ƒvƒƒpƒeƒB‚ÌƒpƒX
+            // æœ‰åŠ¹åŒ–ã®æ¡ä»¶ã‚’è¡¨ã™ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ãƒ‘ã‚¹
             string conditionPath = propertyPath.Replace(property.name, condHAtt.conditionalSourceField);
-            // —LŒø‰»‚ÌğŒ‚Ì’l
+            // æœ‰åŠ¹åŒ–ã®æ¡ä»¶ã®å€¤
             SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
 
             if (sourcePropertyValue != null)

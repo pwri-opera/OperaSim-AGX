@@ -1,0 +1,75 @@
+<Kernel name="FindOverlapPairs" implementation="IterateCells" minJobSize="64" customJobGenerator="true">
+  <description>
+
+    Parallel kernel with one work item per collision object where each work
+    item tests one collision object against all objects in the neighboring
+    cells and those cells' child-cells. 
+
+  </description>
+
+  <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="READ"/>
+	
+  <Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects, children, neighbors, tier, position, numChildren" write="searchCost"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="boundingRadius, size"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="position, radius, obbIndex, collisionGroupSet"/>
+  <Parameter.EntityData name="@OrientedGeometryBound" type="OrientedGeometryBound" read="halfExtents, invTransform"  required="false"/>
+  <Parameter.EntityData name="@GridOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE, ORDER"/>
+
+  <Parameter.Pointer name="@CollisionGroupManager" type="agxCollide::CollisionGroupManager" include="agxCollide/CollisionGroupManager.h" required="false"/>
+</Kernel>
+
+
+<Kernel name="FindOverlapPairs" implementation="ExternalQueries" dispatch="serial">
+  
+  <!-- Assumes that objects are appended to the CollisionObject storage -->
+	<Parameter.Scalar name="numObjects" type="UInt" mode="READ"/>
+	
+	
+  <!-- <Parameter.Array name="@Geometry.tier" type="UInt:8bit" mode="READ_WRITE"/>
+  <Parameter.Array name="@GridTier.size" type="Real" mode="READ"/>
+  <Parameter.Array name="@GridTier.invSize" type="Real" mode="READ"/>
+  <Parameter.Array name="@GridTier.cellTable" type="agx::GridCellTable*" mode="READ" include="agx/Physics/HierarchicalGrid/Common.h"/>
+  <Parameter.Pointer name="cellStorage" bind="@Cell" type="agxData::EntityStorage"/> -->
+  
+	<Parameter.Array name="@RootCells" type="Physics.HierarchicalGrid.CellPtr" mode="READ"/>
+  
+  <!-- <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="READ"/> -->
+
+	<Parameter.EntityData name="@Cell" type="Cell" read="collisionObjects, children, tier, position, numChildren"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier" read="boundingRadius"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject" read="position, radius, obbIndex, collisionGroupSet"/>
+  <Parameter.EntityData name="@OrientedGeometryBound" type="OrientedGeometryBound" read="halfExtents, invTransform"/>
+  <Parameter.EntityData name="@GridOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE"/>
+
+  <Parameter.Pointer name="@CollisionGroupManager" type="agxCollide::CollisionGroupManager" include="agxCollide/CollisionGroupManager.h"/>
+</Kernel>
+
+
+
+
+
+<Kernel name="FindOverlapPairs" implementation="2D_IterateCells" minJobSize="64">
+
+  <!-- <Parameter.Array name="@SortedCells" type="UInt:32bit" mode="READ"/>
+
+  <Parameter.EntityData name="@Cell" type="Cell2D" read="collisionObjects, children, neighbors, tier, position, numChildren" write="searchCost"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier2D" read="boundingRadius, size"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject2D" read="position, radius, collisionGroupSet"/>
+  <Parameter.EntityData name="@GridOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE, ORDER"/>
+
+  <Parameter.Pointer name="@CollisionGroupManager" type="agxCollide::CollisionGroupManager" include="agxCollide/CollisionGroupManager.h"/> -->
+</Kernel>
+
+
+
+
+<Kernel name="FindOverlapPairs" implementation="2D_BottomUp">
+
+  <!-- <Parameter.EntityData name="@Cell" type="Cell2D" read="collisionObjects, children, neighbors, tier, position, numChildren" write="searchCost"/>
+  <Parameter.EntityData name="@GridTier" type="GridTier2D" read="boundingRadius, size"/>
+  <Parameter.EntityData name="@CollisionObject" type="CollisionObject2D" read="position, radius, collisionGroupSet"/>
+  <Parameter.EntityData name="@GridOverlap" type="GridOverlap" write="collisionObject1, collisionObject2" globalResult="TRUNCATE, ORDER"/>
+
+  <Parameter.Pointer name="@CollisionGroupManager" type="agxCollide::CollisionGroupManager" include="agxCollide/CollisionGroupManager.h"/> -->
+</Kernel>
+

@@ -8,6 +8,7 @@ namespace AGXUnity.Collide
   /// Sphere shape object given radius.
   /// </summary>
   [AddComponentMenu( "AGXUnity/Shapes/Sphere" )]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#sphere" )]
   public sealed class Sphere : Shape
   {
     #region Serialized Properties
@@ -26,7 +27,7 @@ namespace AGXUnity.Collide
       get { return m_radius; }
       set
       {
-        m_radius = AGXUnity.Utils.Math.ClampAbove( value, MinimumLength );
+        m_radius = AGXUnity.Utils.Math.ClampAbove( value, MinimumSize );
 
         if ( Native != null )
           Native.setRadius( Radius );
@@ -39,7 +40,7 @@ namespace AGXUnity.Collide
     /// <summary>
     /// Returns the native sphere object if created.
     /// </summary>
-    public agxCollide.Sphere Native { get { return m_shape as agxCollide.Sphere; } }
+    public agxCollide.Sphere Native { get { return NativeShape?.asSphere(); } }
 
     /// <summary>
     /// Debug rendering scale assuming the rendered sphere has diameter 1.
@@ -52,9 +53,10 @@ namespace AGXUnity.Collide
     /// <summary>
     /// Create native sphere object given current radius.
     /// </summary>
-    protected override agxCollide.Shape CreateNative()
+    protected override agxCollide.Geometry CreateNative()
     {
-      return new agxCollide.Sphere( Radius );
+      return new agxCollide.Geometry( new agxCollide.Sphere( Radius ),
+                                      GetNativeGeometryOffset() );
     }
   }
 }

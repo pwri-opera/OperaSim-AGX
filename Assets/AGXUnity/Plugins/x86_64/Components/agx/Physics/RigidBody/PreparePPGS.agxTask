@@ -1,0 +1,24 @@
+<Task name="PreparePPGS" bindContext="@Space.HierarchicalGrid">
+  <!-- <Task source="HierarchicalGrid.ClearContactZones"/> -->
+  <Task source="HierarchicalGrid.RemoveEmptyContactZones"/>
+  <Task source="HierarchicalGrid.CalculateContactZoneAssignments : GeometryGeometryContact"/>
+  <Task source="HierarchicalGrid.CreateMissingContactZones : GeometryGeometryContact"/>
+  <Task source="HierarchicalGrid.AllocateContactZones"/>
+
+  <Task name="CalculateZoneDependencies">
+    <Task source="HierarchicalGrid.CalculateZoneDependencies"/>
+    <Task source="HierarchicalGrid.CalculateZoneDependencies : TierDependencies_Geometry"/>
+  </Task>
+
+  <Task source="HierarchicalGrid.FillContactZones : GeometryGeometryContact"/>
+  <!-- <Task source="ClearGeometryContacts"/> -->
+
+<!--	<Task source="Foundation.ClearStorage">
+		<Parameter.Pointer instance="storage" bind="@GeometryContact"/>
+	</Task>
+
+	<Task source="Foundation.ClearBuffer">
+		<Parameter.Pointer instance="buffer" bind="@ActiveGeometryContacts"/>
+	</Task> -->
+	
+</Task>

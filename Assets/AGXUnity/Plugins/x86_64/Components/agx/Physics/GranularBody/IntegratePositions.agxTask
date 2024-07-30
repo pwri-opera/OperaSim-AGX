@@ -1,0 +1,16 @@
+<Task name="IntegratePositions" source="IntegratePosition">
+  <Parameter.EntityData instance="particle" bind="@Particle"/>
+	<Parameter.Scalar instance="clock_timeStep" bind="@clock.timeStep"/>
+</Task>
+
+<Task name="IntegratePositions" source="IntegratePosition:SolveBody" implementation="SolveBody">
+  <Parameter.EntityData instance="solveBody" bind="@SolveBody"/>
+  <Parameter.EntityData instance="particle" bind="@Particle"/>
+	<Parameter.Scalar instance="clock_timeStep" bind="@clock.timeStep"/>
+</Task>
+
+<Task name="IntegratePositions" source="IntegratePosition:SolveBody32" implementation="SolveBody32">
+  <Parameter.EntityData instance="solveBody" bind="@SolveBody"/>
+  <Parameter.EntityData instance="particle" bind="@Particle"/>
+	<Parameter.Scalar instance="clock_timeStep" bind="@clock.timeStep"/>
+</Task>

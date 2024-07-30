@@ -1,0 +1,32 @@
+<Entity name="ContactPoint">
+  <!-- Basic contact information. -->
+  <Attribute.Scalar name="point" type="Vec3"/>
+  <Attribute.Scalar name="normal" type="Vec3:32bit"/>
+  <Attribute.Scalar name="tangentU" type="Vec3:32bit"/>
+  <Attribute.Scalar name="tangentV" type="Vec3:32bit"/>
+  <Attribute.Scalar name="depth" type="Real"/>
+  <Attribute.Scalar name="state" type="UInt:8bit" value="0" doc="Contact point state, such as impacting, resting etc."/>
+
+  <!-- Support for special features. -->
+  <Attribute.Scalar name="velocity" type="Vec3:32bit"/> <!-- Surface velocity. -->
+
+  <!-- Forces. -->
+  <Attribute.Scalar name="localForce" type="Vec3"/>
+  <Attribute.Scalar name="indexSet"   type="Vec4i:8bit"/>
+  <Attribute.Scalar name="maxNormalForce" type="Real" value="INFINITY"/>
+
+  <Attribute.Scalar name="enabled" type="Bool" value="true"/>
+
+  <Attribute.Scalar name="faceIndex1" type="UInt:32bit" value="InvalidIndex" doc="The face index of shape 1 in contact (e.g. index of triangle for trimesh)."/>
+  <Attribute.Scalar name="faceIndex2" type="UInt:32bit" value="InvalidIndex" doc="The face index of shape 2 in contact (e.g. index of triangle for trimesh)."/>
+  <Attribute.Scalar name="faceFeature1" type="UInt:8bit" value="InvalidIndex" doc="The face feature of shape 1 in contact (e.g. voronoi region on triangle for trimesh)."/>
+  <Attribute.Scalar name="faceFeature2" type="UInt:8bit" value="InvalidIndex" doc="The face feature of shape 2 in contact (e.g. voronoi region on triangle for trimesh)."/>
+
+  <Attribute.Scalar name="shape1" type="Physics.Geometry.ShapePtr" doc="Shape number 1 in contact"/>
+  <Attribute.Scalar name="shape2" type="Physics.Geometry.ShapePtr" doc="Shape number 2 in contact"/>
+
+  <Attribute.Scalar name="area" type="Real" value="1.0"/>
+  <Attribute.Scalar name="elasticRestLengthShape1" type="Real" value="1.0"/>
+  <Attribute.Scalar name="elasticRestLengthShape2" type="Real" value="1.0"/>
+</Entity>
+

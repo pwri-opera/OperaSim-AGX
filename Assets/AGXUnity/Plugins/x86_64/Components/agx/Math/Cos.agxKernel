@@ -1,0 +1,14 @@
+<Kernel.Scalar name="Cos" inline="true" templatePermutation="Math.TemplatePermutations.Cos">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="Cos" inline="true" templatePermutation="Math.TemplatePermutations.Cos">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="arg" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Cos" inline="true" templatePermutation="Math.TemplatePermutations.Cos">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="arg" type="Auto" mode="READ"/>
+</Kernel>

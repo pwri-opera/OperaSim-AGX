@@ -1,0 +1,34 @@
+<Kernel.Scalar name="Clamp" inline="true" templatePermutation="Math.TemplatePermutations.Clamp">
+  <Parameter.Scalar name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Scalar name="value" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="min" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="max" type="Auto" mode="READ"/>
+</Kernel.Scalar>
+
+<Kernel name="Clamp" inline="true" templatePermutation="Math.TemplatePermutations.Clamp">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="value" type="Auto" mode="READ"/>
+  <Parameter.Array name="min" type="Auto" mode="READ"/>
+  <Parameter.Array name="max" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Clamp" inline="true" templatePermutation="Math.TemplatePermutations.Clamp">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="value" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="min" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="max" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Clamp" inline="true" templatePermutation="Math.TemplatePermutations.Clamp">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="value" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="min" type="Auto" mode="READ"/>
+  <Parameter.Array name="max" type="Auto" mode="READ"/>
+</Kernel>
+
+<Kernel name="Clamp" inline="true" templatePermutation="Math.TemplatePermutations.Clamp">
+  <Parameter.Array name="result" type="Auto" mode="WRITE"/>
+  <Parameter.Array name="value" type="Auto" mode="READ"/>
+  <Parameter.Array name="min" type="Auto" mode="READ"/>
+  <Parameter.Scalar name="max" type="Auto" mode="READ"/>
+</Kernel>

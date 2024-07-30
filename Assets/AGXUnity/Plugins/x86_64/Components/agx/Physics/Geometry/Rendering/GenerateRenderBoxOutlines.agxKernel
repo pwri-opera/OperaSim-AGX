@@ -1,0 +1,4 @@
+<Kernel name="GenerateRenderBoxOutlines">
+  
+  <Parameter.Array name="outlinesBuffer" type="agxGL.RenderBoxOutlines" mode="WRITE" bind="@RenderBox.outlines"/>
+</Kernel>

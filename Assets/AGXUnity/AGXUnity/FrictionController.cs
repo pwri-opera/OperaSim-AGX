@@ -5,6 +5,7 @@ namespace AGXUnity
 {
   [AddComponentMenu( "" )]
   [HideInInspector]
+  [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#controllers" )]
   public class FrictionController : ElementaryConstraintController
   {
     [SerializeField]
@@ -73,6 +74,17 @@ namespace AGXUnity
         if ( Native != null )
           agx.FrictionController.safeCast( Native ).setMinimumStaticFrictionForceRange( m_minimumStaticFrictionForceRange.Native );
       }
+    }
+
+    /// <summary>
+    /// Convenience method to get current force applied by this controller. 0 if not initialized.
+    /// </summary>
+    public float GetCurrentForce()
+    {
+      if ( Native != null )
+        return (float) agx.FrictionController.safeCast( Native ).getCurrentForce( );
+      else
+        return 0;
     }
 
     protected override void Construct( agx.ElementaryConstraint tmpEc )

@@ -3,186 +3,162 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace PWRISimulator.ROS
 {
     public enum RealTimeDataAccessType { Closest, Previous, Next, Interpolate /*, Extrapolate*/ };
 
     /// <summary>
-    /// Œn—ñ‚ÌƒŠƒAƒ‹ƒ^ƒCƒ€ƒf[ƒ^‚ğŠÇ—‚·‚éƒNƒ‰ƒXB—á‚¦‚ÎA‚Q‚Â‚ÌŠO‚ê‚éƒ^ƒCƒ€ƒ‰ƒCƒ“‚ÌŠÔƒf[ƒ^‚ğ‹¤—L‚Å‚«‚é‚æ‚¤‚É‚·‚éB
-    /// 
-    /// ƒf[ƒ^ƒvƒƒWƒ…[ƒT[‚ªAdd(data, time)ƒƒ\ƒbƒh‚ÅV‚µ‚¢ƒf[ƒ^‚ğŒn—ñƒoƒbƒtƒ@‚É“ü‚êAƒf[ƒ^ƒRƒ“ƒVƒ…[ƒ}‚ªGet(time)
-    /// ƒƒ\ƒbƒh‚Åƒf[ƒ^‚ğæ“¾‚·‚ég‚¢•û‚Æ‚È‚éBAdd‚ÆGet‚Í•ÊX‚ÈƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚¹‚éBGet‚µ‚½ƒf[ƒ^‚æ‚èŒÃ‚¢ƒf[ƒ^‚ª©“®“I‚É
-    /// íœ‚³‚ê‚éB
+    /// ãƒ‡ãƒ¼ã‚¿ã‚’ç™»éŒ²ã™ã‚‹æ™‚ã«æ™‚åˆ»ã‚‚åŒæ™‚ã«è¨˜éŒ²ã™ã‚‹ãƒªã‚¹ãƒˆã€‚æ™‚åˆ»ã¯å®Ÿæ™‚é–“ã‚’ä½¿ç”¨ã™ã‚‹
+    /// ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™éš›ã€å¼•æ•°ã¨ã—ã¦æ¸¡ã—ãŸæ™‚åˆ»ã¨ãƒªã‚¹ãƒˆé …ç›®ã®æ™‚åˆ»ã‚’æ¯”è¼ƒã—ã€é©åˆ‡ãªé …ç›®ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™
+    /// ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™éš›ã€å¼•æ•°ã¨ã—ã¦æ¸¡ã—ãŸæ™‚åˆ»ã‚ˆã‚Šå‰ã®æ™‚åˆ»ã®ãƒªã‚¹ãƒˆé …ç›®ã¯è‡ªå‹•çš„ã«å‰Šé™¤ã™ã‚‹
+    /// (æŒ™å‹•ã¨ã—ã¦ã¯Queueã«è¿‘ã„ãŒã€å˜ç´”ã«ç›´è¿‘ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™ã ã‘ã§ãªãã€è£œé–“ãªã©ã™ã‚‹å ´åˆã‚‚ã‚ã‚‹ç‚¹ã«æ³¨æ„)
+    /// ãƒ‡ãƒ¼ã‚¿ãƒ—ãƒ­ã‚¸ãƒ¥ãƒ¼ã‚µãƒ¼ãŒAdd(data, time)ãƒ¡ã‚½ãƒƒãƒ‰ã§æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚’æ™‚ç³»åˆ—ãƒãƒƒãƒ•ã‚¡ã«å…¥ã‚Œã€ãƒ‡ãƒ¼ã‚¿ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒãŒGet(time)
+    /// ãƒ¡ã‚½ãƒƒãƒ‰ã§ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹ä½¿ã„æ–¹ã¨ãªã‚‹ã€‚Addã¨Getã¯åˆ¥ã€…ãªã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã›ã‚‹ã€‚Getã—ãŸãƒ‡ãƒ¼ã‚¿ã‚ˆã‚Šå¤ã„ãƒ‡ãƒ¼ã‚¿ãŒè‡ªå‹•çš„ã«
+    /// å‰Šé™¤ã•ã‚Œã‚‹ã€‚
     /// </summary>
-    /// <typeparam name="T">ƒf[ƒ^‚Ìƒ^ƒCƒv</typeparam>
+    /// <typeparam name="T">ãƒ‡ãƒ¼ã‚¿ã®ã‚¿ã‚¤ãƒ—</typeparam>
     public class RealTimeDataBuffer<T>
     {
         public delegate T Interpolator(T a, T b, double t);
 
         struct Entry
         {
-            public double time;
+            public double AddedTime;
             public T data;
             public Entry(double time, T data)
             {
-                this.time = time;
+                this.AddedTime = time;
                 this.data = data;
             }
 
             public override string ToString()
             {
-                return $"time = {time}, data = {data}";
+                return $"time = {AddedTime}, data = {data}";
             }
         };
 
         readonly LinkedList<Entry> buffer;
-        readonly object bufferLock = new object();
+        readonly object bufferLock = new();
         readonly int maxBufferSize = 1000;
         readonly Interpolator interpolator = null;
         readonly RealTimeDataAccessType accessType = RealTimeDataAccessType.Previous;
-
-        bool removeHistoryWhenReading = true;
-        bool clampToFirst = true;
-        bool clampToLast = true;
         
-        public RealTimeDataBuffer(int maxBufferSize, RealTimeDataAccessType accessType, 
-            Interpolator interpolator = null)
+        public RealTimeDataBuffer(int aMaxBufferSize, RealTimeDataAccessType aAccessType, Interpolator aInterpolator = null)
         {
             if (accessType == RealTimeDataAccessType.Interpolate && interpolator == null)
                 Debug.LogError($"{GetType().Name} : Cannot use Interpolate access type without an interpolator.");
 
             buffer = new LinkedList<Entry>();
-            this.maxBufferSize = maxBufferSize;
-            this.accessType = accessType;
-            this.interpolator = interpolator;
+            maxBufferSize = aMaxBufferSize;
+            accessType = aAccessType;
+            interpolator = aInterpolator;
         }
 
-        public bool Add(T data, double time)
+        public bool Add(T newData, double currentRealTime)
         {
-            Entry entry = new Entry(time, data);
-            int errorCode = 0;
+            Entry entry = new Entry(currentRealTime, newData);
             lock (bufferLock)
             {
-                if(buffer.Count == 0 || time > buffer.Last.Value.time)
+                if(buffer.Count == 0 || currentRealTime > buffer.Last.Value.AddedTime)
                 {
+                    // add new
                     buffer.AddLast(entry);
                     if (buffer.Count > maxBufferSize)
                         buffer.RemoveFirst();
+                    return true;
                 }
-                else if(time == buffer.Last.Value.time)
+                else if(currentRealTime == buffer.Last.Value.AddedTime)
+                {
+                    // replace
                     buffer.Last.Value = entry;
+                    return true;
+                }
                 else /*if(time < buffer.Last.Value.time)*/
-                    errorCode = 1;
-            }
-
-            if (errorCode == 1)
-            {
-                Debug.LogError($"{GetType().Name} : Trying to insert a value with a timestamp older ({time}) than " +
-                               $"the most recent value's timestamp. The value will not be added.");
-                return false;
-            }
-            else
-            {
-                return true;
+                {
+                    // discard
+                    Debug.LogError($"{GetType().Name} : Trying to insert a value with a timestamp older ({currentRealTime}) than " +
+                                    $"the most recent value's timestamp. The value will not be added.");
+                    return false;
+                }
             }
         }
 
-        public T Get(double time)
+        public T Get(double inputTime)
         {
-            T data = default(T);
+            T returnData = default;
             lock (bufferLock)
             {
-                // ƒTƒCƒY‚Í‚O‚Ìê‡
+                // ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆ
                 if (buffer.Count == 0)
                 {
                     //Debug.Log("Trying to get value from an empty RealTimeDataBuffer. Will return default value.");
-                    return default(T);
+                    return default;
                 }
-                // w¦‚Ìtime‚ÍŒ»İ‚ÌŒn—ñ‚æ‚èŒÃ‚¢ê‡
-                else if (time < buffer.First.Value.time)
+                // å¼•æ•°ã®æ™‚åˆ»ãŒãƒãƒƒãƒ•ã‚¡ã«ä¿å­˜ã•ã‚Œã¦ã„ã‚‹æœ€åˆã®ãƒ‡ãƒ¼ã‚¿ã‚ˆã‚Šéå»ã®å ´åˆ
+                else if (inputTime < buffer.First.Value.AddedTime)
                 {
-                    if (clampToFirst)
-                        return buffer.First.Value.data;
-                    else
-                    {
-                        Debug.LogWarning($"{GetType().Name} : Trying to get a value from  with a timestamp older " + 
-                                         "than the oldest value. Default value will be returned.");
-                        return default(T);
-                    }
+                    return buffer.First.Value.data;
                 }
-                // w¦‚Ìtime‚ÍŒ»İ‚ÌŒn—ñ‚æ‚èV‚µ‚¢ê‡
-                else if (time > buffer.Last.Value.time)
+                // å¼•æ•°ã®æ™‚åˆ»ãŒãƒãƒƒãƒ•ã‚¡ã«ä¿å­˜ã•ã‚Œã¦ã„ã‚‹æœ€å¾Œã®ãƒ‡ãƒ¼ã‚¿ã‚ˆã‚Šæœªæ¥ã®å ´åˆ
+                else if (inputTime > buffer.Last.Value.AddedTime)
                 {
-                    // Ì‚Ìƒf[ƒ^‚ğíœ
-                    if (removeHistoryWhenReading)
-                        while (buffer.Last.Previous != null)
-                            buffer.Remove(buffer.Last.Previous);
-
-                    if (clampToLast)
-                        return buffer.Last.Value.data;
-                    else
-                    {
-                        Debug.LogWarning($"{GetType().Name} : Trying to get a value with a timestamp newer than the " + 
-                                          "most recent value. Default value will be returned.");
-                        return default(T);
-                    }
+                    // å¼•æ•°ã®æ™‚åˆ»ã‚ˆã‚Šéå»ã®ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦å‰Šé™¤(->æœ€æ–°ã®ãƒ‡ãƒ¼ã‚¿ä»¥å¤–ã¯å…¨ã¦å‰Šé™¤ã™ã‚‹)
+                    while (buffer.Last.Previous != null)
+                        buffer.Remove(buffer.Last.Previous);
+                    return buffer.Last.Value.data;
                 }
                 else
                 {
-                    // ã‹LˆÈŠOAtime‚ğ‡‚í‚¹‚Ä—v‘f‚ğŒŸõ
+                    // ä¸Šè¨˜ä»¥å¤–ã€å¼•æ•°ã®æ™‚åˆ»ã‚’è¦‹ã¦æ¤œç´¢
                     LinkedListNode<Entry> node = buffer.First;
                     while (node != null)
                     {
-                        // w¦‚Ìtime‚ÌŠ®àø‚Èƒ}ƒbƒ`‚Ìê‡
-                        if (time == node.Value.time)
+                        // å¼•æ•°ã®æ™‚åˆ»ã¨ä¸€è‡´ã™ã‚‹æ™‚åˆ»ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç™ºè¦‹ã—ãŸ
+                        if (inputTime == node.Value.AddedTime)
                         {
-                            data = node.Value.data;
+                            returnData = node.Value.data;
                             break;
                         }
-                        // w¦‚Ìtime‚ª‘O‚Ì—v‘f‚æ‚è‘å‚«‚­‚ÄŸ‚Ì—v‘f‚æ‚è¬‚³‚¢ê‡
-                        else if (node.Next != null && time < node.Next.Value.time)
+                        // ãƒªã‚¹ãƒˆä¸Šã®æ¬¡ã®é …ç›®ãŒå¼•æ•°ã®æ™‚åˆ»ã‚ˆã‚Šæœªæ¥ã®å ´åˆ(ã‹ã¤ã€ç¾åœ¨ã®é …ç›®ã¯å¼•æ•°ã®æ™‚åˆ»ã‚ˆã‚Šéå»ã§ã‚ã‚‹)
+                        else if (node.Next != null && inputTime < node.Next.Value.AddedTime)
                         {
-                            // AccessType‚É‚æ‚Á‚Ä—×‚Ì—v‘f‚©‚çƒf[ƒ^‚ğæ“¾
-                            if (accessType == RealTimeDataAccessType.Previous)
-                                data = node.Value.data;
-                            else if (accessType == RealTimeDataAccessType.Next)
-                                data = node.Next.Value.data;
-                            else if (accessType == RealTimeDataAccessType.Closest)
-                                data = Math.Abs(time - node.Next.Value.time) < Math.Abs(time - node.Previous.Value.time) ?
-                                    node.Next.Value.data :
-                                    node.Value.data;
-                            else if (accessType == RealTimeDataAccessType.Interpolate)
+                            // AccessTypeã«ã‚ˆã£ã¦å–å¾—ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’æ±ºã‚ã‚‹
+                            switch (accessType) 
                             {
-                                double t = (time - node.Value.time) / (node.Next.Value.time - node.Value.time);
-                                data = interpolator(node.Value.data, node.Next.Value.data, t);
+                                case RealTimeDataAccessType.Previous: // ç›´å‰
+                                    returnData = node.Value.data;
+                                    break;
+                                case RealTimeDataAccessType.Next: // ç›´å¾Œ
+                                    returnData = node.Next.Value.data;
+                                    break;
+                                case RealTimeDataAccessType.Closest: // æœ€è¿‘
+                                    double diffNext = Math.Abs(inputTime - node.Next.Value.AddedTime);
+                                    double diffCurrent = Math.Abs(inputTime - node.Value.AddedTime);
+                                    returnData = diffNext < diffCurrent ? node.Next.Value.data : node.Value.data;
+                                    break;
+                                case RealTimeDataAccessType.Interpolate: // ç·šå½¢è£œé–“
+                                    double t = (inputTime - node.Value.AddedTime) / (node.Next.Value.AddedTime - node.Value.AddedTime);
+                                    returnData = interpolator(node.Value.data, node.Next.Value.data, t);
+                                    break;
                             }
 
-                            // Ì‚Ìƒf[ƒ^‚ğíœ
-                            if (removeHistoryWhenReading)
-                                while (node.Previous != null)
-                                    buffer.Remove(node.Previous);
-                            // ƒf[ƒ^‚ğŒ©‚Â‚¯‚½‚Ì‚Åƒ‹[ƒv‚ğ‚â‚ß‚é
+                            // ç¾åœ¨ã®ãƒ‡ãƒ¼ã‚¿ã‚ˆã‚Šéå»ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤
+                            while (node.Previous != null)
+                                buffer.Remove(node.Previous);
                             break;
                         }
                         else
                         {
-                            // ƒf[ƒ^‚ğ‚Ü‚¾Œ©‚Â‚¯‚Ä‚¢‚È‚¢‚Ì‚Åƒ‹[ƒv‚ğ‘±‚¯‚é
+                            // ãƒ‡ãƒ¼ã‚¿ã‚’ã¾ã è¦‹ã¤ã‘ã¦ã„ãªã„ã®ã§ãƒ«ãƒ¼ãƒ—ã‚’ç¶šã‘ã‚‹
                             node = node.Next;
                             Debug.Assert(node != null, $"{GetType().Name} : Unexpected code reached.");
                         }
                     }
                 }
             }
-            return data;
-        }
-
-        void Clear()
-        {
-            lock (bufferLock)
-            {
-                buffer.Clear();
-            }
+            return returnData;
         }
     }
 }

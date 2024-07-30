@@ -1,0 +1,7 @@
+<Kernel name="CalculateCameraDistances" device="CPU">
+  <Parameter.EntityData name="@Particle" type="@Particle" read="position" write=""/>
+  <Parameter.Array name="@ParticleCameraDistances" type="Real" mode="WRITE"/>
+	<Parameter.Scalar name="cameraView" type="Matrix4x4" bind="@camera.view"/>
+  <!-- <Parameter.Scalar name="cameraMvp" type="Matrix4x4" bind="@camera.modelViewProjection"/> -->
+  <!-- <Parameter.Pointer name="@camera" type="agxGL::Camera" include="agxGL/Camera.h"/> -->
+</Kernel>
