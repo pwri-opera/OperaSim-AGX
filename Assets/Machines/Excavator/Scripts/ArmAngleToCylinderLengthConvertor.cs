@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing.Text;
 using UnityEditor.Build.Content;
 using UnityEngine;
+using AGXUnity;
 
 namespace PWRISimulator
 {
@@ -27,7 +28,6 @@ namespace PWRISimulator
             Vector3 a = boomPin.transform.position - armPin.transform.position;
             Vector3 b = cylinderRoot.transform.position - armPin.transform.position;
             alpha = Mathf.Deg2Rad * Vector3.Angle(a, b);
-
 
             Vector3 c = bucketPin.transform.position - cylinderBindPoint.transform.position;
             Vector3 d = armPin.transform.position - cylinderBindPoint.transform.position;

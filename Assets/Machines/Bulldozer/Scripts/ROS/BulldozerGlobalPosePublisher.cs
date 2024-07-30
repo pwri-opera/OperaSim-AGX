@@ -22,12 +22,11 @@ namespace PWRISimulator.ROS
 
             if (time > 0 && deltaTime > 0)
             {
+
+                GameObject trackLink = bulldozerJoint.gameObject.GetComponentInChildren<AGXUnity.Model.Track>().gameObject;
                 MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, time);
-                odometryMsg.pose.pose = new PoseMsg
-                {
-                    position = bulldozerJoint.transform.position.To<FLU>(),
-                    orientation = bulldozerJoint.transform.rotation.To<FLU>()
-                };
+                odometryMsg.pose.pose.position = trackLink.transform.position.To<FLU>();
+                odometryMsg.pose.pose.orientation = trackLink.transform.rotation.To<FLU>();
                 previousTime = time;
             }
         }
