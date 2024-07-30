@@ -33,7 +33,7 @@ namespace PWRISimulator.ROS
 
         readonly string trackCmdPhrase = "/track_cmd";
         readonly string volumeCmdPhrase = "/track_volume_cmd";
-        readonly string velocityCmdPhrase = "/cmd_vel";
+        readonly string velocityCmdPhrase = "/tracks/cmd_vel";
 
 
         protected override void CreateSubscriptions()
