@@ -14,8 +14,8 @@ namespace PWRISimulator.ROS
     {
         [SerializeField] uint frequency = 60;
         [SerializeField] DumpTruckJoint dumpTruckJoint;
-        [SerializeField] string frameId = "";
-        readonly string[] joint_name = {"rotate_joint", "dump_joint", "right_track_joint", "left_track_joint"};
+        [SerializeField] string frameId = "world";
+        readonly string[] joint_name = {"rotate_joint", "vessel_pin_joint", "right_track_joint", "left_track_joint"};
 
         protected override void DoUpdate()
         {
@@ -45,7 +45,7 @@ namespace PWRISimulator.ROS
 
         protected override string TopicPhrase()
         {
-            return "/joint_state";
+            return "/joint_states";
         }
 
         protected override uint Frequency()
