@@ -50,6 +50,10 @@ namespace PWRISimulator
             armTilt.actuator.constraint.Native.setEnableComputeForces(true);
             bucketTilt.actuator.constraint.Native.setEnableComputeForces(true);
 
+            boomTilt.convertor.OnInit();
+            armTilt.convertor.OnInit();
+            bucketTilt.convertor.OnInit();
+
             input = gameObject.GetComponent<ExcavatorInput>();
 
             return success;

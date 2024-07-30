@@ -4,6 +4,7 @@ using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine;
+using AGXUnity;
 
 namespace PWRISimulator.ROS
 {
@@ -17,6 +18,7 @@ namespace PWRISimulator.ROS
         [SerializeField] uint frequency = 60;
         private double previousTime = 0;
 
+        [System.Obsolete]
         protected override void DoUpdate()
         {
             double time = Time.fixedTimeAsDouble;
@@ -24,13 +26,11 @@ namespace PWRISimulator.ROS
 
             if (time > 0 && deltaTime > 0)
             {
-                MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, time);
-                odometryMsg.pose.pose = new PoseMsg
-                {
-                    position = excavator.transform.position.To<FLU>(),
-                    orientation = excavator.transform.rotation.To<FLU>()
-                };
+                GameObject trackLink = excavator.gameObject.GetComponentInChildren<AGXUnity.Model.Track>().gameObject;
 
+                MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, time);
+                odometryMsg.pose.pose.position = trackLink.transform.position.To<FLU>();
+                odometryMsg.pose.pose.orientation = trackLink.transform.rotation.To<FLU>();
                 previousTime = time;
             }
         }

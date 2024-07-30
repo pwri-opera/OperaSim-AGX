@@ -21,13 +21,10 @@ namespace PWRISimulator.ROS
 
             if (time > 0 && deltaTime > 0)
             {
+                GameObject trackLink = dumptruck.gameObject.GetComponentInChildren<AGXUnity.Model.Track>().gameObject;
                 MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, time);
-                odometryMsg.pose.pose = new RosMessageTypes.Geometry.PoseMsg
-                {
-                    position = dumptruck.transform.position.To<FLU>(),
-                    orientation = dumptruck.transform.rotation.To<FLU>()
-                };
-                previousTime = time;
+                odometryMsg.pose.pose.position = trackLink.transform.position.To<FLU>();
+                odometryMsg.pose.pose.orientation = trackLink.transform.rotation.To<FLU>();
             }
         }
 
