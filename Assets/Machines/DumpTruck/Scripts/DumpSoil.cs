@@ -439,10 +439,10 @@ namespace PWRISimulator
             aabbMax += new agx.Vec3(nominalParticleData.radius);
 
             // ローカルバウンディングボックスを計算（現在の土砂高さでY軸のサイズを設定）
-            agx.Vec3 localAABBMin = new agx.Vec3(-mergeZoneCurrentSize.x * 0.5, 0, 0);
-            agx.Vec3 localAABBMax = new agx.Vec3(mergeZoneCurrentSize.x * 0.5, soilHeight, mergeZoneCurrentSize.z);
+            agx.Vec3 localAABBMin = new agx.Vec3(-mergeZoneCurrentSize.x * 0.5, soilHeight, 0);
+            agx.Vec3 localAABBMax = new agx.Vec3(mergeZoneCurrentSize.x * 0.5, mergeZoneCurrentSize.y, mergeZoneCurrentSize.z);
 
-            bool canMerge = (soilSpeed == 0.0 && tiltAngle < mininumDumpAngle) || !spawnParticlesEnabled; // 放土していないときだけにマージさせる
+            bool canMerge = (soilSpeed <= 0.1 && tiltAngle < mininumDumpAngle) || !spawnParticlesEnabled; // 放土していないときだけにマージさせる
             double maxPotentialSoilSpeedSqrd = maxPotentialSoilSpeed * maxPotentialSoilSpeed; // 放土の土砂の最大速度
             agx.Vec3 pushForce = forwardDir.ToHandedVec3() * -CalcPushForce() * particlesPushForceScale;
             numUnmergedParticlesInMergeZone = 0; // Merge Zoneに入っているけどマージしない粒子の数

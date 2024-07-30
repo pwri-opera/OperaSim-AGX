@@ -63,7 +63,7 @@ namespace PWRISimulator.ROS
             return new HeaderMsg(0, new TimeMsg(secs, nsecs), frameId);
         #else
             int secs = (int)time;
-            uint nsecs = (uint)(time - secs * 1e+9);
+            uint nsecs = (uint)((time - secs) * 1e+9);
 
             return new HeaderMsg(new TimeMsg(secs, nsecs), frameId);
         #endif
@@ -78,9 +78,11 @@ namespace PWRISimulator.ROS
         public static void UpdateTimeMsg(TimeMsg msg, double time)
         {
         #if !ROS2
-            msg = new((uint)time, (uint)((time - (uint)time) * 1e+9));
+            msg.secs = (uint)time;
+            msg.nsecs = (uint)((time - (uint)time) * 1e+9);
         #else
-            msg = new((int)time, (uint)((time - (uint)time) * 1e+9));
+            msg.sec = (int)time;
+            msg.nanosec = (uint)((time - (uint)time) * 1e+9);
         #endif
         }
     }

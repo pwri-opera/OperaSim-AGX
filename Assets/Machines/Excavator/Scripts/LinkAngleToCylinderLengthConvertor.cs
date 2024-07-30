@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AGXUnity;
+using System.Runtime.CompilerServices;
 
 namespace PWRISimulator
 {
@@ -12,6 +13,8 @@ namespace PWRISimulator
         [SerializeField]
         public Constraint joint;
         public float jointInitialAngle = 0.0f; // [degree]
+        public float jointMaxAngle = 100.0f;
+        public float jointMinAngle = 0.0f; 
         public float cylinderLength = 0.5f; // [rad]
 
         [HideInInspector]
@@ -28,8 +31,16 @@ namespace PWRISimulator
 
         void Start()
         {
-            DoStart();
+            DoStart();            
             cylinderRodDefaultLength = CalculateCylinderLinkLength(Mathf.Deg2Rad * jointInitialAngle) - cylinderLength;
+        }
+
+        public void OnInit()
+        {
+            agx.RangeReal rangeReal = new agx.RangeReal(Mathf.Deg2Rad * (jointMinAngle - jointInitialAngle), Mathf.Deg2Rad * (jointMaxAngle - jointInitialAngle));
+            agx.RangeController rangeController = agx.RangeController.safeCast(joint.GetController<RangeController>()?.Native);
+            rangeController.setRange(rangeReal);
+            rangeController.setEnable(true);
         }
         protected virtual void FixedUpdate()
         {
