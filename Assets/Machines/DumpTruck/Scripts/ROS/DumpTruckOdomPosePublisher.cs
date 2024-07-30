@@ -48,6 +48,9 @@ namespace PWRISimulator.ROS
                 odometryMsg.pose.pose.orientation.x = quaternion.x;
                 odometryMsg.pose.pose.orientation.y = quaternion.y;
                 odometryMsg.pose.pose.orientation.z = quaternion.z;
+                odometryMsg.header.frame_id="ic120_tf/odom";
+                odometryMsg.child_frame_id="ic120_tf/base_link";
+
 
                 previousTime = time;
             }
@@ -58,7 +61,7 @@ namespace PWRISimulator.ROS
         }
         protected override string TopicPhrase()
         {
-            return "/odom_pose";
+            return "/odom";
         }
         protected override uint Frequency()
         {

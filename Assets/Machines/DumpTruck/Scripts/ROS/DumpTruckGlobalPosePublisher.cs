@@ -27,6 +27,9 @@ namespace PWRISimulator.ROS
                     position = dumptruck.transform.position.To<FLU>(),
                     orientation = dumptruck.transform.rotation.To<FLU>()
                 };
+                odometryMsg.header.frame_id="world";
+                odometryMsg.child_frame_id="ic120_tf/base_link";
+                double seconds = Math.Floor(time);
                 previousTime = time;
             }
         }
@@ -37,7 +40,8 @@ namespace PWRISimulator.ROS
         }
         protected override string TopicPhrase()
         {
-            return "/global_pose";
+            //return "/base_link/pose";
+            return "/tracking/ground_truth";
         }
         protected override uint Frequency()
         {
