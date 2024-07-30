@@ -86,16 +86,16 @@ namespace PWRISimulator.ROS
                         break;
                     case ControlType.Speed:
                         joints.bucketTilt.actuator.controlType = ControlType.Speed;
-                        joints.bucketTilt.actuator.controlValue = bucketCylConv.CalculateCylinderRodTelescopingVelocity((float)frontSubscriber.FrontCmd.velocity[0]);
+                        joints.bucketTilt.actuator.controlValue = bucketCylConv.CalculateCylinderRodTelescopingVelocity((float)frontSubscriber.FrontCmd.velocity[3]);
 
                         joints.armTilt.actuator.controlType = ControlType.Speed;
-                        joints.armTilt.actuator.controlValue = armCylConv.CalculateCylinderRodTelescopingVelocity((float)frontSubscriber.FrontCmd.velocity[1]);
+                        joints.armTilt.actuator.controlValue = armCylConv.CalculateCylinderRodTelescopingVelocity((float)frontSubscriber.FrontCmd.velocity[2]);
 
                         joints.boomTilt.actuator.controlType = ControlType.Speed;
-                        joints.boomTilt.actuator.controlValue = boomCylConv.CalculateCylinderRodTelescopingVelocity((float)frontSubscriber.FrontCmd.velocity[2]);
+                        joints.boomTilt.actuator.controlValue = boomCylConv.CalculateCylinderRodTelescopingVelocity((float)frontSubscriber.FrontCmd.velocity[1]);
 
                         joints.swing.actuator.controlType = ControlType.Speed;
-                        double vel = frontSubscriber.FrontCmd.velocity[3];
+                        double vel = frontSubscriber.FrontCmd.velocity[0];
                         if (vel > 0) 
                         {
                             joints.swing.actuator.controlValue = vel * 0.52;

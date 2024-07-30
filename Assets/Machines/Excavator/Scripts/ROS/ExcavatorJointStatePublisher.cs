@@ -19,21 +19,21 @@ namespace PWRISimulator.ROS
         [SerializeField] uint frequency = 60;
         [SerializeField] ExcavatorJoints excavatorJoint;
         [SerializeField] string frameId = "";
-        readonly string[] joint_name = {"bucket_joint", "arm_joint", "boom_joint", "swing_joint", "right_track", "left_track"};
+        readonly string[] joint_name = {"swing_joint", "boom_joint", "arm_joint", "bucket_joint", "right_track", "left_track"};
         override protected void DoUpdate()
         {
-            jointStateMsg.position[0] = excavatorJoint.bucketTilt.JointCurrentPosition;
-            jointStateMsg.velocity[0] = excavatorJoint.bucketTilt.JointCurrentSpeed;
-            jointStateMsg.effort[0]   = excavatorJoint.bucketTilt.JointCurrentForce;
-            jointStateMsg.position[1] = excavatorJoint.armTilt.JointCurrentPosition;
-            jointStateMsg.velocity[1] = excavatorJoint.armTilt.JointCurrentSpeed;
-            jointStateMsg.effort[1]   = excavatorJoint.armTilt.JointCurrentForce;
-            jointStateMsg.position[2] = excavatorJoint.boomTilt.JointCurrentPosition;
-            jointStateMsg.velocity[2] = excavatorJoint.boomTilt.JointCurrentSpeed;
+            jointStateMsg.position[0] = excavatorJoint.swing.JointCurrentPosition;
+            jointStateMsg.velocity[0] = excavatorJoint.swing.JointCurrentSpeed;
+            jointStateMsg.effort[0]   = excavatorJoint.swing.JointCurrentForce;
+            jointStateMsg.position[1] = excavatorJoint.boomTilt.JointCurrentPosition;
+            jointStateMsg.velocity[1] = excavatorJoint.boomTilt.JointCurrentSpeed;
             jointStateMsg.effort[2]   = excavatorJoint.boomTilt.JointCurrentForce;
-            jointStateMsg.position[3] = excavatorJoint.swing.JointCurrentPosition;
-            jointStateMsg.velocity[3] = excavatorJoint.swing.JointCurrentSpeed;
-            jointStateMsg.effort[3]   = excavatorJoint.swing.JointCurrentForce;
+            jointStateMsg.position[2] = excavatorJoint.armTilt.JointCurrentPosition;
+            jointStateMsg.velocity[2] = excavatorJoint.armTilt.JointCurrentSpeed;
+            jointStateMsg.effort[2]   = excavatorJoint.armTilt.JointCurrentForce;
+            jointStateMsg.position[3] = excavatorJoint.bucketTilt.JointCurrentPosition;
+            jointStateMsg.velocity[3] = excavatorJoint.bucketTilt.JointCurrentSpeed;
+            jointStateMsg.effort[4]   = excavatorJoint.bucketTilt.JointCurrentForce;
             jointStateMsg.position[4] = excavatorJoint.rightSprocket.JointCurrentPosition;
             jointStateMsg.velocity[4] = excavatorJoint.rightSprocket.JointCurrentSpeed;
             jointStateMsg.effort[4]   = excavatorJoint.rightSprocket.JointCurrentForce;
