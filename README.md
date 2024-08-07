@@ -65,11 +65,7 @@ Simulator on Unity + AGX Dynamics communicating with ROS
   <img src="https://user-images.githubusercontent.com/82022162/159667980-0426a5a0-f920-4a50-99b3-0b70ddc442c2.jpg" " width="600px">
 </p>
 
-- HierarchyウィンドウからRosConnectorというGameObjectを選択し, Ros Bridge Sercer Urlを入力する
-
-<p align="left">
-  <img src="https://user-images.githubusercontent.com/82022162/159667977-d040451e-1cfd-4d5c-bb8e-5d0c6107ba8b.jpg" " width="600px">
-</p>
+- RoboticsタブからROS Settingを開き、ROS TCP Endpointで接続するPCのIPアドレスおよびポート番号を入力する
 
 - Playボタンを押してシミュレーションを実行
 
