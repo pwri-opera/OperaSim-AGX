@@ -3,10 +3,10 @@
   <Parameter.EntityData name="constraintRow" bind="@ParticleParticleContactConstraint.Row" type="Particle.ContactConstraintRow" read="violation" write="lambda, rhs"/>
   <Parameter.EntityData name="@Particle" type="Particle" read="oldVelocity"/>
   <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="adhesion"/>
-  
+
   <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
   <Parameter.Scalar name="damping" type="Real" value="Math.Mul(Real(4.5), @clock.timeStep)"/>
-	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+	<Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>
 
 
@@ -20,5 +20,5 @@
   <!-- <Parameter.Scalar name="@Particle.defaultRadius" type="Real"/> -->
   <Parameter.Scalar name="timeStep" type="Real" bind="@clock.timeStep"/>
   <Parameter.Scalar name="damping" type="Real" value="Math.Mul(Real(4.5), @clock.timeStep)"/>
-	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+	<Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>
