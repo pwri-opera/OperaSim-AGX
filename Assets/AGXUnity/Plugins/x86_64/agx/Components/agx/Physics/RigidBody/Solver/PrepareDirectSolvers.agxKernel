@@ -31,5 +31,5 @@
 
   <Parameter.Scalar name="stabilityReportEnable" type="Bool" bind="@Solver.stabilityReportEnable"/>
 
-  <Parameter.Scalar name="@useComplexImpactStage" type="Bool"/>
+  <Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>

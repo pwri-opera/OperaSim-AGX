@@ -1,12 +1,12 @@
 {
     "name": "com.algoryx.agxunity",
-    "version": "5.0.1+0a92dbfd",
-    "platform": "ubuntu-22.04",
-    "platformName": "Ubuntu 22.04 LTS",
+    "version": "5.1.0+bb8272e4",
+    "platform": "windows",
+    "platformName": "Microsoft Windows",
     "displayName": "AGX Dynamics for Unity",
     "description": "Plugin for the multi-purpose physics simulation engine AGX Dynamics from Algoryx Simulation AB.",
     "unity": "2021.2",
-    "agx": "2.37.3.0",
+    "agx": "2.38.0.0",
     "dependencies": {},
     "keywords": [],
     "author": {
