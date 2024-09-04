@@ -14,7 +14,7 @@ namespace PWRISimulator.ROS
     {
         [SerializeField] uint frequency = 60;
         [SerializeField] BulldozerJoints bulldozerJoint;
-        [SerializeField] string frameId = "";
+        [SerializeField] string frameId = "world";
         readonly string[] joint_name = {"lift_joint", "tilt_joint", "angle_joint", "right_track", "left_track"};
         protected override void DoUpdate()
         {

@@ -50,6 +50,8 @@ namespace PWRISimulator.ROS
                 odometryMsg.pose.pose.orientation.x = quaternion.x;
                 odometryMsg.pose.pose.orientation.y = quaternion.y;
                 odometryMsg.pose.pose.orientation.z = quaternion.z;
+                odometryMsg.header.frame_id="d37pxi_tf/odom";
+                odometryMsg.child_frame_id="d37pxi_tf/base_link";
 
                 previousTime = time;
             }

@@ -25,6 +25,9 @@ namespace PWRISimulator.ROS
 
                 GameObject trackLink = bulldozerJoint.gameObject.GetComponentInChildren<AGXUnity.Model.Track>().gameObject;
                 MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, time);
+
+                odometryMsg.header.frame_id="world";
+                odometryMsg.child_frame_id="d37pxi_tf/base_link";
                 odometryMsg.pose.pose.position = trackLink.transform.position.To<FLU>();
                 odometryMsg.pose.pose.orientation = trackLink.transform.rotation.To<FLU>();
                 previousTime = time;
