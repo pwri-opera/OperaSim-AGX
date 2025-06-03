@@ -136,6 +136,9 @@ namespace PWRISimulator.ROS
                         joints.bladeTilt.controlType = ControlType.Position;
                         joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[1]);
 
+                        // joints.bladeTilt.controlType = ControlType.Position;
+                        // joints.bladeTilt.controlValue = (float)BladeSubscriber.BladeCmd.position[1];
+
                         float telescoping = bladeAngleCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[2]);
                         joints.bladeAngleLeft.controlType = ControlType.Position;
                         joints.bladeAngleLeft.controlValue = -telescoping;
