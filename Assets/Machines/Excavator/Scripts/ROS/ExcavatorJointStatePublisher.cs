@@ -50,7 +50,7 @@ namespace PWRISimulator.ROS
 
         override protected string TopicPhrase()
         {
-            return "/joint_state";
+            return "/front/joint_states";
         }
 
         override protected uint Frequency()
