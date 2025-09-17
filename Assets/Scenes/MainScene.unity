@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 453132461}
-  m_IndirectSpecularColor: {r: 0.505915, g: 0.52408594, b: 0.5369582, a: 1}
+  m_IndirectSpecularColor: {r: 0.5058982, g: 0.52407897, b: 0.5369262, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6687,15 +6687,15 @@ MonoBehaviour:
     m_userValue: 2000
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 2295.8064, y: 3305.077, z: 1145.9243}
+    m_defaultValue: {x: 2295.8047, y: 3305.0745, z: 1145.9233}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0.9617629, y: 2.1811724, z: -30.172829}
+    m_defaultValue: {x: -0.96171916, y: 2.1810713, z: -30.17278}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0.005895995, y: 0.71843934, z: 1.5849702}
+    m_defaultValue: {x: -0.005895714, y: 0.71843934, z: 1.5849725}
     m_userValue: {x: 0, y: 0.27812976, z: 1.7373104}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -7825,7 +7825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &196977360
 Transform:
   m_ObjectHideFlags: 0
@@ -7835,7 +7835,7 @@ Transform:
   m_GameObject: {fileID: 196977357}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 48.59, y: 3.4, z: 85.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8682,11 +8682,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 111.821846
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 4.4570327, y: 7.654206, z: 4.4570327}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -8694,7 +8694,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0, y: 0, z: -0.011001587}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -11390,11 +11390,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 62.20354
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 1.6504674, y: 2.7991595, z: 1.6504674}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -14847,15 +14847,15 @@ MonoBehaviour:
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 705.10803, y: 1516.1049, z: 860.82855}
+    m_defaultValue: {x: 705.1086, y: 1516.1069, z: 860.83014}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 3.5527137e-15, y: -1.7763568e-15, z: -1.394077}
+    m_defaultValue: {x: 5.3290705e-15, y: -1.7763568e-15, z: -1.3940732}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -2.0816682e-17, y: 0.34564862, z: -0.42254955}
+    m_defaultValue: {x: -3.1225023e-17, y: 0.34564865, z: -0.42254862}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -15344,6 +15344,50 @@ MonoBehaviour:
   - {fileID: 379064783}
   - {fileID: 379064782}
   - {fileID: 379064781}
+--- !u!1 &382326635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 382326637}
+  - component: {fileID: 382326636}
+  m_Layer: 0
+  m_Name: AGXUnity.RuntimeObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &382326636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382326635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6a9e4af77e3804aae97d5030ab5f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &382326637
+Transform:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382326635}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &387098256
 GameObject:
   m_ObjectHideFlags: 0
@@ -18975,7 +19019,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &488108183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19116,7 +19160,7 @@ Transform:
   m_GameObject: {fileID: 488108182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 0, z: -10}
+  m_LocalPosition: {x: 22.09, y: 4.59, z: 92.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20418,50 +20462,6 @@ MonoBehaviour:
     m_userValue: {x: -0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
---- !u!1 &531384863
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 531384865}
-  - component: {fileID: 531384864}
-  m_Layer: 0
-  m_Name: AGXUnity.RuntimeObjects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &531384864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531384863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6a9e4af77e3804aae97d5030ab5f9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &531384865
-Transform:
-  m_ObjectHideFlags: 8
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531384863}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &532686709 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 457fe421e1b07b0408fa351aaa348e86, type: 3}
@@ -22423,7 +22423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_renderShapes: 1
-  m_shapeRenderMaterial: {fileID: 1765616120}
+  m_shapeRenderMaterial: {fileID: 0}
   m_renderContacts: 1
   ContactColor: {r: 1, g: 0, b: 0.7777777, a: 1}
   ContactScale: 0.315
@@ -22816,13 +22816,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576265256}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.002458782, y: -0.994219, z: 0.10477712, w: 0.023331122}
-  m_LocalPosition: {x: 4.454, y: 5.536, z: 12.383}
+  m_LocalRotation: {x: 0.005084912, y: -0.97596675, z: 0.21665253, w: 0.022906287}
+  m_LocalPosition: {x: 41.25, y: 31.19, z: 133.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 12.032, y: -177.311, z: 0}
+  m_LocalEulerAnglesHint: {x: 25.032, y: -177.311, z: 0}
 --- !u!1 &577668387
 GameObject:
   m_ObjectHideFlags: 0
@@ -23447,6 +23447,111 @@ MonoBehaviour:
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
+--- !u!1 &613218715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613218719}
+  - component: {fileID: 613218718}
+  - component: {fileID: 613218717}
+  - component: {fileID: 613218716}
+  m_Layer: 0
+  m_Name: Major
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &613218716
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613218715}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &613218717
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613218715}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &613218718
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613218715}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &613218719
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613218715}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 88.5, y: 3.6435223, z: -16.1}
+  m_LocalScale: {x: 150, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &613929134
 GameObject:
   m_ObjectHideFlags: 0
@@ -25438,6 +25543,7 @@ MonoBehaviour:
       m_localPosition: {x: 1.48, y: -0.25000146, z: 0.9700007}
       m_localRotation: {x: 0.00000031992667, y: -0.00000031992667, z: 0.7071068, w: 0.7071068}
   m_settings: {fileID: 0}
+  m_autoAddToTerrains: 0
 --- !u!114 &659973831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27151,7 +27257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &692805448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27177,7 +27283,7 @@ Transform:
   m_GameObject: {fileID: 692805446}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13, y: 0, z: -10}
+  m_LocalPosition: {x: 27.81, y: 4.23, z: 86.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -28818,7 +28924,7 @@ Transform:
   m_GameObject: {fileID: 738989124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 0, z: -10}
+  m_LocalPosition: {x: 39.27, y: 3.6, z: 96.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29233,11 +29339,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 111.821846
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 4.4570327, y: 7.654206, z: 4.4570327}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -29245,7 +29351,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0, y: 0, z: -0.011001587}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -31531,11 +31637,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 62.20354
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 1.6504674, y: 2.7991595, z: 1.6504674}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -35914,6 +36020,7 @@ MonoBehaviour:
       m_localPosition: {x: -0.06887913, y: 1.3694409, z: 0.029999822}
       m_localRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_settings: {fileID: 0}
+  m_autoAddToTerrains: 0
 --- !u!1 &963599281
 GameObject:
   m_ObjectHideFlags: 0
@@ -50738,15 +50845,15 @@ MonoBehaviour:
     m_userValue: 12020
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 5218.2373, y: 10129.827, z: 8617.243}
+    m_defaultValue: {x: 5218.2354, y: 10129.837, z: 8617.253}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: -1625.4226, y: 344.06714, z: 106.80635}
+    m_defaultValue: {x: -1625.4233, y: 344.05997, z: 106.80395}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0.32022277, y: 1.8884008, z: 1.7481343}
+    m_defaultValue: {x: -0.3202221, y: 1.8884009, z: 1.7481334}
     m_userValue: {x: 0, y: 0, z: -0.4097433}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -52332,6 +52439,7 @@ MonoBehaviour:
       m_localPosition: {x: -1.4200003, y: 0, z: 0.030000135}
       m_localRotation: {x: 0.70710665, y: -0.49999994, z: -0.5, w: 0.00000007706871}
   m_settings: {fileID: 11400000, guid: a3df81a34b356f8429051e769ec110d2, type: 2}
+  m_autoAddToTerrains: 0
 --- !u!114 &1405148027
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -53164,6 +53272,7 @@ MonoBehaviour:
   m_timeStep: 0.02
   m_solverSettings: {fileID: 11400000, guid: ff40ddbb50be60a4f996635e29659a8b, type: 2}
   m_displayStatistics: 1
+  m_statisticsMovingAverage: 50
   m_displayMemoryAllocations: 0
   m_enableMergeSplitHandler: 0
   m_savePreFirstStep: 0
@@ -59334,6 +59443,7 @@ MonoBehaviour:
       m_localPosition: {x: 0.00000008742278, y: 0, z: 1.4}
       m_localRotation: {x: 0.70710665, y: -0.49999994, z: -0.5, w: 0.00000007706871}
   m_settings: {fileID: 11400000, guid: a3df81a34b356f8429051e769ec110d2, type: 2}
+  m_autoAddToTerrains: 0
 --- !u!1 &1626534105
 GameObject:
   m_ObjectHideFlags: 0
@@ -65158,106 +65268,6 @@ MonoBehaviour:
     m_userValue: {x: 0.000000014901161, y: 1.8903117, z: 1.9081446}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
---- !u!21 &1765616120
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: DebugRendererMaterial(Clone)
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _EMISSION
-  m_InvalidKeywords: []
-  m_LightmapFlags: 1
-  m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 2, y: 2}
-        m_Offset: {x: 0, y: 0}
-    - _Cube:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DecalTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Detail:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 2, y: 2}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _BumpScale: 1
-    - _Cutoff: 0.5
-    - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _GlossMapScale: 1
-    - _Glossiness: 0
-    - _GlossyReflections: 1
-    - _InvFade: 1
-    - _Metallic: 0
-    - _Mode: 0
-    - _OcclusionStrength: 1
-    - _Parallax: 0.02
-    - _Shininess: 0.25654158
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _UVSec: 0
-    - _ZWrite: 1
-    m_Colors:
-    - _Color: {r: 0.6764706, g: 0.10942905, b: 0.10942905, a: 0.566}
-    - _Emission: {r: 0.1102941, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
-    - _SpecColor: {r: 0.66176474, g: 0.66176474, b: 0.66176474, a: 0}
-    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-  m_BuildTextureStacks: []
 --- !u!1 &1768902911
 GameObject:
   m_ObjectHideFlags: 0
@@ -69798,6 +69808,7 @@ MonoBehaviour:
       m_localPosition: {x: -2.0037892, y: -0.026813388, z: 0.5592232}
       m_localRotation: {x: -0.5770565, y: -0.57923317, z: 0.39826098, w: 0.41579187}
   m_settings: {fileID: 11400000, guid: a3df81a34b356f8429051e769ec110d2, type: 2}
+  m_autoAddToTerrains: 0
 --- !u!4 &1889706725 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8079db744786cad409f5e7b2f258ffb7, type: 3}
@@ -71507,7 +71518,7 @@ MonoBehaviour:
     m_userValue: {x: 0, y: 0, z: 0}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0, y: -0.39199996, z: -0.069999695}
+    m_defaultValue: {x: -0, y: -0.39199972, z: -0.069999695}
     m_userValue: {x: 0, y: -0.419076, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -79018,4 +79029,5 @@ SceneRoots:
   - {fileID: 2117365227}
   - {fileID: 1109481783}
   - {fileID: 1301564170}
-  - {fileID: 531384865}
+  - {fileID: 613218719}
+  - {fileID: 382326637}
