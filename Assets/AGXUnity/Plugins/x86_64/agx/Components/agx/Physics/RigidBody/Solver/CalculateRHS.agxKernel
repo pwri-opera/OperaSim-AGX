@@ -7,7 +7,7 @@
 	<Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"      mode="READ"/>
 	<Parameter.EntityData name="@ContactMaterial"             type="ContactMaterial" read="model"/>
 	<Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
-	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+	<Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>
 
 
@@ -20,7 +20,7 @@
 	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="velocity, angularVelocity, linearAcceleration, angularAcceleration"/>
 
   <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
-	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+  <Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>
 
 
@@ -33,7 +33,7 @@
 	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="velocity, angularVelocity, linearAcceleration, angularAcceleration"/>
 
   <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
-	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+  <Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>
 
 
@@ -54,5 +54,5 @@
 	<Parameter.EntityData name="@RigidBody" type="RigidBody" read="force, torque, velocity, angularVelocity, linearAcceleration, angularAcceleration, state, worldMassMatrix, worldInertia"/>
 
   <Parameter.Scalar name="@clock.timeStep"                  type="Real"/>
-	<Parameter.Scalar name="@useComplexImpactStage"           type="Bool"/>
+  <Parameter.Scalar name="useComplexImpactStage" value="@Solver.enableComplexImpactStage"           type="Bool"/>
 </SolveKernel>
