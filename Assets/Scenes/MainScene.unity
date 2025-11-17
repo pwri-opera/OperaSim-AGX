@@ -1110,7 +1110,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 362449036}
-    m_localPosition: {x: -0.9840007, y: 0.65999985, z: 1.3859997}
+    m_localPosition: {x: -0.9840007, y: 0.66, z: 1.3859997}
     m_localRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
   m_synchronized: 1
 --- !u!114 &36474800
@@ -6113,7 +6113,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_connectedFrame:
     m_parent: {fileID: 773665788}
-    m_localPosition: {x: 0.033576295, y: 0.23418045, z: 0.6891203}
+    m_localPosition: {x: 0.033576295, y: 0.23417997, z: 0.6891203}
     m_localRotation: {x: 0.23370893, y: 0.6673681, z: 0.23370893, w: 0.6673681}
   m_synchronized: 1
 --- !u!114 &145021292
@@ -8285,7 +8285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &196977360
 Transform:
   m_ObjectHideFlags: 0
@@ -8295,7 +8295,7 @@ Transform:
   m_GameObject: {fileID: 196977357}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 8.87, z: -10}
+  m_LocalPosition: {x: 0, y: -0.34, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8328,14 +8328,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: 40092
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1075737619}
       actuatorType: 1
@@ -8355,14 +8347,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: 40092
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1052463106}
       actuatorType: 1
@@ -8382,14 +8366,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: 68000
       deadTime: 932
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1716965543}
       actuatorType: 1
@@ -8409,14 +8385,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: 581212.3124
       deadTime: 649.5
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1893525218}
       actuatorType: 0
@@ -8436,14 +8404,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: 369403.1904
       deadTime: 425.5
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 984792389}
       actuatorType: 0
@@ -8463,14 +8423,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: 270065.049
       deadTime: 310
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1736900336}
       actuatorType: 0
@@ -10377,37 +10329,6 @@ Transform:
   m_Children:
   - {fileID: 127275016}
   m_Father: {fileID: 1663976118}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &223448421
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 223448422}
-  m_Layer: 0
-  m_Name: GameObject (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &223448422
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223448421}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.307, y: 0.153, z: -11.622}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &225645398
 GameObject:
@@ -15819,7 +15740,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 362449036}
-    m_localPosition: {x: -0.9840002, y: 0.64799976, z: -2.323}
+    m_localPosition: {x: -0.9840002, y: 0.648, z: -2.323}
     m_localRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
   m_synchronized: 1
 --- !u!114 &340044167
@@ -16215,37 +16136,6 @@ MonoBehaviour:
   - {fileID: 350649880}
   - {fileID: 350649879}
   - {fileID: 350649878}
---- !u!1 &351788722
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 351788723}
-  m_Layer: 0
-  m_Name: GameObject (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &351788723
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 351788722}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.307, y: 0.30659726, z: -12.051512}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &351928782
 GameObject:
   m_ObjectHideFlags: 0
@@ -21309,14 +21199,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 600000
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rightSprocket:
     constraint: {fileID: 1235706990}
     controlEnabled: 1
@@ -21324,14 +21206,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 600000
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   bladeLift:
     constraint: {fileID: 535684679}
     controlEnabled: 1
@@ -21339,14 +21213,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   bladeTilt:
     constraint: {fileID: 1734090355}
     controlEnabled: 1
@@ -21354,14 +21220,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   bladeAngleRight:
     constraint: {fileID: 1768902922}
     controlEnabled: 1
@@ -21369,14 +21227,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   bladeAngleLeft:
     constraint: {fileID: 2111588880}
     controlEnabled: 1
@@ -21384,14 +21234,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
 --- !u!114 &488108185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26730,7 +26572,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.6299983, y: 0, z: 0, w: 0.7765965}
   m_connectedFrame:
     m_parent: {fileID: 477976706}
-    m_localPosition: {x: -0.024244815, y: -0.45122913, z: -0.336977}
+    m_localPosition: {x: -0.024244815, y: -0.45122907, z: -0.3369769}
     m_localRotation: {x: 0.22622621, y: 0, z: 0, w: 0.97407484}
   m_synchronized: 1
 --- !u!114 &590905077
@@ -27497,7 +27339,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.00000002745056, y: 0.7071068, z: -0.00000002745056, w: 0.7071068}
   m_connectedFrame:
     m_parent: {fileID: 776953429}
-    m_localPosition: {x: 0.0127195865, y: 1.8799001, z: 1.5754005}
+    m_localPosition: {x: 0.0127195865, y: 1.8799002, z: 1.5754001}
     m_localRotation: {x: -0.21027586, y: 0.67511785, z: -0.21027586, w: 0.67511785}
   m_synchronized: 1
 --- !u!114 &613929144
@@ -29837,37 +29679,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ef3f04a8bf680314aa0547c74eb2fa76, type: 3}
   m_PrefabInstance: {fileID: 409560858}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &665447902
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 665447903}
-  m_Layer: 0
-  m_Name: GameObject (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &665447903
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665447902}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.114, y: 0.60222244, z: -12.745439}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &665458771
 GameObject:
   m_ObjectHideFlags: 0
@@ -31407,14 +31218,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1124232656}
       actuatorType: 1
@@ -31434,14 +31237,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 2072124370}
       actuatorType: 1
@@ -31461,14 +31256,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 916319681}
       actuatorType: 1
@@ -31488,14 +31275,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 271119744}
       actuatorType: 0
@@ -31515,14 +31294,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1230064583}
       actuatorType: 0
@@ -31542,14 +31313,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 1717036761}
       actuatorType: 0
@@ -33304,14 +33067,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 40993
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rightSprocket:
     constraint: {fileID: 1519133246}
     controlEnabled: 1
@@ -33319,14 +33074,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 40993
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   dump_joint:
     constraint: {fileID: 944232113}
     controlEnabled: 1
@@ -33334,14 +33081,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 60000
     deadTime: 0.21789073
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rotate_joint:
     constraint: {fileID: 0}
     controlEnabled: 0
@@ -33349,14 +33088,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
 --- !u!114 &738989126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33382,7 +33113,7 @@ Transform:
   m_GameObject: {fileID: 738989124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 8.79, z: -10}
+  m_LocalPosition: {x: 7, y: -0.35, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34682,14 +34413,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rightSprocket:
     constraint: {fileID: 1744372871}
     controlEnabled: 1
@@ -34697,14 +34420,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   dump_joint:
     constraint: {fileID: 921560665}
     controlEnabled: 1
@@ -34712,14 +34427,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 600000
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rotate_joint:
     constraint: {fileID: 975303056}
     controlEnabled: 1
@@ -34727,14 +34434,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 600000
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
 --- !u!114 &784323880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36576,37 +36275,6 @@ MonoBehaviour:
   m_bottomRadius: 0
   m_thickness: 0
   m_height: 0
---- !u!1 &805191554
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 805191555}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &805191555
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805191554}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.114, y: 0.648, z: -12.334}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &806287207
 GameObject:
   m_ObjectHideFlags: 0
@@ -41229,7 +40897,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 1349787766}
-    m_localPosition: {x: 0, y: 0.9460516, z: -3.0153332}
+    m_localPosition: {x: 0, y: 0.9460521, z: -3.0153332}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_synchronized: 1
 --- !u!4 &944232122
@@ -42543,7 +42211,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 215000909}
-    m_localPosition: {x: 1.1819997, y: 0.45300007, z: 1.856}
+    m_localPosition: {x: 1.1819997, y: 0.453, z: 1.856}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &973372351
@@ -47726,7 +47394,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 215000909}
-    m_localPosition: {x: 1.182, y: 0.45300007, z: -1.6219997}
+    m_localPosition: {x: 1.182, y: 0.453, z: -1.6219997}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &1052463106
@@ -49006,7 +48674,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 215000909}
-    m_localPosition: {x: -1.182, y: 0.45300007, z: -1.6219997}
+    m_localPosition: {x: -1.182, y: 0.453, z: -1.6219997}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &1075737619
@@ -54248,7 +53916,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0, z: 0, w: 1}
   m_connectedFrame:
     m_parent: {fileID: 1760676692}
-    m_localPosition: {x: -0.006611243, y: 2.0019226, z: 1.3928298}
+    m_localPosition: {x: -0.006611243, y: 2.0019217, z: 1.3928301}
     m_localRotation: {x: 0.14996669, y: 0, z: 0, w: 0.9886911}
   m_synchronized: 1
 --- !u!114 &1210529403
@@ -56516,7 +56184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1264068239
 Transform:
   m_ObjectHideFlags: 0
@@ -56957,7 +56625,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: -0.000000023181554, z: 0, w: 1}
   m_connectedFrame:
     m_parent: {fileID: 776953429}
-    m_localPosition: {x: -0.006230004, y: -0.3696909, z: -0.7865623}
+    m_localPosition: {x: -0.006230004, y: -0.3696909, z: -0.7865621}
     m_localRotation: {x: 0.055124525, y: -0.000000023146308, z: -0.0000000012778724, w: 0.99847955}
   m_synchronized: 1
 --- !u!114 &1268630320
@@ -58767,7 +58435,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: -0.00000003090862, z: -0.70710677, w: -0.00000003090862}
   m_connectedFrame:
     m_parent: {fileID: 776953429}
-    m_localPosition: {x: 0.023545638, y: 2.1808996, z: 1.8954005}
+    m_localPosition: {x: 0.023545638, y: 2.1808996, z: 1.8954003}
     m_localRotation: {x: 0.7000089, y: -0.09993769, z: -0.7000089, w: 0.09993765}
   m_synchronized: 1
 --- !u!114 &1314955421
@@ -65741,7 +65409,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 362449036}
-    m_localPosition: {x: 0.9840002, y: 0.64799976, z: -2.323}
+    m_localPosition: {x: 0.9840002, y: 0.648, z: -2.323}
     m_localRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
   m_synchronized: 1
 --- !u!114 &1519133246
@@ -66410,7 +66078,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0, z: 0, w: 1}
   m_connectedFrame:
     m_parent: {fileID: 1672121202}
-    m_localPosition: {x: -0.005322829, y: 0.47663933, z: -0.32968578}
+    m_localPosition: {x: -0.005322829, y: 0.4766389, z: -0.32968533}
     m_localRotation: {x: 0.6299983, y: 0, z: 0, w: 0.7765965}
   m_synchronized: 1
 --- !u!114 &1541757126
@@ -69818,9 +69486,9 @@ MonoBehaviour:
   name: Length FC
   object1: {fileID: 1079318037}
   object2: {fileID: 82518238}
-  distance: 1.8579053
+  distance: 1.8579056
   dist_x: -0.005322531
-  dist_y: 1.1017904
+  dist_y: 1.101791
   dist_z: -1.4959416
 --- !u!4 &1623369581
 Transform:
@@ -69871,8 +69539,8 @@ MonoBehaviour:
   objectA: {fileID: 776953429}
   objectB: {fileID: 1889195021}
   objectC: {fileID: 425813427}
-  angle: 3.1318393
-  angleDeg: 179.44118
+  angle: 3.1318514
+  angleDeg: 179.44186
 --- !u!114 &1623369584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69889,8 +69557,8 @@ MonoBehaviour:
   objectA: {fileID: 477976706}
   objectB: {fileID: 1889195021}
   objectC: {fileID: 1672121202}
-  angle: 1.2784729
-  angleDeg: 73.2511
+  angle: 1.2784725
+  angleDeg: 73.25108
 --- !u!114 &1623369585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69907,8 +69575,8 @@ MonoBehaviour:
   objectA: {fileID: 477976706}
   objectB: {fileID: 1889195021}
   objectC: {fileID: 425813427}
-  angle: 1.7723517
-  angleDeg: 101.54828
+  angle: 1.772352
+  angleDeg: 101.54829
 --- !u!114 &1623369586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69959,8 +69627,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: 
-  object1: {fileID: 223448421}
-  object2: {fileID: 351788722}
+  object1: {fileID: 0}
+  object2: {fileID: 0}
   distance: 0.45614988
   dist_x: 0
   dist_y: -0.15359727
@@ -70715,7 +70383,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 362449036}
-    m_localPosition: {x: 0.9839997, y: 0.65999985, z: 1.3859997}
+    m_localPosition: {x: 0.9839997, y: 0.66, z: 1.3859997}
     m_localRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
   m_synchronized: 1
 --- !u!114 &1649414124
@@ -74214,7 +73882,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 167251482}
-    m_localPosition: {x: 0, y: 1.059, z: -0.25}
+    m_localPosition: {x: 0, y: 1.0589999, z: -0.25}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_synchronized: 1
 --- !u!114 &1718280675
@@ -74517,14 +74185,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 0}
       actuatorType: 0
@@ -74544,14 +74204,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 0}
       actuatorType: 0
@@ -74571,14 +74223,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 0}
       actuatorType: 0
@@ -74598,14 +74242,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 0}
       actuatorType: 0
@@ -74625,14 +74261,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 0}
       actuatorType: 0
@@ -74652,14 +74280,6 @@ MonoBehaviour:
       controlValue: 0
       controlMaxForce: Infinity
       deadTime: 0
-      isEnableState: 0
-      forceRangeMaxState: 0
-      forceRangeMinState: 0
-      forceState: 0
-      compState: 0
-      dampState: 0
-      reguComp: 0
-      reguDump: 0
     hydraulicActuator:
       constraint: {fileID: 0}
       actuatorType: 0
@@ -75268,7 +74888,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.70710677, z: 0.70710695, w: 0}
   m_connectedFrame:
     m_parent: {fileID: 1079318037}
-    m_localPosition: {x: 0, y: 0.00000019158017, z: -0.00000014191711}
+    m_localPosition: {x: 0, y: 0.000000049663058, z: -0.00000033349727}
     m_localRotation: {x: 0, y: 0.70710677, z: 0.70710695, w: 0}
   m_synchronized: 1
 --- !u!114 &1736900336
@@ -81963,7 +81583,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.6981028, y: 0, z: 0, w: -0.7159975}
   m_connectedFrame:
     m_parent: {fileID: 2075784740}
-    m_localPosition: {x: 0, y: 1.3500001, z: 0.00000011920929}
+    m_localPosition: {x: 0, y: 1.3500003, z: 0.000000059604645}
     m_localRotation: {x: 0.69810283, y: 0, z: 0, w: -0.7159976}
   m_synchronized: 1
 --- !u!114 &1893525218
@@ -324846,7 +324466,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.0000000010749583, y: -0.70710677, z: 4.767961e-10, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 1760676692}
-    m_localPosition: {x: -0.017186943, y: 2.7850003, z: 2.2875004}
+    m_localPosition: {x: -0.017186943, y: 2.7850006, z: 2.2875004}
     m_localRotation: {x: 0.39540908, y: -0.5862181, z: -0.39540908, w: 0.5862181}
   m_synchronized: 1
 --- !u!114 &1976954248
@@ -327203,7 +326823,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 215000909}
-    m_localPosition: {x: -1.1820004, y: 0.45300007, z: 1.856}
+    m_localPosition: {x: -1.1820004, y: 0.453, z: 1.856}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &2045337978
@@ -329144,7 +328764,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: -0.00000003090862, z: -0.70710677, w: 0.00000003090862}
   m_connectedFrame:
     m_parent: {fileID: 1760676692}
-    m_localPosition: {x: -0.010956585, y: 2.9959006, z: 4.7878}
+    m_localPosition: {x: -0.010956585, y: 2.9959004, z: 4.7878}
     m_localRotation: {x: 0.6071235, y: 0.36249286, z: -0.6071235, w: -0.36249286}
   m_synchronized: 1
 --- !u!114 &2073083425
@@ -331848,14 +331468,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 600000
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rightSprocket:
     constraint: {fileID: 1430303172}
     controlEnabled: 1
@@ -331863,14 +331475,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: 600000
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   dump_joint:
     constraint: {fileID: 0}
     controlEnabled: 0
@@ -331878,14 +331482,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
   rotate_joint:
     constraint: {fileID: 0}
     controlEnabled: 0
@@ -331893,14 +331489,6 @@ MonoBehaviour:
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
-    isEnableState: 0
-    forceRangeMaxState: 0
-    forceRangeMinState: 0
-    forceState: 0
-    compState: 0
-    dampState: 0
-    reguComp: 0
-    reguDump: 0
 --- !u!1 &2117780496
 GameObject:
   m_ObjectHideFlags: 0
@@ -333093,7 +332681,3 @@ SceneRoots:
   - {fileID: 1341345226}
   - {fileID: 1264068239}
   - {fileID: 1801583928}
-  - {fileID: 805191555}
-  - {fileID: 665447903}
-  - {fileID: 223448422}
-  - {fileID: 351788723}
