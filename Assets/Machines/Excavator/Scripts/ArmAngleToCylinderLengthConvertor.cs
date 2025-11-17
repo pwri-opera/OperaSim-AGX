@@ -70,8 +70,7 @@ namespace PWRISimulator
 
         protected override void FixedUpdate()
         {
-            // currentLinkAngle = joint.GetCurrentAngle() + Mathf.Deg2Rad * (jointInitialAngle);
-            // Debug.Log("joint.GetCurrentAngle() : "+currentLinkAngle);
+            currentLinkAngle = joint.GetCurrentAngle() + Mathf.Deg2Rad * (jointInitialAngle);
         }
     }
 }
