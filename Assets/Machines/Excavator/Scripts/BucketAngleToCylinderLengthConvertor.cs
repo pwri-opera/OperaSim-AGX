@@ -60,8 +60,6 @@ namespace PWRISimulator
         }
         public override float CalculateCylinderRodTelescoping(float _angle)
         {
-            float linkLen = CalculateCylinderLinkLength(_angle);
-            float telescoping = linkLen - cylinderLength - cylinderRodDefaultLength;
             // ---- Debug.Log 追記 ----
             // Debug.Log($"[CalculateCylinderRodTelescoping] _angle(rad)={_angle:F6}");
             // Debug.Log($"[CalculateCylinderRodTelescoping] linkLen={linkLen:F6}, cylinderLength={cylinderLength:F6}, cylinderRodDefaultLength={cylinderRodDefaultLength:F6}");
