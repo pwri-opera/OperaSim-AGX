@@ -38,25 +38,13 @@ public class DeadTimeDelay<T>
     public bool drainInputData(double nowMs, out List<T> ready)
     {
         ready = new List<T>();
-        while (_queue.Count > 0)
+        while (_queue.Count > 0 &&
+            (nowMs - _queue.Peek().timestampMs) >= _internalDeadTimeMs)
         {
-            var (ts, data) = _queue.Peek();
-            if ((nowMs - ts) >= _internalDeadTimeMs)
-            {
-                ready.Add(data);
-                _queue.Dequeue();
-                return true;
-            }
-            else if (_queue.Count <= 0 || (nowMs - ts) < _internalDeadTimeMs) 
-            {
-                break; 
-            }
-            else
-            {
-                break; 
-            }
+            var (ts, data) = _queue.Dequeue(); // Peek ではなく Dequeue で取得
+            ready.Add(data);
         }
-        return false;
+        return ready.Count > 0;
     }
 
     /// <summary>期限到来分の「最後の1件」だけ取得。なければ fallback。</summary>
