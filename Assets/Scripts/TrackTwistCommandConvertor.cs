@@ -9,11 +9,12 @@ using RosMessageTypes.Geometry;
 using agxDriveTrain;
 using UnityEditor.Rendering;
 
-// 車体の並進速度を調整するためのモード一覧
+// 車体の並進速度，旋回速度を微調整するためのモード一覧
 public enum ProjectionMode
 {
-    Radial,         // 原点方向へ等比縮小
-    RadialRatio     // 
+    Radial,         // 原点方向へ等比縮小するモード
+    RadialRatio,    // v, w 方向の縮小率を調整するモード
+    LimitTrackVel   // track の最大周速度で制限するモード 
 }
 
 namespace PWRISimulator
@@ -27,6 +28,9 @@ namespace PWRISimulator
         public PIDController speedController;
         public PIDController angularSpeedController;
 
+        [Tooltip("スプロケットの半径-スプロケット周辺のtrack接地面までの距離")]
+        public double sproketRadiusToTrackOne = 0.07;  // unit is m/sec
+
         [Tooltip("cmd_velコマンドで指定可能な最大速度(m/s)")]
         public double maxLinearVelocity = 3.00;  // unit is m/sec
 
@@ -37,12 +41,20 @@ namespace PWRISimulator
         public bool EnableVWBehaviorMode = false;
 
         [ConditionalHide("EnableVWBehaviorMode", true)]
-        [Tooltip("車体並進速度v と 車体旋回速度ω　が同時に与えられた際に，出力値を抑えるパラメータ: 値が小さい程，v，w 同時出力時の速度が制限される")]
+        [Tooltip("vw制限モードの選択 \n * Radial:  v, wの入力を等比縮小するモード \n * RadialRatio: v, w方向の縮小率を調整するモード \n  * LimitTrackVel: track の最大周速度でv, wを制限するモード ")]
+        public ProjectionMode SetVWBehaviorMode = ProjectionMode.RadialRatio;
+
+        [ConditionalHide("EnableVWBehaviorMode", true)]
+        [Tooltip("車体並進速度v と 車体旋回速度ωが同時に与えられた際に，出力値を抑えるパラメータ: 値が小さい程，v，w 同時出力時の速度が制限される")]
         public double VWDecelFactor = 1.0;
 
         [ConditionalHide("EnableVWBehaviorMode", true)]
         [Tooltip("車体並進速度v と 車体旋回速度ω の縮小配分を決める重み（0＝v優先でωを多く削る、1＝ω優先でvを多く削る）")]
         public double VWRatioFactor = 0.9;
+
+        [ConditionalHide("EnableVWBehaviorMode", true)]
+        [Tooltip("クローラにおける最大周速度(m/s)")]        
+        public double MaxTrackVel = 1.0;
 
         private double leftSprocketRadius = 0.25;
         private double rightSprocketRadius = 0.25;
@@ -135,13 +147,13 @@ namespace PWRISimulator
             angular = Math.Min(cmd_angular.z, maxAngularVelocity);
             angular = Math.Max(angular, -maxAngularVelocity); 
 
-            if (EnableVWBehaviorMode)
-                (linear, angular) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
-
-            sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + 0.07);
-            sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + 0.07);
-
-
+            if (EnableVWBehaviorMode){
+                (sprocketSpeed_L, sprocketSpeed_R) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
+            }
+            else {
+                sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + sproketRadiusToTrackOne);
+                sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + sproketRadiusToTrackOne);
+            }
         }
 
         public void SetCommand(double cmd_linear, double cmd_angular)
@@ -154,11 +166,13 @@ namespace PWRISimulator
             angular = Math.Min(cmd_angular, maxAngularVelocity);
             angular = Math.Max(cmd_angular, -maxAngularVelocity); 
 
-            if (EnableVWBehaviorMode)
-                (linear, angular) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
-
-            sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + 0.07);
-            sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + 0.07);
+            if (EnableVWBehaviorMode){
+                (sprocketSpeed_L, sprocketSpeed_R) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
+            }
+            else {
+                sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + sproketRadiusToTrackOne);
+                sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + sproketRadiusToTrackOne);
+            }
         }
 
 
@@ -166,6 +180,8 @@ namespace PWRISimulator
         {
             double p = VWDecelFactor;
             double ratio = VWRatioFactor;
+            double sprocketVL = 0.0;
+            double sprocketVR = 0.0;;
 
             // 1. 可行域判定
             double g = Math.Pow(
@@ -176,28 +192,45 @@ namespace PWRISimulator
             double v_out = cmdLinearVel;
             double w_out = cmdAngularVel;
 
-            ProjectionMode projMode = ProjectionMode.RadialRatio;
-
-            if (g > 1.0)        // ===== 投影が必要 =====
-            {
-                switch (projMode)
+            // ProjectionMode SetVWBehaviorMode = ProjectionMode.RadialRatio;
+            // if (g > 1.0)        // ===== 投影が必要 =====
+            // {
+                switch (SetVWBehaviorMode)
                 {
                     // --- 原点に向け等比縮小 (Radial) -----------------
                     case ProjectionMode.Radial:
                         double s = 1.0 / g;
                         v_out *= s;
                         w_out *= s;
+                        sprocketVL = (v_out - trackWidth * 0.5 * w_out) / (leftSprocketRadius + sproketRadiusToTrackOne);
+                        sprocketVR = (v_out + trackWidth * 0.5 * w_out) / (rightSprocketRadius + sproketRadiusToTrackOne);
                         break;
 
                     case ProjectionMode.RadialRatio:
+                        Debug.Log($"[Debug] call?:{3333}");
                         (v_out, w_out) = ProjectByRatioScale(
                             cmdLinearVel, cmdAngularVel,
                             maxLinearVelocity, maxAngularVelocity,
                             p, ratio);
+                        sprocketVL = (v_out - trackWidth * 0.5 * w_out) / (leftSprocketRadius + sproketRadiusToTrackOne);
+                        sprocketVR = (v_out + trackWidth * 0.5 * w_out) / (rightSprocketRadius + sproketRadiusToTrackOne);
+                        break;
+
+                    case ProjectionMode.LimitTrackVel:
+                        double trackVL, trackVR;
+
+                        trackVL = Math.Min((v_out - trackWidth * 0.5 * w_out), MaxTrackVel);
+                        trackVL = Math.Max(trackVL, -MaxTrackVel);
+                        trackVR = Math.Min((v_out + trackWidth * 0.5 * w_out), MaxTrackVel);
+                        trackVR = Math.Max(trackVR, -MaxTrackVel);
+
+                        sprocketVL = trackVL / (leftSprocketRadius + sproketRadiusToTrackOne);
+                        sprocketVR = trackVR / (rightSprocketRadius + sproketRadiusToTrackOne);
                         break;
                 }
-            }
-            return (v_out, w_out);
+                
+            // }
+            return (sprocketVL, sprocketVR);
         }
 
         private static (double v_out, double w_out) ProjectByRatioScale(
