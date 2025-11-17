@@ -127,15 +127,13 @@ namespace PWRISimulator
             //sprocketSpeed_L = (out_speed - trackWidth * 0.5 * out_omega) / leftSprocketRadius;
             //sprocketSpeed_R = (out_speed + trackWidth * 0.5 * out_omega) / rightSprocketRadius;
 
-            double linear=2, angular=0.2;
+            double linear=0, angular=0;
 
             // 車体の最大設定速度，旋回速度を超えた値を制限
             linear = Math.Min(cmd_linear.x, maxLinearVelocity);
             linear = Math.Max(linear, -maxLinearVelocity);
             angular = Math.Min(cmd_angular.z, maxAngularVelocity);
             angular = Math.Max(angular, -maxAngularVelocity); 
-
-            Debug.Log($"[CalculateCylinderLinkLength] gameObject={linear}");
 
             if (EnableVWBehaviorMode)
                 (linear, angular) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
