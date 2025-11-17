@@ -37,7 +37,7 @@ namespace PWRISimulator
         [Tooltip("cmd_velコマンドで指定可能な最大角速度(度/s)")]
         public double maxAngularVelocity = Math.PI * 2.0 * 5.0 / 360.0;  // unit is rad/sec
 
-        [Tooltip("VW挙動調整モードを使うか？\n（VW挙動調整モード：cmd_vel (vw入力) が与えられた際，vw組合せ時の出力を制限するモード")]
+        [Tooltip("車体の並進速度v，旋回速度ωを制限するモード（vw制限モード）を使用するか")]
         public bool EnableVWBehaviorMode = false;
 
         [ConditionalHide("EnableVWBehaviorMode", true)]
@@ -49,7 +49,7 @@ namespace PWRISimulator
         public double VWDecelFactor = 1.0;
 
         [ConditionalHide("EnableVWBehaviorMode", true)]
-        [Tooltip("車体並進速度v と 車体旋回速度ω の縮小配分を決める重み（0＝v優先でωを多く削る、1＝ω優先でvを多く削る）")]
+        [Tooltip("車体並進速度v と 車体旋回速度ω の縮小配分を決めるパラメータ: （0＝v優先でωを多く削る、1＝ω優先でvを多く削る）")]
         public double VWRatioFactor = 0.9;
 
         [ConditionalHide("EnableVWBehaviorMode", true)]
@@ -207,7 +207,6 @@ namespace PWRISimulator
                         break;
 
                     case ProjectionMode.RadialRatio:
-                        Debug.Log($"[Debug] call?:{3333}");
                         (v_out, w_out) = ProjectByRatioScale(
                             cmdLinearVel, cmdAngularVel,
                             maxLinearVelocity, maxAngularVelocity,
