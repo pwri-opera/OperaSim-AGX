@@ -57,13 +57,11 @@ namespace PWRISimulator
             switch (_state)
             {
                 case DumpState.DumpUp:
-                    if (pt >= pc) { /* keep DumpUp */ } 
                     if (pt < pc) _state = DumpState.Stop;
                     if (pt < pc && targetChanged) _state = DumpState.DumpDown;
                     break;
 
                 case DumpState.DumpDown:
-                    if (pt <= pc) { /* keep DumpDown */ }
                     if (pt > pc) _state = DumpState.Stop;
                     if (pt > pc && targetChanged) _state = DumpState.DumpUp;
                     break;
