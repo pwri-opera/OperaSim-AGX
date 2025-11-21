@@ -28,8 +28,8 @@ namespace PWRISimulator
         public PIDController speedController;
         public PIDController angularSpeedController;
 
-        [Tooltip("スプロケットの半径-スプロケット周辺のtrack接地面までの距離")]
-        public double sproketRadiusToTrackOne = 0.07;  // unit is m/sec
+        [Tooltip("trackの厚み（スプロケット半径に加算して回転半径の計算に利用）(m)")]
+        public double sproketRadiusToTrackSurface = 0.07;  // unit is m
 
         [Tooltip("cmd_velコマンドで指定可能な最大速度(m/s)")]
         public double maxLinearVelocity = 3.00;  // unit is m/sec
@@ -151,8 +151,8 @@ namespace PWRISimulator
                 (sprocketSpeed_L, sprocketSpeed_R) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
             }
             else {
-                sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + sproketRadiusToTrackOne);
-                sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + sproketRadiusToTrackOne);
+                sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + sproketRadiusToTrackSurface);
+                sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + sproketRadiusToTrackSurface);
             }
         }
 
@@ -170,8 +170,8 @@ namespace PWRISimulator
                 (sprocketSpeed_L, sprocketSpeed_R) = CommandLinearAngularVelocityVWBehaviorMode (linear, angular);
             }
             else {
-                sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + sproketRadiusToTrackOne);
-                sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + sproketRadiusToTrackOne);
+                sprocketSpeed_L = (linear - trackWidth * 0.5 * angular) / (leftSprocketRadius + sproketRadiusToTrackSurface);
+                sprocketSpeed_R = (linear + trackWidth * 0.5 * angular) / (rightSprocketRadius + sproketRadiusToTrackSurface);
             }
         }
 
@@ -202,8 +202,8 @@ namespace PWRISimulator
                         double s = 1.0 / g;
                         v_out *= s;
                         w_out *= s;
-                        sprocketVL = (v_out - trackWidth * 0.5 * w_out) / (leftSprocketRadius + sproketRadiusToTrackOne);
-                        sprocketVR = (v_out + trackWidth * 0.5 * w_out) / (rightSprocketRadius + sproketRadiusToTrackOne);
+                        sprocketVL = (v_out - trackWidth * 0.5 * w_out) / (leftSprocketRadius + sproketRadiusToTrackSurface);
+                        sprocketVR = (v_out + trackWidth * 0.5 * w_out) / (rightSprocketRadius + sproketRadiusToTrackSurface);
                         break;
 
                     case ProjectionMode.RadialRatio:
@@ -211,8 +211,8 @@ namespace PWRISimulator
                             cmdLinearVel, cmdAngularVel,
                             maxLinearVelocity, maxAngularVelocity,
                             p, ratio);
-                        sprocketVL = (v_out - trackWidth * 0.5 * w_out) / (leftSprocketRadius + sproketRadiusToTrackOne);
-                        sprocketVR = (v_out + trackWidth * 0.5 * w_out) / (rightSprocketRadius + sproketRadiusToTrackOne);
+                        sprocketVL = (v_out - trackWidth * 0.5 * w_out) / (leftSprocketRadius + sproketRadiusToTrackSurface);
+                        sprocketVR = (v_out + trackWidth * 0.5 * w_out) / (rightSprocketRadius + sproketRadiusToTrackSurface);
                         break;
 
                     case ProjectionMode.LimitTrackVel:
@@ -223,8 +223,8 @@ namespace PWRISimulator
                         trackVR = Math.Min((v_out + trackWidth * 0.5 * w_out), MaxTrackVel);
                         trackVR = Math.Max(trackVR, -MaxTrackVel);
 
-                        sprocketVL = trackVL / (leftSprocketRadius + sproketRadiusToTrackOne);
-                        sprocketVR = trackVR / (rightSprocketRadius + sproketRadiusToTrackOne);
+                        sprocketVL = trackVL / (leftSprocketRadius + sproketRadiusToTrackSurface);
+                        sprocketVR = trackVR / (rightSprocketRadius + sproketRadiusToTrackSurface);
                         break;
                 }
                 
