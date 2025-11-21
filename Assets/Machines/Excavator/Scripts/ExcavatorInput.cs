@@ -146,7 +146,7 @@ namespace PWRISimulator.ROS
                         var cmd_vel = trackSubscriber.VelocityCmd;
                         if  (cmd_vel != null)
                         {
-                            trackModuleDeadTimeDelay.addInputData(currentTime*1000.0, cmd_vel);   
+                            trackModuleDeadTimeDelay.addInputData(currentTime*1000.0, cmd_vel);
                         }                            
                         break;
 
