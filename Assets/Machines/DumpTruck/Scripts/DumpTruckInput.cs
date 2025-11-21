@@ -56,7 +56,7 @@ namespace PWRISimulator.ROS
             joints = dumpTruckJoint;
             rotateDeadTimeDelay         = new DeadTimeDelay<double>(joints.rotate_joint.deadTime);
             dumpDeadTimeDelay           = new DeadTimeDelay<double>(joints.dump_joint.deadTime);
-            rightSprocketDeadTimeDelay  = new DeadTimeDelay<double>(joints.leftSprocket.deadTime);
+            rightSprocketDeadTimeDelay  = new DeadTimeDelay<double>(joints.rightSprocket.deadTime);
             leftSprocketDeadTimeDelay   = new DeadTimeDelay<double>(joints.leftSprocket.deadTime);
             trackModuleDeadTimeDelay    = new DeadTimeDelay<TwistMsg>(joints.trackDeadTime);
             trackVolumeCmdDeadTimeDelay    = new DeadTimeDelay<JointCmdMsg>(joints.trackDeadTime);
