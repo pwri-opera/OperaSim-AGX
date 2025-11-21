@@ -17,7 +17,7 @@ MonoBehaviour:
   m_frictionModel: {fileID: 11400000, guid: 0db3c3258e7331947befe8c8db01ffb4, type: 2}
   m_youngsModulus: 400000000
   m_surfaceViscosity: {x: 0.000005, y: 0.000005}
-  m_frictionCoefficients: {x: 1, y: 0.2}
+  m_frictionCoefficients: {x: 0.6, y: 0.35}
   m_restitution: 0
   m_damping: 0.04
   m_adhesiveForce: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   m_useContactArea: 0
   m_contactReductionMode: 1
   m_contactReductionLevel: 2
+  m_wireFrictionCoefficients: {x: 0.41667, y: 0.41667}

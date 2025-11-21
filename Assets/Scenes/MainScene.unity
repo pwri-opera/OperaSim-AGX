@@ -844,7 +844,7 @@ MonoBehaviour:
   m_isSensor: 0
   m_enableMassProperties: 1
   m_material: {fileID: 11400000, guid: 20f89c31fdffb92448b53f588dee8470, type: 2}
-  m_radius: 0.37
+  m_radius: 0.35
   m_height: 0.26
 --- !u!114 &36189871
 MonoBehaviour:
@@ -5598,6 +5598,50 @@ ArticulationBody:
   m_Immovable: 0
   m_UseGravity: 1
   m_CollisionDetectionMode: 0
+--- !u!1 &140026013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 140026015}
+  - component: {fileID: 140026014}
+  m_Layer: 0
+  m_Name: AGXUnity.RuntimeObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &140026014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140026013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6a9e4af77e3804aae97d5030ab5f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &140026015
+Transform:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140026013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &141632341
 GameObject:
   m_ObjectHideFlags: 0
@@ -6949,19 +6993,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 0
-    m_defaultValue: 1
+    m_defaultValue: 4152
     m_userValue: 2000
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 2000, y: 2000, z: 2000}
+    m_defaultValue: {x: 2295.8064, y: 3305.077, z: 1145.9243}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0, y: 0, z: 0}
+    m_defaultValue: {x: -0.9617629, y: 2.1811724, z: -30.172829}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0.005895995, y: 0.71843934, z: 1.5849702}
     m_userValue: {x: 0, y: 0.27812976, z: 1.7373104}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -8206,7 +8250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdateConstraints: 1
   activateDeadTime: 1
-  trackDeadTime: 200
+  trackDeadTime: 757.725521
   leftSprocket:
     joint: {fileID: 1075737619}
     convertor: {fileID: 0}
@@ -8215,7 +8259,7 @@ MonoBehaviour:
       controlEnabled: 1
       controlType: 1
       controlValue: 0
-      controlMaxForce: Infinity
+      controlMaxForce: 50000
       deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 1075737619}
@@ -8234,7 +8278,7 @@ MonoBehaviour:
       controlEnabled: 1
       controlType: 1
       controlValue: 0
-      controlMaxForce: Infinity
+      controlMaxForce: 50000
       deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 1052463106}
@@ -8467,8 +8511,8 @@ MonoBehaviour:
   frontSubscriber: {fileID: 196977366}
   trackSubscriber: {fileID: 196977365}
   settingSubscriber: {fileID: 196977364}
-  movementControlType: 1
-  controlType: 0
+  movementControlType: 0
+  controlType: 1
   boomCylConv: {fileID: 196977369}
   armCylConv: {fileID: 196977368}
   bucketCylConv: {fileID: 196977367}
@@ -8597,11 +8641,11 @@ MonoBehaviour:
     Kp: 0.05
     Ki: 0.01
     Kd: 0.005
-  maxLinearVelocity: 3
-  maxAngularVelocity: 1
+  maxLinearVelocity: 0.9166
+  maxAngularVelocity: 400
   EnableVWBehaviorMode: 0
-  VWDecelFactor: 1
-  VWRatioFactor: 0.9
+  VWDecelFactor: 2
+  VWRatioFactor: 0.9900000095367432
 --- !u!1 &199581701
 GameObject:
   m_ObjectHideFlags: 0
@@ -9284,7 +9328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_model: 0
   m_properties: 1
-  m_radius: 0.37
+  m_radius: 0.35
   m_frame:
     m_parent: {fileID: 207341174}
     m_localPosition: {x: 5.684342e-14, y: -0.0000004768373, z: 5.684342e-14}
@@ -9322,11 +9366,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 100.059715
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 3.6279986, y: 6.1286573, z: 3.6279986}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -9334,7 +9378,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0, y: 0, z: -0.01099968}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -10021,8 +10065,8 @@ MonoBehaviour:
     m_primaryDirection: 0
   - ContactMaterial: {fileID: 11400000, guid: 0918c4f0f39db074996223df4f73098a, type: 2}
     m_isOriented: 1
-    m_referenceObject: {fileID: 0}
-    m_primaryDirection: 0
+    m_referenceObject: {fileID: 215000909}
+    m_primaryDirection: 2
   - ContactMaterial: {fileID: 11400000, guid: 1f27f769367476547b70bceb333a242f, type: 2}
     m_isOriented: 0
     m_referenceObject: {fileID: 0}
@@ -10121,15 +10165,15 @@ MonoBehaviour:
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 219.61261, y: 650.43726, z: 460.10428}
+    m_defaultValue: {x: 219.61263, y: 650.43726, z: 460.1043}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0, y: -3.5527137e-15, z: 0.27049977}
+    m_defaultValue: {x: 0, y: -3.5527137e-15, z: 0.27049983}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0.34499997, z: 0.17870006}
+    m_defaultValue: {x: -0, y: 0.345, z: 0.17870006}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -10149,6 +10193,7 @@ Transform:
   - {fileID: 116996838}
   - {fileID: 1977150889}
   - {fileID: 1583206079}
+  - {fileID: 1387712016}
   m_Father: {fileID: 1412500084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &216436432
@@ -12363,11 +12408,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 62.20354
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 1.6504674, y: 2.7991595, z: 1.6504674}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -16467,19 +16512,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 837.37274
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 705.10803, y: 1516.1049, z: 860.82855}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0, y: 0, z: 0}
+    m_defaultValue: {x: 3.5527137e-15, y: -1.7763568e-15, z: -1.394077}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -2.0816682e-17, y: 0.34564862, z: -0.42254955}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -26180,50 +26225,6 @@ MonoBehaviour:
     m_parent: {fileID: 587158321}
     m_localPosition: {x: 0, y: 0, z: 0}
     m_localRotation: {x: -0.000000029802326, y: 0.70710677, z: -0.00000002980232, w: 0.7071069}
---- !u!1 &589976240
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 589976242}
-  - component: {fileID: 589976241}
-  m_Layer: 0
-  m_Name: AGXUnity.RuntimeObjects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &589976241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589976240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6a9e4af77e3804aae97d5030ab5f9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &589976242
-Transform:
-  m_ObjectHideFlags: 8
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589976240}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &590905066
 GameObject:
   m_ObjectHideFlags: 0
@@ -27988,7 +27989,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 1.2449999, z: -0.00000003455619}
+    m_defaultValue: {x: -0, y: 1.2449999, z: 0.00000020384705}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -32898,7 +32899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &738989125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32913,7 +32914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdateConstraints: 1
   activateDeadTime: 1
-  trackDeadTime: 0.21789073
+  trackDeadTime: 217.89073
   rotateJointEnabled: 0
   leftSprocket:
     constraint: {fileID: 340044167}
@@ -32934,7 +32935,7 @@ MonoBehaviour:
     controlEnabled: 1
     controlType: 1
     controlValue: 0
-    controlMaxForce: 600000
+    controlMaxForce: 60000
     deadTime: 0.21789073
   rotate_joint:
     constraint: {fileID: 0}
@@ -33078,7 +33079,7 @@ MonoBehaviour:
   vesselStateController: {fileID: 0}
   dumpTruckJoint: {fileID: 738989125}
   movementControlType: 1
-  trackControlType: 0
+  trackControlType: 1
   vesselControlType: 0
   rotateControlType: 0
   enabledDummy: 0
@@ -33473,11 +33474,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 100.059715
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 3.6279986, y: 6.1286573, z: 3.6279986}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -33485,7 +33486,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0, y: 0, z: -0.01099968}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -33503,7 +33504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_model: 0
   m_properties: 1
-  m_radius: 0.37
+  m_radius: 0.35
   m_frame:
     m_parent: {fileID: 751936173}
     m_localPosition: {x: 5.684342e-14, y: -0.0000004768373, z: 5.684342e-14}
@@ -33897,15 +33898,15 @@ MonoBehaviour:
     m_userValue: 16520
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 22927.34, y: 29069.451, z: 11630.893}
+    m_defaultValue: {x: 22927.34, y: 29069.451, z: 11630.894}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: -1121.7374, y: -5012.074, z: -2679.7793}
+    m_defaultValue: {x: -1121.738, y: -5012.074, z: -2679.7805}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0.2530103, y: 0.71419585, z: -0.8289072}
+    m_defaultValue: {x: -0.2530103, y: 0.7141959, z: -0.8289072}
     m_userValue: {x: 0, y: -0.116886854, z: -0.6055708}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -36022,11 +36023,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 1
+    m_defaultValue: 62.20354
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 1, y: 1, z: 1}
+    m_defaultValue: {x: 1.6504674, y: 2.7991595, z: 1.6504674}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
@@ -38244,7 +38245,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b9f68529a2500e40928a90c15903c22, type: 2}
+  - {fileID: 966985873}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -38387,7 +38388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_numberOfNodes: 50
-  m_thickness: 0.12
+  m_thickness: 0.02
   m_width: 0.77
   m_initialTensionDistance: 0.001
   m_properties: {fileID: 11400000, guid: 8c70830d66deb8f4d80956daae5baf05, type: 2}
@@ -39205,7 +39206,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.73999983, y: 0.12999997, z: 0.74}
+  m_LocalScale: {x: 0.6999998, y: 0.12999997, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 36189869}
@@ -41643,6 +41644,87 @@ MonoBehaviour:
   m_material: {fileID: 11400000, guid: 20f89c31fdffb92448b53f588dee8470, type: 2}
   m_radius: 0.162
   m_height: 0.6
+--- !u!21 &966985873
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default Shape Visual
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.8
+    - _GlossyReflections: 1
+    - _Metallic: 0.3
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 0.93, g: 0.93, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &970499763
 GameObject:
   m_ObjectHideFlags: 0
@@ -46391,7 +46473,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 1.3489997, z: 0.00000034879952}
+    m_defaultValue: {x: -0, y: 1.3489999, z: 0.0000005403797}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -47047,8 +47129,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 1052463101}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
+    m_compliance: 1e-11
+    m_damping: 0.04
     m_forceRange:
       Min: -Infinity
       Max: Infinity
@@ -48327,8 +48409,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 1075737614}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
+    m_compliance: 1e-11
+    m_damping: 0.044
     m_forceRange:
       Min: -Infinity
       Max: Infinity
@@ -53246,7 +53328,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.73999983, y: 0.12999997, z: 0.74}
+  m_LocalScale: {x: 0.6999998, y: 0.12999997, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2033800153}
@@ -59219,19 +59301,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 0
-    m_defaultValue: 1
+    m_defaultValue: 3912.32
     m_userValue: 12020
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 12020, y: 12020, z: 12020}
+    m_defaultValue: {x: 5218.2373, y: 10129.827, z: 8617.243}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0, y: 0, z: 0}
+    m_defaultValue: {x: -1625.4226, y: 344.06714, z: 106.80635}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0.32022277, y: 1.8884008, z: 1.7481343}
     m_userValue: {x: 0, y: 0, z: -0.4097433}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -60792,6 +60874,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1384334845}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1387712015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1387712016}
+  m_Layer: 0
+  m_Name: DirectionFriction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1387712016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387712015}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 215000912}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1394548920
 GameObject:
   m_ObjectHideFlags: 0
@@ -68930,6 +69043,7 @@ GameObject:
   - component: {fileID: 1623369583}
   - component: {fileID: 1623369587}
   - component: {fileID: 1623369586}
+  - component: {fileID: 1623369588}
   m_Layer: 0
   m_Name: MeasureDistance
   m_TagString: Untagged
@@ -69080,6 +69194,25 @@ MonoBehaviour:
   dist_x: 0.008095995
   dist_y: 0.43126583
   dist_z: 0.1833601
+--- !u!114 &1623369588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623369579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720d34d3d5600f845bc066dd0b27b4d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: 
+  object1: {fileID: 829014739}
+  object2: {fileID: 1927549650}
+  distance: 2.364
+  dist_x: 2.364
+  dist_y: 0
+  dist_z: 0
 --- !u!1 &1626534105
 GameObject:
   m_ObjectHideFlags: 0
@@ -322892,19 +323025,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 0
-    m_defaultValue: 1
+    m_defaultValue: 62.399998
     m_userValue: 15
   m_inertiaDiagonal:
     m_defaultToggle: 0
-    m_defaultValue: {x: 15, y: 15, z: 15}
+    m_defaultValue: {x: 0.45200002, y: 8.452, z: 8.9}
     m_userValue: {x: 0.113, y: 2.113, z: 2.225}
   m_inertiaOffDiagonal:
     m_defaultToggle: 0
-    m_defaultValue: {x: 0, y: 0, z: 0}
+    m_defaultValue: {x: 0, y: 1.8758328e-15, z: 0}
     m_userValue: {x: 0, y: 0, z: 0}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0, y: 0, z: 0}
+    m_defaultValue: {x: -0, y: -0.39199996, z: -0.069999695}
     m_userValue: {x: 0, y: -0.419076, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -323284,7 +323417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_numberOfNodes: 50
-  m_thickness: 0.12
+  m_thickness: 0.02
   m_width: 0.77
   m_initialTensionDistance: 0.001
   m_properties: {fileID: 11400000, guid: 8c70830d66deb8f4d80956daae5baf05, type: 2}
@@ -325378,7 +325511,7 @@ MonoBehaviour:
   m_isSensor: 0
   m_enableMassProperties: 1
   m_material: {fileID: 11400000, guid: 20f89c31fdffb92448b53f588dee8470, type: 2}
-  m_radius: 0.37
+  m_radius: 0.35
   m_height: 0.26
 --- !u!114 &2033800155
 MonoBehaviour:
@@ -328021,7 +328154,7 @@ MonoBehaviour:
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0.009999961, y: 0.9010005, z: -0.00000003007344}
+    m_defaultValue: {x: 0.009999961, y: 0.9010003, z: 0.00000011867101}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -331647,4 +331780,4 @@ SceneRoots:
   - {fileID: 1301564170}
   - {fileID: 954400918}
   - {fileID: 1623369581}
-  - {fileID: 589976242}
+  - {fileID: 140026015}
