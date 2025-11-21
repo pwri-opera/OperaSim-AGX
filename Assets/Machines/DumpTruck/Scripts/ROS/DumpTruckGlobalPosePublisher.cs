@@ -25,7 +25,7 @@ namespace PWRISimulator.ROS
                 MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, time);
 
                 odometryMsg.header.frame_id="world";
-                odometryMsg.child_frame_id="ic120_tf/base_link";
+                odometryMsg.child_frame_id=$"{MachineName()}_tf/base_link";
                 odometryMsg.pose.pose.position = trackLink.transform.position.To<FLU>();
                 odometryMsg.pose.pose.orientation = trackLink.transform.rotation.To<FLU>();
             }
@@ -38,7 +38,7 @@ namespace PWRISimulator.ROS
         protected override string TopicPhrase()
         {
             //return "/base_link/pose";
-            return "/tracking/ground_truth";
+            return "/global_pose";
         }
         protected override uint Frequency()
         {

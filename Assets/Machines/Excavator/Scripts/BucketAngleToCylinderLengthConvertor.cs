@@ -15,6 +15,7 @@ namespace PWRISimulator
         public GameObject cylinderRoot;
         public GameObject cylinderBindPoint;
         public GameObject armCylinderBindPoint;
+        public GameObject armPin;
         [Tooltip("End point of the bucket side of the H link")]
         public GameObject HLinkRoot; // 
         [Tooltip("End point of the arm side of the I link")]
@@ -29,6 +30,8 @@ namespace PWRISimulator
 
         private float alpha = 0.5f; // [rad]
         private float beta = 2.0f; // [rad]
+        private float kai = 0.0f; // [rad] 
+
 
         protected override void DoStart()
         {
@@ -44,22 +47,55 @@ namespace PWRISimulator
             ILinkRootToCylinderRoot = (cylinderRoot.transform.position - ILinkRoot.transform.position).magnitude;
             bucketPinTobucketEdge = (bucketEdge.transform.position - bucketPin.transform.position).magnitude;
 
-            alpha = Mathf.Deg2Rad * Vector3.Angle(cylinderRoot.transform.position - ILinkRoot.transform.position, armCylinderBindPoint.transform.position - ILinkRoot.transform.position);
+            // alpha = Mathf.Deg2Rad * Vector3.Angle(cylinderRoot.transform.position - ILinkRoot.transform.position, armCylinderBindPoint.transform.position - ILinkRoot.transform.position);
+            alpha = Mathf.PI - Mathf.Deg2Rad * Vector3.Angle(cylinderRoot.transform.position - ILinkRoot.transform.position, bucketPin.transform.position - ILinkRoot.transform.position);
+            kai = Mathf.Deg2Rad * Vector3.Angle( ILinkRoot.transform.position - bucketPin.transform.position, armPin.transform.position - bucketPin.transform.position);
+
+            // ---- Debug.Log 追記 ----
+            // Debug.Log($"[DoStart] alpha={alpha:F6}");
+            // Debug.Log($"[DoStart] beta={beta:F6}");
+            // Debug.Log($"[DoStart] kai={kai:F6}");
+            // Debug.Log($"[DoStart] bucketPinToILinkRoot={bucketPinToILinkRoot:F6}, bucketPinToHLinkRoot={bucketPinToHLinkRoot:F6}");
+            // Debug.Log($"[DoStart] bucketPinToILinkRoot={bucketPinToILinkRoot:F6}, bucketPinToHLinkRoot={bucketPinToHLinkRoot:F6}");
+            // Debug.Log($"[DoStart] HLinkLength={HLinkLength:F6}, ILinkLength={ILinkLength:F6}, ILinkRootToCylinderRoot={ILinkRootToCylinderRoot:F6}, bucketPinTobucketEdge={bucketPinTobucketEdge:F6}");
+
         }
         public override float CalculateCylinderRodTelescoping(float _angle)
         {
+            float linkLen = CalculateCylinderLinkLength(_angle);
+            float telescoping = linkLen - cylinderLength - cylinderRodDefaultLength;
+            // ---- Debug.Log 追記 ----
+            // Debug.Log($"[CalculateCylinderRodTelescoping] _angle(rad)={_angle:F6}");
+            // Debug.Log($"[CalculateCylinderRodTelescoping] linkLen={linkLen:F6}, cylinderLength={cylinderLength:F6}, cylinderRodDefaultLength={cylinderRodDefaultLength:F6}");
+            // Debug.Log($"[CalculateCylinderRodTelescoping] telescoping={telescoping:F6}");
+
             return CalculateCylinderLinkLength(_angle) - cylinderLength - cylinderRodDefaultLength;
         }
 
         protected override float CalculateCylinderLinkLength(float _angle)
         {
-            float gamma = beta - _angle; 
+            // jointMaxAngle <->jointMinAngle の間で各リンク角度を制限
+            if (Mathf.Deg2Rad * jointMaxAngle < _angle)
+                _angle = Mathf.Deg2Rad * jointMaxAngle;
+                
+            else if (Mathf.Deg2Rad * jointMinAngle > _angle)
+                _angle = Mathf.Deg2Rad * jointMinAngle;
+                
+            float gamma = beta - (_angle - kai); 
             float delta = Mathf.PI - gamma;
             float diagonal = Mathf.Sqrt( Mathf.Pow(bucketPinToILinkRoot, 2.0f) + Mathf.Pow(bucketPinToHLinkRoot, 2.0f) - 2 * bucketPinToILinkRoot * bucketPinToHLinkRoot * Mathf.Cos(delta));
             float eta = Mathf.Acos((Mathf.Pow(ILinkLength, 2.0f) + Mathf.Pow(diagonal, 2.0f) - Mathf.Pow(HLinkLength, 2.0f)) / (2 * ILinkLength * diagonal));
             float omega = Mathf.Acos( (Mathf.Pow(bucketPinToILinkRoot, 2.0f) + Mathf.Pow(diagonal, 2.0f) - Mathf.Pow(bucketPinToHLinkRoot, 2.0f)) / (2 * bucketPinToILinkRoot * diagonal) );
             float lamda = delta < Mathf.PI? eta + omega: eta - omega;
             float psi = Mathf.PI - alpha - lamda;
+            
+            // ---- Debug.Log 追記 ----
+            // Debug.Log($"[CalculateCylinderLinkLength] gameObject={name}");
+            // Debug.Log($"[CalculateCylinderLinkLength] _angle(rad)={_angle:F6}, beta(rad)={beta:F6}, alpha(rad)={alpha:F6}");
+            // Debug.Log($"[CalculateCylinderLinkLength] gamma={gamma:F6}, delta={delta:F6}, diagonal={diagonal:F6}");
+            // Debug.Log($"[CalculateCylinderLinkLength] eta={eta:F6}, omega={omega:F6}, lamda={lamda:F6}, psi={psi:F6}");
+            // Debug.Log($"[CalculateCylinderLinkLength] ILinkRootToCylinderRoot={ILinkRootToCylinderRoot:F6}, ILinkLength={ILinkLength:F6}");
+
             return Mathf.Sqrt( Mathf.Pow(ILinkRootToCylinderRoot, 2.0f) + Mathf.Pow(ILinkLength, 2.0f) - 2 * ILinkRootToCylinderRoot * ILinkLength * Mathf.Cos(psi)); 
         }
 
