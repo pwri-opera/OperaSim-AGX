@@ -13,10 +13,10 @@ namespace PWRISimulator.ROS
         public DumpVesselStateController vesselStateController;
 
         [SerializeField] DumpTruckJoint dumpTruckJoint;
-        [SerializeField] ConstractionMovementControlType movementControlType;
-        [SerializeField] ControlType trackControlType = ControlType.Position;
-        [SerializeField] ControlType vesselControlType = ControlType.Position;
-        [SerializeField] ControlType rotateControlType = ControlType.Position;
+        [SerializeField] public ConstractionMovementControlType movementControlType;
+        [SerializeField] public ControlType trackControlType = ControlType.Position;
+        [SerializeField] public ControlType vesselControlType = ControlType.Position;
+        [SerializeField] public ControlType rotateControlType = ControlType.Position;
 
         [Header("Dummy")]
         [SerializeField] bool enabledDummy;

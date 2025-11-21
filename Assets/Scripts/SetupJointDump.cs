@@ -8,17 +8,17 @@ using UnityEngine;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ƒ[ƒh‚Ìƒ_ƒ“ƒvƒNƒ[ƒ‰‚ÌƒWƒ‡ƒCƒ“ƒg•œŒ³ˆ—
+    /// ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Ìƒ_ï¿½ï¿½ï¿½vï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌƒWï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class SetupJointDump : MonoBehaviour
     {
         private DumpTruckJoint joints;
         private DumpTruckInput input;
 
-        // ‘S²“®ìŠ®—¹ƒtƒ‰ƒO
+        // ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ìŠ®ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
         private bool completedFlag = false;
 
-        // Še²‚Ì“®ìŠ®—¹ƒtƒ‰ƒO
+        // ï¿½eï¿½ï¿½ï¿½Ì“ï¿½ï¿½ìŠ®ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
         //private bool leftSprocketFlag = false;
         //private bool rightSprocketFlag = false;
         private bool dump_jointFlag = false;
@@ -30,7 +30,7 @@ namespace PWRISimulator
 
             var dumpObj = this.gameObject;
 
-            // ƒNƒ‰ƒX“Ç‚İ‚İ
+            // ï¿½Nï¿½ï¿½ï¿½Xï¿½Ç‚İï¿½ï¿½ï¿½
             input = dumpObj.GetComponent<DumpTruckInput>();
             joints = input.joints;
         }
@@ -40,13 +40,13 @@ namespace PWRISimulator
         {
             if (GlobalVariables.SetupJointDumpFlag && !completedFlag)
             {
-                // d‹@‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg
+                // ï¿½dï¿½@ï¿½ÌƒQï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g
                 var dumpObj = this.gameObject;
 
-                // JSONŒ`®‚Å•Û‘¶‚µ‚½ƒf[ƒ^‚ğ“Ç
+                // JSONï¿½`ï¿½ï¿½ï¿½Å•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½Çï¿½
                 var json_ms = GlobalVariables.saveMachines;
 
-                // ƒIƒuƒWƒFƒNƒg‚Æ“¯–¼‚Ìƒf[ƒ^‚ğ—˜—p
+                // ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Æ“ï¿½ï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ğ—˜—p
                 int myidx = -1;
                 for (int i = 1; i < json_ms.data.Length; i++)
                 {
@@ -63,8 +63,10 @@ namespace PWRISimulator
 
                 if (myidx > 0)
                 {
-                    // ControlType‚ÍSpeediŠÖß‚ªˆÚ“®‚·‚éŠp‘¬“x‚ğ“ü—Í‚·‚éj
-                    input.controlType = ControlType.Speed;
+                    // ControlTypeï¿½ï¿½Speedï¿½iï¿½Öß‚ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½j
+                    input.trackControlType = ControlType.Speed;
+                    input.vesselControlType = ControlType.Speed;
+                    input.rotateControlType = ControlType.Speed;
                     input.movementControlType = ConstractionMovementControlType.ActuatorCommand;
 
                     joints.leftSprocket.controlType = ControlType.Speed;
@@ -72,34 +74,34 @@ namespace PWRISimulator
                     joints.dump_joint.controlType = ControlType.Speed;
 
 
-                    // ‹–—eŒë·
-                    const double error = 0.0174533f; // ƒvƒ‰ƒXEƒ}ƒCƒiƒX1“x‚­‚ç‚¢‹–—e
-                    // “®ì‘¬“x
-                    const float speed = 0.523599f; // 30“x‚­‚ç‚¢‚Éİ’è
+                    // ï¿½ï¿½ï¿½eï¿½ë·
+                    const double error = 0.0174533f; // ï¿½vï¿½ï¿½ï¿½Xï¿½Eï¿½}ï¿½Cï¿½iï¿½X1ï¿½xï¿½ï¿½ï¿½ç‚¢ï¿½ï¿½ï¿½e
+                    // ï¿½ï¿½ï¿½ì‘¬ï¿½x
+                    const float speed = 0.523599f; // 30ï¿½xï¿½ï¿½ï¿½ç‚¢ï¿½Éİ’ï¿½
 
 
-                    // ·•ªŠi”[
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[
                     float diff = 0.0f;
 
 
-                    // “®ìŠ®—¹Šm”F
+                    // ï¿½ï¿½ï¿½ìŠ®ï¿½ï¿½ï¿½mï¿½F
                     if (json_ms.data[myidx].joint.dump_joint - error < joints.dump_joint.CurrentPosition &&
                         json_ms.data[myidx].joint.dump_joint + error > joints.dump_joint.CurrentPosition)
                     {
-                        // ‘¬“xƒ[ƒ‚Å’â~‚³‚¹‚é
+                        // ï¿½ï¿½ï¿½xï¿½[ï¿½ï¿½ï¿½Å’ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         joints.dump_joint.controlValue = 0.0f;
-                        // ƒtƒ‰ƒOØ‘Ö
+                        // ï¿½tï¿½ï¿½ï¿½Oï¿½Ø‘ï¿½
                         dump_jointFlag = true;
                     }
 
 
-                    // ‘S²“®ìŠ®—¹Šm”F
+                    // ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ìŠ®ï¿½ï¿½ï¿½mï¿½F
                     if (dump_jointFlag)
                     {
-                        // ’¼Ú§Œä‚ğ‰ğœ
+                        // ï¿½ï¿½ï¿½Úï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         input.movementControlType = ConstractionMovementControlType.TwistCommand;
 
-                        // “®ìŠ®—¹ƒtƒ‰ƒO
+                        // ï¿½ï¿½ï¿½ìŠ®ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
                         completedFlag = true;
                         GlobalVariables.SetupJointDumpCount += 1;
 
@@ -117,7 +119,7 @@ namespace PWRISimulator
                     //UnityEngine.Debug.Log("Flag: " + dump_jointFlag);
 
 
-                    // ²‚É’l‚ğƒZƒbƒg
+                    // ï¿½ï¿½ï¿½É’lï¿½ï¿½ï¿½Zï¿½bï¿½g
                     if (!dump_jointFlag)
                     {
                         diff = (float)(joints.dump_joint.CurrentPosition - json_ms.data[myidx].joint.dump_joint);
@@ -133,10 +135,10 @@ namespace PWRISimulator
                 }
                 else
                 {
-                    // ’¼Ú§Œä‚ğ‰ğœ
+                    // ï¿½ï¿½ï¿½Úï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     input.movementControlType = ConstractionMovementControlType.TwistCommand;
 
-                    // “®ìŠ®—¹ƒtƒ‰ƒO
+                    // ï¿½ï¿½ï¿½ìŠ®ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
                     completedFlag = true;
                     GlobalVariables.SetupJointDumpCount += 1;
                     if ((int)GlobalVariables.Dump_ObjList.Count >= GlobalVariables.SetupJointDumpCount)
