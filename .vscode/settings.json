@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "OperaSim-AGX.sln"
+    "dotnet.defaultSolution": "OperaSim-AGX-hackathon.sln"
 }
