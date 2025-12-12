@@ -85,15 +85,15 @@ MonoBehaviour:
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 219.61263, y: 650.43726, z: 460.1043}
+    m_defaultValue: {x: 219.61275, y: 650.43744, z: 460.10443}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0, y: -3.5527137e-15, z: 0.27049983}
+    m_defaultValue: {x: 0, y: -1.7763568e-15, z: 0.27050644}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0.345, z: 0.17870006}
+    m_defaultValue: {x: -2.7755576e-17, y: 0.34499988, z: 0.17870025}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -1508,15 +1508,15 @@ MonoBehaviour:
     m_userValue: 16520
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 22927.34, y: 29069.451, z: 11630.894}
+    m_defaultValue: {x: 22927.307, y: 29069.42, z: 11630.8955}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: -1121.738, y: -5012.074, z: -2679.7805}
+    m_defaultValue: {x: -1121.7383, y: -5012.0684, z: -2679.7769}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0.2530103, y: 0.7141959, z: -0.8289072}
+    m_defaultValue: {x: -0.25301033, y: 0.7141959, z: -0.8289088}
     m_userValue: {x: 0, y: -0.116886854, z: -0.6055708}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -1910,8 +1910,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210407295067625346}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.62999827, y: -0, z: -0, w: 0.77659655}
+  m_LocalPosition: {x: -0.005323004, y: 0.09312987, z: -2.149567}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1959,11 +1959,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_referenceFrame:
     m_parent: {fileID: 7212497307607879503}
-    m_localPosition: {x: -0.005322829, y: 0.476639, z: 0}
+    m_localPosition: {x: -0.005322829, y: 0.476639, z: -0.3296854}
     m_localRotation: {x: 0.62999827, y: 0, z: 0, w: 0.77659655}
   m_connectedFrame:
     m_parent: {fileID: 5160230272981907072}
-    m_localPosition: {x: -0.024244785, y: -0.19161044, z: -0.13377585}
+    m_localPosition: {x: -0.024244785, y: -0.45122874, z: -0.33697703}
     m_localRotation: {x: 0.22622617, y: 0, z: 0, w: 0.97407484}
   m_synchronized: 1
 --- !u!114 &4348410717665483155
@@ -4158,9 +4158,10 @@ MonoBehaviour:
       m_localRotation: {x: 0.41579187, y: 0.39826098, z: 0.57923317, w: 0.5770565}
     m_end:
       m_parent: {fileID: 4889086722354612996}
-      m_localPosition: {x: -2.0037892, y: -0.026813388, z: 0.5592232}
-      m_localRotation: {x: -0.5770565, y: -0.57923317, z: 0.39826098, w: 0.41579187}
+      m_localPosition: {x: -2.0037901, y: -0.026813507, z: 0.5592258}
+      m_localRotation: {x: 0.41579187, y: 0.39826098, z: 0.57923317, w: 0.5770565}
   m_settings: {fileID: 11400000, guid: a3df81a34b356f8429051e769ec110d2, type: 2}
+  m_autoAddToTerrains: 0
 --- !u!1 &2716439114910653347
 GameObject:
   m_ObjectHideFlags: 0
