@@ -11,10 +11,10 @@ using UnityEditor;
 namespace PWRISimulator
 {
     /// <summary>
-    /// �ȒP�ȋ��ʂ̃C���^�t�F�[�X�Ō��@�̗l�X�ȃR���X�g���C���g�ɃA�N�Z�X�ł���悤�ɂ���x�[�X�N���X�B
+    /// 一般的なインタフェースで物理演算の汎用的な Constraint にアクセスできるようにするベースクラス。
     /// 
-    /// ���ۂ̌��@�N���X��(�����V���x���A�_���v�g���b�N�Ȃ�)���̃N���X���p��������B���삳������Constraint���ƂɁA�q�N���X����
-    /// ConstraintControl�p�����[�^�����[�U�ɒ񋟂��AInitialize����RegisterConstraintControl���Ăяo���ēo�^����B
+    /// 派生の物理クラス（例えばシリンダやダンプトラックなど）はこのクラスを利用します。生成された各 Constraint について、関連する
+    /// ConstraintControl パラメータをユーザに公開し、Initialize から RegisterConstraintControl を呼び出して登録します。
     /// </summary>
     [DefaultExecutionOrder(100)]
     public abstract class ConstructionMachine : ScriptComponent
@@ -22,14 +22,14 @@ namespace PWRISimulator
         #region Public
 
         /// <summary>
-        /// �����I��ConstraintControl���Ƃ�controlValue�����ꂼ���AGXUnity��Constraint�ɐݒ肷��iAGXUnity��PreStepForward
-        /// �R�[���o�b�N����j�Bfalse�̏ꍇ�́AcontrolValue��ύX����ƃ}�j���A����UpdateConstraintControls���Ăяo���K�v�B
+        /// 各種の ConstraintControl から controlValue をそれぞれ AGXUnity の Constraint に設定する
+        /// （AGXUnity の PreStepForward コールバック内）。false の場合には、controlValue を変更した場合にマニュアルで UpdateConstraintControls を呼び出す必要があります。
         /// </summary>
         public bool autoUpdateConstraints = true;
 
         /// <summary>
-        /// ConstraintControl���Ƃ�controlValue�����ꂼ���AGXUnity��Constraint�ɐݒ肷��BautoUpdateConstraints��true�ꍇ��
-        /// �����I��OnPreStepForward()����Ăяo����Ă���B
+        /// ConstraintControl から controlValue をそれぞれ AGXUnity の Constraint に設定する。
+        /// autoUpdateConstraints が true の場合は、自動的に Ord() から呼び出されます。
         /// </summary>
         public void UpdateConstraintControls()
         {
@@ -38,9 +38,10 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ����GameObject�̊K�w�ɂQ��Track��T���Ă��ꂼ���sprocket�z�C�[�����擾���Aseparation�Ƃ����o�͂�sprocket�z�C�[��
-        /// ���m�̋����ɐݒ肵�Aradius�Ƃ����o�͂�sprocket���a�{Track�����ɐݒ肵�ATrue��Ԃ��B���s�̏ꍇ�́Aseparation�Aradius
-        /// ���[���ɐݒ肵False��Ԃ��B
+        /// 指定した GameObject の両側に 2 つの Track が存在し、それぞれの sprocket ホイールを取得し、
+        /// separation という値を sprocket ホイール間の左右の距離に設定し、
+        /// radius という値を sprocket の半径（Track 接地半径）に設定して True を返す。
+        /// 失敗した場合は、separation および radius をゼロに設定し False を返す。
         /// </summary>
         public bool GetTracksSeparationAndRadius(out double separation, out double radius)
         {
@@ -64,15 +65,17 @@ namespace PWRISimulator
         #region Private
 
         /// <summary>
-        /// �o�^���ꂽ�PConstraintControl�̈ꗗ�BConstraintControl��������������AAGXUnity��Constraint��controlValue��ʐM
-        /// �����肷�邽�߂̃��X�g�BEditor���ɐݒ肳��Ȃ��APlay�������ɐݒ肳��A�g���Ă���B
+        /// 登録された各 ConstraintControl の一覧。ConstraintControl をまとめて保持し、
+        /// AGXUnity の Constraint に controlValue を送信するためのリスト。
+        /// Editor では設定されず、Play 開始時に設定され、使用されます。
         /// </summary>
         List<ConstraintControl> contraintControls = new List<ConstraintControl>();
         
         /// <summary>
-        /// Unity��Start�̑���ɁAAGXUnity�p�̏��������\�b�h�B
+        /// Unity の Start の段階で、AGXUnity 用の初期化を行うメソッド。
         /// </summary>
         /// <returns></returns>
+
         protected override bool Initialize()
         {
             bool success = base.Initialize();
@@ -92,7 +95,8 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// ConstraintControl��o�^����B�q�N���X�����삵����Constraint���Ƃɂ��̃��\�b�h��Initialize()����Ăяo���K�v�B
+        /// ConstraintControl を登録する。派生クラスで生成された Constraint については
+        /// このメソッドを Initialize() から呼び出す必要があります。
         /// </summary>
         protected void RegisterConstraintControl(ConstraintControl constraintControl)
         {
@@ -101,9 +105,10 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// AGXUnity��PreStepForward�G�x���g�B�q�N���X����I�[�o���C�h����ꍇ�́A�K�����̃y�A�����g�N���X�̃��\�b�h��
-        /// �Ăяo���Ă��������B
+        /// AGXUnity の PreStepForward イベント。
+        /// 派生クラスでオーバーライドする場合には、必ず基底クラスのこのメソッドを呼び出すようにしてください。
         /// </summary>
+
         protected virtual void OnPreStepForward()
         {
             RequestCommands();
@@ -127,7 +132,7 @@ namespace PWRISimulator
         {
             var machine = (ConstructionMachine)target;
 
-            // �f�t�H���gGUI��\��
+            // デフォルト GUI を表示
             base.OnInspectorGUI();
 
             if (showDumpContainers)
@@ -209,7 +214,7 @@ namespace PWRISimulator
                         bool enabledToggled = EditorGUILayout.Toggle("Enabled", enabled);
                         if (enabledToggled != enabled)
                         {
-                            // gameObject��active�v���p�e�B�o�R�ŗL�������Ǘ�����i�q�r�W���A���Ȃǂ��e�������悤�Ɂj
+                            // gameObject の active プロパティをフラグとして管理する（非表示、無効化などの用途を想定）
                             noMergeZones[i].enabled = true;
                             noMergeZones[i].gameObject.SetActive(enabledToggled);
                         }

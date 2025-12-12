@@ -9,11 +9,19 @@ namespace PWRISimulator.ROS
 {
     public class DumpTruckJoint : ConstructionMachine
     {
+        public bool activateDeadTime = true;
+        public double trackDeadTime = 0.0;    
+        
         [Header("Constraint Controls")]
+
+        public bool rotateJointEnabled = false;
+
         public ConstraintControl leftSprocket;
         public ConstraintControl rightSprocket;
-        public ConstraintControl rotate_joint;
         public ConstraintControl dump_joint;
+
+        [ConditionalHide(nameof(rotateJointEnabled), hideCompletely = true)]
+        public ConstraintControl rotate_joint;
 
         private DumpTruckInput input;
 
@@ -28,10 +36,10 @@ namespace PWRISimulator.ROS
                 RegisterConstraintControl(rotate_joint);
                 RegisterConstraintControl(dump_joint);
 
-                leftSprocket.constraint.Native.setEnableComputeForces(true);
-                rightSprocket.constraint.Native.setEnableComputeForces(true);
-                //rotate_joint.constraint.Native.setEnableComputeForces(true);
-                dump_joint.constraint.Native.setEnableComputeForces(true);
+            leftSprocket.constraint.Native.setEnableComputeForces(true);
+            rightSprocket.constraint.Native.setEnableComputeForces(true);
+            //rotate_joint.constraint.Native.setEnableComputeForces(true);
+            dump_joint.constraint.Native.setEnableComputeForces(true);
 
             }
             catch { }

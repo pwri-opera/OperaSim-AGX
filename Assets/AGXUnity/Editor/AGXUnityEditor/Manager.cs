@@ -78,20 +78,18 @@ namespace AGXUnityEditor
 
       // If compatibility issues, this method will try to fix them and this manager
       // will probably be loaded again after the fix.
-      if ( m_environmentState == EnvironmentState.Initialized && !VerifyCompatibility() )
+      if ( !VerifyCompatibility() )
         return;
 
-#if UNITY_2019_1_OR_NEWER
-      SceneView.duringSceneGui += OnSceneView;
-#else
-      SceneView.onSceneGUIDelegate += OnSceneView;
-#endif
+      // Initializes AGX Dynamics. We're trying to be first to do this, preventing:
+      //   - Recursive Serialization is not supported. You can't dereference a PPtr while loading.
+      // when e.g., starting Unity with an empty scene and click on a (agx) restored prefab
+      // in project tab, loading RestoredAGXFile. No clue why this error appears.
+      AGXUnity.NativeHandler.Instance.Register( null );
 
-#if UNITY_2018_1_OR_NEWER
+      SceneView.duringSceneGui += OnSceneView;
+
       EditorApplication.hierarchyChanged += OnHierarchyWindowChanged;
-#else
-      EditorApplication.hierarchyWindowChanged += OnHierarchyWindowChanged;
-#endif
 
       Selection.selectionChanged += OnSelectionChanged;
 
@@ -308,28 +306,20 @@ namespace AGXUnityEditor
       GameObject.DestroyImmediate( primitive.Node );
     }
 
-    internal static bool HasPlayerNetCompatibilityIssueWarning()
+    internal static bool HasNetRuntimeCompatibilityIssueWarning()
     {
-      return HasPlayerNetCompatibility( "warning" );
+      return HasNetRuntimeCompatibility( "warning" );
     }
 
-    internal static bool HasPlayerNetCompatibilityIssueError()
+    internal static bool HasNetRuntimeCompatibilityIssueError()
     {
-      return HasPlayerNetCompatibility( "error" );
+      return HasNetRuntimeCompatibility( "error" );
     }
 
-    private static bool HasPlayerNetCompatibility( string infoWarningOrError )
+    private static bool HasNetRuntimeCompatibility( string infoWarningOrError )
     {
-      // WARNING INFO:
-      //     Unity 2018, 2019: AGX Dynamics for Unity compiles but undefined behavior
-      //                       in players with API compatibility @ .NET Standard 2.0.
-      if ( PlayerSettings.GetApiCompatibilityLevel( BuildTargetGroup.Standalone ) != ApiCompatibilityLevel.NET_4_6 ) {
-        var apiCompatibilityLevelName =
-#if UNITY_2021_2_OR_NEWER
-          ".NET Framework";
-#else
-          ".NET 4.x";
-#endif
+      var hasMonoRuntime = PlayerSettings.GetScriptingBackend( BuildTargetGroup.Standalone ) == ScriptingImplementation.Mono2x;
+      if ( !hasMonoRuntime ) { 
         string prefix = string.Empty;
         if ( infoWarningOrError == "info" )
           prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>INFO:</b> ", Color.white );
@@ -339,8 +329,8 @@ namespace AGXUnityEditor
           prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>ERROR:</b> ", Color.red );
 
         var message = prefix +
-                      $"AGX Dynamics for Unity requires .NET API compatibility level: {apiCompatibilityLevelName}.\n" +
-                      $"<b>AGXUnity -> Settings -> .NET Compatibility Level</b>";
+                      $"AGX Dynamics for Unity requires Mono .NET Runtime: .\n" +
+                      $"<b>AGXUnity -> Settings -> .NET Runtime</b>";
         if ( infoWarningOrError == "info" )
           Debug.Log( message );
         else if ( infoWarningOrError == "warning" )
@@ -476,7 +466,11 @@ namespace AGXUnityEditor
 
       // Deleted RigidBody component leaves dangling MassProperties
       // so we've to delete them explicitly.
+#if UNITY_6000_0_OR_NEWER
+      var mps = Object.FindObjectsByType<AGXUnity.MassProperties>(FindObjectsSortMode.None);
+#else
       var mps = Object.FindObjectsOfType<AGXUnity.MassProperties>();
+#endif
       foreach ( var mp in mps ) {
         if ( mp.RigidBody == null ) {
           Undo.DestroyObjectImmediate( mp );
@@ -530,9 +524,7 @@ namespace AGXUnityEditor
         EditorData.Instance.GC();
     }
 
-#if UNITY_2020_1_OR_NEWER
     private static double s_lastPickGameObjectTime = 0.0;
-#endif
 
     private static bool TimeToPick()
     {
@@ -542,15 +534,11 @@ namespace AGXUnityEditor
       // and that takes a lot of time (e.g., a scene with many
       // constraints). With this we're only calling PickGameObject
       // in at maximum 10 times per second.
-#if UNITY_2020_1_OR_NEWER
       if ( EditorApplication.timeSinceStartup - s_lastPickGameObjectTime > 0.1 ) {
         s_lastPickGameObjectTime = EditorApplication.timeSinceStartup;
         return true;
       }
       return false;
-#else
-      return true;
-#endif
     }
 
     public static void UpdateMouseOverPrimitives( Event current, bool forced = false )
@@ -804,8 +792,6 @@ namespace AGXUnityEditor
         return EnvironmentState.Uninitialized;
       }
 
-      HasPlayerNetCompatibilityIssueWarning();
-
       return EnvironmentState.Initialized;
 #endif
       }
@@ -822,12 +808,8 @@ namespace AGXUnityEditor
         if ( (float)EditorApplication.timeSinceStartup - lastRequestData.Float > 10.0f ) {
           lastRequestData.Float = (float)EditorApplication.timeSinceStartup;
           lastRequestData.Bool = true;
-#if UNITY_2019_3_OR_NEWER
           Debug.LogWarning( "AGX Dynamics binaries aren't properly loaded into Unity - requesting Unity to reload assemblies..." );
           EditorUtility.RequestScriptReload();
-#else
-          Debug.LogWarning( "AGX Dynamics binaries aren't properly loaded into Unity - restart Unity manually." );
-#endif
         }
       }
 
@@ -882,7 +864,6 @@ namespace AGXUnityEditor
         result = VerifyDotNetAssemblyCompatibility( dotNetAssemblyName ) &&
                  result;
 
-#if UNITY_2019_4_OR_NEWER
       if ( !result ) {
         var defineSymbol = "AGX_DYNAMICS_UPDATE_REBUILD";
         if ( Build.DefineSymbols.Contains( defineSymbol ) )
@@ -890,7 +871,6 @@ namespace AGXUnityEditor
         else
           Build.DefineSymbols.Add( defineSymbol );
       }
-#endif
 
       return result;
     }
@@ -904,12 +884,6 @@ namespace AGXUnityEditor
       // Wasn't able to find any installed version of the assembly - it's up to Unity to handle this...
       if ( installedDll == null || !installedDll.Exists )
         return true;
-
-      // Initializes AGX Dynamics. We're trying to be first to do this, preventing:
-      //   - Recursive Serialization is not supported. You can't dereference a PPtr while loading.
-      // when e.g., starting Unity with an empty scene and click on a (agx) restored prefab
-      // in project tab, loading RestoredAGXFile. No clue why this error appears.
-      AGXUnity.NativeHandler.Instance.Register( null );
 
       if ( !currDll.Exists || HasBeenChanged( currDll, installedDll ) ) {
         Debug.Log( $"<color=green>New version of {dotNetAssemblyName} located in: " + installedDll.Directory + ". Copying it to current project.</color>" );

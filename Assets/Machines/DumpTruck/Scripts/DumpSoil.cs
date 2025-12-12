@@ -415,7 +415,6 @@ namespace PWRISimulator
         void OnPostStepForward()
         {
             needsUpdate = true;
-
             UpdateDoorForce();
         }
 
@@ -424,8 +423,7 @@ namespace PWRISimulator
         /// </summary>
         protected override void OnEnable()
         {
-            if (Simulation.HasInstance)
-                Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
+            Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
             base.OnEnable();
         }
 
@@ -469,6 +467,8 @@ namespace PWRISimulator
             var soilSimulation = terrainNative.getSoilSimulationInterface();
             var granulars = soilSimulation.getSoilParticles();
             int granularsCount = (int)granulars.size();
+
+            //  Debug.Log("canMerge: " + canMerge);
 
             // 各粒子を反復
             for (int i = 0; i < granularsCount; ++i)
@@ -637,7 +637,7 @@ namespace PWRISimulator
                 }
                 previousDensity = density;
             }
-        }
+        }  
 
         #endregion
 

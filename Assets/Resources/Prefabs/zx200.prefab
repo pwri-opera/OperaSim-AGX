@@ -85,15 +85,15 @@ MonoBehaviour:
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 219.61263, y: 650.43726, z: 460.1043}
+    m_defaultValue: {x: 219.61275, y: 650.43744, z: 460.10443}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 0, y: -3.5527137e-15, z: 0.27049983}
+    m_defaultValue: {x: 0, y: -1.7763568e-15, z: 0.27050644}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0, y: 0.345, z: 0.17870006}
+    m_defaultValue: {x: -2.7755576e-17, y: 0.34499988, z: 0.17870025}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -320,7 +320,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.0000000010749583, y: -0.70710677, z: 4.767961e-10, w: 0.70710677}
   m_connectedFrame:
     m_parent: {fileID: 1520536309283587759}
-    m_localPosition: {x: -0.017186943, y: 2.7850003, z: 2.2875004}
+    m_localPosition: {x: -0.017187119, y: 2.785, z: 2.2874994}
     m_localRotation: {x: 0.39540908, y: -0.5862181, z: -0.39540908, w: 0.5862181}
   m_synchronized: 1
 --- !u!114 &1593539987063238941
@@ -340,21 +340,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 1593539987063238941}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 1593539987063238941}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 1593539987063238941}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -376,14 +376,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2231201781326975951}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 2231201781326975951}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -842,21 +842,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 3615782509931753834}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 3615782509931753834}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 3615782509931753834}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -878,7 +878,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 440353777290763100}
-    m_compliance: 1e-11
+    m_compliance: 1e-32
     m_damping: 0.04
     m_forceRange:
       Min: -Infinity
@@ -900,7 +900,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 4189435170452405528}
-    m_compliance: 1e-11
+    m_compliance: 1e-32
     m_damping: 0.04
     m_forceRange:
       Min: -Infinity
@@ -971,8 +971,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 5215988131694948070}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
+    m_compliance: 1e-32
+    m_damping: 1.2
     m_forceRange:
       Min: -Infinity
       Max: Infinity
@@ -1508,15 +1508,15 @@ MonoBehaviour:
     m_userValue: 16520
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 22927.34, y: 29069.451, z: 11630.894}
+    m_defaultValue: {x: 22927.307, y: 29069.42, z: 11630.8955}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: -1121.738, y: -5012.074, z: -2679.7805}
+    m_defaultValue: {x: -1121.7383, y: -5012.0684, z: -2679.7769}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 0
-    m_defaultValue: {x: -0.2530103, y: 0.7141959, z: -0.8289072}
+    m_defaultValue: {x: -0.25301033, y: 0.7141959, z: -0.8289088}
     m_userValue: {x: 0, y: -0.116886854, z: -0.6055708}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -1626,7 +1626,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: -0.000000023181554, z: 0, w: 1}
   m_connectedFrame:
     m_parent: {fileID: 7185146410454998010}
-    m_localPosition: {x: -0.006230004, y: -0.3696909, z: -0.7865621}
+    m_localPosition: {x: -0.0062298775, y: -0.36968905, z: -0.7865621}
     m_localRotation: {x: 0.055124525, y: -0.000000023146308, z: -0.0000000012778724, w: 0.99847955}
   m_synchronized: 1
 --- !u!114 &3167516953151613568
@@ -1646,21 +1646,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 3167516953151613568}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 3167516953151613568}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 3167516953151613568}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -1887,13 +1887,14 @@ GameObject:
   - component: {fileID: 971860556342287867}
   - component: {fileID: 3322461436765238100}
   - component: {fileID: 4483169696690960430}
-  - component: {fileID: 7488422457215827702}
-  - component: {fileID: 3423473997036149920}
-  - component: {fileID: 5011983087236165081}
-  - component: {fileID: 1565139818411517204}
-  - component: {fileID: 6928477032947746847}
-  - component: {fileID: 5319110904144858948}
-  - component: {fileID: 3291800309626616362}
+  - component: {fileID: 4348410717665483155}
+  - component: {fileID: 2025377951873012011}
+  - component: {fileID: 6100460737238095103}
+  - component: {fileID: 5306450803088181554}
+  - component: {fileID: 2132900274688673439}
+  - component: {fileID: 2706224481523588233}
+  - component: {fileID: 3949269219356747030}
+  - component: {fileID: 1799835564988072683}
   m_Layer: 0
   m_Name: AGXUnity.Hinge_bucketJoint2_bucketJoint
   m_TagString: Untagged
@@ -1909,8 +1910,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210407295067625346}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.62999827, y: -0, z: -0, w: 0.77659655}
+  m_LocalPosition: {x: -0.005323004, y: 0.09312987, z: -2.149567}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1930,19 +1931,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_attachmentPairLegacy: {fileID: 0}
   m_attachmentPairComponent: {fileID: 4483169696690960430}
-  m_type: 0
+  m_type: 4
   m_collisionsState: 0
   m_solveType: 0
   m_drawGizmosEnable: 1
   m_connectedFrameNativeSyncEnabled: 0
   m_elementaryConstraints:
-  - {fileID: 7488422457215827702}
-  - {fileID: 3423473997036149920}
-  - {fileID: 5011983087236165081}
-  - {fileID: 1565139818411517204}
-  - {fileID: 6928477032947746847}
-  - {fileID: 5319110904144858948}
-  - {fileID: 3291800309626616362}
+  - {fileID: 4348410717665483155}
+  - {fileID: 2025377951873012011}
+  - {fileID: 6100460737238095103}
+  - {fileID: 5306450803088181554}
+  - {fileID: 2132900274688673439}
+  - {fileID: 2706224481523588233}
+  - {fileID: 3949269219356747030}
+  - {fileID: 1799835564988072683}
 --- !u!114 &4483169696690960430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1957,14 +1959,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_referenceFrame:
     m_parent: {fileID: 7212497307607879503}
-    m_localPosition: {x: -0.00000047683716, y: 0.4812348, z: -0.33265805}
-    m_localRotation: {x: -0.00000002745056, y: 0.7071068, z: -0.00000002745056, w: 0.7071068}
+    m_localPosition: {x: -0.005322829, y: 0.476639, z: -0.3296854}
+    m_localRotation: {x: 0.62999827, y: 0, z: 0, w: 0.77659655}
   m_connectedFrame:
     m_parent: {fileID: 5160230272981907072}
-    m_localPosition: {x: -0.018922463, y: -0.4507373, z: -0.34242815}
-    m_localRotation: {x: -0.309698, y: 0.6356786, z: -0.309698, w: 0.6356786}
+    m_localPosition: {x: -0.024244785, y: -0.45122874, z: -0.33697703}
+    m_localRotation: {x: 0.22622617, y: 0, z: 0, w: 0.97407484}
   m_synchronized: 1
---- !u!114 &7488422457215827702
+--- !u!114 &4348410717665483155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1980,27 +1982,27 @@ MonoBehaviour:
   m_enable: 1
   m_rowData:
   - m_row: 0
-    m_elementaryConstraint: {fileID: 7488422457215827702}
-    m_compliance: 0.00000001
+    m_elementaryConstraint: {fileID: 4348410717665483155}
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
-    m_elementaryConstraint: {fileID: 7488422457215827702}
-    m_compliance: 0.00000001
+    m_elementaryConstraint: {fileID: 4348410717665483155}
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
-    m_elementaryConstraint: {fileID: 7488422457215827702}
-    m_compliance: 0.00000001
+    m_elementaryConstraint: {fileID: 4348410717665483155}
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
---- !u!114 &3423473997036149920
+--- !u!114 &2025377951873012011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2012,121 +2014,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 109ee4d2e7ce6a24abfc38fe7666c22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: SW
-  m_enable: 1
-  m_rowData:
-  - m_row: 0
-    m_elementaryConstraint: {fileID: 3423473997036149920}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  - m_row: 1
-    m_elementaryConstraint: {fileID: 3423473997036149920}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
---- !u!114 &5011983087236165081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210407295067625346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 546112712cfa2af44b5bc0ed07c2a367, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nativeName: RR
+  m_nativeName: CL
   m_enable: 0
   m_rowData:
   - m_row: 0
-    m_elementaryConstraint: {fileID: 5011983087236165081}
-    m_compliance: 1e-10
+    m_elementaryConstraint: {fileID: 2025377951873012011}
+    m_compliance: 0.00000001
     m_damping: 0.040000003
     m_forceRange:
       Min: 0
       Max: Infinity
-  m_range:
-    Min: -Infinity
-    Max: Infinity
---- !u!114 &1565139818411517204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210407295067625346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03ba2f9c312939643961494613a084da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nativeName: MR
-  m_enable: 0
-  m_rowData:
-  - m_row: 0
-    m_elementaryConstraint: {fileID: 1565139818411517204}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  m_speed: 0
-  m_lockAtZeroSpeed: 0
---- !u!114 &6928477032947746847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210407295067625346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d2c2cd313d0bb46be8c1e65aca04c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nativeName: LR
-  m_enable: 0
-  m_rowData:
-  - m_row: 0
-    m_elementaryConstraint: {fileID: 6928477032947746847}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  m_position: 0
---- !u!114 &5319110904144858948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210407295067625346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70462a82c1931f54fb0aa1c1da7c460c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nativeName: ER
-  m_enable: 0
-  m_rowData:
-  - m_row: 0
-    m_elementaryConstraint: {fileID: 5319110904144858948}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  m_voltage: 24
-  m_armatureResistance: 1
-  m_torqueConstant: 1
---- !u!114 &3291800309626616362
+--- !u!114 &6100460737238095103
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2138,11 +2036,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: FR
+  m_nativeName: FU
   m_enable: 0
   m_rowData:
   - m_row: 0
-    m_elementaryConstraint: {fileID: 3291800309626616362}
+    m_elementaryConstraint: {fileID: 6100460737238095103}
     m_compliance: 0.00000001
     m_damping: 0.040000003
     m_forceRange:
@@ -2153,6 +2051,136 @@ MonoBehaviour:
   m_minimumStaticFrictionForceRange:
     Min: -0
     Max: 0
+--- !u!114 &5306450803088181554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210407295067625346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nativeName: FV
+  m_enable: 0
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 5306450803088181554}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
+--- !u!114 &2132900274688673439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210407295067625346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nativeName: FN
+  m_enable: 0
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 2132900274688673439}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
+--- !u!114 &2706224481523588233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210407295067625346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nativeName: CLF
+  m_enable: 0
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 2706224481523588233}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
+--- !u!114 &3949269219356747030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210407295067625346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nativeName: CLFR
+  m_enable: 0
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 3949269219356747030}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
+--- !u!114 &1799835564988072683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210407295067625346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109ee4d2e7ce6a24abfc38fe7666c22b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nativeName: TR
+  m_enable: 1
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 1799835564988072683}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: 0
+      Max: Infinity
 --- !u!1 &1284477107485711280
 GameObject:
   m_ObjectHideFlags: 0
@@ -2318,7 +2346,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.00000002745056, y: 0.7071068, z: -0.00000002745056, w: 0.7071068}
   m_connectedFrame:
     m_parent: {fileID: 7185146410454998010}
-    m_localPosition: {x: 0.0127195865, y: 1.8799001, z: 1.5753999}
+    m_localPosition: {x: 0.012719631, y: 1.8799005, z: 1.5754005}
     m_localRotation: {x: -0.21027586, y: 0.67511785, z: -0.21027586, w: 0.67511785}
   m_synchronized: 1
 --- !u!114 &3305124513211215189
@@ -2338,14 +2366,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 3305124513211215189}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 3305124513211215189}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -2374,14 +2402,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 6697240260150964247}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 6697240260150964247}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -3338,7 +3366,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 209080587690994684}
-    m_localPosition: {x: -1.1820004, y: 0.453, z: 1.856}
+    m_localPosition: {x: -1.1820002, y: 0.45300007, z: 1.855999}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &8168584015194956638
@@ -3814,7 +3842,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.00000002745056, y: 0.7071068, z: -0.00000002745056, w: 0.7071068}
   m_connectedFrame:
     m_parent: {fileID: 7185146410454998010}
-    m_localPosition: {x: 0.007397115, y: 0.7359402, z: -0.24686974}
+    m_localPosition: {x: 0.007397175, y: 0.73593885, z: -0.24686992}
     m_localRotation: {x: 0.26202363, y: 0.6567676, z: 0.26202363, w: 0.6567676}
   m_synchronized: 1
 --- !u!114 &3930788461214163806
@@ -3834,21 +3862,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 3930788461214163806}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 3930788461214163806}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 3930788461214163806}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -3870,14 +3898,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 1030454949476530902}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 1030454949476530902}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -4130,9 +4158,10 @@ MonoBehaviour:
       m_localRotation: {x: 0.41579187, y: 0.39826098, z: 0.57923317, w: 0.5770565}
     m_end:
       m_parent: {fileID: 4889086722354612996}
-      m_localPosition: {x: -2.0037892, y: -0.026813388, z: 0.5592232}
-      m_localRotation: {x: -0.5770565, y: -0.57923317, z: 0.39826098, w: 0.41579187}
+      m_localPosition: {x: -2.0037901, y: -0.026813507, z: 0.5592258}
+      m_localRotation: {x: 0.41579187, y: 0.39826098, z: 0.57923317, w: 0.5770565}
   m_settings: {fileID: 11400000, guid: a3df81a34b356f8429051e769ec110d2, type: 2}
+  m_autoAddToTerrains: 0
 --- !u!1 &2716439114910653347
 GameObject:
   m_ObjectHideFlags: 0
@@ -4441,7 +4470,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 209080587690994684}
-    m_localPosition: {x: 1.182, y: 0.453, z: -1.6219997}
+    m_localPosition: {x: 1.1820002, y: 0.45300007, z: -1.6220016}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &6575672240098025245
@@ -4551,7 +4580,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 5012108158090071857}
-    m_compliance: 0.00000001
+    m_compliance: 1e-12
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -4720,7 +4749,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.6981028, y: 0, z: 0, w: -0.7159975}
   m_connectedFrame:
     m_parent: {fileID: 1720283833457588539}
-    m_localPosition: {x: 0, y: 1.3500001, z: 0.00000011920929}
+    m_localPosition: {x: 0, y: 1.349999, z: -0.0000013709068}
     m_localRotation: {x: 0.69810283, y: 0, z: 0, w: -0.7159976}
   m_synchronized: 1
 --- !u!114 &980400257509688639
@@ -4740,21 +4769,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 980400257509688639}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 980400257509688639}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 980400257509688639}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -4776,7 +4805,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 4611994046131805995}
-    m_compliance: 1e-11
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -4798,7 +4827,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2058021220468771126}
-    m_compliance: 1e-11
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -4820,8 +4849,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2470554733679894869}
-    m_compliance: 1e-10
-    m_damping: 0.040000003
+    m_compliance: 0
+    m_damping: 0.8
     m_forceRange:
       Min: 0
       Max: Infinity
@@ -4869,8 +4898,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 4332414385119244786}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
+    m_compliance: 1e-32
+    m_damping: 0.7
     m_forceRange:
       Min: -Infinity
       Max: Infinity
@@ -5079,7 +5108,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
   m_connectedFrame:
     m_parent: {fileID: 209080587690994684}
-    m_localPosition: {x: 0.034300983, y: 1.1205997, z: 0.1078701}
+    m_localPosition: {x: 0.034300804, y: 1.1205997, z: 0.10787201}
     m_localRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
   m_synchronized: 1
 --- !u!114 &676259575456199360
@@ -5099,21 +5128,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 676259575456199360}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 676259575456199360}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 676259575456199360}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -5213,8 +5242,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 7054496346592820751}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
+    m_compliance: 1e-32
+    m_damping: 0.7
     m_forceRange:
       Min: -Infinity
       Max: Infinity
@@ -5459,7 +5488,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.70710677, z: 0.70710695, w: 0}
   m_connectedFrame:
     m_parent: {fileID: 4339909662788268922}
-    m_localPosition: {x: 0, y: 0.000000049663058, z: -0.00000033349727}
+    m_localPosition: {x: 0, y: 0, z: 0}
     m_localRotation: {x: 0, y: 0.70710677, z: 0.70710695, w: 0}
   m_synchronized: 1
 --- !u!114 &8545665727572226123
@@ -5479,21 +5508,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 8545665727572226123}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 8545665727572226123}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 8545665727572226123}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -5515,7 +5544,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 4886391486467981732}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -5537,7 +5566,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 4912301086995984745}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -5608,8 +5637,8 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 182724628588926440}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
+    m_compliance: 1e-32
+    m_damping: 1.3
     m_forceRange:
       Min: -Infinity
       Max: Infinity
@@ -5944,6 +5973,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoUpdateConstraints: 1
+  activateDeadTime: 1
+  trackDeadTime: 0
   leftSprocket:
     joint: {fileID: 2898882038027683953}
     convertor: {fileID: 0}
@@ -5952,7 +5983,8 @@ MonoBehaviour:
       controlEnabled: 1
       controlType: 1
       controlValue: 0
-      controlMaxForce: Infinity
+      controlMaxForce: 40092
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 2898882038027683953}
       actuatorType: 1
@@ -5970,7 +6002,8 @@ MonoBehaviour:
       controlEnabled: 1
       controlType: 1
       controlValue: 0
-      controlMaxForce: Infinity
+      controlMaxForce: 40092
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 1447156561761762158}
       actuatorType: 1
@@ -5986,9 +6019,10 @@ MonoBehaviour:
     actuator:
       constraint: {fileID: 5292794544567814212}
       controlEnabled: 1
-      controlType: 1
+      controlType: 0
       controlValue: 0
-      controlMaxForce: 10000
+      controlMaxForce: 68000
+      deadTime: 932
     hydraulicActuator:
       constraint: {fileID: 5292794544567814212}
       actuatorType: 1
@@ -6004,9 +6038,10 @@ MonoBehaviour:
     actuator:
       constraint: {fileID: 7521300381502038307}
       controlEnabled: 1
-      controlType: 1
+      controlType: 0
       controlValue: 0
-      controlMaxForce: 500000
+      controlMaxForce: 581212.3124
+      deadTime: 649.5
     hydraulicActuator:
       constraint: {fileID: 7521300381502038307}
       actuatorType: 0
@@ -6022,9 +6057,10 @@ MonoBehaviour:
     actuator:
       constraint: {fileID: 3546637627825537805}
       controlEnabled: 1
-      controlType: 1
+      controlType: 0
       controlValue: 0
-      controlMaxForce: 500000
+      controlMaxForce: 369403.1904
+      deadTime: 425.5
     hydraulicActuator:
       constraint: {fileID: 3546637627825537805}
       actuatorType: 0
@@ -6040,9 +6076,10 @@ MonoBehaviour:
     actuator:
       constraint: {fileID: 6315925862485967959}
       controlEnabled: 1
-      controlType: 1
+      controlType: 0
       controlValue: 0
-      controlMaxForce: 500000
+      controlMaxForce: 270065.049
+      deadTime: 310
     hydraulicActuator:
       constraint: {fileID: 6315925862485967959}
       actuatorType: 0
@@ -6065,8 +6102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joint: {fileID: 3035867917072565244}
-  jointInitialAngle: -10
-  jointMaxAngle: 44
+  jointInitialAngle: -10.68669
+  jointMaxAngle: 55
   jointMinAngle: -70
   cylinderLength: 1.6
   currentLinkAngle: 0
@@ -6087,9 +6124,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joint: {fileID: 3443912930447241851}
-  jointInitialAngle: 34
-  jointMaxAngle: 135
-  jointMinAngle: 5
+  jointInitialAngle: 45
+  jointMaxAngle: 145
+  jointMinAngle: 45
   cylinderLength: 1.7
   currentLinkAngle: 0
   boomPin: {fileID: 1520536309283587759}
@@ -6110,16 +6147,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joint: {fileID: 3276760587077498868}
-  jointInitialAngle: 0
-  jointMaxAngle: 150
-  jointMinAngle: -50
-  cylinderLength: 1.49
+  jointInitialAngle: 0.5581
+  jointMaxAngle: 136
+  jointMinAngle: -35
+  cylinderLength: 1.475
   currentLinkAngle: 0
   bucketPin: {fileID: 2686228281178239091}
   bucketEdge: {fileID: 6242368995783421469}
   cylinderRoot: {fileID: 4339909662788268922}
   cylinderBindPoint: {fileID: 3543181257051943297}
   armCylinderBindPoint: {fileID: 5003496914009344320}
+  armPin: {fileID: 7185146410454998010}
   HLinkRoot: {fileID: 5160230272981907072}
   ILinkRoot: {fileID: 7212497307607879503}
 --- !u!114 &6956393161861540573
@@ -6138,13 +6176,12 @@ MonoBehaviour:
   trackSubscriber: {fileID: 4323362731073216159}
   settingSubscriber: {fileID: 3368106417790520207}
   movementControlType: 1
-  controlType: 1
+  controlType: 0
   joints: {fileID: 0}
   boomCylConv: {fileID: 4937926865299588404}
   armCylConv: {fileID: 8336494013212090991}
   bucketCylConv: {fileID: 1514388780913059043}
   twistCommandConvertor: {fileID: 8744621954012064406}
-  LoadFlag: 0
 --- !u!114 &6233692963551080310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6315,6 +6352,14 @@ MonoBehaviour:
     Kp: 0.05
     Ki: 0.01
     Kd: 0.005
+  sproketRadiusToTrackSurface: 0.07
+  maxLinearVelocity: 0.972222
+  maxAngularVelocity: 1
+  EnableVWBehaviorMode: 1
+  SetVWBehaviorMode: 1
+  VWDecelFactor: 0.5
+  VWRatioFactor: 0.9900000095367432
+  MaxTrackVel: 1
 --- !u!1 &3907119593394011170
 GameObject:
   m_ObjectHideFlags: 0
@@ -6742,7 +6787,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: -0.00000003090862, z: -0.70710677, w: 0.00000003090862}
   m_connectedFrame:
     m_parent: {fileID: 1520536309283587759}
-    m_localPosition: {x: -0.010956585, y: 2.9959002, z: 4.7878}
+    m_localPosition: {x: -0.010956764, y: 2.9959002, z: 4.787799}
     m_localRotation: {x: 0.6071235, y: 0.36249286, z: -0.6071235, w: -0.36249286}
   m_synchronized: 1
 --- !u!114 &6353202087927170999
@@ -6762,21 +6807,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 6353202087927170999}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 6353202087927170999}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 6353202087927170999}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -6798,14 +6843,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 3438532797996369775}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 3438532797996369775}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -7314,7 +7359,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 209080587690994684}
-    m_localPosition: {x: -1.182, y: 0.453, z: -1.6219997}
+    m_localPosition: {x: -1.1820002, y: 0.45300007, z: -1.6220016}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &7521828596549799740
@@ -7424,7 +7469,7 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2168138458485695475}
-    m_compliance: 0.00000001
+    m_compliance: 1e-12
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -8354,7 +8399,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5599999, y: 0.12499997, z: 0.56}
+  m_LocalScale: {x: 0.5599999, y: 0.12499997, z: 0.5599999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6872576145155634426}
@@ -8520,7 +8565,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.49999997, y: 0.49999997, z: -0.49999997, w: -0.49999997}
   m_connectedFrame:
     m_parent: {fileID: 209080587690994684}
-    m_localPosition: {x: 1.1819997, y: 0.453, z: 1.856}
+    m_localPosition: {x: 1.1819997, y: 0.45300007, z: 1.855999}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &853053110898372674
@@ -8949,7 +8994,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5306887883413575595
 Transform:
@@ -9011,7 +9056,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_connectedFrame:
     m_parent: {fileID: 1101572024598052600}
-    m_localPosition: {x: 0.033576295, y: 0.23417997, z: 0.6891203}
+    m_localPosition: {x: 0.03357649, y: 0.23418045, z: 0.68911743}
     m_localRotation: {x: 0.23370893, y: 0.6673681, z: 0.23370893, w: 0.6673681}
   m_synchronized: 1
 --- !u!114 &5440151817257676532
@@ -9031,21 +9076,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 5440151817257676532}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 5440151817257676532}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 5440151817257676532}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -9067,14 +9112,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2540460828157100324}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 2540460828157100324}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -10406,7 +10451,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.70710677, y: -0.00000003090862, z: -0.70710677, w: -0.00000003090862}
   m_connectedFrame:
     m_parent: {fileID: 7185146410454998010}
-    m_localPosition: {x: 0.023545638, y: 2.1808996, z: 1.8954002}
+    m_localPosition: {x: 0.023545742, y: 2.1808977, z: 1.8954002}
     m_localRotation: {x: 0.7000089, y: -0.09993769, z: -0.7000089, w: 0.09993765}
   m_synchronized: 1
 --- !u!114 &6023210694222503207
@@ -10426,21 +10471,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 6023210694222503207}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 6023210694222503207}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 6023210694222503207}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -10462,14 +10507,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2878064288538281435}
-    m_compliance: 0.00000001
+    m_compliance: 1e-16
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 2878064288538281435}
-    m_compliance: 0.00000001
+    m_compliance: 1e-16
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -10491,14 +10536,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 2418067972093791089}
-    m_compliance: 1e-10
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: 0
       Max: Infinity
   m_range:
-    Min: -Infinity
-    Max: Infinity
+    Min: -0.610865
+    Max: 2.37365
 --- !u!114 &8590335457650225845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10771,7 +10816,7 @@ MonoBehaviour:
     m_localRotation: {x: -0.70710677, y: 0.00000006181726, z: 0.70710677, w: 1.7763568e-14}
   m_connectedFrame:
     m_parent: {fileID: 1101572024598052600}
-    m_localPosition: {x: 0.04018718, y: 0.83668995, z: 0.22766972}
+    m_localPosition: {x: 0.04018736, y: 0.83668995, z: 0.22766876}
     m_localRotation: {x: -0.6948694, y: -0.13098288, z: 0.6948694, w: 0.13098294}
   m_synchronized: 1
 --- !u!114 &42117569206225
@@ -10791,21 +10836,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 42117569206225}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 42117569206225}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 42117569206225}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -10827,14 +10872,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 8683280556860947210}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 8683280556860947210}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -10862,8 +10907,8 @@ MonoBehaviour:
       Min: 0
       Max: Infinity
   m_range:
-    Min: -Infinity
-    Max: Infinity
+    Min: -1.22173
+    Max: 0.959931
 --- !u!114 &2634646838503395876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11494,7 +11539,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0, z: 0, w: 1}
   m_connectedFrame:
     m_parent: {fileID: 1520536309283587759}
-    m_localPosition: {x: -0.006611243, y: 2.001922, z: 1.39283}
+    m_localPosition: {x: -0.006611347, y: 2.0019212, z: 1.3928262}
     m_localRotation: {x: 0.14996669, y: 0, z: 0, w: 0.9886911}
   m_synchronized: 1
 --- !u!114 &4505863685945754210
@@ -11514,21 +11559,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 4505863685945754210}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 4505863685945754210}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 4505863685945754210}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -12055,7 +12100,7 @@ MonoBehaviour:
     m_localRotation: {x: 0.00000006135388, y: 0.7071068, z: 0.000000097700756, w: 0.7071068}
   m_connectedFrame:
     m_parent: {fileID: 2686228281178239091}
-    m_localPosition: {x: 0.008096352, y: 0.33853963, z: -0.32404017}
+    m_localPosition: {x: 0.008096218, y: 0.33854052, z: -0.32403985}
     m_localRotation: {x: 0.20437644, y: 0.6769271, z: 0.20437646, w: 0.67692715}
   m_synchronized: 1
 --- !u!114 &8236421745698983799
@@ -12075,21 +12120,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 8236421745698983799}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 8236421745698983799}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 8236421745698983799}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -12111,14 +12156,14 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 3281139559900540869}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 3281139559900540869}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
@@ -12801,7 +12846,7 @@ MonoBehaviour:
     m_localRotation: {x: 0, y: 0, z: 0, w: 1}
   m_connectedFrame:
     m_parent: {fileID: 7212497307607879503}
-    m_localPosition: {x: -0.005322829, y: 0.47663882, z: -0.3296852}
+    m_localPosition: {x: -0.005322933, y: 0.4766385, z: -0.32968643}
     m_localRotation: {x: 0.6299983, y: 0, z: 0, w: 0.7765965}
   m_synchronized: 1
 --- !u!114 &8866971292030133401
@@ -12821,21 +12866,21 @@ MonoBehaviour:
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 8866971292030133401}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 1
     m_elementaryConstraint: {fileID: 8866971292030133401}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity
       Max: Infinity
   - m_row: 2
     m_elementaryConstraint: {fileID: 8866971292030133401}
-    m_compliance: 0.00000001
+    m_compliance: 1e-32
     m_damping: 0.040000003
     m_forceRange:
       Min: -Infinity

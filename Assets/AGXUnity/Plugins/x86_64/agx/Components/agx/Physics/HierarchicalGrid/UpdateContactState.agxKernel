@@ -13,9 +13,6 @@
   <Parameter.EntityData name="@SeparationPair" type="GeometryPair" read="geometry1, geometry2" write="geometry1, geometry2"/>
   <Parameter.Array name="@SeparationPair.globalOrder" type="UInt:32bit" mode="WRITE"/>
   <!-- <Parameter.EntityData name="@BroadPhasePair" type="BroadPhasePair" read="geometry1, geometry2" write="state"/> -->
-  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state"/>
-  <Parameter.EntityData name="@Geometry" type="Geometry" read="body"/>
-
   <Parameter.HashTable name="@ContactTable" bucketType="GeometryPair | Physics.GeometryContactPtr" mode="READ_WRITE" typedef="ContactTable"/>
   <Parameter.Scalar name="@NumPersistentContacts" type="AtomicValue" mode="READ_WRITE"/>
 </Kernel>

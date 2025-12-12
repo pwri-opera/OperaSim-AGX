@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7119a14bd67d1a84b9caafde286f8582, type: 3}
   m_Name: ExcavatorTrackFictionModel
   m_EditorClassIdentifier: 
-  m_solveType: 4
-  m_type: 3
+  m_solveType: 1
+  m_type: 0
   m_normalForceMagnitude: 100000
   m_scaleNormalForceWithDepth: 0

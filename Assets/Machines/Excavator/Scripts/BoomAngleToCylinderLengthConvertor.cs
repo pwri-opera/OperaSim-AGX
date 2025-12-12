@@ -31,7 +31,7 @@ namespace PWRISimulator
             Vector3 b = cylinderBindPoint.transform.position - boomPin.transform.position;
             Vector3 c = armPin.transform.position - cylinderBindPoint.transform.position;
             Vector3 d = armPin.transform.position - boomPin.transform.position;
-            Vector3 e = new Vector3(armPin.transform.position.x, boomPin.transform.position.y, armPin.transform.position.z) - boomPin.transform.position;
+            Vector3 e = new Vector3(boomPin.transform.position.x, boomPin.transform.position.y, armPin.transform.position.z) - boomPin.transform.position;
 
             boomPinToCylinderRoot = a.magnitude;
             boomPinToCylinderBindPoint = b.magnitude;
@@ -47,6 +47,12 @@ namespace PWRISimulator
 
         protected override float CalculateCylinderLinkLength(float _angle)
         {
+            // jointMaxAngle <->jointMinAngle の間で各リンク角度を制限
+            if (Mathf.Deg2Rad * jointMaxAngle < _angle)
+                _angle = Mathf.Deg2Rad * jointMaxAngle;
+                
+            else if (Mathf.Deg2Rad * jointMinAngle > _angle)
+                _angle = Mathf.Deg2Rad * jointMinAngle;
             return Mathf.Sqrt(Mathf.Pow(boomPinToCylinderBindPoint, 2.0f) + Mathf.Pow(boomPinToCylinderRoot, 2.0f) - 2 * boomPinToCylinderBindPoint * boomPinToCylinderRoot * Mathf.Cos(alpha + beta - _angle));
         }
 

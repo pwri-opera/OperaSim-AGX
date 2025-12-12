@@ -15,3 +15,5 @@ MonoBehaviour:
   m_density: 1000
   m_youngsWireStretch: 1e+10
   m_youngsWireBend: 1e+9
+  m_dampingStretch: 0.06
+  m_dampingBend: 0.12
