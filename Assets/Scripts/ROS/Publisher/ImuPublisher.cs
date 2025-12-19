@@ -55,12 +55,10 @@ namespace PWRISimulator.ROS
             if (imuSensor == null && upperBody != null)
             {
                 imuSensor = upperBody.GetComponent<ImuSensor>() ?? upperBody.GetComponentInChildren<ImuSensor>();
-            }
-
-            if (imuSensor == null)
-            {
-                Debug.LogError($"{MachineName()} imu sensor not found");
-                return;
+                if (imuSensor == null)
+                {
+                    imuSensor = upperBody.AddComponent<ImuSensor>();
+                }
             }
 
             imuSensor.OnOutput += HandleImuSensorOutput;
@@ -80,16 +78,6 @@ namespace PWRISimulator.ROS
                 imuSensor.OnOutput -= HandleImuSensorOutput;
             }
         }
-
-        /*
-        void Update()
-        {
-            if (hasSensor && imuSensor != null)
-            {
-                imuSensor.OnUpdate();
-            }
-        }
-        */
 
         public IEnumerator UpdateAndPublishMessage()
         {
@@ -117,7 +105,7 @@ namespace PWRISimulator.ROS
 
             imuMsg.orientation = orientationTransform.rotation.To<FLU>();
             imuMsg.angular_velocity = latestAngularVelocity.To<FLU>();
-            imuMsg.linear_acceleration = latestLinearAcceleration.To<FLU>();
+            imuMsg.linear_acceleration = -latestLinearAcceleration.To<FLU>();
 
             imuMsg.header = MessageUtil.ToHeadermessage(Time.fixedTimeAsDouble, frameId);
         }
