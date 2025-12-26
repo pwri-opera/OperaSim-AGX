@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Sensor;
 using Unity.Robotics.ROSTCPConnector;
@@ -7,7 +6,7 @@ using AGXUnity;
 using System;
 using agxPowerLine;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
-using System.Security.AccessControl;
+using Awsim.Entity;
 
 namespace PWRISimulator.ROS
 {
@@ -24,6 +23,11 @@ namespace PWRISimulator.ROS
         /// 上部構造体のRigidBody
         /// </summary>
         RigidBody rigidBody;
+
+        [SerializeField] ImuSensor imuSensor;
+        Vector3 latestLinearAcceleration;
+        Vector3 latestAngularVelocity;
+        bool hasSensor;
 
         /// <summary>
         /// 上部構造体のオブジェクトを指定する
@@ -48,7 +52,31 @@ namespace PWRISimulator.ROS
                 return;
             }
 
+            if (imuSensor == null && upperBody != null)
+            {
+                imuSensor = upperBody.GetComponent<ImuSensor>() ?? upperBody.GetComponentInChildren<ImuSensor>();
+                if (imuSensor == null)
+                {
+                    imuSensor = upperBody.AddComponent<ImuSensor>();
+                }
+            }
+
+            imuSensor.OnOutput += HandleImuSensorOutput;
+            if (!imuSensor.IsInvoking("Output"))
+            {
+                imuSensor.Initialize();
+            }
+            hasSensor = true;
+
             StartCoroutine(UpdateAndPublishMessage());
+        }
+
+        void OnDisable()
+        {
+            if (imuSensor != null)
+            {
+                imuSensor.OnOutput -= HandleImuSensorOutput;
+            }
         }
 
         public IEnumerator UpdateAndPublishMessage()
@@ -73,11 +101,19 @@ namespace PWRISimulator.ROS
 
         void DoUpdate()
         {
-            imuMsg.orientation = upperBody.transform.rotation.To<FLU>();
-            imuMsg.angular_velocity = rigidBody.AngularVelocity.To<FLU>();
-            imuMsg.linear_acceleration = rigidBody.LinearVelocity.To<FLU>();
+            var orientationTransform = hasSensor && imuSensor != null ? imuSensor.transform : upperBody.transform;
+
+            imuMsg.orientation = orientationTransform.rotation.To<FLU>();
+            imuMsg.angular_velocity = latestAngularVelocity.To<FLU>();
+            imuMsg.linear_acceleration = -latestLinearAcceleration.To<FLU>();
 
             imuMsg.header = MessageUtil.ToHeadermessage(Time.fixedTimeAsDouble, frameId);
+        }
+
+        void HandleImuSensorOutput(ImuSensor.IReadOnlyOutputData data)
+        {
+            latestLinearAcceleration = data.LinearAcceleration;
+            latestAngularVelocity = data.AngularVelocity;
         }
 
         string MachineName()
