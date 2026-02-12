@@ -8285,7 +8285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &196977360
 Transform:
   m_ObjectHideFlags: 0
@@ -8682,6 +8682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba35f34fd9692f49b83335cdb50b027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imuSensor: {fileID: 0}
   upperBody: {fileID: 773665788}
   frequency: 60
   frameId: 
@@ -8708,7 +8709,7 @@ MonoBehaviour:
     Kp: 0.05
     Ki: 0.01
     Kd: 0.005
-  sproketRadiusToTrackOne: 0.07
+  sproketRadiusToTrackSurface: 0.07
   maxLinearVelocity: 0.972222
   maxAngularVelocity: 1
   EnableVWBehaviorMode: 1
@@ -21112,7 +21113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &488108183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21282,7 +21283,7 @@ MonoBehaviour:
   BladeSubscriber: {fileID: 488108190}
   trackSubscriber: {fileID: 488108189}
   settingSubscriber: {fileID: 488108188}
-  movementControlType: 0
+  movementControlType: 1
   controlType: 1
   bladeLiftCylConv: {fileID: 488108193}
   bladeTiltCylConv: {fileID: 488108192}
@@ -21493,6 +21494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba35f34fd9692f49b83335cdb50b027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imuSensor: {fileID: 0}
   upperBody: {fileID: 1413310742}
   frequency: 60
   frameId: 
@@ -21519,7 +21521,7 @@ MonoBehaviour:
     Kp: 0.05
     Ki: 0.01
     Kd: 0.005
-  sproketRadiusToTrackOne: 0.07
+  sproketRadiusToTrackSurface: 0.07
   maxLinearVelocity: 3
   maxAngularVelocity: 0.08726646259971647
   EnableVWBehaviorMode: 1
@@ -22514,7 +22516,7 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 618875521}
     m_localPosition: {x: 1.7804499, y: 1.1012442, z: 0.6650959}
-    m_localRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_localRotation: {x: 0.7071068, y: 0, z: 0, w: -0.7071068}
   m_synchronized: 1
 --- !u!114 &512595872
 MonoBehaviour:
@@ -25583,7 +25585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1482521a3a093da40b60cdbd30963f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_renderShapes: 1
+  m_renderShapes: 0
   m_shapeRenderMaterial: {fileID: 1765616120}
   m_renderContacts: 1
   ContactColor: {r: 1, g: 0, b: 0.7777777, a: 1}
@@ -31004,19 +31006,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mass:
     m_defaultToggle: 1
-    m_defaultValue: 61.072567
+    m_defaultValue: 1
     m_userValue: 1
   m_inertiaDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: 10.771715, y: 53.740208, z: 46.20839}
+    m_defaultValue: {x: 1, y: 1, z: 1}
     m_userValue: {x: 1, y: 1, z: 1}
   m_inertiaOffDiagonal:
     m_defaultToggle: 1
-    m_defaultValue: {x: -2.220446e-16, y: -1.2212453e-15, z: 0.7866147}
+    m_defaultValue: {x: 0, y: 0, z: 0}
     m_userValue: {x: 1, y: 1, z: 1}
   m_centerOfMassOffset:
     m_defaultToggle: 1
-    m_defaultValue: {x: -0.0025000572, y: 0.279, z: 0.20300007}
+    m_defaultValue: {x: -0, y: 0, z: 0}
     m_userValue: {x: 0, y: 0, z: 0}
   m_massCoefficients: {x: 0, y: 0, z: 0}
   m_inertiaCoefficients: {x: 0, y: 0, z: 0}
@@ -31572,6 +31574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba35f34fd9692f49b83335cdb50b027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imuSensor: {fileID: 0}
   upperBody: {fileID: 22688864}
   frequency: 60
   frameId: 
@@ -31598,7 +31601,7 @@ MonoBehaviour:
     Kp: 0.5
     Ki: 0.01
     Kd: 0.04
-  sproketRadiusToTrackOne: 0.07
+  sproketRadiusToTrackSurface: 0.07
   maxLinearVelocity: 3
   maxAngularVelocity: 0.08726646259971647
   EnableVWBehaviorMode: 1
@@ -33043,7 +33046,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &738989125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33332,6 +33335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba35f34fd9692f49b83335cdb50b027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imuSensor: {fileID: 0}
   upperBody: {fileID: 1349787766}
   frequency: 60
   frameId: 
@@ -33358,7 +33362,7 @@ MonoBehaviour:
     Kp: 0.05
     Ki: 0.01
     Kd: 0.005
-  sproketRadiusToTrackOne: 0.06
+  sproketRadiusToTrackSurface: 0.07
   maxLinearVelocity: 1.7
   maxAngularVelocity: 0.9
   EnableVWBehaviorMode: 1
@@ -34472,7 +34476,7 @@ MonoBehaviour:
     Kp: 0.1
     Ki: 0.01
     Kd: 0.05
-  sproketRadiusToTrackOne: 0.07
+  sproketRadiusToTrackSurface: 0.07
   maxLinearVelocity: 3
   maxAngularVelocity: 0.08726646259971647
   EnableVWBehaviorMode: 1
@@ -40059,7 +40063,7 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 1911892984}
     m_localPosition: {x: 2.389001, y: 0.000000059604645, z: 0.56200016}
-    m_localRotation: {x: 0, y: 0, z: 0, w: 1}
+    m_localRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_synchronized: 1
 --- !u!114 &921560665
 MonoBehaviour:
@@ -42505,7 +42509,7 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 618875521}
     m_localPosition: {x: 0, y: 0.00000011920929, z: 1.0000002}
-    m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
+    m_localRotation: {x: 0, y: 0, z: 0, w: 1}
   m_synchronized: 1
 --- !u!114 &975303056
 MonoBehaviour:
@@ -45617,7 +45621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1035102221
 Transform:
   m_ObjectHideFlags: 0
@@ -75517,7 +75521,7 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 618875521}
     m_localPosition: {x: 1.7804499, y: -1.1012442, z: 0.665096}
-    m_localRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_localRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_synchronized: 1
 --- !u!114 &1744372871
 MonoBehaviour:
