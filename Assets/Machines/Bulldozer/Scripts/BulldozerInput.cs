@@ -13,6 +13,13 @@ namespace PWRISimulator.ROS
         [SerializeField] ConstractionMovementControlType movementControlType;
         [SerializeField] ControlType controlType = ControlType.Position;
 
+        [Header("Blade lift limit (blade edge height)")]
+        [SerializeField] Transform bladeEdge;
+        [SerializeField] float bladeEdgeHeightUpperLimitMeters = 0.8f;
+        [SerializeField] float bladeEdgeHeightLowerLimitMeters = -0.38f;
+        [SerializeField] float liftPositionRateLimitRadPerSec = 0.5f;
+
+        [Header("Length convertor")]
         public BladeLiftToCylinderLengthConvertor bladeLiftCylConv;
         public BladeTiltToCylinderLengthConvertor bladeTiltCylConv;
         public BladeAngleToCylinderLengthConvertor bladeAngleCylConv;
@@ -30,11 +37,42 @@ namespace PWRISimulator.ROS
 
 
         private BulldozerJoints joints;
+        private const string BladeEdgeGameObjectName = "AGXUnity.Collide.Box_blade3";
+        private float bladeEdgeInitialLocalY;
+        private float appliedLiftCmdAngle;
 
         void Start()
         {
             joints = gameObject.GetComponent<BulldozerJoints>();
+            appliedLiftCmdAngle = joints != null ? (float)joints.bladeLift.CurrentPosition : 0.0f;
+
+            if (bladeEdge == null)
+            {
+                var bladeEdgeGo = GameObject.Find(BladeEdgeGameObjectName);
+                bladeEdge = bladeEdgeGo != null ? bladeEdgeGo.transform : null;
+            }
+
+            if (bladeEdge != null)
+            {
+                bladeEdgeInitialLocalY = transform.InverseTransformPoint(bladeEdge.position).y;
+            }
+            else
+            {
+                Debug.LogWarning($"[{nameof(BulldozerInput)}] Failed to find blade edge GameObject '{BladeEdgeGameObjectName}' at Start(). Height-based lift limiting will be disabled.", this);
+            }
         }
+
+        private bool TryGetBladeEdgeHeightAboveGround(out float heightMeters)
+        {
+            heightMeters = 0.0f;
+            if (bladeEdge == null)
+                return false;
+
+            float bladeEdgeLocalY = transform.InverseTransformPoint(bladeEdge.position).y;
+            heightMeters = bladeEdgeLocalY - bladeEdgeInitialLocalY;
+            return true;
+        }
+
         // Update is called once per frame
         void FixedUpdate()
         {
@@ -108,6 +146,7 @@ namespace PWRISimulator.ROS
                 // 緊急停止
                 joints.bladeLift.controlType = ControlType.Position;
                 joints.bladeLift.controlValue = joints.bladeLift.CurrentPosition;
+                appliedLiftCmdAngle = (float)joints.bladeLift.CurrentPosition;
 
                 joints.bladeTilt.controlType = ControlType.Position;
                 joints.bladeTilt.controlValue = joints.bladeTilt.CurrentPosition;
@@ -130,8 +169,22 @@ namespace PWRISimulator.ROS
                 switch (controlType)
                 {
                     case ControlType.Position:
+                        float targetLiftCmdAngle = (float)BladeSubscriber.BladeCmd.position[0];
+                        float maxDelta = liftPositionRateLimitRadPerSec > 0.0f ? liftPositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
+                        float liftCmdAngle = Mathf.MoveTowards(appliedLiftCmdAngle, targetLiftCmdAngle, maxDelta);
+
+                        if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeight) && joints != null)
+                        {
+                            float currentLiftAngle = (float)joints.bladeLift.CurrentPosition;
+                            if (bladeEdgeHeight >= bladeEdgeHeightUpperLimitMeters && liftCmdAngle > currentLiftAngle)
+                                liftCmdAngle = currentLiftAngle;
+                            else if (bladeEdgeHeight <= bladeEdgeHeightLowerLimitMeters && liftCmdAngle < currentLiftAngle)
+                                liftCmdAngle = currentLiftAngle;
+                        }
+
+                        appliedLiftCmdAngle = liftCmdAngle;
                         joints.bladeLift.controlType = ControlType.Position;
-                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[0]);
+                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescoping(liftCmdAngle);
 
                         joints.bladeTilt.controlType = ControlType.Position;
                         joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[1]);
@@ -144,8 +197,17 @@ namespace PWRISimulator.ROS
                         joints.bladeAngleRight.controlValue = telescoping;
                         break;
                     case ControlType.Speed:
+                        float liftCmdVelocity = (float)BladeSubscriber.BladeCmd.velocity[0];
+                        if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeightVel))
+                        {
+                            if (bladeEdgeHeightVel >= bladeEdgeHeightUpperLimitMeters && liftCmdVelocity > 0.0f)
+                                liftCmdVelocity = 0.0f;
+                            else if (bladeEdgeHeightVel <= bladeEdgeHeightLowerLimitMeters && liftCmdVelocity < 0.0f)
+                                liftCmdVelocity = 0.0f;
+                        }
+
                         joints.bladeLift.controlType = ControlType.Speed;
-                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescopingVelocity((float)BladeSubscriber.BladeCmd.velocity[0]);
+                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescopingVelocity(liftCmdVelocity);
 
                         joints.bladeTilt.controlType = ControlType.Speed;
                         joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescopingVelocity((float)BladeSubscriber.BladeCmd.velocity[1]);
@@ -158,8 +220,17 @@ namespace PWRISimulator.ROS
                         joints.bladeAngleRight.controlValue = telescopingVelocity;
                         break;
                     case ControlType.Force:
+                        float liftCmdForce = (float)BladeSubscriber.BladeCmd.effort[0];
+                        if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeightForce))
+                        {
+                            if (bladeEdgeHeightForce >= bladeEdgeHeightUpperLimitMeters && liftCmdForce > 0.0f)
+                                liftCmdForce = 0.0f;
+                            else if (bladeEdgeHeightForce <= bladeEdgeHeightLowerLimitMeters && liftCmdForce < 0.0f)
+                                liftCmdForce = 0.0f;
+                        }
+
                         joints.bladeLift.controlType = ControlType.Force;
-                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[0]);
+                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescopingForce(liftCmdForce);
 
                         joints.bladeTilt.controlType = ControlType.Force;
                         joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[1]);
