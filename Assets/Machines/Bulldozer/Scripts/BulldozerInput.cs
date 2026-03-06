@@ -22,8 +22,11 @@ namespace PWRISimulator.ROS
         [Header("Blade tilt limit (blade edge end height difference)")]
         [SerializeField] Transform bladeEdgeLeft;
         [SerializeField] Transform bladeEdgeRight;
-        [SerializeField] float bladeEdgeEndHeightDifferenceUpperLimitMeters = 0.435f;
+        [SerializeField] float bladeEdgeEndHeightDifferenceLimitMeters = 0.435f;
         [SerializeField] float tiltPositionRateLimitRadPerSec = 0.5f;
+
+        [Header("Blade angle limit")]
+        [SerializeField] float bladeAngleLimitDegrees = 24.0f;
 
         [Header("Blade edge debug")]
         [PWRISimulator.ReadOnly] [SerializeField] float currentBladeHeightMeters;
@@ -232,7 +235,7 @@ namespace PWRISimulator.ROS
 
             float leftLocalY = transform.InverseTransformPoint(bladeEdgeLeft.position).y - bladeEdgeLeftInitialLocalY;
             float rightLocalY = transform.InverseTransformPoint(bladeEdgeRight.position).y - bladeEdgeRightInitialLocalY;
-            heightDifferenceMeters = Mathf.Abs(leftLocalY - rightLocalY);
+            heightDifferenceMeters = leftLocalY - rightLocalY;
             return true;
         }
 
@@ -309,6 +312,13 @@ namespace PWRISimulator.ROS
             currentBladeEdgeDifferenceMeters = TryGetBladeEdgeEndHeightDifference(out float edgeDifference) ? edgeDifference : 0.0f;
         }
 
+        private float BladeAngleLimitRadians => Mathf.Abs(bladeAngleLimitDegrees) * Mathf.Deg2Rad;
+
+        private float ClampBladeAngle(float angleRadians)
+        {
+            return Mathf.Clamp(angleRadians, -BladeAngleLimitRadians, BladeAngleLimitRadians);
+        }
+
         public void SetCommands()
         {
             // 制御値の反映
@@ -349,12 +359,12 @@ namespace PWRISimulator.ROS
                         {
                             double currentLiftControlValue = joints.bladeLift.CurrentPosition;
                             if (bladeEdgeHeight >= bladeEdgeHeightUpperLimitMeters &&
-                                liftControlValue > currentLiftControlValue)
+                                liftControlValue < currentLiftControlValue)
                             {
                                 liftControlValue = currentLiftControlValue;
                             }
                             else if (bladeEdgeHeight <= bladeEdgeHeightLowerLimitMeters &&
-                                     liftControlValue < currentLiftControlValue)
+                                     liftControlValue > currentLiftControlValue)
                             {
                                 liftControlValue = currentLiftControlValue;
                             }
@@ -372,8 +382,13 @@ namespace PWRISimulator.ROS
                         if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiff) && joints != null)
                         {
                             double currentTiltControlValue = joints.bladeTilt.CurrentPosition;
-                            if (endHeightDiff >= bladeEdgeEndHeightDifferenceUpperLimitMeters &&
-                                Mathf.Abs((float)tiltControlValue) > Mathf.Abs((float)currentTiltControlValue))
+                            if (endHeightDiff >= bladeEdgeEndHeightDifferenceLimitMeters &&
+                                tiltControlValue > currentTiltControlValue)
+                            {
+                                tiltControlValue = currentTiltControlValue;
+                            }
+                            if (endHeightDiff <= - bladeEdgeEndHeightDifferenceLimitMeters &&
+                                tiltControlValue < currentTiltControlValue)
                             {
                                 tiltControlValue = currentTiltControlValue;
                             }
@@ -382,7 +397,8 @@ namespace PWRISimulator.ROS
                         joints.bladeTilt.controlType = ControlType.Position;
                         joints.bladeTilt.controlValue = tiltControlValue;
 
-                        float telescoping = bladeAngleCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[2]);
+                        float clampedBladeAngle = ClampBladeAngle((float)BladeSubscriber.BladeCmd.position[2]);
+                        float telescoping = bladeAngleCylConv.CalculateCylinderRodTelescoping(clampedBladeAngle);
                         joints.bladeAngleLeft.controlType = ControlType.Position;
                         joints.bladeAngleLeft.controlValue = -telescoping;
 
@@ -407,14 +423,25 @@ namespace PWRISimulator.ROS
                         double tiltControlVelocity = bladeTiltCylConv.CalculateCylinderRodTelescopingVelocity(tiltCmdVelocity);
                         if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiffVel) && joints != null)
                         {
-                            if (endHeightDiffVel >= bladeEdgeEndHeightDifferenceUpperLimitMeters && tiltControlVelocity > 0.0)
+                            if (endHeightDiffVel >= bladeEdgeEndHeightDifferenceLimitMeters && tiltControlVelocity > 0.0)
+                                tiltControlVelocity = 0.0;
+                            if (endHeightDiffVel <= -bladeEdgeEndHeightDifferenceLimitMeters && tiltControlVelocity < 0.0)
                                 tiltControlVelocity = 0.0;
                         }
 
                         joints.bladeTilt.controlType = ControlType.Speed;
                         joints.bladeTilt.controlValue = tiltControlVelocity;
 
-                        float telescopingVelocity = bladeAngleCylConv.CalculateCylinderRodTelescopingVelocity((float)BladeSubscriber.BladeCmd.velocity[2]);
+                        float bladeAngleVelocity = (float)BladeSubscriber.BladeCmd.velocity[2];
+                        float currentBladeAngle = bladeAngleCylConv.currentLinkAngle;
+                        float clampedBladeAngleVelocity = bladeAngleVelocity;
+                        if ((currentBladeAngle >= BladeAngleLimitRadians && bladeAngleVelocity > 0.0f) ||
+                            (currentBladeAngle <= -BladeAngleLimitRadians && bladeAngleVelocity < 0.0f))
+                        {
+                            clampedBladeAngleVelocity = 0.0f;
+                        }
+
+                        float telescopingVelocity = bladeAngleCylConv.CalculateCylinderRodTelescopingVelocity(clampedBladeAngleVelocity);
                         joints.bladeAngleLeft.controlType = ControlType.Speed;
                         joints.bladeAngleLeft.controlValue = -telescopingVelocity;
 
@@ -438,14 +465,25 @@ namespace PWRISimulator.ROS
                         double tiltControlForce = bladeTiltCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[1]);
                         if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiffForce) && joints != null)
                         {
-                            if (endHeightDiffForce >= bladeEdgeEndHeightDifferenceUpperLimitMeters && tiltControlForce > 0.0)
+                            if (endHeightDiffForce >= bladeEdgeEndHeightDifferenceLimitMeters && tiltControlForce > 0.0)
+                                tiltControlForce = 0.0;
+                            if (endHeightDiffForce <= -bladeEdgeEndHeightDifferenceLimitMeters && tiltControlForce < 0.0)
                                 tiltControlForce = 0.0;
                         }
 
                         joints.bladeTilt.controlType = ControlType.Force;
                         joints.bladeTilt.controlValue = tiltControlForce;
 
-                        float telescopingForce = bladeAngleCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[2]);
+                        float bladeAngleForce = (float)BladeSubscriber.BladeCmd.effort[2];
+                        float currentBladeAngleForce = bladeAngleCylConv.currentLinkAngle;
+                        float clampedBladeAngleForce = bladeAngleForce;
+                        if ((currentBladeAngleForce >= BladeAngleLimitRadians && bladeAngleForce > 0.0f) ||
+                            (currentBladeAngleForce <= -BladeAngleLimitRadians && bladeAngleForce < 0.0f))
+                        {
+                            clampedBladeAngleForce = 0.0f;
+                        }
+
+                        float telescopingForce = bladeAngleCylConv.CalculateCylinderRodTelescopingForce(clampedBladeAngleForce);
                         joints.bladeAngleLeft.controlType = ControlType.Force;
                         joints.bladeAngleLeft.controlValue = -telescopingForce;
 
