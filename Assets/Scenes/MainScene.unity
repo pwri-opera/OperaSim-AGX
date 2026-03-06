@@ -21211,7 +21211,7 @@ MonoBehaviour:
     controlEnabled: 1
     controlType: 0
     controlValue: 0
-    controlMaxForce: Infinity
+    controlMaxForce: 1e+50
     deadTime: 0
   bladeTilt:
     constraint: {fileID: 1734090355}
