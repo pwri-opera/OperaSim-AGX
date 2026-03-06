@@ -376,19 +376,19 @@ namespace PWRISimulator.ROS
                         float targetTiltCmdAngle = (float)BladeSubscriber.BladeCmd.position[1];
                         float maxTiltDelta = tiltPositionRateLimitRadPerSec > 0.0f ? tiltPositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
                         float currentTiltAngle = bladeTiltCylConv.currentLinkAngle;
-                        float tiltCmdAngle = Mathf.MoveTowards(currentTiltAngle, targetTiltCmdAngle, maxTiltDelta);
+                        float tiltCmdAngle = targetTiltCmdAngle; // Mathf.MoveTowards(currentTiltAngle, targetTiltCmdAngle, maxTiltDelta);
                         double tiltControlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping(tiltCmdAngle);
 
                         if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiff) && joints != null)
                         {
                             double currentTiltControlValue = joints.bladeTilt.CurrentPosition;
                             if (endHeightDiff >= bladeEdgeEndHeightDifferenceLimitMeters &&
-                                tiltControlValue > currentTiltControlValue)
+                                tiltControlValue < currentTiltControlValue)
                             {
                                 tiltControlValue = currentTiltControlValue;
                             }
                             if (endHeightDiff <= - bladeEdgeEndHeightDifferenceLimitMeters &&
-                                tiltControlValue < currentTiltControlValue)
+                                tiltControlValue > currentTiltControlValue)
                             {
                                 tiltControlValue = currentTiltControlValue;
                             }
