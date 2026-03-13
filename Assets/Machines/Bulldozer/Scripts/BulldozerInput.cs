@@ -584,9 +584,9 @@ namespace PWRISimulator.ROS
                         double liftControlForce = bladeLiftCylConv.CalculateCylinderRodTelescopingForce(liftCmdForce);
                         if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeightForce))
                         {
-                            if (bladeEdgeHeightForce >= bladeEdgeHeightUpperLimitMeters && liftControlForce > 0.0)
+                            if (bladeEdgeHeightForce >= bladeEdgeHeightUpperLimitMeters && liftControlForce < 0.0)
                                 liftControlForce = 0.0;
-                            else if (bladeEdgeHeightForce <= bladeEdgeHeightLowerLimitMeters && liftControlForce < 0.0)
+                            else if (bladeEdgeHeightForce <= bladeEdgeHeightLowerLimitMeters && liftControlForce > 0.0)
                                 liftControlForce = 0.0;
                         }
 
