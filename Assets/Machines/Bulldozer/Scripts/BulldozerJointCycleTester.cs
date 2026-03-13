@@ -10,7 +10,8 @@ namespace PWRISimulator.ROS
         private enum TestControlMode
         {
             Position,
-            Speed
+            Speed,
+            Force
         }
 
         [SerializeField] BulldozerInput target;
@@ -44,6 +45,18 @@ namespace PWRISimulator.ROS
         [Header("Angle speed commands")]
         [SerializeField] float angleNegativeVelocityRadiansPerSec = -0.35f;
         [SerializeField] float anglePositiveVelocityRadiansPerSec = 0.35f;
+
+        [Header("Lift force commands")]
+        [SerializeField] float upForceRadiansEquivalent = -1.0f;
+        [SerializeField] float downForceRadiansEquivalent = 1.0f;
+
+        [Header("Tilt force commands")]
+        [SerializeField] float tiltNegativeForceRadiansEquivalent = -1.0f;
+        [SerializeField] float tiltPositiveForceRadiansEquivalent = 1.0f;
+
+        [Header("Angle force commands")]
+        [SerializeField] float angleNegativeForceRadiansEquivalent = -1.0f;
+        [SerializeField] float anglePositiveForceRadiansEquivalent = 1.0f;
 
         [Header("Timing")]
         [SerializeField] float holdSeconds = 2.0f;
@@ -132,10 +145,15 @@ namespace PWRISimulator.ROS
                         yield return HoldLiftCommand(cycle, "UP", upCommandRadians);
                         yield return HoldLiftCommand(cycle, "DOWN", downCommandRadians);
                     }
-                    else
+                    else if (controlMode == TestControlMode.Speed)
                     {
                         yield return HoldLiftVelocity(cycle, "UP", upVelocityRadiansPerSec);
                         yield return HoldLiftVelocity(cycle, "DOWN", downVelocityRadiansPerSec);
+                    }
+                    else
+                    {
+                        yield return HoldLiftForce(cycle, "UP", upForceRadiansEquivalent);
+                        yield return HoldLiftForce(cycle, "DOWN", downForceRadiansEquivalent);
                     }
                 }
             }
@@ -149,10 +167,15 @@ namespace PWRISimulator.ROS
                         yield return HoldTiltCommand(cycle, "NEG", tiltNegativeCommandRadians);
                         yield return HoldTiltCommand(cycle, "POS", tiltPositiveCommandRadians);
                     }
-                    else
+                    else if (controlMode == TestControlMode.Speed)
                     {
                         yield return HoldTiltVelocity(cycle, "NEG", tiltNegativeVelocityRadiansPerSec);
                         yield return HoldTiltVelocity(cycle, "POS", tiltPositiveVelocityRadiansPerSec);
+                    }
+                    else
+                    {
+                        yield return HoldTiltForce(cycle, "NEG", tiltNegativeForceRadiansEquivalent);
+                        yield return HoldTiltForce(cycle, "POS", tiltPositiveForceRadiansEquivalent);
                     }
                 }
             }
@@ -166,10 +189,15 @@ namespace PWRISimulator.ROS
                         yield return HoldAngleCommand(cycle, "NEG", angleNegativeCommandRadians);
                         yield return HoldAngleCommand(cycle, "POS", anglePositiveCommandRadians);
                     }
-                    else
+                    else if (controlMode == TestControlMode.Speed)
                     {
                         yield return HoldAngleVelocity(cycle, "NEG", angleNegativeVelocityRadiansPerSec);
                         yield return HoldAngleVelocity(cycle, "POS", anglePositiveVelocityRadiansPerSec);
+                    }
+                    else
+                    {
+                        yield return HoldAngleForce(cycle, "NEG", angleNegativeForceRadiansEquivalent);
+                        yield return HoldAngleForce(cycle, "POS", anglePositiveForceRadiansEquivalent);
                     }
                 }
             }
@@ -232,6 +260,38 @@ namespace PWRISimulator.ROS
             LogLiftSpeedLimitSummary(cycle, phase, command, minBladeHeight, maxBladeHeight, finalBladeHeight);
         }
 
+        private IEnumerator HoldLiftForce(int cycle, string phase, double command)
+        {
+            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Lift force cycle {cycle} phase {phase}: effort={command:F3}.", this);
+            SetAllCommands(command, 0.0, 0.0);
+
+            float minBladeHeight = float.PositiveInfinity;
+            float maxBladeHeight = float.NegativeInfinity;
+            float elapsed = 0.0f;
+            float nextSample = 0.0f;
+            while (elapsed < holdSeconds)
+            {
+                float bladeHeight = GetBladeHeight();
+                minBladeHeight = Mathf.Min(minBladeHeight, bladeHeight);
+                maxBladeHeight = Mathf.Max(maxBladeHeight, bladeHeight);
+
+                if (elapsed >= nextSample)
+                {
+                    LogLiftSample(cycle, phase, command, elapsed);
+                    nextSample += sampleIntervalSeconds;
+                }
+
+                yield return new WaitForFixedUpdate();
+                elapsed += Time.fixedDeltaTime;
+            }
+
+            float finalBladeHeight = GetBladeHeight();
+            minBladeHeight = Mathf.Min(minBladeHeight, finalBladeHeight);
+            maxBladeHeight = Mathf.Max(maxBladeHeight, finalBladeHeight);
+            LogLiftSample(cycle, phase, command, holdSeconds);
+            LogLiftLimitSummary("force", cycle, phase, command, minBladeHeight, maxBladeHeight, finalBladeHeight);
+        }
+
         private IEnumerator HoldTiltCommand(int cycle, string phase, double command)
         {
             Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Tilt cycle {cycle} phase {phase}: command={command:F3} rad.", this);
@@ -284,6 +344,38 @@ namespace PWRISimulator.ROS
             maxBladeEdgeDifference = Mathf.Max(maxBladeEdgeDifference, finalBladeEdgeDifference);
             LogTiltSample(cycle, phase, command, holdSeconds);
             LogTiltSpeedLimitSummary(cycle, phase, command, minBladeEdgeDifference, maxBladeEdgeDifference, finalBladeEdgeDifference);
+        }
+
+        private IEnumerator HoldTiltForce(int cycle, string phase, double command)
+        {
+            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Tilt force cycle {cycle} phase {phase}: effort={command:F3}.", this);
+            SetAllCommands(0.0, command, 0.0);
+
+            float minBladeEdgeDifference = float.PositiveInfinity;
+            float maxBladeEdgeDifference = float.NegativeInfinity;
+            float elapsed = 0.0f;
+            float nextSample = 0.0f;
+            while (elapsed < holdSeconds)
+            {
+                float bladeEdgeDifference = GetBladeEdgeDifference();
+                minBladeEdgeDifference = Mathf.Min(minBladeEdgeDifference, bladeEdgeDifference);
+                maxBladeEdgeDifference = Mathf.Max(maxBladeEdgeDifference, bladeEdgeDifference);
+
+                if (elapsed >= nextSample)
+                {
+                    LogTiltSample(cycle, phase, command, elapsed);
+                    nextSample += sampleIntervalSeconds;
+                }
+
+                yield return new WaitForFixedUpdate();
+                elapsed += Time.fixedDeltaTime;
+            }
+
+            float finalBladeEdgeDifference = GetBladeEdgeDifference();
+            minBladeEdgeDifference = Mathf.Min(minBladeEdgeDifference, finalBladeEdgeDifference);
+            maxBladeEdgeDifference = Mathf.Max(maxBladeEdgeDifference, finalBladeEdgeDifference);
+            LogTiltSample(cycle, phase, command, holdSeconds);
+            LogTiltLimitSummary("force", cycle, phase, command, minBladeEdgeDifference, maxBladeEdgeDifference, finalBladeEdgeDifference);
         }
 
         private IEnumerator HoldAngleCommand(int cycle, string phase, double command)
@@ -340,6 +432,38 @@ namespace PWRISimulator.ROS
             LogAngleSpeedLimitSummary(cycle, phase, command, minBladeAngle, maxBladeAngle, finalBladeAngle);
         }
 
+        private IEnumerator HoldAngleForce(int cycle, string phase, double command)
+        {
+            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Angle force cycle {cycle} phase {phase}: effort={command:F3}.", this);
+            SetAllCommands(0.0, 0.0, command);
+
+            float minBladeAngle = float.PositiveInfinity;
+            float maxBladeAngle = float.NegativeInfinity;
+            float elapsed = 0.0f;
+            float nextSample = 0.0f;
+            while (elapsed < holdSeconds)
+            {
+                float bladeAngle = GetBladeAngle();
+                minBladeAngle = Mathf.Min(minBladeAngle, bladeAngle);
+                maxBladeAngle = Mathf.Max(maxBladeAngle, bladeAngle);
+
+                if (elapsed >= nextSample)
+                {
+                    LogAngleSample(cycle, phase, command, elapsed);
+                    nextSample += sampleIntervalSeconds;
+                }
+
+                yield return new WaitForFixedUpdate();
+                elapsed += Time.fixedDeltaTime;
+            }
+
+            float finalBladeAngle = GetBladeAngle();
+            minBladeAngle = Mathf.Min(minBladeAngle, finalBladeAngle);
+            maxBladeAngle = Mathf.Max(maxBladeAngle, finalBladeAngle);
+            LogAngleSample(cycle, phase, command, holdSeconds);
+            LogAngleLimitSummary("force", cycle, phase, command, minBladeAngle, maxBladeAngle, finalBladeAngle);
+        }
+
         private void SetAllCommands(double liftCommand, double tiltCommand, double angleCommand)
         {
             liftJointField?.SetValue(target, liftCommand);
@@ -352,7 +476,11 @@ namespace PWRISimulator.ROS
             if (controlTypeField == null)
                 return;
 
-            ControlType requestedMode = controlMode == TestControlMode.Speed ? ControlType.Speed : ControlType.Position;
+            ControlType requestedMode = ControlType.Position;
+            if (controlMode == TestControlMode.Speed)
+                requestedMode = ControlType.Speed;
+            else if (controlMode == TestControlMode.Force)
+                requestedMode = ControlType.Force;
             controlTypeField.SetValue(target, requestedMode);
         }
 
@@ -393,29 +521,44 @@ namespace PWRISimulator.ROS
 
         private void LogLiftSpeedLimitSummary(int cycle, string phase, double command, float minBladeHeight, float maxBladeHeight, float finalBladeHeight)
         {
+            LogLiftLimitSummary("speed", cycle, phase, command, minBladeHeight, maxBladeHeight, finalBladeHeight);
+        }
+
+        private void LogLiftLimitSummary(string modeLabel, int cycle, string phase, double command, float minBladeHeight, float maxBladeHeight, float finalBladeHeight)
+        {
             bool lowerLimitReached = minBladeHeight <= bladeHeightLowerLimitMeters + liftLimitToleranceMeters;
             bool upperLimitReached = maxBladeHeight >= bladeHeightUpperLimitMeters - liftLimitToleranceMeters;
             bool stayedWithinRange = minBladeHeight >= bladeHeightLowerLimitMeters - liftLimitToleranceMeters &&
                 maxBladeHeight <= bladeHeightUpperLimitMeters + liftLimitToleranceMeters;
-            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Lift speed summary cycle={cycle}, phase={phase}, velocity={command:F3}, minHeight={minBladeHeight:F4}, maxHeight={maxBladeHeight:F4}, finalHeight={finalBladeHeight:F4}, lowerLimit={bladeHeightLowerLimitMeters:F4}, upperLimit={bladeHeightUpperLimitMeters:F4}, reachedLower={lowerLimitReached}, reachedUpper={upperLimitReached}, stayedWithinRange={stayedWithinRange}", this);
+            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Lift {modeLabel} summary cycle={cycle}, phase={phase}, command={command:F3}, minHeight={minBladeHeight:F4}, maxHeight={maxBladeHeight:F4}, finalHeight={finalBladeHeight:F4}, lowerLimit={bladeHeightLowerLimitMeters:F4}, upperLimit={bladeHeightUpperLimitMeters:F4}, reachedLower={lowerLimitReached}, reachedUpper={upperLimitReached}, stayedWithinRange={stayedWithinRange}", this);
         }
 
         private void LogTiltSpeedLimitSummary(int cycle, string phase, double command, float minBladeEdgeDifference, float maxBladeEdgeDifference, float finalBladeEdgeDifference)
+        {
+            LogTiltLimitSummary("speed", cycle, phase, command, minBladeEdgeDifference, maxBladeEdgeDifference, finalBladeEdgeDifference);
+        }
+
+        private void LogTiltLimitSummary(string modeLabel, int cycle, string phase, double command, float minBladeEdgeDifference, float maxBladeEdgeDifference, float finalBladeEdgeDifference)
         {
             bool positiveLimitReached = maxBladeEdgeDifference >= bladeEdgeDifferenceLimitMeters - tiltLimitToleranceMeters;
             bool negativeLimitReached = minBladeEdgeDifference <= -bladeEdgeDifferenceLimitMeters + tiltLimitToleranceMeters;
             bool stayedWithinRange = minBladeEdgeDifference >= -bladeEdgeDifferenceLimitMeters - tiltLimitToleranceMeters &&
                 maxBladeEdgeDifference <= bladeEdgeDifferenceLimitMeters + tiltLimitToleranceMeters;
-            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Tilt speed summary cycle={cycle}, phase={phase}, velocity={command:F3}, minDifference={minBladeEdgeDifference:F4}, maxDifference={maxBladeEdgeDifference:F4}, finalDifference={finalBladeEdgeDifference:F4}, limit={bladeEdgeDifferenceLimitMeters:F4}, reachedNegative={negativeLimitReached}, reachedPositive={positiveLimitReached}, stayedWithinRange={stayedWithinRange}", this);
+            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Tilt {modeLabel} summary cycle={cycle}, phase={phase}, command={command:F3}, minDifference={minBladeEdgeDifference:F4}, maxDifference={maxBladeEdgeDifference:F4}, finalDifference={finalBladeEdgeDifference:F4}, limit={bladeEdgeDifferenceLimitMeters:F4}, reachedNegative={negativeLimitReached}, reachedPositive={positiveLimitReached}, stayedWithinRange={stayedWithinRange}", this);
         }
 
         private void LogAngleSpeedLimitSummary(int cycle, string phase, double command, float minBladeAngle, float maxBladeAngle, float finalBladeAngle)
+        {
+            LogAngleLimitSummary("speed", cycle, phase, command, minBladeAngle, maxBladeAngle, finalBladeAngle);
+        }
+
+        private void LogAngleLimitSummary(string modeLabel, int cycle, string phase, double command, float minBladeAngle, float maxBladeAngle, float finalBladeAngle)
         {
             bool positiveLimitReached = maxBladeAngle >= bladeAngleLimitRadians - angleLimitToleranceRadians;
             bool negativeLimitReached = minBladeAngle <= -bladeAngleLimitRadians + angleLimitToleranceRadians;
             bool stayedWithinRange = minBladeAngle >= -bladeAngleLimitRadians - angleLimitToleranceRadians &&
                 maxBladeAngle <= bladeAngleLimitRadians + angleLimitToleranceRadians;
-            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Angle speed summary cycle={cycle}, phase={phase}, velocity={command:F3}, minAngle={minBladeAngle:F4}, maxAngle={maxBladeAngle:F4}, finalAngle={finalBladeAngle:F4}, limit={bladeAngleLimitRadians:F4}, reachedNegative={negativeLimitReached}, reachedPositive={positiveLimitReached}, stayedWithinRange={stayedWithinRange}", this);
+            Debug.Log($"[{nameof(BulldozerJointCycleTester)}] Angle {modeLabel} summary cycle={cycle}, phase={phase}, command={command:F3}, minAngle={minBladeAngle:F4}, maxAngle={maxBladeAngle:F4}, finalAngle={finalBladeAngle:F4}, limit={bladeAngleLimitRadians:F4}, reachedNegative={negativeLimitReached}, reachedPositive={positiveLimitReached}, stayedWithinRange={stayedWithinRange}", this);
         }
 
         private void LogLiftSample(int cycle, string phase, double command, float elapsed)
