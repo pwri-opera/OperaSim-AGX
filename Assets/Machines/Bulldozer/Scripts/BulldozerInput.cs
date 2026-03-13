@@ -60,6 +60,8 @@ namespace PWRISimulator.ROS
         private float bladeEdgeRightInitialLocalY;
         private bool bladeEdgeHeightInitialized;
         private bool bladeEdgeEndsInitialized;
+        private bool bladeTiltPositionCommandInitialized;
+        private float bladeTiltPositionCommand;
         private bool bladeAnglePositionCommandInitialized;
         private float bladeAnglePositionCommand;
         private int lastLiftLowerLimitLogFrame = -1;
@@ -408,6 +410,7 @@ namespace PWRISimulator.ROS
             // 制御値の反映
             if (enabledDummy ? emergencyStop : settingSubscriber.EmergencyStopCmd)
             {
+                bladeTiltPositionCommandInitialized = false;
                 bladeAnglePositionCommandInitialized = false;
 
                 // 緊急停止
@@ -432,7 +435,10 @@ namespace PWRISimulator.ROS
             else
             {
                 if (controlType != ControlType.Position)
+                {
+                    bladeTiltPositionCommandInitialized = false;
                     bladeAnglePositionCommandInitialized = false;
+                }
 
                 // 上部旋回体
                 switch (controlType)
@@ -485,8 +491,14 @@ namespace PWRISimulator.ROS
 
                         float targetTiltCmdAngle = (float)BladeSubscriber.BladeCmd.position[1];
                         float maxTiltAngleDeltaRad = tiltPositionRateLimitRadPerSec > 0.0f ? tiltPositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
-                        float currentTiltAngle = EstimateTiltAngleFromCylinderPosition(joints.bladeTilt.CurrentPosition);
-                        float tiltCmdAngle = Mathf.MoveTowards(currentTiltAngle, targetTiltCmdAngle, maxTiltAngleDeltaRad);
+                        if (!bladeTiltPositionCommandInitialized)
+                        {
+                            bladeTiltPositionCommand = EstimateTiltAngleFromCylinderPosition(joints.bladeTilt.CurrentPosition);
+                            bladeTiltPositionCommandInitialized = true;
+                        }
+
+                        bladeTiltPositionCommand = Mathf.MoveTowards(bladeTiltPositionCommand, targetTiltCmdAngle, maxTiltAngleDeltaRad);
+                        float tiltCmdAngle = bladeTiltPositionCommand;
                         double tiltControlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping(tiltCmdAngle);
 
                         if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiff) && joints != null)
