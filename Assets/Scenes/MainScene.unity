@@ -36548,6 +36548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 812756218}
+  - component: {fileID: 812756228}
   - component: {fileID: 812756227}
   - component: {fileID: 812756226}
   - component: {fileID: 812756225}
@@ -36558,7 +36559,7 @@ GameObject:
   - component: {fileID: 812756220}
   - component: {fileID: 812756219}
   m_Layer: 0
-  m_Name: AGXUnity.Hinge_angle_L
+  m_Name: AGXUnity.BallJoint_angle_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36591,21 +36592,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: FR
-  m_enable: 0
+  m_nativeName: TR
+  m_enable: 1
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 812756219}
     m_compliance: 0.00000001
     m_damping: 0.040000003
     m_forceRange:
-      Min: -Infinity
+      Min: 0
       Max: Infinity
-  m_frictionCoefficient: 0.41666666
-  m_nonLinearDirectSolveEnabled: 0
-  m_minimumStaticFrictionForceRange:
-    Min: -0
-    Max: 0
 --- !u!114 &812756220
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -36618,7 +36614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70462a82c1931f54fb0aa1c1da7c460c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: ER
+  m_nativeName: CLFR
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -36628,9 +36624,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  m_voltage: 24
-  m_armatureResistance: 1
-  m_torqueConstant: 1
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &812756221
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -36643,7 +36641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d2c2cd313d0bb46be8c1e65aca04c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: LR
+  m_nativeName: CLF
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -36653,7 +36651,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  m_position: 0
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &812756222
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -36666,7 +36668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ba2f9c312939643961494613a084da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: MR
+  m_nativeName: FN
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -36676,8 +36678,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  m_speed: 0
-  m_lockAtZeroSpeed: 0
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &812756223
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -36690,7 +36695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546112712cfa2af44b5bc0ed07c2a367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: RR
+  m_nativeName: FV
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -36698,11 +36703,13 @@ MonoBehaviour:
     m_compliance: 1e-10
     m_damping: 0.040000003
     m_forceRange:
-      Min: 0
+      Min: -Infinity
       Max: Infinity
-  m_range:
-    Min: -Infinity
-    Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &812756224
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -36715,7 +36722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 109ee4d2e7ce6a24abfc38fe7666c22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: SW
+  m_nativeName: FU
   m_enable: 1
   m_rowData:
   - m_row: 0
@@ -36725,13 +36732,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  - m_row: 1
-    m_elementaryConstraint: {fileID: 812756224}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &812756225
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -36744,29 +36749,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 109ee4d2e7ce6a24abfc38fe7666c22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: SR
-  m_enable: 1
+  m_nativeName: CL
+  m_enable: 0
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 812756225}
     m_compliance: 0.00000001
     m_damping: 0.040000003
     m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  - m_row: 1
-    m_elementaryConstraint: {fileID: 812756225}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  - m_row: 2
-    m_elementaryConstraint: {fileID: 812756225}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
+      Min: 0
       Max: Infinity
 --- !u!114 &812756226
 MonoBehaviour:
@@ -36780,6 +36771,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a62c834afa9b74fb73d78f477ec731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_nativeName: SR
+  m_enable: 1
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 812756226}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  - m_row: 1
+    m_elementaryConstraint: {fileID: 812756226}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  - m_row: 2
+    m_elementaryConstraint: {fileID: 812756226}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+--- !u!114 &812756227
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812756217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a62c834afa9b74fb73d78f477ec731, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
   m_referenceFrame:
     m_parent: {fileID: 624259136}
     m_localPosition: {x: 0, y: 0, z: 0}
@@ -36789,7 +36816,7 @@ MonoBehaviour:
     m_localPosition: {x: 0, y: 0, z: 0}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
---- !u!114 &812756227
+--- !u!114 &812756228
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -36799,16 +36826,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9b4d0f676963d549beea62f91bc1976, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_attachmentPairLegacy: {fileID: 0}
-  m_attachmentPairComponent: {fileID: 812756226}
-  m_type: 0
+  m_attachmentPairComponent: {fileID: 812756227}
+  m_type: 4
   m_collisionsState: 0
   m_solveType: 0
   m_drawGizmosEnable: 1
   m_connectedFrameNativeSyncEnabled: 0
   m_elementaryConstraints:
+  - {fileID: 812756226}
   - {fileID: 812756225}
   - {fileID: 812756224}
   - {fileID: 812756223}
@@ -325333,6 +325361,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1996272566}
+  - component: {fileID: 1996272576}
   - component: {fileID: 1996272575}
   - component: {fileID: 1996272574}
   - component: {fileID: 1996272573}
@@ -325343,7 +325372,7 @@ GameObject:
   - component: {fileID: 1996272568}
   - component: {fileID: 1996272567}
   m_Layer: 0
-  m_Name: AGXUnity.Hinge_angle_R
+  m_Name: AGXUnity.BallJoint_angle_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -325376,21 +325405,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efc321cb466bf84aa6b932630481ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: FR
-  m_enable: 0
+  m_nativeName: TR
+  m_enable: 1
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 1996272567}
     m_compliance: 0.00000001
     m_damping: 0.040000003
     m_forceRange:
-      Min: -Infinity
+      Min: 0
       Max: Infinity
-  m_frictionCoefficient: 0.41666666
-  m_nonLinearDirectSolveEnabled: 0
-  m_minimumStaticFrictionForceRange:
-    Min: -0
-    Max: 0
 --- !u!114 &1996272568
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -325403,7 +325427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70462a82c1931f54fb0aa1c1da7c460c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: ER
+  m_nativeName: CLFR
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -325413,9 +325437,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  m_voltage: 24
-  m_armatureResistance: 1
-  m_torqueConstant: 1
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &1996272569
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -325428,7 +325454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d2c2cd313d0bb46be8c1e65aca04c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: LR
+  m_nativeName: CLF
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -325438,7 +325464,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  m_position: 0
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &1996272570
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -325451,7 +325481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ba2f9c312939643961494613a084da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: MR
+  m_nativeName: FN
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -325461,8 +325491,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  m_speed: 0
-  m_lockAtZeroSpeed: 0
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &1996272571
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -325475,7 +325508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546112712cfa2af44b5bc0ed07c2a367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: RR
+  m_nativeName: FV
   m_enable: 0
   m_rowData:
   - m_row: 0
@@ -325483,11 +325516,13 @@ MonoBehaviour:
     m_compliance: 1e-10
     m_damping: 0.040000003
     m_forceRange:
-      Min: 0
+      Min: -Infinity
       Max: Infinity
-  m_range:
-    Min: -Infinity
-    Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &1996272572
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -325500,7 +325535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 109ee4d2e7ce6a24abfc38fe7666c22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: SW
+  m_nativeName: FU
   m_enable: 1
   m_rowData:
   - m_row: 0
@@ -325510,13 +325545,11 @@ MonoBehaviour:
     m_forceRange:
       Min: -Infinity
       Max: Infinity
-  - m_row: 1
-    m_elementaryConstraint: {fileID: 1996272572}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
+  m_frictionCoefficient: 0.41666666
+  m_nonLinearDirectSolveEnabled: 0
+  m_minimumStaticFrictionForceRange:
+    Min: -0
+    Max: 0
 --- !u!114 &1996272573
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -325529,29 +325562,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 109ee4d2e7ce6a24abfc38fe7666c22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nativeName: SR
-  m_enable: 1
+  m_nativeName: CL
+  m_enable: 0
   m_rowData:
   - m_row: 0
     m_elementaryConstraint: {fileID: 1996272573}
     m_compliance: 0.00000001
     m_damping: 0.040000003
     m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  - m_row: 1
-    m_elementaryConstraint: {fileID: 1996272573}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
-      Max: Infinity
-  - m_row: 2
-    m_elementaryConstraint: {fileID: 1996272573}
-    m_compliance: 0.00000001
-    m_damping: 0.040000003
-    m_forceRange:
-      Min: -Infinity
+      Min: 0
       Max: Infinity
 --- !u!114 &1996272574
 MonoBehaviour:
@@ -325565,6 +325584,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a62c834afa9b74fb73d78f477ec731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_nativeName: SR
+  m_enable: 1
+  m_rowData:
+  - m_row: 0
+    m_elementaryConstraint: {fileID: 1996272574}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  - m_row: 1
+    m_elementaryConstraint: {fileID: 1996272574}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+  - m_row: 2
+    m_elementaryConstraint: {fileID: 1996272574}
+    m_compliance: 0.00000001
+    m_damping: 0.040000003
+    m_forceRange:
+      Min: -Infinity
+      Max: Infinity
+--- !u!114 &1996272575
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996272565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a62c834afa9b74fb73d78f477ec731, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
   m_referenceFrame:
     m_parent: {fileID: 110769663}
     m_localPosition: {x: 0, y: 0, z: 0}
@@ -325574,7 +325629,7 @@ MonoBehaviour:
     m_localPosition: {x: 0, y: 0, z: 0}
     m_localRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
   m_synchronized: 1
---- !u!114 &1996272575
+--- !u!114 &1996272576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -325584,16 +325639,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9b4d0f676963d549beea62f91bc1976, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_attachmentPairLegacy: {fileID: 0}
-  m_attachmentPairComponent: {fileID: 1996272574}
-  m_type: 0
+  m_attachmentPairComponent: {fileID: 1996272575}
+  m_type: 4
   m_collisionsState: 0
   m_solveType: 0
   m_drawGizmosEnable: 1
   m_connectedFrameNativeSyncEnabled: 0
   m_elementaryConstraints:
+  - {fileID: 1996272574}
   - {fileID: 1996272573}
   - {fileID: 1996272572}
   - {fileID: 1996272571}
