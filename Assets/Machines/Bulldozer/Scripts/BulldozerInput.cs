@@ -27,6 +27,7 @@ namespace PWRISimulator.ROS
 
         [Header("Blade angle limit")]
         [SerializeField] float bladeAngleLimitDegrees = 24.0f;
+        [SerializeField] float anglePositionRateLimitRadPerSec = 0.5f;
 
         [Header("Blade edge debug")]
         [PWRISimulator.ReadOnly] [SerializeField] float currentBladeHeightMeters;
@@ -59,6 +60,8 @@ namespace PWRISimulator.ROS
         private float bladeEdgeRightInitialLocalY;
         private bool bladeEdgeHeightInitialized;
         private bool bladeEdgeEndsInitialized;
+        private bool bladeAnglePositionCommandInitialized;
+        private float bladeAnglePositionCommand;
         private int lastLiftLowerLimitLogFrame = -1;
         private int lastLiftLowerZoneLogFrame = -1;
 
@@ -405,6 +408,8 @@ namespace PWRISimulator.ROS
             // 制御値の反映
             if (enabledDummy ? emergencyStop : settingSubscriber.EmergencyStopCmd)
             {
+                bladeAnglePositionCommandInitialized = false;
+
                 // 緊急停止
                 joints.bladeLift.controlType = ControlType.Position;
                 joints.bladeLift.controlValue = joints.bladeLift.CurrentPosition;
@@ -426,6 +431,9 @@ namespace PWRISimulator.ROS
             }
             else
             {
+                if (controlType != ControlType.Position)
+                    bladeAnglePositionCommandInitialized = false;
+
                 // 上部旋回体
                 switch (controlType)
                 {
@@ -499,7 +507,16 @@ namespace PWRISimulator.ROS
                         joints.bladeTilt.controlType = ControlType.Position;
                         joints.bladeTilt.controlValue = tiltControlValue;
 
-                        float clampedBladeAngle = ClampBladeAngle((float)BladeSubscriber.BladeCmd.position[2]);
+                        float targetBladeAngle = ClampBladeAngle((float)BladeSubscriber.BladeCmd.position[2]);
+                        float maxBladeAngleDeltaRad = anglePositionRateLimitRadPerSec > 0.0f ? anglePositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
+                        if (!bladeAnglePositionCommandInitialized)
+                        {
+                            bladeAnglePositionCommand = bladeAngleCylConv.currentLinkAngle;
+                            bladeAnglePositionCommandInitialized = true;
+                        }
+
+                        bladeAnglePositionCommand = Mathf.MoveTowards(bladeAnglePositionCommand, targetBladeAngle, maxBladeAngleDeltaRad);
+                        float clampedBladeAngle = ClampBladeAngle(bladeAnglePositionCommand);
                         float telescoping = bladeAngleCylConv.CalculateCylinderRodTelescoping(clampedBladeAngle);
                         joints.bladeAngleLeft.controlType = ControlType.Position;
                         joints.bladeAngleLeft.controlValue = -telescoping;
