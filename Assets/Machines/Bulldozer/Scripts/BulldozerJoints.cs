@@ -19,6 +19,9 @@ namespace PWRISimulator
         public ConstraintControl bladeAngleRight;
         public ConstraintControl bladeAngleLeft;
 
+        [Header("Blade Angle Limit (Distance Constraint)")]
+        public ConstraintControl bladeAngleDistance;
+
         private BulldozerInput input;
         protected override bool Initialize()
         {
@@ -33,6 +36,8 @@ namespace PWRISimulator
             RegisterConstraintControl(bladeAngleRight);
             RegisterConstraintControl(bladeAngleLeft);
 
+            if (bladeAngleDistance != null && bladeAngleDistance.constraint != null)
+                RegisterConstraintControl(bladeAngleDistance);
 
             leftSprocket.constraint.Native.setEnableComputeForces(true);
             rightSprocket.constraint.Native.setEnableComputeForces(true);
@@ -40,6 +45,10 @@ namespace PWRISimulator
             bladeTilt.constraint.Native.setEnableComputeForces(true);
             bladeAngleRight.constraint.Native.setEnableComputeForces(true);
             bladeAngleLeft.constraint.Native.setEnableComputeForces(true);
+
+            if (bladeAngleDistance != null && bladeAngleDistance.constraint != null
+                && bladeAngleDistance.constraint.Native != null)
+                bladeAngleDistance.constraint.Native.setEnableComputeForces(true);
 
             input = gameObject.GetComponent<BulldozerInput>();
 
