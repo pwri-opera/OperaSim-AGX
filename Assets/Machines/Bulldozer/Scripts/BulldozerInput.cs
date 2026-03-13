@@ -529,9 +529,9 @@ namespace PWRISimulator.ROS
                         double liftControlVelocity = bladeLiftCylConv.CalculateCylinderRodTelescopingVelocity(liftCmdVelocity);
                         if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeightVel))
                         {
-                            if (bladeEdgeHeightVel >= bladeEdgeHeightUpperLimitMeters && liftControlVelocity > 0.0)
+                            if (bladeEdgeHeightVel >= bladeEdgeHeightUpperLimitMeters && liftControlVelocity < 0.0)
                                 liftControlVelocity = 0.0;
-                            else if (bladeEdgeHeightVel <= bladeEdgeHeightLowerLimitMeters && liftControlVelocity < 0.0)
+                            else if (bladeEdgeHeightVel <= bladeEdgeHeightLowerLimitMeters && liftControlVelocity > 0.0)
                                 liftControlVelocity = 0.0;
                         }
 
