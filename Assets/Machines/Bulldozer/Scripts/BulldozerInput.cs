@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using PWRISimulator;
 
 namespace PWRISimulator.ROS
 {
@@ -28,6 +30,9 @@ namespace PWRISimulator.ROS
         [Header("Blade angle limit")]
         [SerializeField] float bladeAngleLimitDegrees = 24.0f;
         [SerializeField] float anglePositionRateLimitRadPerSec = 0.5f;
+
+        [Header("Track velocity limit (vehicle speed)")]
+        [SerializeField] float trackVelocityLimitKph = 8.5f;
 
         [Header("Blade edge debug")]
         [PWRISimulator.ReadOnly] [SerializeField] float currentBladeHeightMeters;
@@ -638,11 +643,8 @@ namespace PWRISimulator.ROS
                                 joints.leftSprocket.controlValue = trackSubscriber.TrackCmd.position[1];
                                 break;
                             case ControlType.Speed:
-                                joints.rightSprocket.controlType = ControlType.Speed;
-                                joints.rightSprocket.controlValue = trackSubscriber.TrackCmd.velocity[0];
-
-                                joints.leftSprocket.controlType = ControlType.Speed;
-                                joints.leftSprocket.controlValue = trackSubscriber.TrackCmd.velocity[1];
+                                ApplyTrackSpeedCommand(joints.rightSprocket, trackSubscriber.TrackCmd.velocity[0]);
+                                ApplyTrackSpeedCommand(joints.leftSprocket, trackSubscriber.TrackCmd.velocity[1]);
                                 break;
                             case ControlType.Force:
                                 joints.rightSprocket.controlType = ControlType.Force;
@@ -670,6 +672,24 @@ namespace PWRISimulator.ROS
                         break;
                 }
             }
+        }
+
+        private void ApplyTrackSpeedCommand(ConstraintControl control, double speedCommand)
+        {
+            if (control == null)
+                return;
+
+            float trackVelocityLimitRadiansPerSec = GetTrackVelocityLimitRadiansPerSec();
+            control.controlType = ControlType.Speed;
+            control.controlValue = Mathf.Clamp((float)speedCommand, -Mathf.Abs(trackVelocityLimitRadiansPerSec), Mathf.Abs(trackVelocityLimitRadiansPerSec));
+        }
+
+        private float GetTrackVelocityLimitRadiansPerSec()
+        {
+            if (twistCommandConvertor != null)
+                return (float)twistCommandConvertor.GetTrackSpeedLimitRadiansPerSec(trackVelocityLimitKph);
+
+            return 0.0f;
         }
     }
 }

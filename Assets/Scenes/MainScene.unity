@@ -21260,14 +21260,14 @@ MonoBehaviour:
     controlEnabled: 1
     controlType: 1
     controlValue: 0
-    controlMaxForce: 600000
+    controlMaxForce: 60000
     deadTime: 0
   rightSprocket:
     constraint: {fileID: 1235706990}
     controlEnabled: 1
     controlType: 1
     controlValue: 0
-    controlMaxForce: 600000
+    controlMaxForce: 60000
     deadTime: 0
   bladeLift:
     constraint: {fileID: 535684679}
@@ -21281,7 +21281,7 @@ MonoBehaviour:
     controlEnabled: 1
     controlType: 0
     controlValue: 0
-    controlMaxForce: Infinity
+    controlMaxForce: 1e+50
     deadTime: 0
   bladeAngleRight:
     constraint: {fileID: 1768902922}
@@ -21294,6 +21294,13 @@ MonoBehaviour:
     constraint: {fileID: 2111588880}
     controlEnabled: 1
     controlType: 0
+    controlValue: 0
+    controlMaxForce: Infinity
+    deadTime: 0
+  bladeAngleDistance:
+    constraint: {fileID: 0}
+    controlEnabled: 0
+    controlType: 1
     controlValue: 0
     controlMaxForce: Infinity
     deadTime: 0
@@ -21346,7 +21353,21 @@ MonoBehaviour:
   trackSubscriber: {fileID: 488108189}
   settingSubscriber: {fileID: 488108188}
   movementControlType: 0
-  controlType: 1
+  controlType: 0
+  bladeEdge: {fileID: 0}
+  bladeEdgeHeightUpperLimitMeters: 0.8
+  bladeEdgeHeightLowerLimitMeters: -0.38
+  liftPositionRateLimitRadPerSec: 0.5
+  bladeEdgeLeft: {fileID: 0}
+  bladeEdgeRight: {fileID: 0}
+  bladeEdgeEndHeightDifferenceLimitMeters: 0.435
+  tiltPositionRateLimitRadPerSec: 0.5
+  bladeAngleLimitDegrees: 24
+  anglePositionRateLimitRadPerSec: 0.5
+  trackVelocityLimitKph: 8.5
+  currentBladeHeightMeters: 0
+  currentBladeEdgeDifferenceMeters: 0
+  enableLiftLimitDebugLogs: 0
   bladeLiftCylConv: {fileID: 488108193}
   bladeTiltCylConv: {fileID: 488108192}
   bladeAngleCylConv: {fileID: 488108191}
