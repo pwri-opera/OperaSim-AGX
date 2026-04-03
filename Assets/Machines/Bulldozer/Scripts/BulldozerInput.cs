@@ -287,6 +287,7 @@ namespace PWRISimulator.ROS
                 switch (controlType)
                 {
                     case ControlType.Position:
+                        BladeSubscriber.BladeCmd.control_type = (byte)controlType;
                         BladeSubscriber.BladeCmd.position[0] = lift_joint;
                         BladeSubscriber.BladeCmd.position[1] = tilt_joint;
                         BladeSubscriber.BladeCmd.position[2] = angle_joint;
@@ -297,6 +298,7 @@ namespace PWRISimulator.ROS
                         BladeSubscriber.BladeCmd.effort[1] = 0.0;
                         BladeSubscriber.BladeCmd.effort[2] = 0.0;
 
+                        trackSubscriber.TrackCmd.control_type = (byte)controlType;
                         trackSubscriber.TrackCmd.position[0] = right_track;
                         trackSubscriber.TrackCmd.position[1] = left_track;
                         trackSubscriber.TrackCmd.velocity[0] = 0.0;
@@ -305,6 +307,7 @@ namespace PWRISimulator.ROS
                         trackSubscriber.TrackCmd.effort[1] = 0.0;
                         break;
                     case ControlType.Speed:
+                        BladeSubscriber.BladeCmd.control_type = (byte)controlType;
                         BladeSubscriber.BladeCmd.position[0] = 0.0;
                         BladeSubscriber.BladeCmd.position[1] = 0.0;
                         BladeSubscriber.BladeCmd.position[2] = 0.0;
@@ -315,6 +318,7 @@ namespace PWRISimulator.ROS
                         BladeSubscriber.BladeCmd.effort[1] = 0.0;
                         BladeSubscriber.BladeCmd.effort[2] = 0.0;
 
+                        trackSubscriber.TrackCmd.control_type = (byte)controlType;
                         trackSubscriber.TrackCmd.position[0] = 0.0;
                         trackSubscriber.TrackCmd.position[1] = 0.0;
                         trackSubscriber.TrackCmd.velocity[0] = right_track;
@@ -323,6 +327,7 @@ namespace PWRISimulator.ROS
                         trackSubscriber.TrackCmd.effort[1] = 0.0;
                         break;
                     case ControlType.Force:
+                        BladeSubscriber.BladeCmd.control_type = (byte)controlType;
                         BladeSubscriber.BladeCmd.position[0] = 0.0;
                         BladeSubscriber.BladeCmd.position[1] = 0.0;
                         BladeSubscriber.BladeCmd.position[2] = 0.0;
@@ -333,6 +338,7 @@ namespace PWRISimulator.ROS
                         BladeSubscriber.BladeCmd.effort[1] = tilt_joint;
                         BladeSubscriber.BladeCmd.effort[2] = angle_joint;
 
+                        trackSubscriber.TrackCmd.control_type = (byte)controlType;
                         trackSubscriber.TrackCmd.position[0] = 0.0;
                         trackSubscriber.TrackCmd.position[1] = 0.0;
                         trackSubscriber.TrackCmd.velocity[0] = 0.0;
@@ -405,6 +411,11 @@ namespace PWRISimulator.ROS
 
         private float BladeAngleLimitRadians => Mathf.Abs(bladeAngleLimitDegrees) * Mathf.Deg2Rad;
 
+        private static ControlType ResolveControlType(byte controlType)
+        {
+            return Enum.IsDefined(typeof(ControlType), (int)controlType) ? (ControlType)controlType : ControlType.Position;
+        }
+
         private float ClampBladeAngle(float angleRadians)
         {
             return Mathf.Clamp(angleRadians, -BladeAngleLimitRadians, BladeAngleLimitRadians);
@@ -412,6 +423,9 @@ namespace PWRISimulator.ROS
 
         public void SetCommands()
         {
+            ControlType bladeControlType = enabledDummy ? controlType : ResolveControlType(BladeSubscriber.BladeCmd.control_type);
+            ControlType trackControlType = enabledDummy ? controlType : ResolveControlType(trackSubscriber.TrackCmd.control_type);
+
             // 制御値の反映
             if (enabledDummy ? emergencyStop : settingSubscriber.EmergencyStopCmd)
             {
@@ -439,14 +453,14 @@ namespace PWRISimulator.ROS
             }
             else
             {
-                if (controlType != ControlType.Position)
+                if (bladeControlType != ControlType.Position)
                 {
                     bladeTiltPositionCommandInitialized = false;
                     bladeAnglePositionCommandInitialized = false;
                 }
 
                 // 上部旋回体
-                switch (controlType)
+                switch (bladeControlType)
                 {
                     case ControlType.Position:
                         float targetLiftCmdAngle = (float)BladeSubscriber.BladeCmd.position[0];
@@ -633,7 +647,7 @@ namespace PWRISimulator.ROS
                 switch (movementControlType)
                 {
                     case ConstractionMovementControlType.ActuatorCommand:
-                        switch (controlType)
+                        switch (trackControlType)
                         {
                             case ControlType.Position:
                                 joints.rightSprocket.controlType = ControlType.Position;
