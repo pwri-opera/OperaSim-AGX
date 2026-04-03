@@ -175,6 +175,16 @@ namespace PWRISimulator
             }
         }
 
+        public double GetTrackSpeedLimitRadiansPerSec(double vehicleSpeedKph)
+        {
+            double sprocketRadius = Math.Max(leftSprocketRadius, rightSprocketRadius);
+            if (sprocketRadius <= 0.0)
+                return 0.0;
+
+            double vehicleSpeedMetersPerSecond = vehicleSpeedKph / 3.6;
+            return vehicleSpeedMetersPerSecond / sprocketRadius;
+        }
+
 
         private  (double, double) CommandLinearAngularVelocityVWBehaviorMode(double cmdLinearVel, double cmdAngularVel)
         {

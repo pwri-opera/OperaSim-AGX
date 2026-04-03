@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using PWRISimulator;
 
 namespace PWRISimulator.ROS
 {
@@ -13,13 +15,38 @@ namespace PWRISimulator.ROS
         [SerializeField] ConstractionMovementControlType movementControlType;
         [SerializeField] ControlType controlType = ControlType.Position;
 
+        [Header("Blade lift limit (blade edge height)")]
+        [SerializeField] Transform bladeEdge;
+        [SerializeField] float bladeEdgeHeightUpperLimitMeters = 0.8f;
+        [SerializeField] float bladeEdgeHeightLowerLimitMeters = -0.38f;
+        [SerializeField] float liftPositionRateLimitRadPerSec = 0.5f;
+
+        [Header("Blade tilt limit (blade edge end height difference)")]
+        [SerializeField] Transform bladeEdgeLeft;
+        [SerializeField] Transform bladeEdgeRight;
+        [SerializeField] float bladeEdgeEndHeightDifferenceLimitMeters = 0.435f;
+        [SerializeField] float tiltPositionRateLimitRadPerSec = 0.5f;
+
+        [Header("Blade angle limit")]
+        [SerializeField] float bladeAngleLimitDegrees = 24.0f;
+        [SerializeField] float anglePositionRateLimitRadPerSec = 0.5f;
+
+        [Header("Track velocity limit (vehicle speed)")]
+        [SerializeField] float trackVelocityLimitKph = 8.5f;
+
+        [Header("Blade edge debug")]
+        [PWRISimulator.ReadOnly] [SerializeField] float currentBladeHeightMeters;
+        [PWRISimulator.ReadOnly] [SerializeField] float currentBladeEdgeDifferenceMeters;
+        [SerializeField] bool enableLiftLimitDebugLogs;
+
+        [Header("Length convertor")]
         public BladeLiftToCylinderLengthConvertor bladeLiftCylConv;
         public BladeTiltToCylinderLengthConvertor bladeTiltCylConv;
         public BladeAngleToCylinderLengthConvertor bladeAngleCylConv;
 
         public TrackTwistCommandConvertor twistCommandConvertor;
 
-        [Header("Dummy")]
+        [Header("Dummy input")]
         [SerializeField] bool enabledDummy;
         [SerializeField] double lift_joint;
         [SerializeField] double tilt_joint;
@@ -30,22 +57,298 @@ namespace PWRISimulator.ROS
 
 
         private BulldozerJoints joints;
+        private const string BladeEdgeGameObjectName = "AGXUnity.Collide.Box_blade3";
+        private const string BladeEdgeLeftAutoName = "BladeEdgeLeft_Auto";
+        private const string BladeEdgeRightAutoName = "BladeEdgeRight_Auto";
+        private float bladeEdgeInitialLocalY;
+        private float bladeEdgeLeftInitialLocalY;
+        private float bladeEdgeRightInitialLocalY;
+        private bool bladeEdgeHeightInitialized;
+        private bool bladeEdgeEndsInitialized;
+        private bool bladeTiltPositionCommandInitialized;
+        private float bladeTiltPositionCommand;
+        private bool bladeAnglePositionCommandInitialized;
+        private float bladeAnglePositionCommand;
+        private int lastLiftLowerLimitLogFrame = -1;
+        private int lastLiftLowerZoneLogFrame = -1;
 
         void Start()
         {
             joints = gameObject.GetComponent<BulldozerJoints>();
+
+            if (!TryInitializeBladeEdgeReferences())
+            {
+                Debug.LogWarning($"[{nameof(BulldozerInput)}] Failed to find blade edge GameObject '{BladeEdgeGameObjectName}' at Start(). Height-based lift limiting will be disabled.", this);
+            }
         }
+
+        private bool TryInitializeBladeEdgeReferences()
+        {
+            if (bladeEdge == null)
+            {
+                var bladeEdgeGo = GameObject.Find(BladeEdgeGameObjectName);
+                bladeEdge = bladeEdgeGo != null ? bladeEdgeGo.transform : null;
+            }
+
+            if (bladeEdge != null && !bladeEdgeHeightInitialized)
+            {
+                bladeEdgeInitialLocalY = transform.InverseTransformPoint(bladeEdge.position).y;
+                bladeEdgeHeightInitialized = true;
+            }
+
+            if ((bladeEdgeLeft == null || bladeEdgeRight == null) && bladeEdge != null)
+            {
+                if (TryCreateBladeEdgeEndReferencesFromBounds(bladeEdge, out Transform left, out Transform right))
+                {
+                    if (bladeEdgeLeft == null)
+                        bladeEdgeLeft = left;
+                    if (bladeEdgeRight == null)
+                        bladeEdgeRight = right;
+                }
+            }
+
+            if (bladeEdgeLeft != null && bladeEdgeRight != null && !bladeEdgeEndsInitialized)
+            {
+                bladeEdgeLeftInitialLocalY = transform.InverseTransformPoint(bladeEdgeLeft.position).y;
+                bladeEdgeRightInitialLocalY = transform.InverseTransformPoint(bladeEdgeRight.position).y;
+                bladeEdgeEndsInitialized = true;
+            }
+
+            return bladeEdgeHeightInitialized || bladeEdgeEndsInitialized;
+        }
+
+        private bool TryCreateBladeEdgeEndReferencesFromBounds(Transform bladeEdgeTransform, out Transform left, out Transform right)
+        {
+            left = null;
+            right = null;
+
+            if (!TryGetBladeEdgeBounds(bladeEdgeTransform, out Bounds bounds))
+                return false;
+
+            Vector3[] corners = new Vector3[8];
+            Vector3 c = bounds.center;
+            Vector3 e = bounds.extents;
+            corners[0] = c + new Vector3(-e.x, -e.y, -e.z);
+            corners[1] = c + new Vector3(-e.x, -e.y,  e.z);
+            corners[2] = c + new Vector3(-e.x,  e.y, -e.z);
+            corners[3] = c + new Vector3(-e.x,  e.y,  e.z);
+            corners[4] = c + new Vector3( e.x, -e.y, -e.z);
+            corners[5] = c + new Vector3( e.x, -e.y,  e.z);
+            corners[6] = c + new Vector3( e.x,  e.y, -e.z);
+            corners[7] = c + new Vector3( e.x,  e.y,  e.z);
+
+            int minIdx = 0;
+            int maxIdx = 0;
+            float minX = float.PositiveInfinity;
+            float maxX = float.NegativeInfinity;
+            for (int i = 0; i < corners.Length; i++)
+            {
+                float localX = transform.InverseTransformPoint(corners[i]).x;
+                if (localX < minX)
+                {
+                    minX = localX;
+                    minIdx = i;
+                }
+                if (localX > maxX)
+                {
+                    maxX = localX;
+                    maxIdx = i;
+                }
+            }
+
+            Transform leftExisting = bladeEdgeTransform.Find(BladeEdgeLeftAutoName);
+            Transform rightExisting = bladeEdgeTransform.Find(BladeEdgeRightAutoName);
+
+            if (leftExisting == null)
+                leftExisting = new GameObject(BladeEdgeLeftAutoName).transform;
+            if (rightExisting == null)
+                rightExisting = new GameObject(BladeEdgeRightAutoName).transform;
+
+            leftExisting.SetParent(bladeEdgeTransform, true);
+            rightExisting.SetParent(bladeEdgeTransform, true);
+
+            leftExisting.position = corners[minIdx];
+            rightExisting.position = corners[maxIdx];
+
+            left = leftExisting;
+            right = rightExisting;
+            return true;
+        }
+
+        private bool TryGetBladeEdgeBounds(Transform bladeEdgeTransform, out Bounds bounds)
+        {
+            bounds = default;
+            if (bladeEdgeTransform == null)
+                return false;
+
+            if (bladeEdgeTransform.TryGetComponent<AGXUnity.Collide.Box>(out var agxBox))
+            {
+                Vector3 halfExtents = agxBox.HalfExtents;
+                Vector3[] corners = new Vector3[8];
+                int index = 0;
+                for (int x = -1; x <= 1; x += 2)
+                {
+                    for (int y = -1; y <= 1; y += 2)
+                    {
+                        for (int z = -1; z <= 1; z += 2)
+                        {
+                            corners[index++] = bladeEdgeTransform.TransformPoint(new Vector3(
+                                halfExtents.x * x,
+                                halfExtents.y * y,
+                                halfExtents.z * z));
+                        }
+                    }
+                }
+
+                bounds = new Bounds(corners[0], Vector3.zero);
+                for (int i = 1; i < corners.Length; i++)
+                    bounds.Encapsulate(corners[i]);
+                return true;
+            }
+
+            if (bladeEdgeTransform.TryGetComponent<BoxCollider>(out var boxCollider))
+            {
+                bounds = boxCollider.bounds;
+                return true;
+            }
+
+            if (bladeEdgeTransform.TryGetComponent<Collider>(out var collider))
+            {
+                bounds = collider.bounds;
+                return true;
+            }
+
+            if (bladeEdgeTransform.TryGetComponent<Renderer>(out var renderer))
+            {
+                bounds = renderer.bounds;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryGetBladeEdgeHeightAboveGround(out float heightMeters)
+        {
+            heightMeters = 0.0f;
+            TryInitializeBladeEdgeReferences();
+            if (bladeEdge == null || !bladeEdgeHeightInitialized)
+                return false;
+
+            float bladeEdgeLocalY = transform.InverseTransformPoint(bladeEdge.position).y;
+            heightMeters = bladeEdgeLocalY - bladeEdgeInitialLocalY;
+            return true;
+        }
+
+        private bool TryGetBladeEdgeEndHeightDifference(out float heightDifferenceMeters)
+        {
+            heightDifferenceMeters = 0.0f;
+            TryInitializeBladeEdgeReferences();
+            if (bladeEdgeLeft == null || bladeEdgeRight == null || !bladeEdgeEndsInitialized)
+                return false;
+
+            float leftLocalY = transform.InverseTransformPoint(bladeEdgeLeft.position).y - bladeEdgeLeftInitialLocalY;
+            float rightLocalY = transform.InverseTransformPoint(bladeEdgeRight.position).y - bladeEdgeRightInitialLocalY;
+            heightDifferenceMeters = leftLocalY - rightLocalY;
+            return true;
+        }
+
+        private float EstimateTiltAngleFromCylinderPosition(double currentTiltControlValue)
+        {
+            float minAngle = Mathf.Deg2Rad * (bladeTiltCylConv.jointMinAngle - bladeTiltCylConv.jointInitialAngle);
+            float maxAngle = Mathf.Deg2Rad * (bladeTiltCylConv.jointMaxAngle - bladeTiltCylConv.jointInitialAngle);
+            float minControlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping(minAngle);
+            float maxControlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping(maxAngle);
+            bool isIncreasing = maxControlValue >= minControlValue;
+
+            float lowAngle = minAngle;
+            float highAngle = maxAngle;
+            float targetControlValue = (float)currentTiltControlValue;
+
+            for (int i = 0; i < 24; i++)
+            {
+                float midAngle = 0.5f * (lowAngle + highAngle);
+                float midControlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping(midAngle);
+
+                if ((midControlValue < targetControlValue) == isIncreasing)
+                    lowAngle = midAngle;
+                else
+                    highAngle = midAngle;
+            }
+
+            return 0.5f * (lowAngle + highAngle);
+        }
+
         // Update is called once per frame
         void FixedUpdate()
         {
+            UpdateBladeEdgeDebugValues();
+
             if (enabledDummy)
-            {
-                BladeSubscriber.BladeCmd.position[0] = lift_joint;
-                BladeSubscriber.BladeCmd.position[1] = tilt_joint;
-                BladeSubscriber.BladeCmd.position[2] = angle_joint;
-                trackSubscriber.TrackCmd.position[0] = right_track;
-                trackSubscriber.TrackCmd.position[1] = left_track;
-            }
+                switch (controlType)
+                {
+                    case ControlType.Position:
+                        BladeSubscriber.BladeCmd.control_type = (byte)controlType;
+                        BladeSubscriber.BladeCmd.position[0] = lift_joint;
+                        BladeSubscriber.BladeCmd.position[1] = tilt_joint;
+                        BladeSubscriber.BladeCmd.position[2] = angle_joint;
+                        BladeSubscriber.BladeCmd.velocity[0] = 0.0;
+                        BladeSubscriber.BladeCmd.velocity[1] = 0.0;
+                        BladeSubscriber.BladeCmd.velocity[2] = 0.0;
+                        BladeSubscriber.BladeCmd.effort[0] = 0.0;
+                        BladeSubscriber.BladeCmd.effort[1] = 0.0;
+                        BladeSubscriber.BladeCmd.effort[2] = 0.0;
+
+                        trackSubscriber.TrackCmd.control_type = (byte)controlType;
+                        trackSubscriber.TrackCmd.position[0] = right_track;
+                        trackSubscriber.TrackCmd.position[1] = left_track;
+                        trackSubscriber.TrackCmd.velocity[0] = 0.0;
+                        trackSubscriber.TrackCmd.velocity[1] = 0.0;
+                        trackSubscriber.TrackCmd.effort[0] = 0.0;
+                        trackSubscriber.TrackCmd.effort[1] = 0.0;
+                        break;
+                    case ControlType.Speed:
+                        BladeSubscriber.BladeCmd.control_type = (byte)controlType;
+                        BladeSubscriber.BladeCmd.position[0] = 0.0;
+                        BladeSubscriber.BladeCmd.position[1] = 0.0;
+                        BladeSubscriber.BladeCmd.position[2] = 0.0;
+                        BladeSubscriber.BladeCmd.velocity[0] = lift_joint;
+                        BladeSubscriber.BladeCmd.velocity[1] = tilt_joint;
+                        BladeSubscriber.BladeCmd.velocity[2] = angle_joint;
+                        BladeSubscriber.BladeCmd.effort[0] = 0.0;
+                        BladeSubscriber.BladeCmd.effort[1] = 0.0;
+                        BladeSubscriber.BladeCmd.effort[2] = 0.0;
+
+                        trackSubscriber.TrackCmd.control_type = (byte)controlType;
+                        trackSubscriber.TrackCmd.position[0] = 0.0;
+                        trackSubscriber.TrackCmd.position[1] = 0.0;
+                        trackSubscriber.TrackCmd.velocity[0] = right_track;
+                        trackSubscriber.TrackCmd.velocity[1] = left_track;
+                        trackSubscriber.TrackCmd.effort[0] = 0.0;
+                        trackSubscriber.TrackCmd.effort[1] = 0.0;
+                        break;
+                    case ControlType.Force:
+                        BladeSubscriber.BladeCmd.control_type = (byte)controlType;
+                        BladeSubscriber.BladeCmd.position[0] = 0.0;
+                        BladeSubscriber.BladeCmd.position[1] = 0.0;
+                        BladeSubscriber.BladeCmd.position[2] = 0.0;
+                        BladeSubscriber.BladeCmd.velocity[0] = 0.0;
+                        BladeSubscriber.BladeCmd.velocity[1] = 0.0;
+                        BladeSubscriber.BladeCmd.velocity[2] = 0.0;
+                        BladeSubscriber.BladeCmd.effort[0] = lift_joint;
+                        BladeSubscriber.BladeCmd.effort[1] = tilt_joint;
+                        BladeSubscriber.BladeCmd.effort[2] = angle_joint;
+
+                        trackSubscriber.TrackCmd.control_type = (byte)controlType;
+                        trackSubscriber.TrackCmd.position[0] = 0.0;
+                        trackSubscriber.TrackCmd.position[1] = 0.0;
+                        trackSubscriber.TrackCmd.velocity[0] = 0.0;
+                        trackSubscriber.TrackCmd.velocity[1] = 0.0;
+                        trackSubscriber.TrackCmd.effort[0] = right_track;
+                        trackSubscriber.TrackCmd.effort[1] = left_track;
+                        break;
+                    default:
+                        break;
+                }
             else
             {
                 // 受信
@@ -100,11 +403,35 @@ namespace PWRISimulator.ROS
             }
         }
 
+        private void UpdateBladeEdgeDebugValues()
+        {
+            currentBladeHeightMeters = TryGetBladeEdgeHeightAboveGround(out float bladeHeight) ? bladeHeight : 0.0f;
+            currentBladeEdgeDifferenceMeters = TryGetBladeEdgeEndHeightDifference(out float edgeDifference) ? edgeDifference : 0.0f;
+        }
+
+        private float BladeAngleLimitRadians => Mathf.Abs(bladeAngleLimitDegrees) * Mathf.Deg2Rad;
+
+        private static ControlType ResolveControlType(byte controlType)
+        {
+            return Enum.IsDefined(typeof(ControlType), (int)controlType) ? (ControlType)controlType : ControlType.Position;
+        }
+
+        private float ClampBladeAngle(float angleRadians)
+        {
+            return Mathf.Clamp(angleRadians, -BladeAngleLimitRadians, BladeAngleLimitRadians);
+        }
+
         public void SetCommands()
         {
+            ControlType bladeControlType = enabledDummy ? controlType : ResolveControlType(BladeSubscriber.BladeCmd.control_type);
+            ControlType trackControlType = enabledDummy ? controlType : ResolveControlType(trackSubscriber.TrackCmd.control_type);
+
             // 制御値の反映
             if (enabledDummy ? emergencyStop : settingSubscriber.EmergencyStopCmd)
             {
+                bladeTiltPositionCommandInitialized = false;
+                bladeAnglePositionCommandInitialized = false;
+
                 // 緊急停止
                 joints.bladeLift.controlType = ControlType.Position;
                 joints.bladeLift.controlValue = joints.bladeLift.CurrentPosition;
@@ -126,17 +453,102 @@ namespace PWRISimulator.ROS
             }
             else
             {
+                if (bladeControlType != ControlType.Position)
+                {
+                    bladeTiltPositionCommandInitialized = false;
+                    bladeAnglePositionCommandInitialized = false;
+                }
+
                 // 上部旋回体
-                switch (controlType)
+                switch (bladeControlType)
                 {
                     case ControlType.Position:
+                        float targetLiftCmdAngle = (float)BladeSubscriber.BladeCmd.position[0];
+                        float maxLiftAngleDeltaRad = liftPositionRateLimitRadPerSec > 0.0f ? liftPositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
+                        float currentLiftAngle = bladeLiftCylConv.currentLinkAngle;
+                        float liftCmdAngle = Mathf.MoveTowards(currentLiftAngle, targetLiftCmdAngle, maxLiftAngleDeltaRad);
+                        double liftControlValue = bladeLiftCylConv.CalculateCylinderRodTelescoping(liftCmdAngle);
+                        double requestedLiftControlValue = liftControlValue;
+                        const float LiftAngleDirectionEpsilon = 1.0e-4f;
+                        bool isCommandingLiftUp = liftCmdAngle < currentLiftAngle - LiftAngleDirectionEpsilon;
+                        bool isCommandingLiftDown = liftCmdAngle > currentLiftAngle + LiftAngleDirectionEpsilon;
+
+                        if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeight) && joints != null)
+                        {
+                            double currentLiftControlValue = joints.bladeLift.CurrentPosition;
+                            bool nearLowerLimit = bladeEdgeHeight <= bladeEdgeHeightLowerLimitMeters;
+
+                            if (enableLiftLimitDebugLogs &&
+                                nearLowerLimit &&
+                                lastLiftLowerZoneLogFrame != Time.frameCount)
+                            {
+                                lastLiftLowerZoneLogFrame = Time.frameCount;
+                                Debug.Log($"[{nameof(BulldozerInput)}] Lift near lower limit in position mode. bladeEdgeHeight={bladeEdgeHeight:F4}, lowerLimit={bladeEdgeHeightLowerLimitMeters:F4}, currentLiftAngle={currentLiftAngle:F4}, targetLiftCmdAngle={targetLiftCmdAngle:F4}, liftCmdAngle={liftCmdAngle:F4}, currentLiftControlValue={currentLiftControlValue:F4}, requestedLiftControlValue={requestedLiftControlValue:F4}", this);
+                            }
+
+                            if (bladeEdgeHeight >= bladeEdgeHeightUpperLimitMeters &&
+                                isCommandingLiftUp)
+                            {
+                                liftControlValue = currentLiftControlValue;
+                            }
+                            else if (nearLowerLimit &&
+                                     isCommandingLiftDown)
+                            {
+                                if (enableLiftLimitDebugLogs &&
+                                    lastLiftLowerLimitLogFrame != Time.frameCount)
+                                {
+                                    lastLiftLowerLimitLogFrame = Time.frameCount;
+                                    Debug.LogWarning($"[{nameof(BulldozerInput)}] Lift command clamped at lower limit. bladeEdgeHeight={bladeEdgeHeight:F4}, lowerLimit={bladeEdgeHeightLowerLimitMeters:F4}, currentLiftAngle={currentLiftAngle:F4}, targetLiftCmdAngle={targetLiftCmdAngle:F4}, liftCmdAngle={liftCmdAngle:F4}, currentLiftControlValue={currentLiftControlValue:F4}, requestedLiftControlValue={requestedLiftControlValue:F4}, isCommandingLiftDown={isCommandingLiftDown}", this);
+                                }
+
+                                liftControlValue = currentLiftControlValue;
+                            }
+                        }
+
                         joints.bladeLift.controlType = ControlType.Position;
-                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[0]);
+                        joints.bladeLift.controlValue = liftControlValue;
+
+                        float targetTiltCmdAngle = (float)BladeSubscriber.BladeCmd.position[1];
+                        float maxTiltAngleDeltaRad = tiltPositionRateLimitRadPerSec > 0.0f ? tiltPositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
+                        if (!bladeTiltPositionCommandInitialized)
+                        {
+                            bladeTiltPositionCommand = EstimateTiltAngleFromCylinderPosition(joints.bladeTilt.CurrentPosition);
+                            bladeTiltPositionCommandInitialized = true;
+                        }
+
+                        bladeTiltPositionCommand = Mathf.MoveTowards(bladeTiltPositionCommand, targetTiltCmdAngle, maxTiltAngleDeltaRad);
+                        float tiltCmdAngle = bladeTiltPositionCommand;
+                        double tiltControlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping(tiltCmdAngle);
+
+                        if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiff) && joints != null)
+                        {
+                            double currentTiltControlValue = joints.bladeTilt.CurrentPosition;
+                            if (endHeightDiff >= bladeEdgeEndHeightDifferenceLimitMeters &&
+                                tiltControlValue > currentTiltControlValue)
+                            {
+                                tiltControlValue = currentTiltControlValue;
+                            }
+                            if (endHeightDiff <= - bladeEdgeEndHeightDifferenceLimitMeters &&
+                                tiltControlValue < currentTiltControlValue)
+                            {
+                                tiltControlValue = currentTiltControlValue;
+                            }
+                        }
 
                         joints.bladeTilt.controlType = ControlType.Position;
-                        joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[1]);
+                        joints.bladeTilt.controlValue = tiltControlValue;
 
-                        float telescoping = bladeAngleCylConv.CalculateCylinderRodTelescoping((float)BladeSubscriber.BladeCmd.position[2]);
+                        float targetBladeAngle = ClampBladeAngle((float)BladeSubscriber.BladeCmd.position[2]);
+                        float maxBladeAngleDeltaRad = anglePositionRateLimitRadPerSec > 0.0f ? anglePositionRateLimitRadPerSec * Time.fixedDeltaTime : float.PositiveInfinity;
+                        if (!bladeAnglePositionCommandInitialized)
+                        {
+                            bladeAnglePositionCommand = bladeAngleCylConv.currentLinkAngle;
+                            bladeAnglePositionCommandInitialized = true;
+                        }
+
+                        bladeAnglePositionCommand = Mathf.MoveTowards(bladeAnglePositionCommand, targetBladeAngle, maxBladeAngleDeltaRad);
+                        float clampedBladeAngle = ClampBladeAngle(bladeAnglePositionCommand);
+                        float telescoping = bladeAngleCylConv.CalculateCylinderRodTelescoping(clampedBladeAngle);
                         joints.bladeAngleLeft.controlType = ControlType.Position;
                         joints.bladeAngleLeft.controlValue = -telescoping;
 
@@ -144,13 +556,42 @@ namespace PWRISimulator.ROS
                         joints.bladeAngleRight.controlValue = telescoping;
                         break;
                     case ControlType.Speed:
+                        float liftCmdVelocity = (float)BladeSubscriber.BladeCmd.velocity[0];
+                        double liftControlVelocity = bladeLiftCylConv.CalculateCylinderRodTelescopingVelocity(liftCmdVelocity);
+                        if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeightVel))
+                        {
+                            if (bladeEdgeHeightVel >= bladeEdgeHeightUpperLimitMeters && liftControlVelocity < 0.0)
+                                liftControlVelocity = 0.0;
+                            else if (bladeEdgeHeightVel <= bladeEdgeHeightLowerLimitMeters && liftControlVelocity > 0.0)
+                                liftControlVelocity = 0.0;
+                        }
+
                         joints.bladeLift.controlType = ControlType.Speed;
-                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescopingVelocity((float)BladeSubscriber.BladeCmd.velocity[0]);
+                        joints.bladeLift.controlValue = liftControlVelocity;
+
+                        float tiltCmdVelocity = (float)BladeSubscriber.BladeCmd.velocity[1];
+                        double tiltControlVelocity = bladeTiltCylConv.CalculateCylinderRodTelescopingVelocity(tiltCmdVelocity);
+                        if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiffVel) && joints != null)
+                        {
+                            if (endHeightDiffVel >= bladeEdgeEndHeightDifferenceLimitMeters && tiltControlVelocity > 0.0)
+                                tiltControlVelocity = 0.0;
+                            if (endHeightDiffVel <= -bladeEdgeEndHeightDifferenceLimitMeters && tiltControlVelocity < 0.0)
+                                tiltControlVelocity = 0.0;
+                        }
 
                         joints.bladeTilt.controlType = ControlType.Speed;
-                        joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescopingVelocity((float)BladeSubscriber.BladeCmd.velocity[1]);
+                        joints.bladeTilt.controlValue = tiltControlVelocity;
 
-                        float telescopingVelocity = bladeAngleCylConv.CalculateCylinderRodTelescopingVelocity((float)BladeSubscriber.BladeCmd.velocity[2]);
+                        float bladeAngleVelocity = (float)BladeSubscriber.BladeCmd.velocity[2];
+                        float currentBladeAngle = bladeAngleCylConv.currentLinkAngle;
+                        float clampedBladeAngleVelocity = bladeAngleVelocity;
+                        if ((currentBladeAngle >= BladeAngleLimitRadians && bladeAngleVelocity > 0.0f) ||
+                            (currentBladeAngle <= -BladeAngleLimitRadians && bladeAngleVelocity < 0.0f))
+                        {
+                            clampedBladeAngleVelocity = 0.0f;
+                        }
+
+                        float telescopingVelocity = bladeAngleCylConv.CalculateCylinderRodTelescopingVelocity(clampedBladeAngleVelocity);
                         joints.bladeAngleLeft.controlType = ControlType.Speed;
                         joints.bladeAngleLeft.controlValue = -telescopingVelocity;
 
@@ -158,13 +599,41 @@ namespace PWRISimulator.ROS
                         joints.bladeAngleRight.controlValue = telescopingVelocity;
                         break;
                     case ControlType.Force:
+                        float liftCmdForce = (float)BladeSubscriber.BladeCmd.effort[0];
+                        double liftControlForce = bladeLiftCylConv.CalculateCylinderRodTelescopingForce(liftCmdForce);
+                        if (TryGetBladeEdgeHeightAboveGround(out float bladeEdgeHeightForce))
+                        {
+                            if (bladeEdgeHeightForce >= bladeEdgeHeightUpperLimitMeters && liftControlForce < 0.0)
+                                liftControlForce = 0.0;
+                            else if (bladeEdgeHeightForce <= bladeEdgeHeightLowerLimitMeters && liftControlForce > 0.0)
+                                liftControlForce = 0.0;
+                        }
+
                         joints.bladeLift.controlType = ControlType.Force;
-                        joints.bladeLift.controlValue = bladeLiftCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[0]);
+                        joints.bladeLift.controlValue = liftControlForce;
+
+                        double tiltControlForce = bladeTiltCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[1]);
+                        if (TryGetBladeEdgeEndHeightDifference(out float endHeightDiffForce) && joints != null)
+                        {
+                            if (endHeightDiffForce >= bladeEdgeEndHeightDifferenceLimitMeters && tiltControlForce > 0.0)
+                                tiltControlForce = 0.0;
+                            if (endHeightDiffForce <= -bladeEdgeEndHeightDifferenceLimitMeters && tiltControlForce < 0.0)
+                                tiltControlForce = 0.0;
+                        }
 
                         joints.bladeTilt.controlType = ControlType.Force;
-                        joints.bladeTilt.controlValue = bladeTiltCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[1]);
+                        joints.bladeTilt.controlValue = tiltControlForce;
 
-                        float telescopingForce = bladeAngleCylConv.CalculateCylinderRodTelescopingForce((float)BladeSubscriber.BladeCmd.effort[2]);
+                        float bladeAngleForce = (float)BladeSubscriber.BladeCmd.effort[2];
+                        float currentBladeAngleForce = bladeAngleCylConv.currentLinkAngle;
+                        float clampedBladeAngleForce = bladeAngleForce;
+                        if ((currentBladeAngleForce >= BladeAngleLimitRadians && bladeAngleForce > 0.0f) ||
+                            (currentBladeAngleForce <= -BladeAngleLimitRadians && bladeAngleForce < 0.0f))
+                        {
+                            clampedBladeAngleForce = 0.0f;
+                        }
+
+                        float telescopingForce = bladeAngleCylConv.CalculateCylinderRodTelescopingForce(clampedBladeAngleForce);
                         joints.bladeAngleLeft.controlType = ControlType.Force;
                         joints.bladeAngleLeft.controlValue = -telescopingForce;
 
@@ -178,7 +647,7 @@ namespace PWRISimulator.ROS
                 switch (movementControlType)
                 {
                     case ConstractionMovementControlType.ActuatorCommand:
-                        switch (controlType)
+                        switch (trackControlType)
                         {
                             case ControlType.Position:
                                 joints.rightSprocket.controlType = ControlType.Position;
@@ -188,11 +657,8 @@ namespace PWRISimulator.ROS
                                 joints.leftSprocket.controlValue = trackSubscriber.TrackCmd.position[1];
                                 break;
                             case ControlType.Speed:
-                                joints.rightSprocket.controlType = ControlType.Speed;
-                                joints.rightSprocket.controlValue = trackSubscriber.TrackCmd.velocity[0];
-
-                                joints.leftSprocket.controlType = ControlType.Speed;
-                                joints.leftSprocket.controlValue = trackSubscriber.TrackCmd.velocity[1];
+                                ApplyTrackSpeedCommand(joints.rightSprocket, trackSubscriber.TrackCmd.velocity[0]);
+                                ApplyTrackSpeedCommand(joints.leftSprocket, trackSubscriber.TrackCmd.velocity[1]);
                                 break;
                             case ControlType.Force:
                                 joints.rightSprocket.controlType = ControlType.Force;
@@ -220,6 +686,24 @@ namespace PWRISimulator.ROS
                         break;
                 }
             }
+        }
+
+        private void ApplyTrackSpeedCommand(ConstraintControl control, double speedCommand)
+        {
+            if (control == null)
+                return;
+
+            float trackVelocityLimitRadiansPerSec = GetTrackVelocityLimitRadiansPerSec();
+            control.controlType = ControlType.Speed;
+            control.controlValue = Mathf.Clamp((float)speedCommand, -Mathf.Abs(trackVelocityLimitRadiansPerSec), Mathf.Abs(trackVelocityLimitRadiansPerSec));
+        }
+
+        private float GetTrackVelocityLimitRadiansPerSec()
+        {
+            if (twistCommandConvertor != null)
+                return (float)twistCommandConvertor.GetTrackSpeedLimitRadiansPerSec(trackVelocityLimitKph);
+
+            return 0.0f;
         }
     }
 }
