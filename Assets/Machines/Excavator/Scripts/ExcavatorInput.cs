@@ -315,7 +315,8 @@ namespace PWRISimulator.ROS
                             // Unwrap normalized swingPos (-PI..+PI) to the nearest equivalent
                             // angle in the internal continuous coordinate used by AGX.
                             double currentInternal = joints.swing.actuator.CurrentPosition;
-                            double adjusted = swingPos + Math.Round((currentInternal - swingPos) / (2.0 * Math.PI)) * (2.0 * Math.PI);
+                            double twoPi = 2.0 * Math.PI;
+                            double adjusted = swingPos + Math.Round((currentInternal - swingPos) / twoPi, MidpointRounding.AwayFromZero) * twoPi;
                             joints.swing.actuator.controlValue = adjusted;
                         }
                         break;
