@@ -6685,6 +6685,7 @@ GameObject:
   - component: {fileID: 7852489504170109931}
   - component: {fileID: 906789761961088836}
   - component: {fileID: 4237734099077471996}
+  - component: {fileID: 9129173913399177508}
   m_Layer: 0
   m_Name: ic120_pref
   m_TagString: Untagged
@@ -7044,6 +7045,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   w_up: 0.0443
   w_down: -0.0394
+--- !u!114 &9129173913399177508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6907077907001403058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d660c6afee128240a89010588e9ccd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseTrackShapeMaterial: {fileID: 11400000, guid: ddc8f068d2cfe184d867b4a1c395b3b9, type: 2}
+  baseFrictionModel: {fileID: 11400000, guid: bf834b81784ba1c4da3c8e6ad1709d5f, type: 2}
+  baseContactMaterials:
+  - {fileID: 11400000, guid: ee1e1bbd93d5744409c3b41c9ab9e1f4, type: 2}
+  - {fileID: 11400000, guid: 137a8ee9914b3cb479b888f0ab1e0afa, type: 2}
+  trackComponents:
+  - {fileID: 3256888965249362520}
+  - {fileID: 5372934808896250953}
+  referenceObject: {fileID: 8802734808122230308}
+  primaryDirection: 2
 --- !u!1 &6929029394021069492
 GameObject:
   m_ObjectHideFlags: 0
