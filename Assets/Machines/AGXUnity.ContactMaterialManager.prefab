@@ -62,7 +62,7 @@ MonoBehaviour:
     m_referenceObject: {fileID: 0}
     m_primaryDirection: 0
   - ContactMaterial: {fileID: 11400000, guid: ee1e1bbd93d5744409c3b41c9ab9e1f4, type: 2}
-    m_isOriented: 1
+    m_isOriented: 0
     m_referenceObject: {fileID: 0}
     m_primaryDirection: 0
   - ContactMaterial: {fileID: 11400000, guid: 137a8ee9914b3cb479b888f0ab1e0afa, type: 2}
