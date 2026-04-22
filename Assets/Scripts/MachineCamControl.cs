@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace PWRISimulator
 {
     /// <summary>
-    /// èdã@Ç…ìãç⁄Ç≥ÇÍÇƒÇ¢ÇÈÉJÉÅÉâÇÃêßå‰èàóù
+    /// ÔøΩdÔøΩ@ÔøΩ…ìÔøΩÔøΩ⁄ÇÔøΩÔøΩÔøΩƒÇÔøΩÔøΩÔøΩJÔøΩÔøΩÔøΩÔøΩÔøΩÃêÔøΩÔøΩ‰èàÔøΩÔøΩ
     /// </summary>
     public class MachineCamControl : MonoBehaviour
     {
@@ -17,19 +17,23 @@ namespace PWRISimulator
         private Slider VerticalSlider;
         private Slider UpDownSlider;
         private Slider FrontRearSlider;
+        private Slider LeftRightSlider;
 
         private float VerticalAngle = 0.0f;
         private float HorizontalAngle = 0.0f;
 
         private float UpDownPos = 0.0f;
         private float FrontRearPos = 0.0f;
+        private float LeftRightPos = 0.0f;
 
         private Transform obj;
+        private float baseLocalX = 0.0f;
 
         private float HorizontalSliderLastVal = 0.0f;
         private float VerticalSliderLastVal = 0.0f;
         private float UpDownSliderLastVal = 0.0f;
         private float FrontRearSliderLastVal = 0.0f;
+        private float LeftRightSliderLastVal = 0.0f;
 
         private float timer = 0f;
 
@@ -86,6 +90,14 @@ namespace PWRISimulator
             FrontRearSliderLastVal = evt.newValue;
         }
 
+        private void LeftRightSliderOnValueChanged(ChangeEvent<float> evt)
+        {
+
+            if (Mathf.Approximately(evt.newValue, LeftRightSliderLastVal)) return;
+            LeftRightPos = evt.newValue;
+            LeftRightSliderLastVal = evt.newValue;
+        }
+
 
         public void Initialize(GameObject machineObject)
         {
@@ -102,6 +114,7 @@ namespace PWRISimulator
             else
             {
                 UnityEngine.Debug.Log("Object Not NULL");
+                baseLocalX = obj.localPosition.x;
             }
 
             var root = GetComponent<UIDocument>().rootVisualElement;
@@ -109,6 +122,7 @@ namespace PWRISimulator
             VerticalSlider = root.Q<Slider>("Vertical");
             UpDownSlider = root.Q<Slider>("UpDown");
             FrontRearSlider = root.Q<Slider>("FrontRear");
+            LeftRightSlider = root.Q<Slider>("LeftRight");
 
 
 
@@ -124,6 +138,9 @@ namespace PWRISimulator
             FrontRearSlider.UnregisterValueChangedCallback(FrontRearSliderOnValueChanged);
             FrontRearSlider.RegisterValueChangedCallback(FrontRearSliderOnValueChanged);
 
+            LeftRightSlider.UnregisterValueChangedCallback(LeftRightSliderOnValueChanged);
+            LeftRightSlider.RegisterValueChangedCallback(LeftRightSliderOnValueChanged);
+
         }
 
         public void ClearCallBack()
@@ -132,6 +149,7 @@ namespace PWRISimulator
             VerticalSlider.UnregisterValueChangedCallback(VerticalSliderOnValueChanged);
             UpDownSlider.UnregisterValueChangedCallback(UpDownSliderOnValueChanged);
             FrontRearSlider.UnregisterValueChangedCallback(FrontRearSliderOnValueChanged);
+            LeftRightSlider.UnregisterValueChangedCallback(LeftRightSliderOnValueChanged);
 
         }
 
@@ -151,7 +169,7 @@ namespace PWRISimulator
                 var angls = obj.transform.localRotation;
                 obj.transform.localRotation = Quaternion.Euler(VerticalAngle, HorizontalAngle, angls.z);
                 var pos = obj.transform.localPosition;
-                obj.transform.localPosition = new Vector3(pos.x, 2.4f + UpDownPos, 2.3f - FrontRearPos);
+                obj.transform.localPosition = new Vector3(baseLocalX + LeftRightPos, 2.4f + UpDownPos, 2.3f - FrontRearPos);
             }
         }
     }
