@@ -902,9 +902,26 @@ namespace RuntimeGizmos
 						var subdisp = GameObject.Find("SubdisplayForSpawnCamera");
 						if (subdisp != null)
 						{
-							target.Find("base_link/track_link/CameraStr").gameObject.GetComponent<Camera>().gameObject.SetActive(true);
-							target.Find("base_link/track_link/CameraStr/Camera").gameObject.GetComponent<Camera>().gameObject.SetActive(true);
-							subdisp.GetComponent<Subdisplay>().SetDisplay(target.Find("base_link/track_link/CameraStr/Camera").gameObject.GetComponent<Camera>());
+							Transform obj = target.Find("base_link/body_link/CameraStr") ?? target.Find("base_link/track_link/CameraStr");
+							if (obj != null)
+							{
+								Camera cameraComponent = obj.gameObject.GetComponent<Camera>();
+								if (cameraComponent != null)
+								{
+									cameraComponent.gameObject.SetActive(true);
+								}
+
+								Transform objSub = obj.Find("Camera");
+								if (objSub != null)
+								{
+									Camera subCameraComponent = objSub.gameObject.GetComponent<Camera>();
+									if (subCameraComponent != null)
+									{
+										subCameraComponent.gameObject.SetActive(true);
+										subdisp.GetComponent<Subdisplay>().SetDisplay(subCameraComponent);
+									}
+								}	
+							}
 						}
 
 						UnityEngine.Debug.Log("********************************************");

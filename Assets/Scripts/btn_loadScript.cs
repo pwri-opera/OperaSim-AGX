@@ -361,7 +361,7 @@ namespace PWRISimulator
                     if (json_ms.camera[i].name.Contains("zx200"))
                     {
                         // ショベルカー
-                        obj = shovelObj.transform.Find("base_link/track_link/CameraStr").gameObject;
+                        obj = shovelObj.transform.Find("base_link/body_link/CameraStr").gameObject;
                     }
                     else
                     {

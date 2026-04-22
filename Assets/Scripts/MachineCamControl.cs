@@ -92,9 +92,9 @@ namespace PWRISimulator
             this.machineObj = machineObject;
             UnityEngine.Debug.Log("Initilize : " + this.machineObj.name);
 
-            obj = null;
+            obj = machineObj.transform.Find("base_link/body_link/CameraStr")
+                ?? machineObj.transform.Find("base_link/track_link/CameraStr");
 
-            obj = machineObj.transform.Find("base_link/track_link/CameraStr");
             if (obj == null)
             {
                 UnityEngine.Debug.Log("Object NULL");
