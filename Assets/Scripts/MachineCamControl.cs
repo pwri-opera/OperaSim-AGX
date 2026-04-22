@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace PWRISimulator
 {
     /// <summary>
-    /// �d�@�ɓ��ڂ���Ă���J�����̐��䏈��
+    /// 重機に搭載されているカメラの制御処理
     /// </summary>
     public class MachineCamControl : MonoBehaviour
     {
@@ -47,6 +47,7 @@ namespace PWRISimulator
             //bj.transform.localRotation = Quaternion.Euler(VerticalAngle, HorizontalAngle, angls.z);
 
             HorizontalSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
 
@@ -61,6 +62,7 @@ namespace PWRISimulator
             //obj.transform.localRotation = Quaternion.Euler(VerticalAngle, HorizontalAngle, angls.z);
 
             VerticalSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
 
@@ -75,6 +77,7 @@ namespace PWRISimulator
             //obj.transform.localPosition = new Vector3(pos.x, 2.4f + evt.newValue, pos.z);
 
             UpDownSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
         private void FrontRearSliderOnValueChanged(ChangeEvent<float> evt)
@@ -88,6 +91,7 @@ namespace PWRISimulator
             //obj.transform.localPosition = new Vector3(pos.x, pos.y, 2.3f - evt.newValue);
 
             FrontRearSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
         private void LeftRightSliderOnValueChanged(ChangeEvent<float> evt)
@@ -96,6 +100,21 @@ namespace PWRISimulator
             if (Mathf.Approximately(evt.newValue, LeftRightSliderLastVal)) return;
             LeftRightPos = evt.newValue;
             LeftRightSliderLastVal = evt.newValue;
+            SaveToGlobal();
+        }
+
+        private void SaveToGlobal()
+        {
+            if (machineObj == null) return;
+            GlobalVariables.MachineCameraSliders[machineObj.name] = new saveScript.MachineCameraSliderState
+            {
+                machineName = machineObj.name,
+                horizontalAngle = HorizontalAngle,
+                verticalAngle = VerticalAngle,
+                upDownPos = UpDownPos,
+                frontRearPos = FrontRearPos,
+                leftRightPos = LeftRightPos,
+            };
         }
 
 
@@ -124,6 +143,26 @@ namespace PWRISimulator
             FrontRearSlider = root.Q<Slider>("FrontRear");
             LeftRightSlider = root.Q<Slider>("LeftRight");
 
+            if (GlobalVariables.MachineCameraSliders.TryGetValue(machineObj.name, out var saved))
+            {
+                HorizontalAngle = saved.horizontalAngle;
+                VerticalAngle = saved.verticalAngle;
+                UpDownPos = saved.upDownPos;
+                FrontRearPos = saved.frontRearPos;
+                LeftRightPos = saved.leftRightPos;
+
+                HorizontalSliderLastVal = HorizontalAngle;
+                VerticalSliderLastVal = VerticalAngle;
+                UpDownSliderLastVal = UpDownPos;
+                FrontRearSliderLastVal = FrontRearPos;
+                LeftRightSliderLastVal = LeftRightPos;
+
+                HorizontalSlider.SetValueWithoutNotify(HorizontalAngle);
+                VerticalSlider.SetValueWithoutNotify(VerticalAngle);
+                UpDownSlider.SetValueWithoutNotify(UpDownPos);
+                FrontRearSlider.SetValueWithoutNotify(FrontRearPos);
+                LeftRightSlider.SetValueWithoutNotify(LeftRightPos);
+            }
 
 
             HorizontalSlider.UnregisterValueChangedCallback(HorizontalSliderOnValueChanged);

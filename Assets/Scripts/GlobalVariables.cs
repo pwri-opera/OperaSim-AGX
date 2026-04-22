@@ -33,6 +33,9 @@ namespace PWRISimulator
         public static saveScript.SaveDumpSoil saveDumpSoil = new saveScript.SaveDumpSoil();
         public static saveScript.SaveParticles saveParticles = new saveScript.SaveParticles();
 
+        public static Dictionary<string, saveScript.MachineCameraSliderState> MachineCameraSliders
+            = new Dictionary<string, saveScript.MachineCameraSliderState>();
+
         //public static bool ObjectRemoveFlag = false;
         public static int ConfirmWaitFlag = 0; // 0: 初期値、1：確認画面表示中、2：確認画面OKクリック
 
