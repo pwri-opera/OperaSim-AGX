@@ -6,4 +6,5 @@
         <ui:Button text="Camera Selection" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SelectCamera" style="height: 29px;" />
         <ui:Button text="Start Simulation" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SimulationStart" style="height: 27px;" />
     </ui:VisualElement>
+    <ui:Toggle label="総得点を標示" name="ShowScore" value="true" style="position: absolute; top: 20px; right: 20px; -unity-font-style: bold; -unity-font: resource('Fonts/BIZUDPGothic-Regular'); -unity-font-definition: initial;" />
 </ui:UXML>
