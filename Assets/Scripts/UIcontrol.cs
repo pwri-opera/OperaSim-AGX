@@ -359,7 +359,7 @@ namespace PWRISimulator
             //CountdownTimerUIobj_disp2.GetComponent<UIDocument>().panelSettings.targetTexture = cameraTexture;
 
             ScoreUIobj = Instantiate(ScoreUI);
-            ScoreUIobj.SetActive(true);
+            ScoreUIobj.SetActive(GlobalVariables.ShowScoreBoard);
 
             //ScoreUIobj_disp2 = Instantiate(ScoreUI_disp2);
             //ScoreUIobj_disp2.GetComponent<UIDocument>().panelSettings.targetTexture = cameraTexture;
@@ -515,6 +515,16 @@ namespace PWRISimulator
             root.Q<Button>("CameraPositionSetting").clicked += () => OnCameraPositionSettingClicked();
             root.Q<Button>("SelectCamera").clicked += () => OnSelectCameraClicked();
             root.Q<Button>("SimulationStart").clicked += () => OnSimulationStartClicked();
+
+            var showScoreToggle = root.Q<Toggle>("ShowScore");
+            if (showScoreToggle != null)
+            {
+                showScoreToggle.SetValueWithoutNotify(GlobalVariables.ShowScoreBoard);
+                showScoreToggle.RegisterValueChangedCallback(evt =>
+                {
+                    GlobalVariables.ShowScoreBoard = evt.newValue;
+                });
+            }
         }
 
 
