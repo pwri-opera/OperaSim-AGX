@@ -23551,6 +23551,7 @@ MonoBehaviour:
   CountdownTimerUI: {fileID: 7813579680973091423, guid: eb380b2da79490c4ea7138639e96b2a4, type: 3}
   ScoreUI: {fileID: 3837522813619453629, guid: 19a90a196cde7754aa8943c684b8651d, type: 3}
   StatusBoardUI: {fileID: 7957770569840457810, guid: e447dace5e06f4f42a221ba308f4b702, type: 3}
+  EventLogUI: {fileID: 471996605656418113, guid: 0149d45eb41e6fa40ac0f89a5723f002, type: 3}
   SubdisplayUI: {fileID: 3711915823438044549, guid: dc5448b6aab450c4492dcd0793f29fa6, type: 3}
   SaveLoadUI: {fileID: 4055054385805311678, guid: 8543e0671815b4b4793228ae81418fc8, type: 3}
   SaveLoadSettingUI: {fileID: 4055054385805311678, guid: 05b9036e35e76a143a9af0aa11fdfe49, type: 3}

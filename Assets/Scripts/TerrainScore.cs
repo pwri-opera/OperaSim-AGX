@@ -540,7 +540,7 @@ namespace PWRISimulator
                 if (Math.Abs(excScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)excScore);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.P01, Point = (int)excScore });
 
                     // スコア積算リセット
                     excScore = excScore - (int)excScore;
@@ -570,7 +570,7 @@ namespace PWRISimulator
                 if (Math.Abs(dmpScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)dmpScore);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.P03, Point = (int)dmpScore });
 
                     // スコア積算リセット
                     dmpScore = dmpScore - (int)dmpScore;
@@ -594,7 +594,7 @@ namespace PWRISimulator
                 if (Math.Abs(sumScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)sumScore);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.M01, Point = (int)sumScore });
 
                     // スコア積算リセット
                     sumScore = sumScore - (int)sumScore;

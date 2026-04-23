@@ -202,6 +202,22 @@ namespace PWRISimulator
             }
         }
 
+        public enum ScoreEventId { P01, P02, P03, M01, M02, M03, M04 }
+
+        public struct ScoreEvent
+        {
+            public ScoreEventId Id;
+            public int Point;
+        }
+
+        public static event System.Action<ScoreEvent> OnScoreEvent;
+
+        public static void RegisterScoreEvent(ScoreEvent evt)
+        {
+            incrementScore(evt.Point);
+            OnScoreEvent?.Invoke(evt);
+        }
+
         public static void decrementScore(int point)
         {
             if (_mutexScore.WaitOne(TimeOutSpan))

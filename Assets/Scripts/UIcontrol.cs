@@ -58,6 +58,9 @@ namespace PWRISimulator
         private GameObject StatusBoardUIobj;
         private StatusBoard sBoard;
 
+        [SerializeField] GameObject EventLogUI;
+        private GameObject EventLogUIobj;
+
         [SerializeField] GameObject SubdisplayUI;
         private GameObject SubdisplayUIobj;
 
@@ -100,6 +103,11 @@ namespace PWRISimulator
             sBoard = StatusBoardUIobj.GetComponent<StatusBoard>();
             sBoard.SetStatusMessage("Start!!");
             sBoard.SetMessageColor(Color.blue);
+
+            if (EventLogUI != null)
+            {
+                EventLogUIobj = Instantiate(EventLogUI);
+            }
 
 
             munuUIobj = Instantiate(MenuUI);
