@@ -4,7 +4,7 @@ using AGXUnity.Collide;
 using AGXUnity.Model;
 using UnityEngine;
 
-namespace Hackathon
+namespace PWRISimulator
 {
   /// <summary>
   /// Per-instance registrar for oriented (anisotropic) friction ContactMaterials
