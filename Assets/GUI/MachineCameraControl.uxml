@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="MachineCamContBase" style="flex-grow: 1; height: 152px; width: 432px; position: absolute; top: 250px; opacity: 1; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; visibility: visible;">
+    <ui:VisualElement name="MachineCamContBase" style="flex-grow: 1; height: 190px; width: 432px; position: absolute; top: 250px; opacity: 1; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; visibility: visible;">
         <ui:Slider label="Horizontal Angle" value="0" high-value="180" name="Horizontal" low-value="-180" style="height: auto; width: 400px;" />
         <ui:Slider label="Vertical Angle" value="0" high-value="90" name="Vertical" low-value="-90" style="height: auto; width: 400px; top: auto;" />
         <ui:Slider label="UpDown Pos" value="0" high-value="6" name="UpDown" low-value="-2" style="width: 400px; position: relative; left: auto; top: auto;" />
         <ui:Slider label="FrontRear Pos" value="0" high-value="6" name="FrontRear" low-value="-2" style="height: 35px; width: 400px;" />
+        <ui:Slider label="LeftRight Pos" value="0" high-value="4" name="LeftRight" low-value="-4" style="height: 35px; width: 400px;" />
     </ui:VisualElement>
 </ui:UXML>

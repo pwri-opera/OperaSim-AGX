@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace PWRISimulator
 {
     /// <summary>
-    /// èdã@Ç…ìãç⁄Ç≥ÇÍÇƒÇ¢ÇÈÉJÉÅÉâÇÃêßå‰èàóù
+    /// ÈáçÊ©ü„Å´Êê≠Ëºâ„Åï„Çå„Å¶„ÅÑ„Çã„Ç´„É°„É©„ÅÆÂà∂Âæ°Âá¶ÁêÜ
     /// </summary>
     public class MachineCamControl : MonoBehaviour
     {
@@ -17,19 +17,23 @@ namespace PWRISimulator
         private Slider VerticalSlider;
         private Slider UpDownSlider;
         private Slider FrontRearSlider;
+        private Slider LeftRightSlider;
 
         private float VerticalAngle = 0.0f;
         private float HorizontalAngle = 0.0f;
 
         private float UpDownPos = 0.0f;
         private float FrontRearPos = 0.0f;
+        private float LeftRightPos = 0.0f;
 
         private Transform obj;
+        private float baseLocalX = 0.0f;
 
         private float HorizontalSliderLastVal = 0.0f;
         private float VerticalSliderLastVal = 0.0f;
         private float UpDownSliderLastVal = 0.0f;
         private float FrontRearSliderLastVal = 0.0f;
+        private float LeftRightSliderLastVal = 0.0f;
 
         private float timer = 0f;
 
@@ -43,6 +47,7 @@ namespace PWRISimulator
             //bj.transform.localRotation = Quaternion.Euler(VerticalAngle, HorizontalAngle, angls.z);
 
             HorizontalSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
 
@@ -57,6 +62,7 @@ namespace PWRISimulator
             //obj.transform.localRotation = Quaternion.Euler(VerticalAngle, HorizontalAngle, angls.z);
 
             VerticalSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
 
@@ -71,6 +77,7 @@ namespace PWRISimulator
             //obj.transform.localPosition = new Vector3(pos.x, 2.4f + evt.newValue, pos.z);
 
             UpDownSliderLastVal = evt.newValue;
+            SaveToGlobal();
         }
 
         private void FrontRearSliderOnValueChanged(ChangeEvent<float> evt)
@@ -84,6 +91,30 @@ namespace PWRISimulator
             //obj.transform.localPosition = new Vector3(pos.x, pos.y, 2.3f - evt.newValue);
 
             FrontRearSliderLastVal = evt.newValue;
+            SaveToGlobal();
+        }
+
+        private void LeftRightSliderOnValueChanged(ChangeEvent<float> evt)
+        {
+
+            if (Mathf.Approximately(evt.newValue, LeftRightSliderLastVal)) return;
+            LeftRightPos = evt.newValue;
+            LeftRightSliderLastVal = evt.newValue;
+            SaveToGlobal();
+        }
+
+        private void SaveToGlobal()
+        {
+            if (machineObj == null) return;
+            GlobalVariables.MachineCameraSliders[machineObj.name] = new saveScript.MachineCameraSliderState
+            {
+                machineName = machineObj.name,
+                horizontalAngle = HorizontalAngle,
+                verticalAngle = VerticalAngle,
+                upDownPos = UpDownPos,
+                frontRearPos = FrontRearPos,
+                leftRightPos = LeftRightPos,
+            };
         }
 
 
@@ -92,9 +123,9 @@ namespace PWRISimulator
             this.machineObj = machineObject;
             UnityEngine.Debug.Log("Initilize : " + this.machineObj.name);
 
-            obj = null;
+            obj = machineObj.transform.Find("base_link/body_link/CameraStr")
+                ?? machineObj.transform.Find("base_link/track_link/CameraStr");
 
-            obj = machineObj.transform.Find("base_link/track_link/CameraStr");
             if (obj == null)
             {
                 UnityEngine.Debug.Log("Object NULL");
@@ -102,6 +133,7 @@ namespace PWRISimulator
             else
             {
                 UnityEngine.Debug.Log("Object Not NULL");
+                baseLocalX = obj.localPosition.x;
             }
 
             var root = GetComponent<UIDocument>().rootVisualElement;
@@ -109,7 +141,28 @@ namespace PWRISimulator
             VerticalSlider = root.Q<Slider>("Vertical");
             UpDownSlider = root.Q<Slider>("UpDown");
             FrontRearSlider = root.Q<Slider>("FrontRear");
+            LeftRightSlider = root.Q<Slider>("LeftRight");
 
+            if (GlobalVariables.MachineCameraSliders.TryGetValue(machineObj.name, out var saved))
+            {
+                HorizontalAngle = saved.horizontalAngle;
+                VerticalAngle = saved.verticalAngle;
+                UpDownPos = saved.upDownPos;
+                FrontRearPos = saved.frontRearPos;
+                LeftRightPos = saved.leftRightPos;
+
+                HorizontalSliderLastVal = HorizontalAngle;
+                VerticalSliderLastVal = VerticalAngle;
+                UpDownSliderLastVal = UpDownPos;
+                FrontRearSliderLastVal = FrontRearPos;
+                LeftRightSliderLastVal = LeftRightPos;
+
+                HorizontalSlider.SetValueWithoutNotify(HorizontalAngle);
+                VerticalSlider.SetValueWithoutNotify(VerticalAngle);
+                UpDownSlider.SetValueWithoutNotify(UpDownPos);
+                FrontRearSlider.SetValueWithoutNotify(FrontRearPos);
+                LeftRightSlider.SetValueWithoutNotify(LeftRightPos);
+            }
 
 
             HorizontalSlider.UnregisterValueChangedCallback(HorizontalSliderOnValueChanged);
@@ -124,6 +177,9 @@ namespace PWRISimulator
             FrontRearSlider.UnregisterValueChangedCallback(FrontRearSliderOnValueChanged);
             FrontRearSlider.RegisterValueChangedCallback(FrontRearSliderOnValueChanged);
 
+            LeftRightSlider.UnregisterValueChangedCallback(LeftRightSliderOnValueChanged);
+            LeftRightSlider.RegisterValueChangedCallback(LeftRightSliderOnValueChanged);
+
         }
 
         public void ClearCallBack()
@@ -132,6 +188,7 @@ namespace PWRISimulator
             VerticalSlider.UnregisterValueChangedCallback(VerticalSliderOnValueChanged);
             UpDownSlider.UnregisterValueChangedCallback(UpDownSliderOnValueChanged);
             FrontRearSlider.UnregisterValueChangedCallback(FrontRearSliderOnValueChanged);
+            LeftRightSlider.UnregisterValueChangedCallback(LeftRightSliderOnValueChanged);
 
         }
 
@@ -151,7 +208,7 @@ namespace PWRISimulator
                 var angls = obj.transform.localRotation;
                 obj.transform.localRotation = Quaternion.Euler(VerticalAngle, HorizontalAngle, angls.z);
                 var pos = obj.transform.localPosition;
-                obj.transform.localPosition = new Vector3(pos.x, 2.4f + UpDownPos, 2.3f - FrontRearPos);
+                obj.transform.localPosition = new Vector3(baseLocalX + LeftRightPos, 2.4f + UpDownPos, 2.3f - FrontRearPos);
             }
         }
     }

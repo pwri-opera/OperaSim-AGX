@@ -13028,6 +13028,10 @@ PrefabInstance:
       propertyPath: m_rowData.Array.data[1].m_compliance
       value: 0.00000001
       objectReference: {fileID: 0}
+    - target: {fileID: 4105532883222003896, guid: 56f2770f81a681740af1224174c25a22, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5770360841801418231, guid: 56f2770f81a681740af1224174c25a22, type: 3}
       propertyPath: m_rowData.Array.data[0].m_compliance
       value: 1e-16
