@@ -14,7 +14,7 @@ namespace PWRISimulator
 
         private List<string> connectionIds = new List<string>();
 
-        //rtiStreamId‚Åw’è‚µ‚½index‚É‘Î‰‚·‚éVideoStreamSender‚ğ•Ô‚·
+        //rtiStreamIdã§æŒ‡å®šã—ãŸindexã«å¯¾å¿œã™ã‚‹VideoStreamSenderã‚’è¿”ã™
         private GameObject GetSelectedVideoStreamSender(string rtiStreamId)
         {
             var items = CameraStreamList;
@@ -22,24 +22,24 @@ namespace PWRISimulator
 
             int streamIndex = int.Parse(rtiStreamId);
 
-            //w’è‚µ‚½Index‚ğ‚ÂVideoStreamSender‚ğ•Ô‚·
+            //æŒ‡å®šã—ãŸIndexã‚’æŒã¤VideoStreamSenderã‚’è¿”ã™
             if (streamIndex < items.Count)
             {
                 UnityEngine.Debug.Log("VideoStreamSender Obj (GetSelectedVideoStreamSender) : " + items[streamIndex].gameObject.name);
                 return items[streamIndex].gameObject;
             }
 
-            //‘Î‰‚·‚éindex‚ª‘¶İ‚µ‚È‚¢ê‡‚É‚ÍƒŠƒXƒg‚ÌÅ‰‚ÌVideoStreamSender‚ğ•Ô‚·
+            //å¯¾å¿œã™ã‚‹indexãŒå­˜åœ¨ã—ãªã„å ´åˆã«ã¯ãƒªã‚¹ãƒˆã®æœ€åˆã®VideoStreamSenderã‚’è¿”ã™
             UnityEngine.Debug.Log("Error: Selected Stream Index is Out Of Number Of VideoStremaSenders.");
             return items[0].gameObject;
 
         }
 
 
-        //Offerˆ—
+        //Offerå‡¦ç†
         public void OnOffer(SignalingEventData data)
         {
-            //VideoStreamSenderƒIƒuƒWƒFƒNƒg‚ğŒŸõ‚µƒŠƒXƒg‚É“o˜^
+            //VideoStreamSenderã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢ã—ãƒªã‚¹ãƒˆã«ç™»éŒ²
             var items = FindObjectsOfType<VideoStreamSender>();
             foreach (var item in items)
             {
@@ -47,7 +47,7 @@ namespace PWRISimulator
                 if (!CameraStreamList.Contains(item)) CameraStreamList.Add(item);
             }
 
-            //Connection ID‚ÌŠÇ—
+            //Connection IDã®ç®¡ç†
             if (connectionIds.Contains(data.connectionId))
             {
                 UnityEngine.Debug.Log("Already answered this connectionId : " + data.connectionId);
@@ -55,7 +55,7 @@ namespace PWRISimulator
             }
             connectionIds.Add(data.connectionId);
 
-            //sdpƒf[ƒ^‚ğ—v‘f–ˆ‚É•ª‰ğ‚µAsdpƒf[ƒ^‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚érid‚ğæ“¾
+            //sdpãƒ‡ãƒ¼ã‚¿ã‚’è¦ç´ æ¯ã«åˆ†è§£ã—ã€sdpãƒ‡ãƒ¼ã‚¿ã«å«ã¾ã‚Œã¦ã„ã‚‹ridã‚’å–å¾—
             var sdpList = data.sdp.Split("\r\n");
             var results = sdpList.Where(line => line.Contains("a=rid"));
             var res = "";
@@ -67,7 +67,7 @@ namespace PWRISimulator
 
             GameObject gameObject = null;
 
-            //rid‚ªæ“¾‰Â”\‚Å‚ ‚ê‚Îrid‚É‘Î‰‚·‚éVideoStreamSender‚ğæ“¾
+            //ridãŒå–å¾—å¯èƒ½ã§ã‚ã‚Œã°ridã«å¯¾å¿œã™ã‚‹VideoStreamSenderã‚’å–å¾—
             if (res != "")
             {
                 UnityEngine.Debug.Log("test2 : " + res.Split("=")[1].Split(":")[1]);
@@ -80,7 +80,7 @@ namespace PWRISimulator
 
             }
             else
-            { //rid‚ªæ“¾‚Å‚«‚È‚¯‚ê‚ÎList‚Ìæ“ª‚ÌVideoStreamSender‚ğæ“¾
+            { //ridãŒå–å¾—ã§ããªã‘ã‚Œã°Listã®å…ˆé ­ã®VideoStreamSenderã‚’å–å¾—
                 gameObject = GetSelectedVideoStreamSender("0"); ;
                 if (gameObject == null)
                 {
@@ -103,7 +103,7 @@ namespace PWRISimulator
 
 
 
-        //connectionId‚Åw’è‚µ‚½ConnectionID‚ğ‚ÂƒAƒNƒeƒBƒu‚ÈVideoStreamSender‚ğ•Ô‚·
+        //connectionIdã§æŒ‡å®šã—ãŸConnectionIDã‚’æŒã¤ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªVideoStreamSenderã‚’è¿”ã™
         private GameObject FindActiveVideoStreamSender(string connectionId)
         {
             //var items = CameraGroup.GetComponentsInChildren<VideoStreamSender>();
@@ -122,7 +122,7 @@ namespace PWRISimulator
 
 
 
-        //Ú‘±Ø’fˆ—
+        //æ¥ç¶šåˆ‡æ–­å‡¦ç†
         private void Disconnect(string connectionId)
         {
             if (!connectionIds.Contains(connectionId))
@@ -136,13 +136,13 @@ namespace PWRISimulator
             connectionIds.Remove(connectionId);
         }
 
-        //Ú‘±Ø’f
+        //æ¥ç¶šåˆ‡æ–­
         public void OnDeletedConnection(SignalingEventData eventData)
         {
             Disconnect(eventData.connectionId);
         }
 
-        //ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚©‚çÚ‘±Ø’f
+        //ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã‹ã‚‰æ¥ç¶šåˆ‡æ–­
         public void OnDisconnect(SignalingEventData eventData)
         {
             Disconnect(eventData.connectionId);

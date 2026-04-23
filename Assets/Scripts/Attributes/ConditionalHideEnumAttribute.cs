@@ -63,11 +63,11 @@ namespace PWRISimulator
 
         int GetConditionalHideAttributeResult(ConditionalHide_EnumAttribute condHAtt, SerializedProperty property)
         {
-            // —LŒø‰»^–³Œø‰»‚µ‚½‚¢ƒvƒƒpƒeƒB‚ÌƒpƒX
+            // æœ‰åŠ¹åŒ–ï¼ç„¡åŠ¹åŒ–ã—ãŸã„ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ãƒ‘ã‚¹
             string propertyPath = property.propertyPath;
-            // —LŒø‰»‚ÌðŒ‚ð•\‚·ƒvƒƒpƒeƒB‚ÌƒpƒX
+            // æœ‰åŠ¹åŒ–ã®æ¡ä»¶ã‚’è¡¨ã™ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ãƒ‘ã‚¹
             string conditionPath = propertyPath.Replace(property.name, condHAtt.conditionalSourceField);
-            // —LŒø‰»‚ÌðŒ‚Ì’l
+            // æœ‰åŠ¹åŒ–ã®æ¡ä»¶ã®å€¤
             SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
 
             if (sourcePropertyValue != null)
