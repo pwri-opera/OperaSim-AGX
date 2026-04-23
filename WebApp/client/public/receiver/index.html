@@ -16,33 +16,18 @@
 
     <div id="warning" hidden="true"></div>
 
-    <div id="player"></div>
+    <div id="playerGrid"></div>
 
-    <div class="box">
-      <span>Camera Select:</span>
-      <select id="cameraSelect" autocomplete="off" disabled>
-        <option value="0" selected>GamingUI</option>
-        <option value="1">Camera1</option>
-        <option value="2">Camera2</option>
-        <option value="3">Camera3</option>
-      </select>
-    </div>
-
-    <div class="box">
-      <span>Codec preferences:</span>
-      <select id="codecPreferences" autocomplete="off" disabled>
-        <option selected value="">Default</option>
-      </select>
-    </div>
-
-    <div class="box">
-      <span>Lock Cursor to Player:</span>
-      <input type="checkbox" id="lockMouseCheck" autocomplete="off" />
-    </div>
+    <fieldset class="box" id="cameraCheckboxes">
+      <legend>Cameras</legend>
+      <label><input type="checkbox" class="cameraCheckbox" value="0" data-label="GamingUI" checked autocomplete="off" />GamingUI</label>
+      <label><input type="checkbox" class="cameraCheckbox" value="1" data-label="Camera1" autocomplete="off" />Camera1</label>
+      <label><input type="checkbox" class="cameraCheckbox" value="2" data-label="Camera2" autocomplete="off" />Camera2</label>
+      <label><input type="checkbox" class="cameraCheckbox" value="3" data-label="Camera3" autocomplete="off" />Camera3</label>
+    </fieldset>
 
     <p>
-      For more information about sample, see
-        <a href="https://docs.unity3d.com/Packages/com.unity.renderstreaming@3.1/manual/sample-broadcast.html">Broadcast sample</a> document page.
+      Check one or more cameras to stream them into the grid above. Cameras can be added or removed at any time after the initial play.
     </p>
 
     <div id="message"></div>
