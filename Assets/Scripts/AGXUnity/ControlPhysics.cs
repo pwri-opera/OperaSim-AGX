@@ -65,7 +65,7 @@ namespace PWRISimulator
 
             }
             //else if (GlobalVariables.ActionMode == -1 && PhysicsFlg == true)
-            else if (GlobalVariables.ActionMode == -1 && PhysicsFlg ==true && GlobalVariables.SelectMode == -1) // ’nŒ`‚Ì‰Šú‰»‚ªŠ®—¹‚µ‚½‚ç’â~
+            else if (GlobalVariables.ActionMode == -1 && PhysicsFlg ==true && GlobalVariables.SelectMode == -1) // åœ°å½¢ã®åˆæœŸåŒ–ãŒå®Œäº†ã—ãŸã‚‰åœæ­¢ 
             {
                 PausePhysics();
                 PhysicsFlg = false;
