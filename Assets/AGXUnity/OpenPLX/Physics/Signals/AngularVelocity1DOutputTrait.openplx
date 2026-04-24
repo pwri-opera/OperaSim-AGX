@@ -1,0 +1,5 @@
+trait AngularVelocity1DOutputTrait:
+    .doc: """
+A trait for AngularVelocity1DOutput that can be implemented for interactions
+that have an non ambiguous interpretation of an internal angular velocity measurement.
+"""

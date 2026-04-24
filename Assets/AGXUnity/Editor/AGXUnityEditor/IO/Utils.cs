@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AGXUnity.Utils;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Runtime.InteropServices;
+using System.Text;
 using UnityEditor;
-using AGXUnity.Utils;
-
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace AGXUnityEditor.IO
@@ -17,15 +18,13 @@ namespace AGXUnityEditor.IO
     private const string m_refScript = "RigidBody.cs";
     private static string m_relDataPathDir = string.Empty;
 
-    public static string PackageName => "com.algoryx.agxunity";
-
     public static bool IsPackageContext => AGXUnityPackageDirectory.StartsWith( "Packages" );
 
     /// <summary>
     /// Absolute Unity project directory without trailing /, i.e., add '/Assets/Foo' for
     /// directory Foo in the project default assets folder.
     /// </summary>
-    public static string ProjectDirectory =>  Application.dataPath.Remove( Application.dataPath.LastIndexOf( "/Assets" ), "/Assets".Length );
+    public static string ProjectDirectory => Application.dataPath.Remove( Application.dataPath.LastIndexOf( "/Assets" ), "/Assets".Length );
 
     /// <summary>
     /// Directory of AGXUnity source code, i.e, package directory + /AGXUnity.
@@ -75,7 +74,7 @@ namespace AGXUnityEditor.IO
     /// <summary>
     /// Absolute directory of AGXUnityEditor source code, i.e, full package directory + /Editor/AGXUnityEditor.
     /// </summary>
-    public static string AGXUnityEditorSourceDirectoryFull => GetFullPath(AGXUnityEditorSourceDirectory);
+    public static string AGXUnityEditorSourceDirectoryFull => GetFullPath( AGXUnityEditorSourceDirectory );
 
     /// <summary>
     /// AGXUnity package directory relative Unity project, e.g., Assets/Foo if AGXUnity source
@@ -89,7 +88,7 @@ namespace AGXUnityEditor.IO
         var filePath = GetCurrentFilePath().Replace('\\','/');
         var assetCtx = filePath.StartsWith( Application.dataPath );
 
-        if( assetCtx ) { 
+        if ( assetCtx ) {
           var refScriptFullPath = Application.dataPath + '/' + m_relDataPathDir + '/' + m_refDirectory + '/' + m_refScript;
           if ( m_relDataPathDir != "" && File.Exists( refScriptFullPath ) )
             return "Assets/" + m_relDataPathDir;
@@ -104,8 +103,9 @@ namespace AGXUnityEditor.IO
           }
 
           return "Assets/" + m_relDataPathDir;
-        } else {
-          return "Packages/" + PackageName;
+        }
+        else {
+          return "Packages/" + AGXUnity.IO.Utils.PackageName;
         }
       }
     }
@@ -117,10 +117,10 @@ namespace AGXUnityEditor.IO
 
     private static string GetCurrentFilePath( [System.Runtime.CompilerServices.CallerFilePath] string fileName = null ) => fileName;
 
-    private static string GetFullPath(string fileName )
+    private static string GetFullPath( string fileName )
     {
       if ( fileName.StartsWith( "Package" ) )
-        return Path.GetFullPath(fileName);
+        return Path.GetFullPath( fileName );
       else return ProjectDirectory + "/" + fileName;
     }
 
@@ -281,6 +281,112 @@ namespace AGXUnityEditor.IO
                           $"doesn't match the given {fileExtension} extension." );
 
       return filesWithCorrectExtension.ToArray();
+    }
+
+#if UNITY_EDITOR_WIN
+    [DllImport( "Shlwapi.dll", CharSet = CharSet.Unicode )]
+    private static extern uint AssocQueryString(
+    AssocF flags,
+    AssocStr str,
+    string pszAssoc,
+    string pszExtra,
+    [Out] StringBuilder pszOut,
+    ref uint pcchOut
+);
+
+    [Flags]
+    private enum AssocF
+    {
+      None = 0,
+      Init_NoRemapCLSID = 0x1,
+      Init_ByExeName = 0x2,
+      Open_ByExeName = 0x2,
+      Init_DefaultToStar = 0x4,
+      Init_DefaultToFolder = 0x8,
+      NoUserSettings = 0x10,
+      NoTruncate = 0x20,
+      Verify = 0x40,
+      RemapRunDll = 0x80,
+      NoFixUps = 0x100,
+      IgnoreBaseClass = 0x200,
+      Init_IgnoreUnknown = 0x400,
+      Init_Fixed_ProgId = 0x800,
+      Is_Protocol = 0x1000,
+      Init_For_File = 0x2000
+    }
+
+    private enum AssocStr
+    {
+      Command = 1,
+      Executable,
+      FriendlyDocName,
+      FriendlyAppName,
+      NoOpen,
+      ShellNewValue,
+      DDECommand,
+      DDEIfExec,
+      DDEApplication,
+      DDETopic,
+      InfoTip,
+      QuickTip,
+      TileInfo,
+      ContentType,
+      DefaultIcon,
+      ShellExtension,
+      DropTarget,
+      DelegateExecute,
+      Supported_Uri_Protocols,
+      ProgID,
+      AppID,
+      AppPublisher,
+      AppIconReference,
+      Max
+    }
+
+    static string AssocQueryString( AssocStr association, string extension )
+    {
+      const int S_OK = 0;
+      const int S_FALSE = 1;
+
+      uint length = 0;
+      uint ret = AssocQueryString(AssocF.None, association, extension, null, null, ref length);
+      if ( ret != S_FALSE ) {
+        throw new InvalidOperationException( "Could not determine associated string" );
+      }
+
+      var sb = new StringBuilder((int)length); // (length-1) will probably work too as the marshaller adds null termination
+      ret = AssocQueryString( AssocF.None, association, extension, null, sb, ref length );
+      if ( ret != S_OK ) {
+        throw new InvalidOperationException( "Could not determine associated string" );
+      }
+
+      return sb.ToString();
+    }
+#endif
+
+    public static void OpenFile( string path, int line, int column = 0 )
+    {
+      // Something in the implementation of AssetDatabase.OpenAsset does not properly pass the line and column numbers 
+      // to VSCode when using it as the external text editor. This is a workaround which checks if the default program 
+      // is VSCode and opens it manually if that is the case.
+#if UNITY_EDITOR_WIN
+      var fullPath = System.IO.Path.GetFullPath( path );
+      try {
+        var extension = System.IO.Path.GetExtension( fullPath );
+        var assoc = AssocQueryString( AssocStr.Executable, extension );
+        if ( assoc.ToLower().EndsWith( "code.exe" ) ) {
+          using System.Diagnostics.Process fileopener = new System.Diagnostics.Process();
+          fileopener.StartInfo.FileName = assoc;
+          fileopener.StartInfo.Arguments = "-g \"" + fullPath.Replace( "\\", "/" ) + "\":" + line + ":" + column;
+          fileopener.StartInfo.CreateNoWindow = true;
+          fileopener.StartInfo.UseShellExecute = false;
+          fileopener.Start();
+          return;
+        }
+      }
+      catch ( System.Exception ) { }
+#endif
+      UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal( path, line, column );
     }
   }
 }

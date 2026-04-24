@@ -1,4 +1,0 @@
-<Kernel name="CalculateAppliedAcceleration">
-  <Parameter.EntityData name="@RigidBody" type="RigidBody"/>
-  <Parameter.Scalar name="@clock.timeStep" type="Real"/>
-</Kernel>

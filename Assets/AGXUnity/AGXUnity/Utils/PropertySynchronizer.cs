@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace AGXUnity.Utils
 {
+  public interface IPropertySynchronizable { }
+
   /// <summary>
   /// This object couples a private serialized field with a
   /// property. When an object has been initialized with a
@@ -113,7 +115,7 @@ namespace AGXUnity.Utils
     }
 
     private static Dictionary<Type, List<FieldPropertyPair>> m_cache = new Dictionary<Type, List<FieldPropertyPair>>();
-    private static Regex m_fieldPropertyMatcher = new Regex( @"\b(m_)([a-z])(\w+)", RegexOptions.Compiled );
+    private static Regex m_fieldPropertyMatcher = new Regex( @"\b(m_)([a-z])(\w*)", RegexOptions.Compiled );
 
     /// <summary>
     /// Searches for field + property match:
@@ -321,9 +323,7 @@ namespace AGXUnity.Utils
     /// <returns>True if <paramref name="type"/> is ScriptComponent or ScriptAsset - otherwise false.</returns>
     private static bool TypeSupportsUpdate( Type type )
     {
-      return type != null &&
-             ( typeof( ScriptComponent ).IsAssignableFrom( type ) ||
-               typeof( ScriptAsset ).IsAssignableFrom( type ) );
+      return type != null && typeof( IPropertySynchronizable ).IsAssignableFrom( type );
     }
   }
 }

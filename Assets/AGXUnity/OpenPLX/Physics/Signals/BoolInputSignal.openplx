@@ -1,0 +1,3 @@
+BoolInputSignal is InputSignal:
+    value is Bool: false
+    static fn create(value: Bool, target: Input) -> BoolInputSignal

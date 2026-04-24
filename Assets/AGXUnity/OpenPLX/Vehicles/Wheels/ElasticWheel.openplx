@@ -1,0 +1,9 @@
+ElasticWheel is Wheel:
+    tire is Physics3D.Bodies.RigidBody with Vehicles.Wheels.TireTrait
+
+    tire_mate is Physics3D.Interactions.Lock:
+      enabled: false
+      connectors: [rim.connector, tire.connector]
+
+    dissipation is Vehicles.Wheels.Interactions.Dissipation.WheelMechanicalDamping
+    flexibility is Vehicles.Wheels.Interactions.Flexibility.LinearElasticWheelFlexibility

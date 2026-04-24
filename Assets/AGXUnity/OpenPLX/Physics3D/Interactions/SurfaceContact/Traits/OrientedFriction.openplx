@@ -1,0 +1,17 @@
+
+trait OrientedFriction:
+    .doc: """
+    The OrientedFrictionTrait is designed to model non-isotropic surface friction,
+    meaning it allows for different frictional properties depending on direction.
+    This trait modifies the friction model based on a specified primary_direction,
+    making it adaptable to surfaces where directional friction is a factor.
+    It is compatible with any DryFriction implementation that inherits from DefaultDryFriction.
+    The friction in the primary_direction is determined by the coefficient from the DryFriction model,
+    while the secondary_coefficient defines the friction in a secondary direction.
+    This secondary direction is orthogonal to both the normal of the contact surface
+    and the primary_direction.
+    This trait is useful for modeling scenarios such as anisotropic surfaces or materials
+    engineered to have specific directional friction properties.
+"""
+    primary_direction is Math.Vec3
+    secondary_coefficient is Real

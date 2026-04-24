@@ -1,0 +1,46 @@
+{
+   "BulkProperties":{
+      "cohesion": 100.0,
+      "density": 550.0,
+      "dilatancyAngle" : 0.085,
+      "frictionAngle": 0.6978,
+      "maximumDensity" : 600.0,
+      "poissonsRatio": 0.175,
+      "swellFactor": 1.0,
+      "youngsModulus": 1.25e6,
+      "deltaReposeAngle": 0.0
+   },
+   "CompactionProperties":{
+      "angleOfReposeCompactionRate": 24.0,
+      "bankStatePhi" :  0.6666,
+      "compactionTimeRelaxationConstant" : 0.050,
+      "compressionIndex" : 0.05,
+      "hardeningConstantKE" : 1.0,
+      "hardeningConstantNE" : 0.0833,
+      "preconsolidationStress" : 98000.0,
+      "stressCutOffFraction" : 0.01,
+      "dilatancyAngleScalingFactor" : 0.261799
+   },
+   "ExcavationContactProperties" : {
+      "aggregateStiffnessMultiplier" : 0.002,
+      "depthDecayFactor" : 2.0,
+      "depthIncreaseFactor" : 1.0,
+      "excavationStiffnessMultiplier" : 1.0,
+      "maximumAggregateNormalForce" : "inf",
+      "maximumContactDepth" : 1.0
+   },
+   "ParticleProperties":{
+      "adhesionOverlapFactor" : 0.050,
+      "particleCohesion" : 300,
+      "particleFriction" : 0.4,
+      "particleRestitution" : 0.0,
+      "particleRollingResistance" : 0.2,
+      "particleTerrainCohesion" : 300,
+      "particleTerrainFriction" : 0.5,
+      "particleTerrainRestitution" : 0.0,
+      "particleTerrainRollingResistance" : 0.7,
+      "particleTerrainYoungsModulus" : 1.25e7,
+      "particleYoungsModulus" : 1.25e7
+   },
+   "description" : "This material specification is named grain_dry_loose and aims to model the behaviour of loose grain with particle size of 1.3mm."
+}

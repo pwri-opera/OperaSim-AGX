@@ -1,0 +1,14 @@
+JohnDeere6068HF485 is DriveTrain.MeanValueEngine:
+    .doc: """
+        Used in John Deere forwarder. https://www.deere.com/en/forwarders/1210g-forwarder/#tag-compare
+        Reference: https://www.deere.com/assets/pdfs/common/industries/engines-and-drivetrain/specsheets/6068hf485_aux.pdf
+    """
+    displacement_volume: 0.0068
+    max_torque: 1025.0
+    max_torque_RPM: 1400.0
+    max_power_RPM: 2200.0
+    idle_RPM: 800.0
+    max_RPM: 4000.0
+    crank_shaft_inertia: 2.5
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

@@ -1,0 +1,6 @@
+EngageInput is BoolInput:
+    .doc: """
+An Input that is a boolean, specifying weather to engage or disengage the source.
+Not to be mistaken for ActivateInput. For example a clutch can be engaged, but not activated.
+A vacuum gripper can be activated, but is not engaged until an object is in the gripper.
+"""

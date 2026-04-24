@@ -1,0 +1,5 @@
+GyroscopeSensingDistortion is Distortion:
+    .doc:"""
+    An error in the structural or electronic internals of the gyroscope distorting the sensor
+    output.
+    """

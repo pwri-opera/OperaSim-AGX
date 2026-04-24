@@ -1,0 +1,25 @@
+
+const Functions:
+    static fn sin(x: Real) -> Real
+    static fn cos(x: Real) -> Real
+    static fn tan(x: Real) -> Real
+    static fn arcsin(x: Real) -> Real
+    static fn arccos(x: Real) -> Real
+    static fn arctan(x: Real) -> Real
+    static fn arctan2(x: Real, y: Real) -> Real
+    static fn sqrt(values: Real) -> Real
+    static fn pow(base: Real, exponent: Real) -> Real
+    static fn mean(values: Real[]) -> Real
+    static fn median(values: Real[]) -> Real
+    static fn harmonic_mean(values: Real[]) -> Real
+    static fn min(values: Real[]) -> Real
+    static fn max(values: Real[]) -> Real
+    static fn sum(values: Real[]) -> Real
+    static fn equals_approx(value: Real, ref: Real) -> Bool
+    static fn inf() -> Real
+    static fn neg_inf() -> Real
+    static fn rad_to_deg(rad: Real) -> Real
+    static fn deg_to_rad(deg: Real) -> Real
+    static fn round(x: Real) -> Int
+    static fn floor(x: Real) -> Int
+    static fn ceil(x: Real) -> Int

@@ -1,0 +1,12 @@
+StructuralComponent is Physics3D.System:
+    .doc: """
+Work In Progress
+
+The StructuralComponent a generic type that is recommented to use as a sub system
+of a vehicle or another type of heavy machine.
+A vehicle could consist of many structural components structured hierarchically.
+The main purpose of the StructuralComponent is to enable a higher level
+interface for connecting parts of a vehicle.
+Instead of having one Mate for each pair of mate connectors,
+we could connect Structural components with StructuralMates (not defined yet).
+"""

@@ -1,0 +1,9 @@
+RigidBodyKinematics is Physics3D.Bodies.Kinematics:
+    .doc: """
+local_cm_transform: Relative local_transform
+initial_local_linear_velocity: local linear velocity relative the body parent system
+initial_local_angular_velocity: local angular velocity relative the body parent system
+"""
+    local_cm_transform is Math.AffineTransform
+    initial_local_linear_velocity is Math.Vec3
+    initial_local_angular_velocity is Math.Vec3

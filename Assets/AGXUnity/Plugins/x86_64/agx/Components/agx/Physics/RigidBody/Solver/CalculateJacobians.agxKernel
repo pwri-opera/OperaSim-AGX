@@ -7,7 +7,7 @@
 
   <Parameter.Array  name="@ContactConstraintJacobian" type="Jacobian6DOFElement" mode="WRITE"/>
 
-  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="" write="impactSpeed, holonomic, damping, violation, velocity, epsilon, bound, lambda, rhs"/>
+  <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="" write="impactSpeed, holonomic, damping, violation, velocity, epsilon, bound, lambda, rhs, tangentialCohesion"/>
   <Parameter.EntityData name="@RigidBody" type="RigidBody" read="mass, cmTransform, linearAcceleration, angularAcceleration"/>
 
   <Parameter.Scalar name="@clock.timeStep" type="Real"/>

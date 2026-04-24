@@ -1,0 +1,8 @@
+DryConeFriction is DefaultDryFriction:
+    .doc: """
+    Isotropic friction model for which the friction force depend on the current normal forces
+    acting normal to the friction plane between two bodies.
+    To compute the perfect cone while solving the non-linear normal/friction force equations
+    is a very sophisticated approach that might be computationally very expensive when there are several interactions 
+    and contacts present.
+    """

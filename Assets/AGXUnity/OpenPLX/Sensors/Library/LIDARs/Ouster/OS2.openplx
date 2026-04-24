@@ -1,0 +1,42 @@
+OS2 is Physics3D.System:
+    .doc: """
+        Ouster OS2 LIDAR.
+        Data sheet: https://data.ouster.io/downloads/datasheets/datasheet-revd-v2p0-os2.pdf
+    """
+    body is Physics3D.Bodies.RigidBody:
+        is_dynamic: true
+        inertia:
+            mass: 1.1
+            tensor: Physics3D.Bodies.Inertia.symmetric_tensor(Math.Vec3.from_xyz(1.0, 1.0, 1.0), 0.0, 0.0, 0.0)
+
+    connector is Physics3D.Interactions.RedirectedMateConnector:
+        redirected_parent: body
+
+    logic is Sensors.PulsedLidarLogic:
+        mate_connector_attachment: connector
+        wavelength: 865e-9
+
+        beam_divergence becomes Sensors.Optics.ConicalBeamDivergence:
+            divergence_angle: Math.Functions.deg_to_rad(0.09)
+            waist_radius: 0.019
+
+        ray_source becomes Sensors.Optics.HorizontalSweepRaySource:
+            horizontal_fov:
+                x: Math.Functions.deg_to_rad(0.0)
+                y: Math.Functions.deg_to_rad(360.0)
+            vertical_fov: Math.Vec2.from_xy(Math.Functions.deg_to_rad(-11.5), Math.Functions.deg_to_rad(11.5))
+
+        distance_noise is Sensors.LidarDetectionDistanceGaussianNoise:
+            gaussian_distribution.mean: 0.0
+            gaussian_distribution.standard_deviation: 3e-2
+            standard_deviation_slope: 1.13e-3
+
+        sensing_distortions: [ logic.distance_noise ]
+
+        distance_output is Sensors.Signals.LidarOutput:
+            fields: [
+                Sensors.Signals.LidarOutputField.Distance_F32,
+                Sensors.Signals.LidarOutputField.Intensity_F32,
+                Sensors.Signals.LidarOutputField.TimeStamp_F64
+            ]
+            source: logic

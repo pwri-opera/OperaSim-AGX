@@ -1,0 +1,16 @@
+CatC27 is DriveTrain.MeanValueEngine:
+    .doc: """
+        Diesel Engine in CAT D10 Dozer. https://s7d2.scene7.com/is/content/Caterpillar/CM20221025-d8691-7d308
+        Reference: https://emc.cat.com/pubdirect.ashx?media_string_id=SS-8230179-18397086-037.pdf
+    """
+    displacement_volume: 0.027
+    max_torque: 5255.0
+    max_torque_RPM: 1400.0
+    max_power_RPM: 1800.0
+    idle_RPM: 500.0
+    max_RPM: 3000.0
+    crank_shaft_inertia: 10.0
+    throttle_pin_bore_ratio: 0.1
+    max_volumetric_efficiency: 0.92
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

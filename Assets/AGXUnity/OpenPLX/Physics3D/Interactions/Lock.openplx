@@ -1,0 +1,18 @@
+Lock is Mate:
+    with Physics3D.Signals.Force3DOutputTrait
+    with Physics3D.Signals.Torque3DOutputTrait
+    .doc: """
+Interaction that constrain all 6 degrees of freedom between two bodies, or one body and the world.
+The force and torque output vectors are reported in the world frame.
+    """
+    dissipation becomes Physics3D.Interactions.Dissipation.DefaultLockDissipation
+    flexibility becomes Physics3D.Interactions.Flexibility.DefaultLockFlexibility
+    toughness becomes Physics3D.Interactions.Toughness.DefaultLockToughness
+
+    torque_output is Physics3D.Signals.Torque3DOutput:
+        source: this
+        enabled: false
+
+    force_output is Physics3D.Signals.Force3DOutput:
+        source: this
+        enabled: false

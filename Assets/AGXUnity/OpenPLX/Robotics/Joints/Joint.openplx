@@ -1,0 +1,4 @@
+Joint is Physics3D.System:
+    mate is Physics3D.Interactions.Mate:
+        connectors: [links[0].end, links[1].start]
+    links is Robotics.Links.RigidLink[]

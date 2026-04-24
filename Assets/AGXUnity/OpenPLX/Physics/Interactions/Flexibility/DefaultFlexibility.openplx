@@ -1,0 +1,6 @@
+DefaultFlexibility:
+    .doc: """
+        The default choice of how something would deform.
+    The intention is for the runtime environment to decide,
+    since the model author has not.
+    """

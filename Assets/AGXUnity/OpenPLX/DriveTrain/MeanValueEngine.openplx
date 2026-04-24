@@ -1,0 +1,56 @@
+MeanValueEngine is Physics.Interactions.Interaction1DOF:
+    with DriveTrain.Traits.RotationalPowerGenerator
+    with Physics.Signals.FractionInputTrait
+    with Physics.Signals.RpmOutputTrait
+    with Physics.Signals.Torque1DOutputTrait
+    .doc: """
+    Combustion engine is one of the most widely used types of engines in various applications such as vehicles, excavators,
+    wheelloaders, aircrafts and marine propulsion systems. It includes a number of components such as
+    the cylinders, pistons, crankshaft, camshafts, valves, fuel injection system, ignition system,
+    air intake and exhaust systems. The cylinders and the pistons form the main body of the engine,
+    where the combustion process occurs. The combustion converts the chemical energy of the air-fuel
+    mixture into the heat energy. The heat energy generates the high temperature as well as the
+    high pressure inside the cylinders. The pressure pushes the pistons to move during the power stroke
+    and outputs the torque to rotate the crank shaft. The crank shaft drives the gears in the drive train,
+    which eventually enables the motion of the vehicle. The valves control the flow of air and
+    fuel into and out of the engine cylinders, and the fuel injection and ignition systems manage the combustion process.
+
+    'displacement_volume'       - The total displacement volume of the engine, which is the sum of the volumes of the cylinders.
+    'max_torque'                - The maximum rated torque which is the highest brake torque that an engine is allowed to deliver over short/continous periods of operations
+    'max_torque_RPM'            - The rated torque speed (i.e. the crankshaft rotational speed) in which the maximum rated torque is delivered.
+    'max_power_RPM'             - The rated power speed (i.e. the crankshaft rotational speed) in which the maximum rated power is delivered.
+    'idle_RPM'                  - The crankshaft speed in which the engine is at idle condition.
+    'max_RPM'                   - The maximum allowerable crankshaft speed of the engine.
+    'crank_shaft_inertia'       - The moment of inertia of the crank shaft.
+    'throttle_pin_bore_ratio'   - The ratio between throttle pin diameter and throttle bore diameter.
+    'max_volumetric_efficiency' - Maximum volumetric efficiency of the engine. The volumetric efficiency refers to the ratio of air volume drawn into the cylinders to the volume the cylinder sweeps.
+    'air_fuel_ratio'            - The stoichiometric air-fuel ratio. Ideal ratio of air to fuel needed for complete combustion, e.g. gasoline.
+    'heat_value'                - The heat value of the fuel.
+    'revolutions_per_cycle'     - The number of crankshaft revolutions during one engine operating cycle.
+    'idle_throttle_angle'       - The smallest angle the throttle plate can have when the engine is running at idle.
+    'max_throttle_angle'        - The maximum angle that the throttle plate is allowed to have.
+    'inlet_volume'              - The inlet manifold volume of the engine.
+    'initial_throttle'          - The initial_throttle is a value between 0-1, where 0 is no throttle, and 1 is max throttle.
+
+    """
+    displacement_volume is Real
+    max_torque is Real
+    max_torque_RPM is Real
+    max_power_RPM is Real
+    idle_RPM is Real
+    max_RPM is Real
+    crank_shaft_inertia is Real
+    air_fuel_ratio is Real
+    heat_value is Real
+    revolutions_per_cycle is Int
+    idle_throttle_angle is Real: 0.17
+    max_throttle_angle is Real: 1.45
+    inlet_volume is Real: displacement_volume * 1.1
+    throttle_pin_bore_ratio is Real: 0.1
+    max_volumetric_efficiency is Real: 0.92
+
+    initial_throttle is Real: 0.0
+
+    # Control input
+    throttle_input is Physics.Signals.FractionInput:
+        source: this

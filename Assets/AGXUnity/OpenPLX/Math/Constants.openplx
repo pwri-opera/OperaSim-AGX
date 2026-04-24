@@ -1,0 +1,4 @@
+
+PI is Real: 3.14159265358979323846264338327950288419716939937510
+NEG_INF is Real: Math.Functions.neg_inf()
+INF is Real: Math.Functions.inf()

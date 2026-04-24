@@ -84,7 +84,7 @@ namespace AGXUnity
         for ( int i = 0; i < (int)agxIO.Environment.Type.NUM_TYPES; ++i )
           envInstance.getFilePath( (agxIO.Environment.Type)i ).clear();
 
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataAGXRuntimePath );
+        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataAGXRuntimePath + "/data" );
         envInstance.getFilePath( agxIO.Environment.Type.RUNTIME_PATH ).pushbackPath( dataAGXRuntimePath );
 
         if ( string.IsNullOrEmpty( envInstance.findComponent( "Referenced.agxEntity" ) ) )
@@ -131,6 +131,7 @@ namespace AGXUnity
 
     ~NativeHandler()
     {
+      LicenseManager.ReturnFloating( "Shutting down" );
       m_isAgx = null;
     }
 

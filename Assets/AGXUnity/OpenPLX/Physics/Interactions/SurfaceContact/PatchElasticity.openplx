@@ -1,0 +1,7 @@
+PatchElasticity is Physics.Interactions.Flexibility.LinearElastic:
+    .doc: """
+        Models the interaction between two objects in contact with a unidirectional elasticity.
+    Where the model assume contact points, where all are treated as one surface area.
+    Compared to the PointwiseElasticity model, the stiffness of the PatchElasticity model
+    will remain independent of the number of points.
+    """

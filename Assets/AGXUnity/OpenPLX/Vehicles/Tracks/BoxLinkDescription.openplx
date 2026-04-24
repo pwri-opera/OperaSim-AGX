@@ -1,0 +1,11 @@
+BoxLinkDescription is ContactGeometryLinkDescription:
+    .doc: """
+Link description for a track belt with a contact_geometry with the shape of a box,
+and possible variations in size given BoxLinkVariation type.
+"""
+    width is Real
+    height is Real
+    contact_geometry becomes Physics3D.Geometries.Box:
+        size.y: width
+        size.z: height
+    variation becomes BoxLinkVariation

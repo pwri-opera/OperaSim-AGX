@@ -1,9 +1,10 @@
-﻿using System.Linq;
+﻿using AGXUnity;
+using AGXUnity.Model;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using AGXUnity;
+using UnityEngine;
 using GUI = AGXUnity.Utils.GUI;
 
 namespace AGXUnityEditor.Tools
@@ -11,7 +12,7 @@ namespace AGXUnityEditor.Tools
   [CustomTool( typeof( RigidBody ) )]
   public class RigidBodyTool : CustomTargetTool
   {
-    private List<Constraint> m_constraints = new List<Constraint>();
+    private List<IConstraint> m_constraints = new List<IConstraint>();
 
     public RigidBody RigidBody
     {
@@ -30,8 +31,7 @@ namespace AGXUnityEditor.Tools
           RemoveAllChildren();
 
           var pointTool = new FindPointTool();
-          pointTool.OnPointFound = data =>
-          {
+          pointTool.OnPointFound = data => {
             Undo.RecordObject( RigidBody.transform, "Rigid body transform" );
 
             RigidBody.transform.position = data.RaycastResult.Point;
@@ -56,8 +56,7 @@ namespace AGXUnityEditor.Tools
           RemoveAllChildren();
 
           var edgeTool = new EdgeDetectionTool();
-          edgeTool.OnEdgeFound = data =>
-          {
+          edgeTool.OnEdgeFound = data => {
             Undo.RecordObject( RigidBody.transform, "Rigid body transform" );
 
             RigidBody.transform.position = data.Position;
@@ -144,17 +143,34 @@ namespace AGXUnityEditor.Tools
     public RigidBodyTool( Object[] targets )
       : base( targets )
     {
-#if UNITY_2019_1_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
+      var allConstraints = StageUtility.GetCurrentStageHandle().Contains( RigidBody.gameObject ) ?
+                             StageUtility.GetCurrentStageHandle().FindComponentsOfType<Constraint>() :
+                             Object.FindObjectsByType<Constraint>(FindObjectsSortMode.None);
+#else
       var allConstraints = StageUtility.GetCurrentStageHandle().Contains( RigidBody.gameObject ) ?
                              StageUtility.GetCurrentStageHandle().FindComponentsOfType<Constraint>() :
                              Object.FindObjectsOfType<Constraint>();
-#else
-      var allConstraints = Object.FindObjectsOfType<Constraint>();
 #endif
       foreach ( var constraint in allConstraints ) {
         foreach ( var rb in GetTargets<RigidBody>() )
           if ( constraint.AttachmentPair.Contains( rb ) )
             m_constraints.Add( constraint );
+      }
+
+#if UNITY_2022_2_OR_NEWER
+      var allWheelJoints = StageUtility.GetCurrentStageHandle().Contains( RigidBody.gameObject ) ?
+                             StageUtility.GetCurrentStageHandle().FindComponentsOfType<WheelJoint>() :
+                             Object.FindObjectsByType<WheelJoint>(FindObjectsSortMode.None);
+#else
+      var allWheelJoints = StageUtility.GetCurrentStageHandle().Contains( RigidBody.gameObject ) ?
+                             StageUtility.GetCurrentStageHandle().FindComponentsOfType<WheelJoint>() :
+                             Object.FindObjectsOfType<WheelJoint>();
+#endif
+      foreach ( var wheelJoint in allWheelJoints ) {
+        foreach ( var rb in GetTargets<RigidBody>() )
+          if ( wheelJoint.AttachmentPair.Contains( rb ) )
+            m_constraints.Add( wheelJoint );
       }
     }
 
@@ -174,7 +190,7 @@ namespace AGXUnityEditor.Tools
         if ( cmTransformToolVisible ) {
           var newPosition = PositionTool( cmPosition, rb.transform.rotation, 0.6f, 1.0f );
           if ( Vector3.SqrMagnitude( cmPosition - newPosition ) > 1.0E-6 ) {
-            Undo.RecordObject( rb.MassProperties, "Center of mass changed" );
+            Undo.RecordObject( rb, "Center of mass changed" );
             cmPosition = newPosition;
             rb.MassProperties.CenterOfMassOffset.UserValue = rb.transform.InverseTransformDirection( newPosition -
                                                                                                      rb.transform.position );
@@ -251,8 +267,10 @@ namespace AGXUnityEditor.Tools
       }
 
       EditorGUILayout.LabelField( GUI.MakeLabel( "Mass properties", true ), skin.Label );
-      using ( InspectorGUI.IndentScope.Single )
-        InspectorEditor.DrawMembersGUI( GetTargets<RigidBody>().Select( rb => rb.MassProperties ).ToArray() );
+      using ( InspectorGUI.IndentScope.Single ) {
+        var targets = GetTargets<RigidBody>();
+        InspectorEditor.DrawMembersGUI( targets.Select( rb => rb.MassProperties ).ToArray(), targets.ToArray() );
+      }
 
       if ( toggleConstraintCreate )
         ConstraintCreateTool = !ConstraintCreateTool;
@@ -271,7 +289,7 @@ namespace AGXUnityEditor.Tools
 
       InspectorGUI.ToolArrayGUI( this, RigidBody.Shapes, "Shapes" );
 
-      InspectorGUI.ToolArrayGUI( this, m_constraints.ToArray(), "Constraints" );
+      InspectorGUI.ToolArrayGUI( this, m_constraints.Cast<ScriptComponent>().ToArray(), "Constraints" );
     }
   }
 }

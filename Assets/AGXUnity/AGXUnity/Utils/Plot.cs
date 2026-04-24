@@ -3,13 +3,13 @@ using UnityEngine;
 namespace AGXUnity.Utils
 {
   [DisallowMultipleComponent]
+  [AddComponentMenu( "AGXUnity/Plot" )]
   [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#plotting-and-data-acquisition" )]
   public class Plot : ScriptComponent
   {
     /// <summary>
     /// Native AGXPlot.System object.
     /// </summary>
-    [SerializeField]
     public agxPlot.System Native { get; private set; } = null;
 
     /// <summary>
@@ -69,9 +69,9 @@ namespace AGXUnity.Utils
     /// <param name="legend">Legend for what is being plotted.</param>
     public void CreatePlot( agxPlot.DataSeries xSeries, agxPlot.DataSeries ySeries, string name, string legend, Color color )
     {
-      agx.Vec4 curveColor;
+      agx.Vec4f curveColor;
       System.Random random = new System.Random();
-      curveColor = new agx.Vec4( color.r, color.g, color.b, 1 );
+      curveColor = new agx.Vec4f( color.r, color.g, color.b, 1 );
       agxPlot.Curve plotCurve = new agxPlot.Curve(xSeries, ySeries, legend);
       plotCurve.setColor( curveColor );
       agxPlot.Window plotWindow = Native.getOrCreateWindow(name);
@@ -87,10 +87,10 @@ namespace AGXUnity.Utils
     /// <param name="legend">Legend for what is being plotted.</param>
     public void CreatePlot( DataSeries xSeries, DataSeries ySeries, string name, string legend, Color color )
     {
-      agx.Vec4 curveColor;
+      agx.Vec4f curveColor;
       System.Random random = new System.Random();
       GetInitialized<AGXUnity.Utils.Plot>();
-      curveColor = new agx.Vec4( color.r, color.g, color.b, 1 );
+      curveColor = new agx.Vec4f( color.r, color.g, color.b, 1 );
       agxPlot.Curve plotCurve = new agxPlot.Curve(xSeries.GetInitialized<AGXUnity.Utils.DataSeries>().Native, ySeries.GetInitialized<AGXUnity.Utils.DataSeries>().Native, legend);
       plotCurve.setColor( curveColor );
       agxPlot.Window plotWindow = Native.getOrCreateWindow(name);

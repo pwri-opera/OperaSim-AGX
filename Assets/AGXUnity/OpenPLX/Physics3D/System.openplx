@@ -1,0 +1,32 @@
+System is Physics.System:
+    .doc: """
+A physical system is a collection of bodies, interactions, and subsystems.
+Each body and subsystem has local transformations relative to the system.
+These local transformations can either be explicitly specified or computed by SNAP, given the mate interactions.
+
+Any Physics3D.Bodies.RigidBody, Physics3D.System or PowerLine within a System will be included in the physics simulation.
+Geometries, however, will not be part of the simulation unless they belong to a Physics3D.Bodies.RigidBody.
+
+Each system has a reference rigid body that maintains the system's frame of reference.
+This reference is applied to the reference body through a redirected mate connector.
+The reduce_object_to_root_system_transform() function is utilized by the bundle implementation
+to compute transformations relative to the root system.
+Physics3D recognizes a reference system at the origin.
+on_init() - Used by the bundle implementation, will choose a reference_body, if one is not specified.
+reduce_body_to_world_system_transform() - Used by the bundle implementation to compute a transform from a rigid body to the world system.
+reduce_to_world_system_transform() - Used by the bundle implementation to compute a transform from this system to the world system.
+kinematically_controlled -  deprecated, to specify the motion control of a RigidBody see is_dynamic attribute in RigidBody.openplx.
+reference_body - a body chosen to be carry the origin of the system.
+                 Will be the first body to get a forced local transform by SNAP,
+                 to get past ambiguous states in the SNAP algorithm in a deterministic way.
+"""
+
+    local_transform is Math.AffineTransform
+    fn on_init()
+    static fn resnap(system: System)
+    fn reduce_body_to_world_system_transform(rigid_body: Physics3D.Bodies.RigidBody) -> Math.AffineTransform
+    fn reduce_to_world_system_transform() -> Math.AffineTransform
+    # kinematically_controlled is deprecated, use RigidBody.is_dynamic instead
+    kinematically_controlled is Physics3D.Bodies.RigidBody[]: []
+    optional reference_body is Physics3D.Bodies.Body reference
+

@@ -1,0 +1,4 @@
+ActivatedOutput is BoolOutput:
+    .doc: """
+An Output that is a boolean, answering if the source is activated or not.
+"""

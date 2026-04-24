@@ -1,0 +1,6 @@
+Rim is Physics3D.Bodies.RigidBody:
+    with Vehicles.Wheels.RimTrait
+
+    geometry is Physics3D.Geometries.Cylinder:
+        radius: radius
+        height: width

@@ -1,0 +1,13 @@
+WheelMechanicalDamping is DefaultWheelDissipation:
+    .doc: """
+    Defines mechanical damping for all constrained degrees of freedom for a Wheel.
+    """
+    default_damping is Real: 5000.0
+    along_axial becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    along_radial becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    around_axial becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    around_radial becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping

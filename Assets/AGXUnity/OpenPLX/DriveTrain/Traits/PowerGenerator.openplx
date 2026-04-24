@@ -1,0 +1,10 @@
+trait PowerGenerator:
+    .doc: """
+A trait for DurationInput that can be implemented for interactions
+that have an non ambiguous interpretation of a time signal input in seconds.
+"""
+    # Optional efficiency factor (0.0 - 1.0)
+    # efficiency is Real
+
+    # Optional reference to a power or energy source (e.g. battery, fuel tank)
+    # power_source is PowerSource

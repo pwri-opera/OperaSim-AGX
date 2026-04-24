@@ -1,0 +1,5 @@
+DefaultMateFlexibility:
+    .doc: """
+    The base type for defining flexibility models for each constrained degree of freedom any Mate.
+    The type of mate will define which dimensions we will model flexibility for.
+    """

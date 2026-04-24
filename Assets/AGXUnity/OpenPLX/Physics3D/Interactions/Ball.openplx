@@ -1,0 +1,10 @@
+Ball is Mate:
+    with Physics3D.Signals.Force3DOutputTrait
+    .doc: """Interaction that constrain all 3 translational degrees of freedom between two bodies, or one body and the world."""
+    dissipation becomes Physics3D.Interactions.Dissipation.DefaultBallDissipation
+    flexibility becomes Physics3D.Interactions.Flexibility.DefaultBallFlexibility
+    toughness becomes Physics3D.Interactions.Toughness.DefaultBallToughness
+
+    force_output is Physics3D.Signals.Force3DOutput:
+        source: this
+        enabled: false

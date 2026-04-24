@@ -1,0 +1,27 @@
+
+MateConnector is Physics.Interactions.Connector:
+    with Signals.MateConnector.MCLinearVelocity3DOutputTrait
+    with Signals.MateConnector.MCAngularVelocity3DOutputTrait
+    .doc: """
+The MateConnector has a implicit frame defined from two orthogonal vectors local to the owning model.
+The two vectors are named main_axis and normal and they must span a plane in 2D. If the normal is not specified
+OpenPLX computes an orthogonal normalized vector to the main_axis.
+The purpose of the main_axis is to act as the direction of an interaction that is used as e.g. the rotational dof of a hinge,
+translational dof of a prismatic, or the normal axis of a planar constraint. The purpose of the normal axis is to define the two
+orthogonal directions (binormal = main_axis x normal).
+
+If the model require parametrisation in any direction orthogonal to the main_axis,
+or if you model something like the hands on the clock, you like for example the default zero position
+to point to twelve aclock, you make sure the normal axis of the MateConnector on the clock point towards twelve.
+
+Physics3D has the concept of a reference mate connector at the origin.
+
+"""
+    position is Math.Vec3
+    # User set direction, which is the main_axis mate direction
+    # E.g. it will define the hinge axis with respect to the MateConnector frames
+    main_axis is Math.Vec3: # Defaults to the z-axis
+        z: 1
+    # A non parallel vector to main_axis axis
+    normal is Math.Vec3: main_axis.get_orthogonal_unit_vector()
+

@@ -1,0 +1,12 @@
+RotationalBody is Body:
+  with Physics.Signals.AngleOutputTrait
+  with Physics.Signals.AngularVelocity1DOutputTrait
+  kinematics becomes RotationalKinematics
+
+  angle_output is Physics.Signals.AngleOutput:
+    source: this
+    enabled: false
+
+  angular_velocity_output is Physics.Signals.AngularVelocity1DOutput:
+    source: this
+    enabled: false

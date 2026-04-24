@@ -1,0 +1,21 @@
+VelocityMotor is Physics.Interactions.Interaction1DOF:
+    .doc: """
+    A velocity-driven motor provides precise and accurate control of speed and position.
+    The gain of a velocity-driven motor can be defined as the ratio of the change in motor speed to
+    the change in control input signal. It determines how responsive the motor output is to changes
+    in the input signal, thus influencing the motor's performance. Generally, higher gain motors are
+    faster and more responsive to changes in control signals, while lower gain motors are more stable but slower to act.
+    The motor will always try to keep the specifed target_speed.
+    If the zero_speed_as_spring is enabled, the motor will act as a spring when the target_speed is set to zero,
+    with the gain value as the default elastic stiffness.
+
+    connectors are typically set to the connectors of the Mate that the motor complement.
+    """
+
+    gain is Real: 1e8
+    # target_speed in m/s
+    target_speed is Real: 0.0
+    zero_speed_as_spring is Bool: false
+    zero_speed_spring_flexibility is Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: gain
+    zero_speed_spring_dissipation is Physics.Interactions.Dissipation.DefaultDissipation

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 98b8a76919e74c04b9b10c596a5feb28
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 2e722c612d1981948a75b738d33c88a3, type: 3}
+  errors: []
+  declaredModels: []
+  ImportedModel: 
+  SkipImport: 1
+  HideImportedMeshes: 1
+  HideImportedVisualMaterials: 0
+  IgnoreDisabledMeshes: 0
+  RotateUp: 1

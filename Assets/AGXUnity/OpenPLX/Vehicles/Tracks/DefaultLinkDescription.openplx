@@ -1,0 +1,7 @@
+DefaultLinkDescription:
+    .doc: """
+Defines the links of a belt of a track system.
+"""
+    inertia is Physics3D.Bodies.Inertia
+    local_cm_transform is Math.AffineTransform
+    variation is DefaultLinkVariation

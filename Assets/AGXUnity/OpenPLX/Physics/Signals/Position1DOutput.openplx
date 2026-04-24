@@ -1,0 +1,9 @@
+Position1DOutput is Output:
+    .doc: """
+A scalar position output given an interaction.
+For interactions where it is unambiguous which position is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.Position1D
+    source is Position1DOutputTrait
+    marshalling.position is RealField

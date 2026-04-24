@@ -1,0 +1,4 @@
+Vec3Marshalling is Physics.Signals.Marshalling:
+    x is Physics.Signals.RealField
+    y is Physics.Signals.RealField
+    z is Physics.Signals.RealField

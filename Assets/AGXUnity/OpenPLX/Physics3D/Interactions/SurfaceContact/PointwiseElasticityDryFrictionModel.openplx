@@ -1,0 +1,15 @@
+# NOT NEEDED ANYMORE?
+
+# Move to Physics3D named ElasticDryFrictionModel
+PointwiseElasticityDryFrictionModel is Physics.Interactions.SurfaceContact.Model:
+    .doc: """
+    The PointwiseElasticityDryFrictionModel is a surface constact definition.
+    An elastic contact normal model with Coulomb friction.
+    The stiffness of the elastic part defaults to
+    half of the harmonic mean of the youngs modulus of the two interacting materials.
+    The relaxation time defaults to maximum relaxation time of the two interacting materials.
+    Mechanical damping capacity [Ns/m] defaults to the stiffness [N/m] multiplied with the relaxation time [s].
+    """
+    
+    normal_flexibility becomes Physics.Interactions.SurfaceContact.PointwiseElasticity
+    friction becomes Physics.Interactions.Dissipation.DefaultDryFriction

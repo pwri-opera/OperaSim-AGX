@@ -1,0 +1,5 @@
+trait BoolOutputTrait:
+    .doc: """
+A trait that can be implemented for types that have a non ambiguous
+boolean as output parameter.
+"""

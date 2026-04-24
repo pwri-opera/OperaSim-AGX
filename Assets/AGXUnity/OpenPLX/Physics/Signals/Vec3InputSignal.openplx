@@ -1,0 +1,3 @@
+Vec3InputSignal is InputSignal:
+    value is Math.Vec3: Math.Vec3.from_xyz(0,0,0)
+    static fn create(value: Math.Vec3, target: Input) -> Vec3InputSignal

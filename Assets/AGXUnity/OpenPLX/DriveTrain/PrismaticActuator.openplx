@@ -1,0 +1,7 @@
+
+PrismaticActuator is Actuator:
+    .doc: """
+    Actuation of the linear degree of freedom of the 3D Prismatic
+    by rotaional to translational conversion from a 1D rotational shaft.
+    """
+    mate_3d becomes Physics3D.Interactions.Prismatic

@@ -1,0 +1,5 @@
+trait MateConnectorAttachment:
+    .doc: """
+    A trait for models attaching to a mate connector.
+    """
+    mate_connector_attachment is Physics3D.Interactions.MateConnector reference

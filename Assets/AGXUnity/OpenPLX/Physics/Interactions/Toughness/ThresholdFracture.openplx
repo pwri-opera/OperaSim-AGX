@@ -1,0 +1,7 @@
+ThresholdFracture is DefaultToughness:
+    .doc: """
+    Defines an interaction or material to break at a specific stress limit,
+    the fracture_point.
+    Force for linear, torque for angular. 
+    """
+    fracture_point is Real

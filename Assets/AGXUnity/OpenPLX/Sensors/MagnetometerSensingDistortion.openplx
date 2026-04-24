@@ -1,0 +1,5 @@
+MagnetometerSensingDistortion is Distortion:
+    .doc:"""
+    Models an error in the structural or electronic internals of the magnetometer distorting the sensor
+    output.
+    """

@@ -1,0 +1,38 @@
+Shovel is Terrain.Shovel:
+    penetration_depth_threshold is Real: 0.5
+    penetration_force_scaling is Real: 1.0
+    max_penetration_force is Real: Math.INF
+    vertical_blade_soil_merge_distance is Real: 0.0
+    enable_particle_free_deformers is Bool: false
+
+    enable_generate_teeth_geometry is Bool: true
+    enable_custom_teeth_geometry is Bool: false
+    custom_teeth_geometry_half_vec is Math.Vec3: {0, 0, 0}
+    enable_excavation_at_teeth_edge is Bool: false
+
+    # Advanced settings
+    always_remove_shovel_contacts is Bool: false
+    enable_inner_shape_create_dynamic_mass is Bool: true
+    enable_particle_force_feedback is Bool: false
+    use_zero_aggregate_velocity is Bool: false
+    no_merge_extension_distance is Real: 0.5
+    minimum_submerged_contact_length_fraction is Real: 0.5
+    secondary_separation_deadload_limit is Real: 0.8
+    contact_region_threshold is Real: (cutting_edge.end - cutting_edge.start).length()*0.1
+    contact_region_vertical_limit is Real: (cutting_edge.end - cutting_edge.start).length()*0.1
+    particle_inclusion_multiplier is Real: 1.0
+    custom_excavation_stiffness_multiplier is Real: 1.0
+    num_contact_patches is Int: 3
+    custom_contact_patch_angle_tresholds is Real[]: [0.0, Math.PI/3, 2*Math.PI/3, Math.PI]
+    enable_custom_partitioning is Bool: false
+    enable_custom_forward_vector is Bool: false
+    enable_custom_bottom_vector is Bool: false
+    custom_forward_vector is Math.Vec3
+    custom_bottom_vector is Math.Vec3
+    enable_teeth_volume is Bool: true
+
+    # Excavation settings
+    primary_excavation_mode is ExcavationModeData
+    back_excavation_mode is ExcavationModeData
+    right_excavation_mode is ExcavationModeData
+    left_excavation_mode is ExcavationModeData

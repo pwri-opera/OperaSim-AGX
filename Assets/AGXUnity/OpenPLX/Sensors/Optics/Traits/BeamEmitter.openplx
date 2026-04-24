@@ -1,0 +1,5 @@
+trait BeamEmitter is RayEmitter:
+    .doc: """
+    Trait for models that emit (non-infinitesimal) beams.
+    """
+    beam_divergence is BeamDivergence

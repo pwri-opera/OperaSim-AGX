@@ -1,0 +1,9 @@
+FlexibleTorqueJoint is HingeJoint:
+    with FlexibleJointTrait
+    actuator becomes DriveTrain.TorqueMotor:
+        connectors: [drive_train.motor_shaft.input]
+
+    drive_train becomes FlexibleJointDriveTrain:
+        hinge_actuator.mate_3d: mate
+
+    # actuator_input is Physics.Signals.Input: actuator.torque_input

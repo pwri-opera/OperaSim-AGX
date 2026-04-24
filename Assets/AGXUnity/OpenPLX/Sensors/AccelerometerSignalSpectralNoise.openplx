@@ -1,0 +1,8 @@
+AccelerometerSignalSpectralGaussianNoise is AccelerometerSensingDistortion:
+    .doc: """
+    A spectral noise error affecting the measured accelerometer signal based on its sampling
+    frequency.
+    """
+    noise_density_x is Real
+    noise_density_y is Real
+    noise_density_z is Real

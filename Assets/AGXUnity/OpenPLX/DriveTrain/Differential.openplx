@@ -1,0 +1,21 @@
+Differential is Physics1D.Interactions.Mate:
+    .doc: """
+    The differential in a vehicle transmit torque from the drive_shaft to the left_axle_shaft and right_axle_shaft.
+    The default definition is that it will connect the output connector of the drive_shaft to the differential
+    so that the differential transmitts torque to the input connectors of the axle shafts.
+
+    The gear_ratio in a vehicle's differential is the difference between the number of times the drive shaft
+    needs to rotate in comparison to the axle_shafts.
+    """
+    drive_shaft is Shaft
+    left_axle_shaft is Shaft
+    right_axle_shaft is Shaft
+    gear_ratio is Real: 1.0
+    locked_up is Bool: false
+    connectors: [drive_shaft.output, left_axle_shaft.input, right_axle_shaft.input]
+
+    locked_up_output is Physics.Signals.BoolOutput:
+        source: this
+        enabled: false
+    lock_up_input is Physics.Signals.BoolInput:
+        source: this

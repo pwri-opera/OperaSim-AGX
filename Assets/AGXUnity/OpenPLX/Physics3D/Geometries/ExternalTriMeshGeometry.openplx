@@ -1,0 +1,9 @@
+ExternalTriMeshGeometry is TriMeshGeometry:
+    .doc: """
+A contact geometry consisting of a triangle mesh stored in an external file at path
+"""
+    path is String
+    scale is Math.Vec3:
+        x: 1.0
+        y: 1.0
+        z: 1.0

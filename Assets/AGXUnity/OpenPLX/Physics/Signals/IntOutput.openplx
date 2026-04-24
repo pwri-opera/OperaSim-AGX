@@ -1,0 +1,6 @@
+IntOutput is Output:
+    .doc: """
+An Output that can be represented by an Integer.
+"""
+    type: Physics.Signals.InputOutputType.Integer
+    source is IntOutputTrait

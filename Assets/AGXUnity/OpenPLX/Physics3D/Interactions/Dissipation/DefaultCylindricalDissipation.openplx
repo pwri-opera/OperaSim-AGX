@@ -1,0 +1,8 @@
+DefaultCylindricalDissipation is DefaultMateDissipation:
+    .doc: """
+    Defines one dissipation model for each constrained degree of freedom for a Cylindrical
+    """
+    along_normal is Physics.Interactions.Dissipation.DefaultDissipation
+    along_cross is Physics.Interactions.Dissipation.DefaultDissipation
+    around_normal is Physics.Interactions.Dissipation.DefaultDissipation
+    around_cross is Physics.Interactions.Dissipation.DefaultDissipation

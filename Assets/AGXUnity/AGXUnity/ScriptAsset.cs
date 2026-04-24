@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AGXUnity.Utils;
+using System;
 using UnityEngine;
 
 namespace AGXUnity
@@ -17,8 +18,22 @@ namespace AGXUnity
   /// implementations.
   /// </summary>
   [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#assets" )]
-  public abstract class ScriptAsset : ScriptableObject
+  public abstract class ScriptAsset : ScriptableObject, IPropertySynchronizable
   {
+    private const int CurrentSerializationVersion = 1;
+
+    // Serialization version is currently unused
+#pragma warning disable 0414
+    [SerializeField]
+    private int m_serializationVersion = CurrentSerializationVersion;
+#pragma warning restore 0414
+
+    /// <summary>
+    /// True when the property synchronizer is running during (post) initialize.
+    /// </summary>
+    [HideInInspector]
+    public bool IsSynchronizingProperties { get; private set; } = false;
+
     public static T Create<T>() where T : ScriptAsset
     {
       return Create( typeof( T ) ) as T;
@@ -45,8 +60,11 @@ namespace AGXUnity
       if ( state == ScriptAssetManager.InitializationState.NotInitialized ) {
         NativeHandler.Instance.MakeMainThread();
 
-        if ( Initialize() )
+        if ( Initialize() ) {
+          IsSynchronizingProperties = true;
           Utils.PropertySynchronizer.Synchronize( this );
+          IsSynchronizingProperties = false;
+        }
         else {
           Debug.LogError( "Unable to initialize script asset: " + this.name, this );
           ScriptAssetManager.Instance.Unregister( this );
@@ -92,5 +110,23 @@ namespace AGXUnity
     /// </summary>
     /// <returns></returns>
     protected abstract bool Initialize();
+  }
+
+  /// <summary>
+  /// Extension methods for ScriptAsset.
+  /// This is used for template inference in classes that derive from ScriptAsset.
+  /// </summary>
+  public static partial class ScriptAssetExtensions
+  {
+    /// <summary>
+    /// Shorthand for the GetInitialized method which does not require specifying the asset type.
+    /// </summary>
+    /// <typeparam name="T">The asset type, deduced from instance.</typeparam>
+    /// <param name="inst">Asset instance to initialize.</param>
+    /// <returns></returns>
+    public static T GetInitialized<T>( this T inst ) where T : ScriptAsset
+    {
+      return inst.GetInitialized<T>();
+    }
   }
 }

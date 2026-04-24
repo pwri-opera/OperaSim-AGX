@@ -1,0 +1,15 @@
+LinearElasticHingeFlexibility is DefaultHingeFlexibility:
+    .doc: """
+    Define a linear elastic flexibility model for each constrained degree of freedom for a Hinge.
+    """
+    default_stiffness is Real: 100000.0
+    along_main becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    along_normal becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    along_cross becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    around_normal becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    around_cross becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness

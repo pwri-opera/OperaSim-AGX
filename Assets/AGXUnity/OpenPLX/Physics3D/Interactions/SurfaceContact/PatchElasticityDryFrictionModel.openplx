@@ -1,0 +1,11 @@
+# NOT NEEDED ANYMORE?
+
+# Move to Physics3D named ElasticDryFrictionModel
+PatchElasticityDryFrictionModel is Physics.Interactions.SurfaceContact.Model:
+    .doc: """
+    The PatchElasticityDryFrictionModel is a surface constact definition.
+    An elastic contact normal model with dry friction.
+    The stiffness of the elastic part must be specified.
+    """
+    normal_flexibility becomes Physics.Interactions.SurfaceContact.PatchElasticity
+    friction becomes Physics.Interactions.Dissipation.DefaultDryFriction

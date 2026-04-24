@@ -1,0 +1,6 @@
+SixDofSuctionCupJoint is Physics3D.Interactions.Lock:
+    .doc: """
+    A mate prepared for the SixDofSuctionCup to model flexibility and damping.
+    """
+    flexibility becomes Physics3D.Interactions.Flexibility.LinearElasticLockFlexibility
+    dissipation becomes Physics3D.Interactions.Dissipation.LockMechanicalDamping

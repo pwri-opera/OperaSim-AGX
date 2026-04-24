@@ -1,0 +1,13 @@
+GMTruck is DriveTrain.MeanValueEngine:
+    .doc: """
+        These parameters come from Figure 1-11, Pulkabek2004, Engineering fundamentals of the internal combustion engine.
+    """
+    displacement_volume: 0.0074
+    max_torque: 556.0
+    max_torque_RPM: 3200.0
+    max_power_RPM: 4200.0
+    idle_RPM: 1000.0
+    max_RPM: 7000.0
+    crank_shaft_inertia: 2.0
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

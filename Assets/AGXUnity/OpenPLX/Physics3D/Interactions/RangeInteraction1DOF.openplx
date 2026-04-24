@@ -1,0 +1,12 @@
+RangeInteraction1DOF is Physics.Interactions.Interaction1DOF:
+    .doc: """
+    A limit range, for where the degree of freedom is bound.
+    The boundary conditions are considered one dimensional walls,
+    with which the two involved bodies will collide, if violated.
+    The interaction when bumping in to the range defined with an ElasticityType.
+    """
+    min_effort: 0
+    flexibility is Physics.Interactions.Flexibility.DefaultFlexibility
+    dissipation is Physics.Interactions.Dissipation.DefaultDissipation
+    start is Real
+    end is Real

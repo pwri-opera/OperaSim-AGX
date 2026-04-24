@@ -1,0 +1,6 @@
+MechanicalDamping is DefaultDissipation:
+    .doc: """
+        Mechanical damping has units [N/(m/s)] for linear damping
+        and [Nm/(rad/s)] for rotational damping
+    """
+    damping_constant is Real

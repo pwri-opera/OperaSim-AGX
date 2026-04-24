@@ -1,0 +1,37 @@
+Matrix4x4:
+    # first row
+    e00 is Real
+    e01 is Real
+    e02 is Real
+    e03 is Real
+    # second row
+    e10 is Real
+    e11 is Real
+    e12 is Real
+    e13 is Real
+    # third row
+    e20 is Real
+    e21 is Real
+    e22 is Real
+    e23 is Real
+    # fourth row
+    e30 is Real
+    e31 is Real
+    e32 is Real
+    e33 is Real
+
+    # First four values are the first row, etc.
+    static fn from_row_major(r0c0: Real, r0c1: Real, r0c2: Real, r0c3: Real, r1c0: Real, r1c1: Real, r1c2: Real, r1c3: Real, r2c0: Real, r2c1: Real, r2c2: Real, r2c3: Real, r3c0: Real, r3c1: Real, r3c2: Real, r3c3: Real) -> Matrix4x4
+    static fn from_rows(r0: Real[], r1: Real[], r2: Real[], r3: Real[]) -> Matrix4x4
+    static fn from_columns(c0: Real[], c1: Real[], c2: Real[], c3: Real[]) -> Matrix4x4
+    static fn from_vec3_quat(v : Vec3, q : Quat) -> Matrix4x4
+
+    fn transpose() -> Matrix4x4
+    fn copy() -> Matrix4x4
+    # The following two acts as if the matrix was an affine matrix with translation in the last column
+    fn get_affine_translation() -> Vec3
+    fn get_affine_rotation() -> Quat
+
+operator +(lhs: Matrix4x4, rhs: Matrix4x4) -> Matrix4x4
+operator -(lhs: Matrix4x4, rhs: Matrix4x4) -> Matrix4x4
+operator *(lhs: Matrix4x4, rhs: Matrix4x4) -> Matrix4x4

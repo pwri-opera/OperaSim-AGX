@@ -1,0 +1,4 @@
+ExcavationModeData:
+    enabled is Bool: true
+    enable_force_feedback is Bool: true
+    enable_create_dynamic_mass is Bool: true

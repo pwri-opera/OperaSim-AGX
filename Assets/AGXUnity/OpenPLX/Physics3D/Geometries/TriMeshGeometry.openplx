@@ -1,0 +1,4 @@
+TriMeshGeometry is ContactGeometry:
+    .doc: """
+A contact geometry consisting of a triangle mesh
+"""

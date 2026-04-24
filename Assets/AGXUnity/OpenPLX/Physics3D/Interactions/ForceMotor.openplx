@@ -1,0 +1,15 @@
+ForceMotor is Physics.Interactions.Interaction1DOF:
+    with Physics.Signals.Force1DInputTrait
+    with Physics.Signals.Force1DOutputTrait
+    .doc: """
+    A force-driven motor provides precise and accurate control of the applied force.
+    The motor will initially be configured to apply the default force.
+    """
+    default_force is Real: 0.0
+
+    force_input is Physics.Signals.Force1DInput:
+        source: this
+
+    force_output is Physics.Signals.Force1DOutput:
+        source: this
+        enabled: false

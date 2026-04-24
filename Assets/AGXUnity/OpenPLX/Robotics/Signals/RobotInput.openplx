@@ -1,0 +1,9 @@
+
+RobotInput is Physics.Signals.Input:
+  .doc: """
+A filter that accepts a RobotInputSignal and decomposes it into a RealInputSignal of the correct type for each target in targets.
+targets contains the Signal Inputs to map to in order.
+"""
+    type: Physics.Signals.InputOutputType.Composite
+    targets is Physics.Signals.Input[]: []
+    fn process(signal: Physics.Signals.InputSignal) -> Physics.Signals.InputSignal[]

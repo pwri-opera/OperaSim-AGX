@@ -1,0 +1,2 @@
+Actuator is DriveTrain.Actuator:
+    mate_3d becomes Vehicles.Suspensions.Interactions.Mate

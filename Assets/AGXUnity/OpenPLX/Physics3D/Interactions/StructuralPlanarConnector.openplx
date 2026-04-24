@@ -1,0 +1,19 @@
+StructuralPlanarConnector is Physics3D.Interactions.RedirectedMateConnector:
+    .doc: """
+    The StructuralPlanarConnector is a RedirectedMateConnector for modeling in a plane.
+    It can be used in combination with the StructuralPlane to conveniently  model
+    planar mechanical structures like crane arms or tracked system.
+    The main_axis is always considered pointing in the normal direcion of the StructuralPlane, which is Z.
+    The default normal direction is X, and the specified angle will rotate the normal direction around the main_axis.
+    """
+    angle is Real: 0
+    x is Real: 0
+    y is Real: 0
+
+    main_axis: Math.Vec3.Z_AXIS()
+    normal: Math.Quat.angle_axis(angle, main_axis).rotate(Math.Vec3.X_AXIS())
+    position:
+        x: x
+        y: y
+        z: 0
+

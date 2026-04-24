@@ -1,3 +1,0 @@
-<Entity name="Plane" source="Shape">
-	<Attribute.Scalar name="plane" type="Plane"/>
-</Entity>

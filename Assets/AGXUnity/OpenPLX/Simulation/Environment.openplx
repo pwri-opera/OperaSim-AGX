@@ -1,0 +1,10 @@
+Environment is Physics3D.System:
+    .doc: """
+An environment is a special type of a system. Just as a system it can contain multiple subsystems and bodies.
+An environment also contains parameters that affect the environment of all those bodies and systems that are part
+of it, such as the gravitational field. An important difference to remember is that an environment should never
+be in a system or another environment.
+
+gravity - what type of gravitational field is used
+"""
+    gravity is GravitationalField

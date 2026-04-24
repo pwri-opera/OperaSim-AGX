@@ -1,0 +1,7 @@
+DryBoxFriction is DefaultDryFriction:
+    .doc: """
+    Defines a constant maximum friction forces,linear dof's, or torques, around angular dof's,
+    given the hypothetic normal forces when the gravitational masses of the involved objects are at rest.
+    """
+    
+    

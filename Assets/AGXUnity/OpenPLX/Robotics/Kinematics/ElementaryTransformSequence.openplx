@@ -1,0 +1,30 @@
+
+ElementaryTransform:
+    static fn tx(x: Real) -> ElementaryTransform
+    static fn ty(y: Real) -> ElementaryTransform
+    static fn tz(z: Real) -> ElementaryTransform
+    static fn Rx(theta: Real) -> ElementaryTransform
+    static fn Ry(theta: Real) -> ElementaryTransform
+    static fn Rz(theta: Real) -> ElementaryTransform
+    static fn tx_free(flip: Bool) -> ElementaryTransform
+    static fn ty_free(flip: Bool) -> ElementaryTransform
+    static fn tz_free(flip: Bool) -> ElementaryTransform
+    static fn Rx_free(flip: Bool) -> ElementaryTransform
+    static fn Ry_free(flip: Bool) -> ElementaryTransform
+    static fn Rz_free(flip: Bool) -> ElementaryTransform
+    static fn calculateElementaryTransformSequence(system: Physics3D.System, base: Physics3D.Interactions.MateConnector, end: Physics3D.Interactions.MateConnector) -> Robotics.Kinematics.ElementaryTransform[]
+    static fn fkine(ets: ElementaryTransform[], q: Real[]) -> Math.AffineTransform
+    static fn position_from_ets(ets: ElementaryTransform[], joint_index: Int) -> Math.Vec3
+    static fn main_axis_from_ets(ets: ElementaryTransform[], joint_index: Int) -> Math.Vec3
+    static fn normal_from_ets(ets: ElementaryTransform[], joint_index: Int) -> Math.Vec3
+    type is String: "tx" # tx | ty | tz | Rx | Ry | Rz (case insensitive)
+    c is Real: 0.0
+    free is Bool: false
+    flip is Bool: false
+
+trait FromETS:
+    ets is ElementaryTransform[]
+    joint_index is Int: 0
+    position: ElementaryTransform.position_from_ets(ets, joint_index)
+    main_axis: ElementaryTransform.main_axis_from_ets(ets, joint_index)
+    normal: ElementaryTransform.normal_from_ets(ets, joint_index)

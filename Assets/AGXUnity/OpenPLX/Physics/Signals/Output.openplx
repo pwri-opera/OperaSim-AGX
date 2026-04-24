@@ -1,0 +1,10 @@
+Output:
+    .doc: """
+An Output, i.e. a sender of signals.
+- Each Output must have a type-attribute, e.g. InputOutputType.Torque1D, Angle, AngularVelocity or any other InputOutputType.
+- Use type Composite when the Output sends a Signal with multiple values.
+"""
+    type is Int
+    enabled is Bool: true
+    marshalling is Marshalling
+

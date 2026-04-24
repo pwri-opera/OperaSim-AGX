@@ -1,4 +1,0 @@
-<Kernel name="AppendToBuffer" dispatch="serial">
-  <Parameter.Scalar name="value" type="Real"/>
-  <Parameter.Array name="@buffer" type="Real" globalResult="APPEND"/>
-</Kernel>

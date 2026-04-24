@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/assets/logo_small.png" />
+    <title>AGX Dynamics Web Debugger</title>
+    <!-- Moved menu bar CSS to style.css to avoid inline css proxy build issue -->
+    <script type="module" crossorigin src="/assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index.css">
+  </head>
+  <body>
+
+    <!-- New top menu bar -->
+    <div id="main-menu-bar">
+      <div id="file-menu-root" class="menu-root">File
+        <div id="file-menu-dropdown" class="menu-dropdown">
+          <div id="menu-load-session" class="menu-item">Load Session...</div>
+          <div id="menu-save-session-binary" class="menu-item">Save Session (Binary)</div>
+          <div id="menu-save-session" class="menu-item">Save Session</div>
+          <div id="menu-request-agx-archive" class="menu-item">Request AGX Archive</div>
+        </div>
+      </div>
+      <div id="help-menu-root" class="menu-root">Help
+        <div id="help-menu-dropdown" class="menu-dropdown">
+          <div id="menu-web-debugger-docs" class="menu-item">Web Debugger Documentation</div>
+          <div id="menu-agx-user-manual" class="menu-item">AGX Dynamics User Manual</div>
+          <div id="menu-about" class="menu-item">About</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="menu-bar">
+
+        <!-- Original Save/Load elements kept for existing logic but hidden -->
+        <button id="save-session-btn" style="display:none;">Save Session</button>
+        <label style="cursor: pointer; display: none;">
+          <span style="padding: 6px 12px; background: #555; color: white; border-radius: 4px;">Load Session</span>
+          <input type="file" id="load-session" accept=".json,.wbdbg,.wbdbg.zst" style="display: none;">
+        </label>
+
+        <button id="focus-btn" disabled>Focus Selected</button>
+        <button id="center-btn" disabled>Center</button>
+        <input type="checkbox" id="follow-selected-checkbox" style="margin-left: 5px; align-self: center;" disabled>
+        <label for="follow-selected-checkbox" style="color: #e0e0e0; font-family: Arial, sans-serif; font-size: 14px; align-self: center; margin-right: 5px;">Follow</label>
+        <button id="zoom-out-btn">Zoom to Fit</button>
+
+        <button id="disconnect-btn">Disconnect</button>
+        <input type="text" id="socket-host-textbox" placeholder="localhost" style="margin: 0 10px; width: 150px;" />
+        <input type="text" id="socket-port-textbox" placeholder="9001" style="margin: 0 10px; width: 60px;" />
+        <input type="checkbox" id="auto-reconnect-checkbox" style="margin-left: 10px; align-self: center;">
+        <label for="auto-reconnect-checkbox" style="color: #e0e0e0; font-family: Arial, sans-serif; font-size: 14px; align-self: center;">Auto-Reconnect</label>
+
+        <input type="checkbox" id="record-checkbox" style="margin-left: 10px; align-self: center;">
+        <label for="record-checkbox" style="color: #f60d0d; font-family: Arial, sans-serif; font-size: 14px; align-self: center;">Record</label>
+        <button id="clear-recording-btn" style="margin-left:6px; background:#b32424; color:#ffffff; border:1px solid #ff4d4d; padding:4px 10px; border-radius:4px; cursor:pointer;">Clear</button>
+
+        <input type="range" id="timeline-slider" min="0" max="0" value="0" step="0.01" style="flex-grow: 1;">
+
+        <select id="speed-select">
+            <option value="0.125">0.125x</option>
+            <option value="0.25">0.25x</option>
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1x</option>
+            <option value="2">2x</option>
+            <option value="4">4x</option>
+          </select>        
+        <button id="settings-btn"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuOBtp6qgAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAASRkBAOgDAABJGQEA6AMAAFBhaW50Lk5FVCA1LjEuOAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABth7jdgL6qmwAAAc9JREFUWEftlT9rVEEUR8/bWIq4iBIFUVlNJYqmjJ/BziKtfxL8AGmT0jbEVgVNaed3ECyjaQTBBLUIKqhBTBo9NjM4e+O+2TUWgnvg8Zh779x3585v5sGYMf87TTT8DjWaAA4BE8Cn6Mg0TT19JxoqNEAPWALWgIXgnwZm8kAdVPxo5ETqgvrRX7xXH6kr6g11Td1R54s5Md3oFMluFh+v8UA9XiugdQvCCjrAhf6IVq4CB6NxJFIBnfSei0ussDzMFrTKNE1eBKaAK8CpEPISeAWcB84E3yZwOZ+SYU7EHtIK1uPSEvfUI+oB9Zh6Pwaos8N0YSDqUfV1zKq+UydLpasn1K0Qt6E+VKdi7kyrCIGTwGQ0Am+Abfpb+xnY6IuC08C1NjHWCvgKPE77WXI266Foby9pIbIFvI3GoSjaOxtaq/pMvaR21Yvq0xiQWN+PBvLTTfsZ+ZY0shsd6qa6qi7+cQH0F7Ecv1BhLs2b+BsF9MI/oMZKcYGVOtlDTYSZbeBJNLbwAvhBOiVtl9CwBXwArgO3gV3gOXALuAusJn/mC3C4GO+Pso3pmVGng+1OEumSek5taq3PDO5NoJKsC3zPl1NJW/vHjBnzT/ATaTS0nPCfjvQAAAAASUVORK5CYII=" alt="Settings"></button>
+        <input type="checkbox" id="statistics-checkbox" style="margin-left: 10px; align-self: center;">
+        <label for="statistics-checkbox" style="color: #e0e0e0; font-family: Arial, sans-serif; font-size: 14px; align-self: center;">Statistics</label>
+        <img src="/assets/algoryx_logo.png" alt="Algoryx Logo" />
+    </div>
+
+    <div id="container">
+        <div id="sidebar">
+          <div id="resizer"></div> <!-- draggable edge -->
+          <h3>Web Debugger</h3>
+          <div style="margin-bottom: 8px;">
+            <input type="text" id="scene-search-box" placeholder="Search scene..." style="width: 95%; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: #e0e0e0;">
+          </div>          <div class="tree">
+            <div class="tree-node">
+              <div class="tree-toggle" data-toggle="scene">
+                <input type="checkbox" id="vis-scene" class="group-vis-checkbox" checked title="Toggle all" style="margin-right: 6px;">
+                ▶ <span class="tree-label">Scene</span>
+              </div>
+              <div class="tree-children" id="scene-group">
+                <div class="tree-node">
+                  <div class="tree-toggle" data-toggle="RIGIDBODY">
+                    <input type="checkbox" id="vis-RIGIDBODY" class="group-vis-checkbox" checked title="Toggle all RigidBody" style="margin-right: 6px;">
+                    ▶ <span class="tree-label">RigidBody</span>
+                  </div>
+                  <div class="tree-children group-list" id="RIGIDBODY-group"></div> <!-- ✅ added class -->
+                </div>
+                <div class="tree-node">
+                  <div class="tree-toggle" data-toggle="GEOMETRY">
+                    <input type="checkbox" id="vis-GEOMETRY" class="group-vis-checkbox" checked title="Toggle all Geometry" style="margin-right: 6px;">
+                    ▶ <span class="tree-label">Geometry</span>
+                  </div>
+                  <div class="tree-children group-list" id="GEOMETRY-group"></div> <!-- ✅ added class -->
+                </div>
+                <div class="tree-node">
+                  <div class="tree-toggle" data-toggle="GRANULAR">
+                    <input type="checkbox" id="vis-GRANULAR" class="group-vis-checkbox" checked title="Toggle all Granular" style="margin-right: 6px;">
+                    ▶ <span class="tree-label">Granular</span>
+                  </div>
+                  <div class="tree-children group-list" id="GRANULAR-group"></div> <!-- ✅ added class -->
+                </div>
+                <div class="tree-node">
+                  <div class="tree-toggle" data-toggle="TEXT">
+                    <input type="checkbox" id="vis-TEXT" class="group-vis-checkbox" checked title="Toggle all Text" style="margin-right: 6px;">
+                    ▶ <span class="tree-label">Text</span>
+                  </div>
+                  <div class="tree-children group-list" id="TEXT-group"></div> <!-- ✅ added class -->
+                </div>
+                <div class="tree-node">
+                  <div class="tree-toggle" data-toggle="OTHER">
+                    <input type="checkbox" id="vis-OTHER" class="group-vis-checkbox" checked title="Toggle all Other" style="margin-right: 6px;">
+                    ▶ <span class="tree-label">Other</span>
+                  </div>
+                  <div class="tree-children group-list" id="OTHER-group"></div> <!-- ✅ added class -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div id="scene"></div>
+      </div>
+
+      <div id="player-controls">
+        <button id="play-btn"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAYAAAAAEAAABgAAAAAQAAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAAlR56NozS1xQAAAHpJREFUSEvtkWEJgDAQRocJjGAEIxjBKGtiFCMYwQhG0AbzndxgwhDl8N89eIyD4/s2FhzHeSalNOCOEWW+aYYQKcisKPNvBZkZO9QtA4TUCjJR1x5p9PzKodrglrUXTNiibhkgpCxYsMfrg0UzhEjBhmMOLXUc5w0hnMGEw1Ofh+wHAAAAAElFTkSuQmCC" alt="Play"></button>
+        <button id="pause-btn"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAYAAAAAEAAABgAAAAAQAAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAAlR56NozS1xQAAAHVJREFUSEtjGAWjYBQwMEJprOD///8sQEoCim+AxIBAA4hfgDAjI+MfsAi5AGiBAhAvAOLXQNwMxAlAfB+IDwOxDlQZXsAEpQkBkE94IEwwALFBYgQBsRaQDUYtIAgIWQBKhl+g+A6UBonB2KNgFIwCgoCBAQAosCryU6OWAwAAAABJRU5ErkJggg==" alt="Pause"></button>
+        <button id="stop-btn"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAYAAAAAEAAABgAAAAAQAAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAAlR56NozS1xQAAAE9JREFUSEtjGAWjYBQMAvD////1QIwNrIcqwQuYoDQ+IACl0QEucRRAjAUUgVELCAJGKI0TAFNLApBSgPBQwANGRsYFUPYoGAWjACdgYAAAI8AgcNkbpNMAAAAASUVORK5CYII=" alt="Stop"></button>
+        <button id="jump-to-end-btn"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuOWxu2j4AAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAA8nYBAOgDAADydgEA6AMAAFBhaW50Lk5FVCA1LjEuOQADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAArIfcnPEIHlAAAAKxJREFUSEvt01ENwjAUheEfFEzCJICD4WBIIKmASZgDDPQBB0gACTgACTg4vNwl5I5Cm/Cwh37JkubctOehHVTV4q188C6E4KOZGKOP8knqJQ2ScF8jaZS08XuK2CGSdLFDp4LO8tHv8dY+SOiAO9D7wS+5BQANcAaOts5SUjAZgNaHKaUFD2AH3PwgpaTgBGyBqx98k1PwBPbAwdb/Y0+z/fAfTE81+7KrasFeet5jO2iX0XsAAAAASUVORK5CYII=" alt="JumpEnd"></button>
+        <span style="margin-left: 10px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; align-self: center;">Time: </span>
+        <input type="number" id="sim-time-input" value="0.00" step="0.01" style="width: 70px; background-color: transparent; color: #e0e0e0; border: none; font-family: Arial, sans-serif; font-size: 14px; padding: 2px; margin-left: 5px; align-self: center;">
+        <span style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; align-self: center;">s</span>
+      </div>
+
+      <div id="floating-stats" style="
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 60px;
+        min-width: 220px;
+        min-height: 60px;
+        max-width: 40vw;
+        max-height: 60vh;
+        background: rgba(30,30,30,0.85);
+        color: #e0e0e0;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', 'monospace';
+        font-size: 14px;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        z-index: 1001;
+        padding: 12px 16px 12px 16px;
+        user-select: text;
+        cursor: move;
+        overflow: auto;
+      ">
+        <div id="floating-stats-header" style="font-weight: bold; cursor: move; margin-bottom: 6px;">Statistics</div>
+        <pre id="floating-stats-content" style="margin: 0; white-space: pre-wrap; word-break: break-word;"></pre>
+      </div>
+      
+      <!-- Floating Statistics Form -->
+<div id="stats-floating-form" style="
+  display: none;
+  position: fixed;
+  top: 120px;
+  left: 1200px;
+  min-width: 260px;
+  min-height: 80px;
+  background: rgba(30,30,30,0.85);
+  color: #e0e0e0;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  user-select: none;
+  pointer-events: auto;
+  border: 1px solid #444;
+">
+  <div id="stats-form-header" style="
+    cursor: move;
+    background: rgba(40,40,40,0.95);
+    padding: 6px 12px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 13px;
+    border-bottom: 1px solid #444;
+    color: #f6c244;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  ">
+    <span>Statistics</span>
+    <button id="stats-form-close-btn" style="
+      background: none;
+      border: none;
+      color: #e0e0e0;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    ">&times;</button>
+  </div>
+  <pre id="stats-form-content" style="
+    margin: 0;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    background: transparent;
+    color: #e0e0e0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 40px;
+    max-height: 300px;
+    overflow-y: auto;
+  "></pre>
+</div>
+
+<!-- Floating Settings Form -->
+<div id="settings-floating-form" style="
+  display: none;
+  position: fixed;
+  top: 180px;
+  left: 1200px;
+  min-width: 260px;
+  min-height: 80px;
+  background: rgba(30,30,30,0.92);
+  color: #e0e0e0;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  z-index: 1001;
+  user-select: none;
+  pointer-events: auto;
+  border: 1px solid #444;
+">  <div id="settings-form-header" style="
+    cursor: move;
+    background: rgba(40,40,40,0.95);
+    padding: 6px 12px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 13px;
+    border-bottom: 1px solid #444;
+    color: #f6c244;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  ">
+    <span>Settings</span>
+    <button id="settings-form-close-btn" style="
+      background: none;
+      border: none;
+      color: #e0e0e0;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    ">&times;</button>
+  </div>
+  <div id="settings-form-content" style="
+    margin: 0;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    background: transparent;
+    color: #e0e0e0;
+    min-height: 40px;
+    max-height: 300px;
+    overflow-y: auto;
+  ">
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <input type="checkbox" id="settings-enable-logging-checkbox">
+      <span>Enable logging</span>
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <input type="checkbox" id="settings-show-statistics-checkbox">
+      <span>Show statistics</span>
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <input type="checkbox" id="settings-grid-checkbox" checked>
+      <span>Show grid</span>
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <span>Cell size</span>
+      <input type="number" id="settings-grid-cell-size" value="1" min="0.01" step="0.01" style="width: 60px; background: #222; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 6px; font-size: 14px;">
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <span>Total size</span>
+      <input type="number" id="settings-grid-total-size" value="20" min="0.01" step="0.01" style="width: 60px; background: #222; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 6px; font-size: 14px;">
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px;">
+      <input type="checkbox" id="settings-background-checkbox" checked>
+      <span>Solid background</span>
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+      <span>Camera speed</span>
+      <input type="number" id="camera-movement-speed" value="0.2" step="0.01" min="0.01" style="width: 60px; background: #222; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 6px; font-size: 14px;">
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+      <span>Up Axis</span>
+      <select id="settings-up-axis" style="background: #222; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 6px; font-size: 14px;">
+        <option value="Z+">Z+</option>
+        <option value="+Y">+Y</option>
+        <option value="X+">X+</option>
+      </select>
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <span>Primitive tesselation</span>
+      <input type="number" id="settings-primitive-tesselation" value="10" min="2" max="30" step="1" style="width: 60px; background: #222; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 2px 6px; font-size: 14px;">
+    </label>
+    <button id="settings-reset-btn" style="margin-top: 12px; width: 100%; background: #444; color: #fff; border: none; border-radius: 4px; padding: 8px 0; font-size: 14px; cursor: pointer;">Reset settings</button>
+  </div>
+</div>
+
+<!-- Generic Message Dialog Modal -->
+<div id="message-dialog" class="modal-overlay" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h2 id="message-dialog-title">Message</h2>
+      <button id="message-dialog-close-btn" class="modal-close-btn">&times;</button>
+    </div>    <div class="modal-body">
+      <div id="message-dialog-text"></div>
+    </div>
+    <div class="modal-footer">
+      <button id="message-dialog-ok-btn" class="modal-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/stats.js@0.17.0/build/stats.min.js"></script>    
+  </body>
+</html>

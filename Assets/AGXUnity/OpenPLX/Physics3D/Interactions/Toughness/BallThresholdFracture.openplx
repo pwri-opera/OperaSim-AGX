@@ -1,0 +1,12 @@
+BallThresholdFracture is DefaultBallToughness:
+    .doc: """
+    Define a threshold fracture model for each constrained degree of freedom for a Ball.
+    Each dimension can then fail individually at their fracture points.   
+    """
+    default_limit is Real: 10000.0
+    along_main becomes Physics.Interactions.Toughness.ThresholdFracture:
+        fracture_point: default_limit
+    along_normal becomes Physics.Interactions.Toughness.ThresholdFracture:
+        fracture_point: default_limit
+    along_cross becomes Physics.Interactions.Toughness.ThresholdFracture:
+        fracture_point: default_limit

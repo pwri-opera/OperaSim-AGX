@@ -1,0 +1,8 @@
+
+Sensor:
+    .doc: """
+A sensor can be placed e.g. on a robot. Signals from the outputs are collected so that their values are grouped together by the sensor.
+reference_id is optional and must be unique within each Robot and can be used to identify the sensor, e.g. when communicating using Click or ROS. Typically the full name will be used if not set.
+"""
+    outputs is Physics.Signals.Output[]
+    reference_id is String: ""

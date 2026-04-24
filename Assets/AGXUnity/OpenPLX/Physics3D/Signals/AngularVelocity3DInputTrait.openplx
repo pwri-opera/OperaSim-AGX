@@ -1,0 +1,5 @@
+trait AngularVelocity3DInputTrait:
+    .doc: """
+A trait that can be implemented for models that have an non ambiguous
+3D angular velocity parameter as input.
+"""

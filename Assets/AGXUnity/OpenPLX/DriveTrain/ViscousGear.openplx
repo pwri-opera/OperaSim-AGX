@@ -1,0 +1,13 @@
+
+ViscousGear is Gear:
+    .doc: """
+The ViscousGear acts as a rotational coupling that connects two RotationalBodies
+with a focus on viscous surface friction. This model accounts for the damping effects
+due to surface viscosity, impacting the rotational interaction between two
+Physics1D.Bodies.RotationalBody instances.
+It maintains a linear relationship of rotational speed and position through
+a specified gear ratio but differs from an ideal gear by incorporating the effects
+of surface viscous friction, adding a layer of complexity and realism to its behavior.
+"""
+    dissipation is Physics.Interactions.Dissipation.ConstantViscousSurfaceFriction:
+        viscosity: Math.INF

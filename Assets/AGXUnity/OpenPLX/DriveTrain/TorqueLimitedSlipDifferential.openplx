@@ -1,0 +1,16 @@
+TorqueLimitedSlipDifferential is Differential:
+    .doc: """
+    A TorqueLimitedSlipDifferential is designed to overcome the standard differential's main limitation:
+    the tendency to send torque to the wheel with the least amount of traction. 
+    A Torque Limited Slip Differential seeks to maintain both wheels turning at the same speed,
+    until the difference in torque required to keep both wheels at the same speed exceeds a defined limit.
+    This limit is often referred to as the "breakaway torque."
+    Once the breakaway_torque is exceeded, the Limited Slip Differential will allow the wheels to rotate at different speeds. 
+    This is especially useful when there's significantly different traction on each wheel, such as when turning on a slippery surface.
+
+    The differential can then re-engage the lock between the wheels when the torque difference reduces and falls below the threshold again.
+    This behavior of a Torque LSD allows for better traction and control in situations where a conventional open differential might cause one wheel to spin freely. For instance when driving on ice or when one wheel is in the air.
+    
+    
+    """
+    breakaway_torque is Real

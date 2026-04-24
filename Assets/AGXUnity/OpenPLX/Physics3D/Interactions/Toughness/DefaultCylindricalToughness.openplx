@@ -1,0 +1,8 @@
+DefaultCylindricalToughness is DefaultMateToughness:
+    .doc: """
+    Defines one toughness model for each constrained degree of freedom for a Cylindrical
+    """
+    along_normal is Physics.Interactions.Toughness.DefaultToughness
+    along_cross is Physics.Interactions.Toughness.DefaultToughness
+    around_normal is Physics.Interactions.Toughness.DefaultToughness
+    around_cross is Physics.Interactions.Toughness.DefaultToughness

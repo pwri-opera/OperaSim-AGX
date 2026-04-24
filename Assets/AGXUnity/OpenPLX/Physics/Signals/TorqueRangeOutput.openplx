@@ -1,0 +1,11 @@
+TorqueRangeOutput is Output:
+    .doc: """
+A torque range output given an interaction.
+For interactions where it is unambiguous which torque range is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.TorqueRange
+    source is TorqueRangeOutputTrait
+    marshalling:
+        min is RealField
+        max is RealField

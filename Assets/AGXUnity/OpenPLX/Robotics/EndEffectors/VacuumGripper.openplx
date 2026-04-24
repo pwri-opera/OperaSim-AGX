@@ -1,0 +1,13 @@
+VacuumGripper:
+    with Physics.Signals.BoolInputTrait
+    with Physics.Signals.BoolOutputTrait
+    activated is Bool
+    suction_cups is SuctionCup[]
+    vacuum_system is VacuumSystem
+
+    activate_input is Physics.Signals.ActivateInput:
+        source: this
+
+    activated_output is Physics.Signals.ActivatedOutput:
+        enabled: false
+        source: this

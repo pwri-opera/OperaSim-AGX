@@ -1,0 +1,63 @@
+
+SixAxisSerialManipulator is Robots.Robot:
+    data is Robots.SerialManipulatorData
+    link1 is Links.RigidLink:
+        inertia.mass: data.link_data[0].inertia.mass
+        start.main_axis: data.link_data[0].start_main_axis
+        start.normal: data.link_data[0].start_normal
+        start.position: data.link_data[0].start_position
+        end.main_axis: data.link_data[0].end_main_axis
+        end.normal: data.link_data[0].end_normal
+        end.position: data.link_data[0].end_position
+    link2 is Links.RigidLink:
+        inertia.mass: data.link_data[1].inertia.mass
+        start.main_axis: data.link_data[1].start_main_axis
+        start.normal: data.link_data[1].start_normal
+        start.position: data.link_data[1].start_position
+        end.main_axis: data.link_data[1].end_main_axis
+        end.normal: data.link_data[1].end_normal
+        end.position: data.link_data[1].end_position
+    link3 is Links.RigidLink:
+        inertia.mass: data.link_data[2].inertia.mass
+        start.main_axis: data.link_data[2].start_main_axis
+        start.normal: data.link_data[2].start_normal
+        start.position: data.link_data[2].start_position
+        end.main_axis: data.link_data[2].end_main_axis
+        end.normal: data.link_data[2].end_normal
+        end.position: data.link_data[2].end_position
+    link4 is Links.RigidLink:
+        inertia.mass: data.link_data[3].inertia.mass
+        start.main_axis: data.link_data[3].start_main_axis
+        start.normal: data.link_data[3].start_normal
+        start.position: data.link_data[3].start_position
+        end.main_axis: data.link_data[3].end_main_axis
+        end.normal: data.link_data[3].end_normal
+        end.position: data.link_data[3].end_position
+    link5 is Links.RigidLink:
+        inertia.mass: data.link_data[4].inertia.mass
+        start.main_axis: data.link_data[4].start_main_axis
+        start.normal: data.link_data[4].start_normal
+        start.position: data.link_data[4].start_position
+        end.main_axis: data.link_data[4].end_main_axis
+        end.normal: data.link_data[4].end_normal
+        end.position: data.link_data[4].end_position
+    link6 is Links.RigidLink:
+        inertia.mass: data.link_data[5].inertia.mass
+        start.main_axis: data.link_data[5].start_main_axis
+        start.normal: data.link_data[5].start_normal
+        start.position: data.link_data[5].start_position
+        end.main_axis: data.link_data[5].end_main_axis
+        end.normal: data.link_data[5].end_normal
+        end.position: data.link_data[5].end_position
+
+    joint1 is Joints.HingeJoint
+    joint2 is Joints.HingeJoint:
+        links: [link1, link2]
+    joint3 is Joints.HingeJoint:
+        links: [link2, link3]
+    joint4 is Joints.HingeJoint:
+        links: [link3, link4]
+    joint5 is Joints.HingeJoint:
+        links: [link4, link5]
+    joint6 is Joints.HingeJoint:
+        links: [link5, link6]

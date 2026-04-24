@@ -1,0 +1,4 @@
+DefaultMateClearance:
+    .doc: """
+    Clearance for mates.
+    """

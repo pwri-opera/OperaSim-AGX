@@ -1,0 +1,7 @@
+trait TireTrait:
+    outer_radius is Real
+    inner_radius is Real
+    width is Real
+    rotational_axis is Math.Vec3: {0, 0, 1.0}
+    connector is Physics3D.Interactions.MateConnector:
+        main_axis: rotational_axis

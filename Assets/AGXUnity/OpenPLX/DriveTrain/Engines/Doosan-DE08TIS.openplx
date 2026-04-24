@@ -1,0 +1,14 @@
+DoosanDE08TIS is DriveTrain.MeanValueEngine:
+    .doc: """
+        Diesel Engine in Doosan DL300 Wheelloader.
+        Reference: https://doosan.co.za/brochure/attachments-wheel-loaders/DL300A.pdf
+    """
+    displacement_volume: 0.00807
+    max_torque: 902.0
+    max_torque_RPM: 1300.0
+    max_power_RPM: 2100.0
+    idle_RPM: 900.0
+    max_RPM: 4000.0
+    crank_shaft_inertia: 2.0
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

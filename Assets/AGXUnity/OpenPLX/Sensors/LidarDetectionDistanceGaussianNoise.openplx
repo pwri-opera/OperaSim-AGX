@@ -1,0 +1,9 @@
+LidarDetectionDistanceGaussianNoise is LidarSensingDistortion:
+    .doc: """
+    A Gaussian noise error in the detection distance of lidar points.
+
+    The noise applied to a distance depends on the base standard deviation and the specified
+    standard deviation slope, denoting standard deviation change per meter.
+    """
+    gaussian_distribution is Math.Random.GaussianDistribution
+    standard_deviation_slope is Real

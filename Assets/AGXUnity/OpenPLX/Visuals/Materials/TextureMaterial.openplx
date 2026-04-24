@@ -1,0 +1,10 @@
+TextureMaterial is Material:
+    .doc: """
+Can be used to add a texture to an Visuals.Geometries.ExternalTriMeshGeometry.
+
+Note: It currently only works for .obj files that include texture coordinates.
+"""
+    path is String
+    repeat is Bool: false
+    scale_u is Real: 1.0
+    scale_v is Real: 1.0

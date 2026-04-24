@@ -1,0 +1,6 @@
+RotationalRange is RangeInteraction1DOF:
+    with Physics.Signals.Torque1DOutputTrait
+
+    torque_output is Physics.Signals.Torque1DOutput:
+        enabled: false
+        source: this

@@ -1,0 +1,6 @@
+# """
+# Base type for Body
+# """
+Body:
+    inertia is Inertia
+    kinematics is Kinematics

@@ -1,0 +1,13 @@
+FlexibleJointDriveTrain is Physics3D.System:
+    motor_shaft is DriveTrain.Shaft
+    gear is DriveTrain.Gear:
+        connectors: [motor_shaft.output, gear_shaft.input]
+    gear_shaft is DriveTrain.Shaft
+    motor_shaft.angle_output.enabled: true
+    motor_shaft.angular_velocity_output.enabled: true
+    gear.torque_output.enabled: true
+    sensor is Robotics.Signals.Sensor:
+        outputs: [motor_shaft.angle_output, motor_shaft.angular_velocity_output, gear.torque_output]
+
+    hinge_actuator is DriveTrain.HingeActuator:
+        connector_1d: gear_shaft.output

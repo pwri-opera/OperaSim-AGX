@@ -23,6 +23,8 @@ namespace AGXUnityEditor.Tools
 
     public string Name { get; set; } = "Line";
 
+    public bool EnableRendering { get; set; } = true;
+
     public UnityEngine.Object UndoRedoRecordObject { get; set; }
 
     public Func<EdgeDetectionTool.EdgeSelectResult, EdgeDetectionTool.EdgeSelectResult> TransformResult = null;
@@ -67,9 +69,10 @@ namespace AGXUnityEditor.Tools
       var lineVisualRadius   = 0.005f;
       var sphereVisualRadius = 1.5f * lineVisualRadius;
       var renderOnSceneView  = !ConfigurationToolActive() &&
-                                Line.Valid && ( 
+                                Line.Valid && (
                                !EditorApplication.isPlaying ||
-                                EditorApplication.isPaused );
+                                EditorApplication.isPaused ) &&
+                                EnableRendering;
       var startEnabled = renderOnSceneView && GetFrameToggleEnable( StartFrameNameId );
       var endEnabled   = renderOnSceneView && GetFrameToggleEnable( EndFrameNameId );
 
@@ -199,7 +202,9 @@ namespace AGXUnityEditor.Tools
       if ( Mode != ToolMode.Direction || !Line.Valid )
         return;
 
+      Line.End.SetParent( Line.Start.Parent );
       Line.End.Position = Line.Start.Position + Line.Start.Rotation * Vector3.back;
+      Line.End.Rotation = Line.Start.Rotation;
     }
 
     private bool ConfigurationToolActive()

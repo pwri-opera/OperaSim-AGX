@@ -1,0 +1,12 @@
+DefaultClearance:
+    .doc: """
+    For mates like hinges, prismatics etc., or between contacting surfaces,
+    clearance refers to the loose or extra space that exists which allows for some amount of movement.
+    Often, this term is used in mechanical or manufacturing contexts. 
+    For instance, a door hinge might have a clearance that allows it to move or swing more freely.
+    Alternatively, if two objects are meant to fit snugly together but don't, the extra space between them would be considered a clearance.
+
+    In a perfect world with perfect manufacturing, there would be no clearance as objects designed to interact would fit together perfectly.
+    However, in reality, some infinitesimal clearance is often allowed for to ensure smooth operation or for tolerances in manufacturing.
+    Too large clearances, however, can lead to instability or failure of a system.
+    """

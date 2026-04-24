@@ -1,0 +1,2 @@
+InfinitePowerSource is PowerSource:
+    maximum_energy_capacity: Math.INF

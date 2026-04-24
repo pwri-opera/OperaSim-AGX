@@ -1,0 +1,4 @@
+CyclicVariation:
+    .doc: """
+Defines cyclic variations along the belt of a track system.
+"""

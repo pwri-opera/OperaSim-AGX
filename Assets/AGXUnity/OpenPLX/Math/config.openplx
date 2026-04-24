@@ -1,0 +1,4 @@
+
+config is BundleConfig:
+    name: "Math"
+    version: "0.20.2"

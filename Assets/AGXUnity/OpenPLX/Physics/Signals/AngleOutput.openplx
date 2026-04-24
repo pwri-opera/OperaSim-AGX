@@ -1,0 +1,9 @@
+AngleOutput is Output:
+    .doc: """
+A scalar angle output given an interaction.
+For interactions where it is unambiguous which angle is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.Angle
+    source is AngleOutputTrait
+    marshalling.angle is RealField

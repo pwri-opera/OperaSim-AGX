@@ -1,0 +1,32 @@
+
+Terrain is Physics3D.Bodies.Body:
+    .doc: """
+    A Terrain is modifiable by Shovels
+
+    num_elements_x - defines the number of elements in the x direction.
+    num_elements_y - defines the number of elements in the y direction.
+    element_size - The distance between the height points in the terrain
+    max_depth - The maximum depth that the terrain can have.
+
+    The size of the terrain is thus (num_elements_x-1)*element_size x (num_elements_y-1)*element_size
+
+    Example:
+
+    Scene is Physics3D.System:
+    local_transform.position.x: 1
+    terrain is Terrain.Terrain:
+        num_elements_x: 151
+        num_elements_y: 201
+        element_size: 0.10
+        max_depth: 5.0
+        # Let terrain starts at origo
+        kinematics.local_transform.position.x: (terrain.num_elements_x-1)/2*terrain.element_size
+        kinematics.local_transform.position.y: (terrain.num_elements_y-1)/2*terrain.element_size
+
+    """
+    num_elements_x is Int
+    num_elements_y is Int
+    element_size is Real
+    max_depth is Real
+
+    material is TerrainMaterial: MaterialLibrary.defaultTerrainMaterial

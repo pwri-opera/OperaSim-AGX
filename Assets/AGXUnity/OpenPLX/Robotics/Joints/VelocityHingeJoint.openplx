@@ -1,0 +1,3 @@
+VelocityHingeJoint is HingeJoint:
+    actuator becomes Physics3D.Interactions.RotationalVelocityMotor:
+        target_speed: 0

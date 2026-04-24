@@ -1,0 +1,9 @@
+AngularVelocity3DOutput is Physics3D.Signals.AngularVelocity3DOutput:
+    with MateConnectorOutputTrait
+    .doc: """
+Emits a ValueOutputSignal where the signal value is the directional angular velocity of the source
+relative_to      - You may specify a MateConnector as the relative_to parameter to get the value relative to that mate connector
+"""
+    # Impl note: Prevent users to accidentally use anything else but MateConnector:s
+    source becomes MCAngularVelocity3DOutputTrait
+

@@ -1,0 +1,85 @@
+Value:
+    .doc: """
+Base for different types of values, e.g. for use in ValueOutputSignal
+"""
+
+
+IntValue is Value:
+    .doc: """
+Base for Values that are integers
+"""
+    value is Int
+    static fn create(value: Int) -> IntValue
+
+BoolValue is Value:
+    .doc: """
+Base for Values that are integers
+"""
+    value is Bool
+    static fn create(value: Bool) -> BoolValue
+
+RealValue is Value:
+    .doc: """
+Base for Values that are real numbers
+"""
+    value is Real
+
+
+AngleValue is RealValue:
+    static fn create(value: Real) -> AngleValue
+AngularVelocity1DValue is RealValue:
+    static fn create(value: Real) -> AngularVelocity1DValue
+DistanceValue is RealValue:
+    static fn create(value: Real) -> DistanceValue
+Force1DValue is RealValue:
+    static fn create(value: Real) -> Force1DValue
+Velocity1DValue is RealValue:
+    static fn create(value: Real) -> Velocity1DValue
+Torque1DValue is RealValue:
+    static fn create(value: Real) -> Torque1DValue
+RpmValue is RealValue:
+    static fn create(value: Real) -> RpmValue
+FractionValue is RealValue:
+    static fn create(value: Real) -> FractionValue
+DurationValue is RealValue:
+    static fn create(value: Real) -> DurationValue
+RatioValue is RealValue:
+    static fn create(value: Real) -> RatioValue
+MassValue is RealValue:
+    static fn create(value: Real) -> MassValue
+
+
+Vec2Value is Value:
+    .doc: """
+Base for Values that are real Vec3s
+"""
+    value is Math.Vec2
+
+TorqueRangeValue is Vec2Value:
+    static fn create(value: Math.Vec2) -> TorqueRangeValue
+ForceRangeValue is Vec2Value:
+    static fn create(value: Math.Vec2) -> ForceRangeValue
+
+
+Vec3Value is Value:
+    .doc: """
+Base for Values that are real Vec3s
+"""
+    value is Math.Vec3
+
+Acceleration3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> Acceleration3DValue
+AngularAcceleration3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> AngularAcceleration3DValue
+AngularVelocity3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> AngularVelocity3DValue
+Force3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> Force3DValue
+Torque3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> Torque3DValue
+Velocity3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> Velocity3DValue
+Position3DValue is Vec3Value:
+    static fn create(value: Math.Vec3) -> Position3DValue
+RPYvalue is Vec3Value:
+    static fn create(value: Math.Vec3) -> RPYvalue

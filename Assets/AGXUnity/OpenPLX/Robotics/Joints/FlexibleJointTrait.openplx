@@ -1,0 +1,6 @@
+
+trait FlexibleJointTrait:
+    .doc: """
+For a Joint with the FlexibleJointTrait, a drive train is introduced
+"""
+    drive_train is FlexibleJointDriveTrain

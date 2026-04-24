@@ -1,0 +1,7 @@
+FlexibleJointData is HingeJointData:
+    motor_damping is Real: 10.0
+    motor_inertia is Real: 0.01
+    motor_stiffness is Real: 1000.0
+    gear_inertia is Real: 0.001
+    gear_ratio is Real: 1.0
+    max_motor_torque is Real: 100.0

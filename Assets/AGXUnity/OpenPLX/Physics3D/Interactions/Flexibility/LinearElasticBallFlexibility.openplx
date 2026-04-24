@@ -1,0 +1,11 @@
+LinearElasticBallFlexibility is DefaultBallFlexibility:
+    .doc: """
+    Define a linear elastic flexibility model for each constrained degree of freedom for a Ball.
+    """
+    default_stiffness is Real: 100000.0
+    along_main becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    along_normal becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    along_cross becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness

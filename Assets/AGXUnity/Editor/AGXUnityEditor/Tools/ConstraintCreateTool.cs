@@ -1,7 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using AGXUnity;
+using AGXUnity.Model;
+using AGXUnity.Utils;
+using System;
 using UnityEditor;
-using AGXUnity;
+using UnityEngine;
 using GUI = AGXUnity.Utils.GUI;
 
 namespace AGXUnityEditor.Tools
@@ -9,6 +11,14 @@ namespace AGXUnityEditor.Tools
   public class ConstraintCreateTool : Tool
   {
     public GameObject Parent { get; private set; }
+
+    class UndoWrapper : UnityEngine.ScriptableObject
+    {
+      [SerializeField]
+      public AttachmentPair wrapped;
+    }
+
+    UndoWrapper TempAttachmentPair;
 
     public bool MakeConstraintChildToParent { get; set; }
 
@@ -24,35 +34,34 @@ namespace AGXUnityEditor.Tools
 
     public ConstraintCreateTool( GameObject parent,
                                  bool makeConstraintChildToParent,
-                                 Action<Constraint> onCreate = null )
+                                 Action<IConstraint> onCreate = null )
       : base( isSingleInstanceTool: true )
     {
       Parent = parent;
       MakeConstraintChildToParent = makeConstraintChildToParent;
       m_onCreate = onCreate;
+      TempAttachmentPair = ScriptableObject.CreateInstance<UndoWrapper>();
+      TempAttachmentPair.hideFlags = HideFlags.DontSave;
     }
 
     public override void OnAdd()
     {
       m_createConstraintData.CreateInitialState( Parent.name );
+      TempAttachmentPair.wrapped = m_createConstraintData.AttachmentPair;
+
       AttachmentFrameTool = new ConstraintAttachmentFrameTool( new AttachmentPair[]
                                                                {
                                                                  m_createConstraintData.AttachmentPair
                                                                },
+                                                               new UnityEngine.Object[] { TempAttachmentPair },
                                                                Parent );
       AttachmentFrameTool.ReferenceFrameTool.TransformHandleActive = false;
       // Enabling reference frame transform handle when select tool
       // is done. When connected frame tool parent is set (first) we
       // still activate the reference frame transform handle since
       // this is the default behavior.
-      AttachmentFrameTool.ReferenceFrameTool.OnToolDoneCallback = tool =>
-      {
-        AttachmentFrameTool.ReferenceFrameTool.TransformHandleActive = true;
-      };
-      AttachmentFrameTool.ConnectedFrameTool.OnToolDoneCallback = tool =>
-      {
-        AttachmentFrameTool.ReferenceFrameTool.TransformHandleActive = true;
-      };
+      AttachmentFrameTool.ReferenceFrameTool.OnToolDoneCallback = tool => AttachmentFrameTool.ReferenceFrameTool.TransformHandleActive = true;
+      AttachmentFrameTool.ConnectedFrameTool.OnToolDoneCallback = tool => AttachmentFrameTool.ReferenceFrameTool.TransformHandleActive = true;
     }
 
     public override void OnRemove()
@@ -84,18 +93,13 @@ namespace AGXUnityEditor.Tools
                                                                 m_createConstraintData.Name,
                                                                 skin.TextField );
 
+      // Hijack the Unknown type to represent WheelJoints
+      string[] types = Enum.GetNames(typeof(ConstraintType));
+      types[ (int)ConstraintType.Unknown ] = "Wheel Joint";
 
-#if UNITY_2018_1_OR_NEWER
-      m_createConstraintData.ConstraintType = (ConstraintType)EditorGUILayout.EnumPopup( GUI.MakeLabel( "Type", true ),
-                                                                                         m_createConstraintData.ConstraintType,
-                                                                                         val => (ConstraintType)val != ConstraintType.Unknown,
-                                                                                         false,
-                                                                                         skin.Popup );
-#else
-      m_createConstraintData.ConstraintType = (ConstraintType)EditorGUILayout.EnumPopup( GUI.MakeLabel( "Type", true ),
-                                                                                         m_createConstraintData.ConstraintType,
-                                                                                         skin.Popup );
-#endif
+      m_createConstraintData.ConstraintType = (ConstraintType)EditorGUILayout.Popup( GUI.MakeLabel( "Type", true ),
+                                                                                     (int)m_createConstraintData.ConstraintType,
+                                                                                     types );
 
       AttachmentFrameTool.OnPreTargetMembersGUI();
       AttachmentFrameTool.AttachmentPairs[ 0 ].Synchronize();
@@ -119,11 +123,26 @@ namespace AGXUnityEditor.Tools
                                                                     "Create the constraint",
                                                                     "Cancel" );
       if ( createCancelState == InspectorGUI.PositiveNegativeResult.Positive ) {
-        GameObject constraintGameObject = Factory.Create( m_createConstraintData.ConstraintType,
-                                                          m_createConstraintData.AttachmentPair );
-        Constraint constraint           = constraintGameObject.GetComponent<Constraint>();
-        constraintGameObject.name       = m_createConstraintData.Name;
+        GameObject constraintGameObject = null;
+
+        IConstraint constraint = null;
+
+        if ( m_createConstraintData.ConstraintType != ConstraintType.Unknown ) {
+          constraintGameObject = Factory.Create( m_createConstraintData.ConstraintType,
+                                                 m_createConstraintData.AttachmentPair );
+
+          constraint = constraintGameObject.GetComponent<Constraint>();
+
+        }
+        else {
+          constraint = WheelJoint.Create( m_createConstraintData.AttachmentPair );
+          constraintGameObject = ( constraint as WheelJoint ).gameObject;
+          PrefabUtils.PlaceInCurrentStange( constraintGameObject );
+
+        }
+
         constraint.CollisionsState      = m_createConstraintData.CollisionState;
+        constraintGameObject.name       = m_createConstraintData.Name;
 
         if ( MakeConstraintChildToParent )
           constraintGameObject.transform.SetParent( Parent.transform );
@@ -175,7 +194,7 @@ namespace AGXUnityEditor.Tools
       public void CreateInitialState( string name )
       {
         if ( AttachmentPair != null ) {
-          Debug.LogError( "Attachment pair already created. Make sure to clean any previous state before initializing a new one.", AttachmentPair );
+          Debug.LogError( "Attachment pair already created. Make sure to clean any previous state before initializing a new one." );
           return;
         }
 
@@ -194,6 +213,6 @@ namespace AGXUnityEditor.Tools
     }
 
     private CreateConstraintData m_createConstraintData = new CreateConstraintData();
-    private Action<Constraint> m_onCreate = null;
+    private Action<IConstraint> m_onCreate = null;
   }
 }

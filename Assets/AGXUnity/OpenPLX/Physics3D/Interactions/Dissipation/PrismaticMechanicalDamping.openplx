@@ -1,0 +1,15 @@
+PrismaticMechanicalDamping is DefaultPrismaticDissipation:
+    .doc: """
+    Defines mechanical damping for all constrained degrees of freedom for a Prismatic.
+    """
+    default_damping is Real: 1000.0
+    along_normal becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    along_cross becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    around_main becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    around_normal becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping
+    around_cross becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping

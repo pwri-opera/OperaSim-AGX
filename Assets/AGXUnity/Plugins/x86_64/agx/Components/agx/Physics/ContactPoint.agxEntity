@@ -10,6 +10,12 @@
   <!-- Support for special features. -->
   <Attribute.Scalar name="velocity" type="Vec3:32bit"/> <!-- Surface velocity. -->
 
+  <!-- Per point friction coefficients and restitution -->
+  <Attribute.Scalar name="restitution" type="Vec3" />
+  <Attribute.Scalar name="friction" type="Vec2" />
+  <Attribute.Scalar name="tangentialCohesion" type="Vec2" />
+  <Attribute.Scalar name="youngsModulus" type="Real" />
+
   <!-- Forces. -->
   <Attribute.Scalar name="localForce" type="Vec3"/>
   <Attribute.Scalar name="indexSet"   type="Vec4i:8bit"/>

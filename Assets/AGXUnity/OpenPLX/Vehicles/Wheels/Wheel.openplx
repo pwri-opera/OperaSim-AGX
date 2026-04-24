@@ -1,0 +1,12 @@
+Wheel is Physics3D.System:
+    rim is Physics3D.Bodies.RigidBody with Vehicles.Wheels.RimTrait
+    connector is Physics3D.Interactions.RedirectedMateConnector
+    connector.redirected_parent: rim
+
+    rim_alignment_connector is Physics3D.Interactions.MateConnector:
+        position: {0, 0, 0}
+        main_axis: rim.connector.main_axis
+        normal: rim.connector.normal
+    rim_alignment_mate is Physics3D.Interactions.Lock:
+        enabled: false
+        connectors: [rim.connector, rim_alignment_connector]

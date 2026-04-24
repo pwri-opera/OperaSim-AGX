@@ -1,3 +1,0 @@
-<Entity name="ContactZone_Internal" source="ContactZone">
-  <!-- <Attribute.Scalar name="spatialCell" type="Physics.HierarchicalGrid.CellPtr"/> -->
-</Entity>

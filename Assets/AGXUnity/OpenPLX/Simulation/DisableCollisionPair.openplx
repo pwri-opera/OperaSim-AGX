@@ -1,0 +1,9 @@
+#
+# Declaring a DisableCollisionPair in a system disables
+# collisions between all geometries in the two groups.
+#
+# If you want to disable collisions with a group, create a pair where both group1 and group2 point to the same group
+#
+DisableCollisionPair:
+    group1 is CollisionGroup
+    group2 is CollisionGroup

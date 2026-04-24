@@ -1,0 +1,30 @@
+# List of predefined terrain materials that the Physics Engine should implement
+
+const defaultTerrainMaterial is TerrainMaterial:
+    .doc: """Let the Physics Engine use default parameters"""
+    unique_name: "default"
+
+const dirt_1 is TerrainMaterial:
+    .agx_terrain_material: "DIRT_1"
+    unique_name: "Terrain.MaterialLibrary.dirt_1"
+    density: 1474.0
+
+const gravel_1 is TerrainMaterial:
+    .agx_terrain_material: "GRAVEL_1"
+    unique_name: "Terrain.MaterialLibrary.gravel_1"
+    density: 1474.0
+
+const iron_pellets is TerrainMaterial:
+    .agx_terrain_material: "IRON_PELLETS"
+    unique_name: "Terrain.MaterialLibrary.iron_pellets"
+    density: 3942.0
+
+const sand_1 is TerrainMaterial:
+    .agx_terrain_material: "SAND_1"
+    unique_name: "Terrain.MaterialLibrary.sand_1"
+    density: 1474.0
+
+const wet_sand is TerrainMaterial:
+    .agx_terrain_material: "WET_SAND"
+    unique_name: "Terrain.MaterialLibrary.wet_sand"
+    density: 1474.0

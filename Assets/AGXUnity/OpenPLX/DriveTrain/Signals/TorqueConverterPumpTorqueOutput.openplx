@@ -1,0 +1,3 @@
+TorqueConverterPumpTorqueOutput is Physics.Signals.Output:
+    type: Physics.Signals.InputOutputType.Torque1D
+    torque_converter is DriveTrain.EmpiricalTorqueConverter reference

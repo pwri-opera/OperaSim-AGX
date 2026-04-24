@@ -1,0 +1,98 @@
+Quat:
+    x is Real: 0
+    y is Real: 0
+    z is Real: 0
+    w is Real: 1
+
+    # Applies this quaternion as a rotation to a vector, returns the
+    # rotated vector.
+    fn rotate(v: Vec3) -> Vec3
+
+    fn conj() -> Quat
+    fn inverse() -> Quat
+
+    # Creates a quaternion that represents a rotation of angle radians
+    # around the specified axis.
+    static fn angle_axis(angle: Real, axis: Math.Vec3) -> Quat
+
+    # Creates a quaternion that represents a rotation that would rotate
+    # the from vector to the to vector.
+    static fn from_to(from: Vec3, to: Vec3) -> Quat
+
+    # Normalizes a quaternion
+    static fn normal(q : Quat) -> Quat
+
+    # Creates a new quaternion with the specified values
+    static fn from_xyzw(x : Real, y : Real, z : Real, w : Real) -> Quat
+
+    # Factory methods for euler angles of different conventions
+    static fn from_euler_angles_xyzs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xyxs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xzys(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xzxs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yzxs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yzys(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yxzs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yxys(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zxys(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zxzs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zyxs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zyzs(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zyxr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xyxr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yzxr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xzxr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xzyr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yzyr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zxyr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yxyr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_yxzr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zxzr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_xyzr(alpha: Real, beta: Real, gamma: Real) -> Quat
+    static fn from_euler_angles_zyzr(alpha: Real, beta: Real, gamma: Real) -> Quat
+
+    # Alias for from_euler_angles_xyzs
+    static fn from_euler_angles(alpha: Real, beta: Real, gamma: Real) -> Quat
+
+    # Conversions to euler angles
+    fn to_euler_angles_xyzs() -> Vec3
+    fn to_euler_angles_xyxs() -> Vec3
+    fn to_euler_angles_xzys() -> Vec3
+    fn to_euler_angles_xzxs() -> Vec3
+    fn to_euler_angles_yzxs() -> Vec3
+    fn to_euler_angles_yzys() -> Vec3
+    fn to_euler_angles_yxzs() -> Vec3
+    fn to_euler_angles_yxys() -> Vec3
+    fn to_euler_angles_zxys() -> Vec3
+    fn to_euler_angles_zxzs() -> Vec3
+    fn to_euler_angles_zyxs() -> Vec3
+    fn to_euler_angles_zyzs() -> Vec3
+    fn to_euler_angles_zyxr() -> Vec3
+    fn to_euler_angles_xyxr() -> Vec3
+    fn to_euler_angles_yzxr() -> Vec3
+    fn to_euler_angles_xzxr() -> Vec3
+    fn to_euler_angles_xzyr() -> Vec3
+    fn to_euler_angles_yzyr() -> Vec3
+    fn to_euler_angles_zxyr() -> Vec3
+    fn to_euler_angles_yxyr() -> Vec3
+    fn to_euler_angles_yxzr() -> Vec3
+    fn to_euler_angles_zxzr() -> Vec3
+    fn to_euler_angles_xyzr() -> Vec3
+    fn to_euler_angles_zyzr() -> Vec3
+
+    # Alias for to_euler_angles_xyzs
+    fn to_euler_angles() -> Vec3
+
+
+# Operator overloads
+
+operator *(lhs: Quat, rhs: Real) -> Quat
+operator *(lhs: Real, rhs: Quat) -> Quat
+operator *(lhs: Quat, rhs: Quat) -> Quat
+
+operator /(lhs: Quat, rhs: Real) -> Quat
+operator /(lhs: Quat, rhs: Quat) -> Quat
+
+operator +(lhs: Quat, rhs: Quat) -> Quat
+operator -(lhs: Quat, rhs: Quat) -> Quat
+operator -(operand: Quat) -> Quat

@@ -1,0 +1,14 @@
+VolvoD16E540 is DriveTrain.MeanValueEngine:
+    .doc: """
+        Used in Volvo Excavator.
+        Reference: https://stpi.it.volvo.com/STPIFiles/Volvo/FactSheet/D16E540,%20EU4SCR_Eng_01_1163211.pdf
+    """
+    displacement_volume: 0.0161
+    max_torque: 2600.0
+    max_torque_RPM: 1225.0
+    max_power_RPM: 1625.0
+    idle_RPM: 600.0
+    max_RPM: 3500.0
+    crank_shaft_inertia: 4.0
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

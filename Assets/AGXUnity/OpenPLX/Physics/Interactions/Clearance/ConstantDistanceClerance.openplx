@@ -1,0 +1,5 @@
+ConstantDistanceClearance is DefaultClearance:
+    .doc: """
+    A translational clearance.
+    """
+    distance is Real

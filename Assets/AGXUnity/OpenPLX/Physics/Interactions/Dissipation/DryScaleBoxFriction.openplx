@@ -1,0 +1,14 @@
+DryScaleBoxFriction is DefaultDryFriction:
+    .doc: """
+    Defines a constant maximum friction forces,linear dof's, or torques, around angular dof's,
+    given the current normal force between the involved two interacting bodies. 
+    The difference between ScaleBox and Box friction is that ScaleBox defines the 
+    maximum friction depending on the actual forces between the objects.
+    There are obvious artifacts that comes with the ScaleBox method.
+    First of all, it is anisotropic due to the box shape of the possible friction forces in the friction plane.
+    The actual resulting friction forces is sqrt(2) times larger in the local XY direction than the X or Y direction.
+    This issue is accounted for with the DryCone friction method, where a friction cone is computed.
+    Another issue is the nonlinear behaviour, where in non-ideal situations, the normal and force depend on each other,
+    and it is computationally very expensive to find a good solution.
+    """
+    

@@ -1,0 +1,4 @@
+Material:
+    .doc: """
+    Specification of the optical material properties of a geometry.
+    """

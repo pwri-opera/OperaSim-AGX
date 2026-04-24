@@ -1,0 +1,11 @@
+trait OrientedSurfaceViscosity is Physics.Interactions.SurfaceContact.Traits.SurfaceViscosity:
+    .doc: """
+Extends the SurfaceViscosity trait and introduces
+a secondary viscosity in the secondary direction,
+defined by an OrientedFricion trait
+
+works with Physics.Interactions.Dissipation.DefaultDryFriction with OrientedFriction
+
+"""
+
+    secondary_viscosity is Real

@@ -1,3 +1,0 @@
-<Kernel name="RestoreVelocities" device="CPU">
-  <Parameter.EntityData name="@RigidBody" type="RigidBody" read="state, linearAcceleration, angularAcceleration" write="velocity, angularVelocity"/>
-</Kernel>

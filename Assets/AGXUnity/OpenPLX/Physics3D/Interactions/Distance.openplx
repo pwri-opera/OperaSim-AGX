@@ -1,0 +1,33 @@
+Distance is Mate:
+    with Physics.Signals.Position1DOutputTrait
+    with Physics.Signals.Position1DInputTrait
+    with Physics.Signals.Force1DOutputTrait
+    .doc: """
+    A distance mate constrains only one degree of freedom, which is the distance
+    between two mate connectors. It will try to keep the distance between them
+    to be target_distance, with the constraining force acting along a line between
+    the mate connectors.
+    If one of the bodies is free to move, SNAP will move it the initial_distance
+    along the main_axis during the initialization.
+    """
+
+    initial_distance is Real: 0.0
+    target_distance is Real: initial_distance
+    dissipation becomes Physics3D.Interactions.Dissipation.DefaultDistanceDissipation
+    flexibility becomes Physics3D.Interactions.Flexibility.DefaultDistanceFlexibility
+    toughness becomes Physics3D.Interactions.Toughness.DefaultDistanceThoughness
+
+    distance_output is Physics.Signals.Position1DOutput:
+        enabled: false
+        source: this
+
+    target_distance_output is Physics.Signals.Position1DOutput:
+        enabled: false
+        source: this
+
+    target_distance_input is Physics.Signals.Position1DInput:
+        source: this
+
+    force_output is Physics.Signals.Force1DOutput:
+        enabled: false
+        source: this

@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace AGXUnityEditor.Tools
 {
@@ -225,29 +225,38 @@ namespace AGXUnityEditor.Tools
 
     private void HandleHierarchyDragDrop( int instanceId, Rect pos )
     {
+#if UNITY_6000_3_OR_NEWER
+      InspectorGUI.HandleDragDrop<AGXUnity.ShapeMaterial>( pos,
+                                                           Event.current,
+                                                           material =>
+                                                             HasShapeMaterialProperty( EditorUtility.EntityIdToObject( instanceId ) as GameObject, false ),
+                                                           material =>
+                                                           {
+                                                             AssignMaterial( EditorUtility.EntityIdToObject( instanceId ) as GameObject,
+                                                                             material );
+                                                           } );
+#else 
       InspectorGUI.HandleDragDrop<AGXUnity.ShapeMaterial>( pos,
                                                            Event.current,
                                                            material =>
                                                              HasShapeMaterialProperty( EditorUtility.InstanceIDToObject( instanceId ) as GameObject, false ),
-                                                           material =>
-                                                           {
+                                                           material => {
                                                              AssignMaterial( EditorUtility.InstanceIDToObject( instanceId ) as GameObject,
                                                                              material );
                                                            } );
+#endif
     }
 
     private void HandleSceneViewDragDrop( Event current, SceneView sceneView )
     {
       InspectorGUI.HandleSceneViewDragDrop<AGXUnity.ShapeMaterial>( current,
                                                                     go => HasShapeMaterialProperty( go, true ),
-                                                                    ( go, material ) =>
-                                                                    {
+                                                                    ( go, material ) => {
                                                                       var menuTool = new SelectGameObjectDropdownMenuTool()
                                                                       {
                                                                         Target = Manager.MouseOverObject
                                                                       };
-                                                                      menuTool.OnSelect = selected =>
-                                                                      {
+                                                                      menuTool.OnSelect = selected => {
                                                                         AssignMaterial( selected, material );
                                                                       };
                                                                       menuTool.Show();

@@ -1,0 +1,6 @@
+trait MateConnectorOutputTrait:
+    .doc: """
+Trait for MateConnector Outputs
+relative_to      - You may specify a MateConnector as the relative_to parameter to get the value relative to that mate connector
+"""
+    relative_to is Physics3D.Interactions.MateConnector: Physics3D.Interactions.World

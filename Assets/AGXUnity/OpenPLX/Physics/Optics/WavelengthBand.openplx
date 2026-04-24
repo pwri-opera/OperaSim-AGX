@@ -1,0 +1,5 @@
+WavelengthBand:
+    .doc: """
+    An optical parameter set for the material at a specific wavelength reference band.
+    """
+    wavelength is Real

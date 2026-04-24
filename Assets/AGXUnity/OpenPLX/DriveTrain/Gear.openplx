@@ -1,0 +1,23 @@
+
+Gear is Physics1D.Interactions.Mate:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.FractionInputTrait
+    with Physics.Signals.FractionOutputTrait
+    .doc: """
+The Gear serves as a rotational coupling between two RotationalBodies.
+It establishes a linear relationship between the rotational speed and position
+of the two Physics1D.Bodies.RotationalBody instances through a specified gear ratio.
+This model assumes an ideal gear, characterized by no slippage or flexibility.
+"""
+    ratio is Real: 1.0
+
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+
+    ratio_input is Physics.Signals.FractionInput:
+        source: this
+
+    ratio_output is Physics.Signals.FractionOutput:
+        source: this
+        enabled: false

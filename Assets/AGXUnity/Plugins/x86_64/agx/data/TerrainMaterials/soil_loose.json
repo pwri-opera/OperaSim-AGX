@@ -1,0 +1,46 @@
+{
+   "BulkProperties":{
+      "cohesion": 200.0,
+      "density": 1374.0,
+      "dilatancyAngle" : 0.0,
+      "frictionAngle": 0.2615,
+      "maximumDensity" : 2200.0,
+      "poissonsRatio": 0.15,
+      "swellFactor": 1.00,
+      "youngsModulus": 1e6,
+      "deltaReposeAngle": 0.0
+   },
+   "CompactionProperties":{
+      "angleOfReposeCompactionRate": 24.0,
+      "bankStatePhi" :  1.0,
+      "compactionTimeRelaxationConstant" : 0.015,
+      "compressionIndex" : 0.21,
+      "hardeningConstantKE" : 1.0,
+      "hardeningConstantNE" : 0.0833,
+      "preconsolidationStress" : 18000.0,
+      "stressCutOffFraction" : 0.01,
+      "dilatancyAngleScalingFactor" : 0.261799
+   },
+   "ExcavationContactProperties" : {
+      "aggregateStiffnessMultiplier" : 0.002,
+      "depthDecayFactor" : 2.0,
+      "depthIncreaseFactor" : 1.0,
+      "excavationStiffnessMultiplier" : 1.0,
+      "maximumAggregateNormalForce" : "inf",
+      "maximumContactDepth" : 1.0
+   },
+   "ParticleProperties":{
+      "adhesionOverlapFactor" : 0.050,
+      "particleCohesion" : 200,
+      "particleFriction" : 0.4,
+      "particleRestitution" : 0.0,
+      "particleRollingResistance" : 0.1,
+      "particleTerrainCohesion" : 200,
+      "particleTerrainFriction" : 0.7,
+      "particleTerrainRestitution" : 0.0,
+      "particleTerrainRollingResistance" : 0.7,
+      "particleTerrainYoungsModulus" : 1e8,
+      "particleYoungsModulus" : 1e9
+   },
+   "description" : "This material specification is named soil_loose and aims to model the behaviour of loose and soft soil, specifically in terms of compaction potential."
+}

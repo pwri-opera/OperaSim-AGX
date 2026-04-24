@@ -1,0 +1,5 @@
+
+SerialManipulatorData:
+    link_data is Links.LinkData[]
+    hinge_data is Joints.HingeJointData[]
+    

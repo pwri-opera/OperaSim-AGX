@@ -1,0 +1,22 @@
+#
+# Declaring a CollisionGroup in a system groups geometries
+# together so that we can configure how they collide with
+# other geometries in a convenient way.
+#
+# Once geometries has been added to a collision group,
+# a DisableCollisionPair can be declared which disables
+# collisions between two groups.
+#
+# Members:
+#     systems    - Declares an array of systems for which
+#                  we will recursively collect all geometries
+#                  in all bodies in the system and their subsystems.
+#     bodies     - Declares an array of bodies for which
+#                  we will collect all geometries.
+#     geometries - Declares an array of geometries that
+#                  are added to the group.
+#
+CollisionGroup:
+    systems is Physics.System[]: []
+    bodies is Physics.Bodies.Body[]: []
+    geometries is Physics.Geometries.ContactGeometry[]: []

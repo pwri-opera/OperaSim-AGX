@@ -1,0 +1,14 @@
+CatC17520 is DriveTrain.MeanValueEngine:
+    .doc: """
+        Used in CAT 797F. https://en.wikipedia.org/wiki/Caterpillar_797 https://www.cat.com/en_US/products/new/equipment/off-highway-trucks/mining-trucks/18093014.html
+        Reference: https://en.wikipedia.org/wiki/Caterpillar_C175
+    """
+    displacement_volume: 0.106
+    max_torque: 9260.0
+    max_torque_RPM: 1500.0
+    max_power_RPM: 1800.0
+    idle_RPM: 500.0
+    max_RPM: 3000.0
+    crank_shaft_inertia: 10.0
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

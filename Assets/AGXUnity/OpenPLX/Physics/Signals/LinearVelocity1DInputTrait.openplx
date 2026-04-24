@@ -1,0 +1,5 @@
+trait LinearVelocity1DInputTrait:
+    .doc: """
+A trait for LinearVelocity1DInput that can be implemented for interactions
+that have an non ambiguous interpretation of a 1D linear velocity signal input.
+"""

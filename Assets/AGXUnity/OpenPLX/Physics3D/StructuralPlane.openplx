@@ -1,0 +1,4 @@
+StructuralPlane is StructuralComponent:
+    .doc: """
+    A structural component specialized for modeling in the X-Y plane.
+    """

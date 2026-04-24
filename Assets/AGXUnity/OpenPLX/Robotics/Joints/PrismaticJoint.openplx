@@ -1,0 +1,13 @@
+PrismaticJoint is ActuatedJoint:
+    .doc: """
+The prismatic joint specializes the mate of the actuated joint to be a prismatic,
+and declares a range interaction. Position and angular velocity outputs are declared in the mate.
+"""
+    mate becomes Physics3D.Interactions.Prismatic:
+        position_output.enabled: true
+        velocity_output.enabled: true
+
+    range is Physics3D.Interactions.LinearRange:
+        start: Math.NEG_INF
+        end: Math.INF
+        connectors: mate.connectors

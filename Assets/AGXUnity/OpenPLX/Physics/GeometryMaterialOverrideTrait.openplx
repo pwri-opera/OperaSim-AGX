@@ -1,0 +1,17 @@
+trait GeometryMaterialOverrideTrait:
+    .doc: """
+Apply this trait to a body or a system to override ContactGeometry materials in that body or
+system. Material parameter on geometry will not be changed, but it will not be used in simulation
+either. To keep a set material on a geometry, add it to the material_override_geometries_excluded
+list.
+
+Note that when the owning system/body has this trait, any changes to materials in a non-excluded
+geometry will not have any effect. Also, an override will never override another override This
+means that if you have a system with this trait and a body in it also has this trait, the
+geometries in the body will keep the material set by the override trait in that body.
+
+material_override - this material will override geometry materials in the body/system
+material_override_geometries_excluded - list of geometries that will keep their original material
+"""
+    material_override is Physics.Geometries.Material
+    material_override_geometries_excluded is Physics.Geometries.ContactGeometry[]: []

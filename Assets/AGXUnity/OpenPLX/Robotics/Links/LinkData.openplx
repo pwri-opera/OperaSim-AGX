@@ -1,0 +1,22 @@
+
+LinkData:
+    inertia is Physics3D.Bodies.Inertia
+
+    start_position is Math.Vec3
+    start_main_axis is Math.Vec3:
+        x: 0
+        y: 0
+        z: 1
+    start_normal is Math.Vec3:
+        x: 1
+        y: 0
+        z: 0
+    end_position is Math.Vec3
+    end_main_axis is Math.Vec3:
+        x: 0
+        y: 0
+        z: 1
+    end_normal is Math.Vec3:
+        x: 1
+        y: 0
+        z: 0

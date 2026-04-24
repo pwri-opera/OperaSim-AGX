@@ -1,0 +1,6 @@
+GaussianDistribution:
+    .doc: """
+    Gaussian distribution.
+    """
+    mean is Real
+    standard_deviation is Real

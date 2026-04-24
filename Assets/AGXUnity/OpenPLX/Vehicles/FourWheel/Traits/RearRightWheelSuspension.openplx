@@ -1,0 +1,8 @@
+trait RearRightWheelSuspension:
+    rear_right_suspension becomes Vehicles.Suspensions.LinearSpringDamper:
+        mate becomes Vehicles.Suspensions.Interactions.LinearSpringDamperMate
+        attachment_connector: rear_right_wheel.connector
+        chassis_connector: chassis.rear_right_connector
+    chassis.rear_right_connector is Vehicles.Suspensions.Interactions.Connector:
+        forward_vector: chassis.forward_vector
+        up_vector: chassis.up_vector

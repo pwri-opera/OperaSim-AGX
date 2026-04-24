@@ -1,0 +1,5 @@
+#"""
+#Base type for Geometry
+#"""
+ContactGeometry:
+    material is Physics.Geometries.Material

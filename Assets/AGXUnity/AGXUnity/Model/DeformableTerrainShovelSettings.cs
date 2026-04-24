@@ -9,30 +9,44 @@ namespace AGXUnity.Model
   {
     [SerializeField]
     private int m_numberOfTeeth = 6;
-    [ClampAboveZeroInInspector]
-    [Tooltip("The number of teeth that the shovel has")]
+    [ClampAboveZeroInInspector( acceptZero: true )]
+    [Tooltip( "The number of teeth that the shovel has" )]
     public int NumberOfTeeth
     {
       get { return m_numberOfTeeth; }
       set
       {
         m_numberOfTeeth = value;
-        Propagate( shovel => shovel.setNumberOfTeeth( Convert.ToUInt64( m_numberOfTeeth ) ) );
+        Propagate( shovel => shovel.getSettings().setNumberOfTeeth( Convert.ToUInt64( m_numberOfTeeth ) ) );
+      }
+    }
+
+    [SerializeField]
+    private bool m_enableExcavationAtTeethEdge = false;
+
+    [Tooltip( "Whether or not to perform excavation at the teeth edge rather than the cutting edge" )]
+    public bool EnableExcavationAtTeethEdge
+    {
+      get => m_enableExcavationAtTeethEdge;
+      set
+      {
+        m_enableExcavationAtTeethEdge = value;
+        Propagate( shovel => shovel.getSettings().setEnableExcavationAtTeethEdge( m_enableExcavationAtTeethEdge ) );
       }
     }
 
     [SerializeField]
     private float m_toothLength = 0.15f;
 
-    [ClampAboveZeroInInspector]
-    [Tooltip("The length of the shovel's teeth")]
+    [ClampAboveZeroInInspector( true )]
+    [Tooltip( "The length of the shovel's teeth" )]
     public float ToothLength
     {
       get { return m_toothLength; }
       set
       {
         m_toothLength = value;
-        Propagate( shovel => shovel.setToothLength( m_toothLength ) );
+        Propagate( shovel => shovel.getSettings().setToothLength( m_toothLength ) );
       }
     }
 
@@ -40,48 +54,17 @@ namespace AGXUnity.Model
     private RangeReal m_toothRadius = new RangeReal( 0.015f, 0.075f );
 
     [ClampAboveZeroInInspector]
-    [Tooltip("The radius of the shovel's teeth")]
+    [Tooltip( "The radius of the shovel's teeth" )]
     public RangeReal ToothRadius
     {
       get { return m_toothRadius; }
       set
       {
         m_toothRadius = value;
-        Propagate( shovel =>
-        {
-          shovel.setToothMinimumRadius( m_toothRadius.Min );
-          shovel.setToothMaximumRadius( m_toothRadius.Max );
+        Propagate( shovel => {
+          shovel.getSettings().setToothMinimumRadius( m_toothRadius.Min );
+          shovel.getSettings().setToothMaximumRadius( m_toothRadius.Max );
         } );
-      }
-    }
-
-    [SerializeField]
-    private float m_noMergeExtensionDistance = 0.5f;
-
-    [ClampAboveZeroInInspector( true )]
-    [Tooltip( "The margin outside the shovel bonding box where soil particle merging is forbidden. " )]
-    public float NoMergeExtensionDistance
-    {
-      get { return m_noMergeExtensionDistance; }
-      set
-      {
-        m_noMergeExtensionDistance = value;
-        Propagate( shovel => shovel.setNoMergeExtensionDistance( m_noMergeExtensionDistance ) );
-      }
-    }
-
-    [SerializeField]
-    private float m_minimumSubmergedContactLengthFraction = 0.5f;
-
-    [FloatSliderInInspector( 0.0f, 1.0f )]
-    [Tooltip( "The minimum submerged cutting edge length fraction that generates submerged cutting. " )]
-    public float MinimumSubmergedContactLengthFraction
-    {
-      get { return m_minimumSubmergedContactLengthFraction; }
-      set
-      {
-        m_minimumSubmergedContactLengthFraction = value;
-        Propagate( shovel => shovel.setMinimumSubmergedContactLengthFraction( m_minimumSubmergedContactLengthFraction ) );
       }
     }
 
@@ -96,22 +79,7 @@ namespace AGXUnity.Model
       set
       {
         m_verticalBladeSoilMergeDistance = value;
-        Propagate( shovel => shovel.setVerticalBladeSoilMergeDistance( m_verticalBladeSoilMergeDistance ) );
-      }
-    }
-
-    [SerializeField]
-    private float m_secondarySeparationDeadloadLimit = 0.8f;
-
-    [ClampAboveZeroInInspector( true )]
-    [Tooltip( "The dead-load limit where secondary separation will start to active where the forward direction starts to change according to the virtual separation plate created by the material inside the shovel " )]
-    public float SecondarySeparationDeadloadLimit
-    {
-      get { return m_secondarySeparationDeadloadLimit; }
-      set
-      {
-        m_secondarySeparationDeadloadLimit = value;
-        Propagate( shovel => shovel.setSecondarySeparationDeadloadLimit( m_secondarySeparationDeadloadLimit ) );
+        Propagate( shovel => shovel.getSettings().setVerticalBladeSoilMergeDistance( m_verticalBladeSoilMergeDistance ) );
       }
     }
 
@@ -126,7 +94,7 @@ namespace AGXUnity.Model
       set
       {
         m_penetrationDepthThreshold = value;
-        Propagate( shovel => shovel.setPenetrationDepthThreshold( m_penetrationDepthThreshold ) );
+        Propagate( shovel => shovel.getSettings().setPenetrationDepthThreshold( m_penetrationDepthThreshold ) );
       }
     }
 
@@ -141,7 +109,7 @@ namespace AGXUnity.Model
       set
       {
         m_penetrationForceScaling = value;
-        Propagate( shovel => shovel.setPenetrationForceScaling( m_penetrationForceScaling ) );
+        Propagate( shovel => shovel.getSettings().setPenetrationForceScaling( m_penetrationForceScaling ) );
       }
     }
 
@@ -156,7 +124,53 @@ namespace AGXUnity.Model
       set
       {
         m_maxPenetrationForce = value;
-        Propagate( shovel => shovel.setMaxPenetrationForce( m_maxPenetrationForce ) );
+        Propagate( shovel => shovel.getSettings().setMaxPenetrationForce( m_maxPenetrationForce ) );
+      }
+    }
+
+    [SerializeField]
+    private float m_noMergeExtensionDistance = 0.5f;
+
+    [ClampAboveZeroInInspector( true )]
+    [InspectorGroupBegin( Name = "Advanced" )]
+    [Tooltip( "The margin outside the shovel bonding box where soil particle merging is forbidden. " )]
+    public float NoMergeExtensionDistance
+    {
+      get { return m_noMergeExtensionDistance; }
+      set
+      {
+        m_noMergeExtensionDistance = value;
+        Propagate( shovel => shovel.getAdvancedSettings().setNoMergeExtensionDistance( m_noMergeExtensionDistance ) );
+      }
+    }
+
+    [SerializeField]
+    private float m_minimumSubmergedContactLengthFraction = 0.5f;
+
+    [FloatSliderInInspector( 0.0f, 1.0f )]
+    [Tooltip( "The minimum submerged cutting edge length fraction that generates submerged cutting. " )]
+    public float MinimumSubmergedContactLengthFraction
+    {
+      get { return m_minimumSubmergedContactLengthFraction; }
+      set
+      {
+        m_minimumSubmergedContactLengthFraction = value;
+        Propagate( shovel => shovel.getAdvancedSettings().setMinimumSubmergedContactLengthFraction( m_minimumSubmergedContactLengthFraction ) );
+      }
+    }
+
+    [SerializeField]
+    private float m_secondarySeparationDeadloadLimit = 0.8f;
+
+    [ClampAboveZeroInInspector( true )]
+    [Tooltip( "The dead-load limit where secondary separation will start to active where the forward direction starts to change according to the virtual separation plate created by the material inside the shovel " )]
+    public float SecondarySeparationDeadloadLimit
+    {
+      get { return m_secondarySeparationDeadloadLimit; }
+      set
+      {
+        m_secondarySeparationDeadloadLimit = value;
+        Propagate( shovel => shovel.getAdvancedSettings().setSecondarySeparationDeadloadLimit( m_secondarySeparationDeadloadLimit ) );
       }
     }
 
@@ -164,18 +178,7 @@ namespace AGXUnity.Model
     private OptionalOverrideValue<float> m_contactRegionThreshold = new OptionalOverrideValue<float>(0.02f);
 
     [Tooltip( "Set the starting distance threshold from the shovel planes where regular geometry contacts between the shovel underside and the terrain can be created. Contacts that are not past the distance threshold will be filtered away" )]
-    public OptionalOverrideValue<float> ContactRegionThreshold
-    {
-      get { return m_contactRegionThreshold; }
-      set
-      {
-        m_contactRegionThreshold = value;
-        if ( m_contactRegionThreshold.UseOverride )
-          Propagate( shovel => shovel.setContactRegionThreshold( m_contactRegionThreshold.OverrideValue ) );
-        else
-          Propagate( shovel => shovel.setContactRegionThreshold( shovel.computeDefaultContactRegionThreshold() ) );
-      }
-    }
+    public OptionalOverrideValue<float> ContactRegionThreshold => m_contactRegionThreshold;
 
     [SerializeField]
     private bool m_removeContacts = false;
@@ -187,7 +190,7 @@ namespace AGXUnity.Model
       set
       {
         m_removeContacts = value;
-        Propagate( shovel => shovel.setAlwaysRemoveShovelContacts( m_removeContacts ) );
+        Propagate( shovel => shovel.getAdvancedSettings().setAlwaysRemoveShovelContacts( m_removeContacts ) );
       }
     }
 
@@ -232,6 +235,7 @@ namespace AGXUnity.Model
     };
 
     [InspectorSeparator]
+    [InspectorGroupEnd]
     public ExcavationSettings PrimaryExcavationSettings
     {
       get { return m_primaryExcavationSettings; }
@@ -342,12 +346,6 @@ namespace AGXUnity.Model
     {
       m_shovels.Clear();
     }
-    
-    public DeformableTerrainShovelSettings()
-    {
-      m_contactRegionThreshold.OnOverrideValue += OnBottomContactThresholdOverrideValue;
-      m_contactRegionThreshold.OnUseOverrideToggle += OnBottomContactThresholdUseOverrideToggle;
-    }
 
     protected override void Construct()
     {
@@ -355,21 +353,23 @@ namespace AGXUnity.Model
 
     protected override bool Initialize()
     {
+      m_contactRegionThreshold.OnOverrideValue += OnBottomContactThresholdOverrideValue;
+      m_contactRegionThreshold.OnUseOverrideToggle += OnBottomContactThresholdUseOverrideToggle;
       return true;
     }
 
     private void OnBottomContactThresholdOverrideValue( float newValue )
     {
       if ( m_contactRegionThreshold.UseOverride )
-        Propagate( shovel => shovel.setContactRegionThreshold( newValue ) );
+        Propagate( shovel => shovel.getAdvancedSettings().setContactRegionThreshold( newValue ) );
     }
-    
+
     private void OnBottomContactThresholdUseOverrideToggle( bool newValue )
     {
       if ( newValue )
-        Propagate( shovel => shovel.setContactRegionThreshold( m_contactRegionThreshold.OverrideValue ) );
-      else
-        Propagate( shovel => shovel.setContactRegionThreshold( shovel.computeDefaultContactRegionThreshold() ) );
+        Propagate( shovel => shovel.getAdvancedSettings().setContactRegionThreshold( m_contactRegionThreshold.OverrideValue ) );
+      //else
+      //  Propagate( shovel => shovel.getAdvancedSettings().setContactRegionThreshold( shovel.getAdvancedSettings().computeDefaultContactRegionThreshold() ) );
     }
 
     private void Propagate( Action<agxTerrain.Shovel> action )

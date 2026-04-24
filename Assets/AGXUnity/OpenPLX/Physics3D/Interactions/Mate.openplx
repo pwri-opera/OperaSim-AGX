@@ -1,0 +1,15 @@
+Mate is Physics.Interactions.Interaction:
+    .doc: """
+    A mate is a two body interaction which is defined from two MateConnectors.
+    The MateConnector define three axes, main_axis, normal and cross, which define an orthonormal basis.
+    The degrees of freedom of the mates are defined using these axes.
+    For each degree of freedom the mate can have individually specified
+    damping, deformation, breakableness and slack.
+    """
+
+    connectors becomes Physics3D.Interactions.MateConnector[]
+    dissipation is Physics3D.Interactions.Dissipation.DefaultMateDissipation
+    flexibility is Physics3D.Interactions.Flexibility.DefaultMateFlexibility
+    toughness is Physics3D.Interactions.Toughness.DefaultMateToughness
+    clearance is Physics3D.Interactions.Clearance.DefaultMateClearance
+    enable_snap is Bool: true

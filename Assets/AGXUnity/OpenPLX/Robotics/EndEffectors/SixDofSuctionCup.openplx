@@ -1,0 +1,46 @@
+SixDofSuctionCup is SuctionCup:
+    .doc: """
+A flexible suction cup modeled with one RigidBody and six degrees of freedom
+for modeling the elasto dynamics.
+There are elasto dynamic parameters defined for both the collapsed and the resting state.
+"""
+    geometry is Physics3D.Geometries.ExternalTriMeshGeometry
+
+    local_geometry_axis is Math.Vec3: Math.Vec3.from_xyz(0,0,1)
+    holder_relative_position is Math.Vec3: gripper_connector.position
+
+    collapsed_elasto_dynamics is SuctionCupElastoDynamics
+    resting_elasto_dynamics is SuctionCupElastoDynamics
+
+    collapsed_joint is SixDofSuctionCupJoint:
+        enable_snap: false
+        connectors: [gripper_connector, collapsed_mounting_connector]
+        flexibility.along_main.stiffness: resting_elasto_dynamics.lip_normal_flexibility.stiffness
+        flexibility.along_normal.stiffness: resting_elasto_dynamics.radial_axis_flexibility.stiffness
+        flexibility.along_cross.stiffness: resting_elasto_dynamics.radial_axis_flexibility.stiffness
+        flexibility.around_main.stiffness: resting_elasto_dynamics.around_lip_normal_flexibility.stiffness
+        flexibility.around_normal.stiffness: resting_elasto_dynamics.around_radial_axis_flexibility.stiffness
+        flexibility.around_cross.stiffness: resting_elasto_dynamics.around_radial_axis_flexibility.stiffness
+
+        dissipation.along_main.damping_constant: resting_elasto_dynamics.lip_normal_dissipation.damping_constant
+        dissipation.along_normal.damping_constant: resting_elasto_dynamics.radial_axis_dissipation.damping_constant
+        dissipation.along_cross.damping_constant: resting_elasto_dynamics.radial_axis_dissipation.damping_constant
+        dissipation.around_main.damping_constant: resting_elasto_dynamics.around_lip_normal_dissipation.damping_constant
+        dissipation.around_normal.damping_constant: resting_elasto_dynamics.around_radial_axis_dissipation.damping_constant
+        dissipation.around_cross.damping_constant: resting_elasto_dynamics.around_radial_axis_dissipation.damping_constant
+
+    resting_joint is SixDofSuctionCupJoint:
+        connectors: [gripper_connector, resting_mounting_connector]
+        flexibility.along_main.stiffness: resting_elasto_dynamics.lip_normal_flexibility.stiffness
+        flexibility.along_normal.stiffness: resting_elasto_dynamics.radial_axis_flexibility.stiffness
+        flexibility.along_cross.stiffness: resting_elasto_dynamics.radial_axis_flexibility.stiffness
+        flexibility.around_main.stiffness: resting_elasto_dynamics.around_lip_normal_flexibility.stiffness
+        flexibility.around_normal.stiffness: resting_elasto_dynamics.around_radial_axis_flexibility.stiffness
+        flexibility.around_cross.stiffness: resting_elasto_dynamics.around_radial_axis_flexibility.stiffness
+
+        dissipation.along_main.damping_constant: resting_elasto_dynamics.lip_normal_dissipation.damping_constant
+        dissipation.along_normal.damping_constant: resting_elasto_dynamics.radial_axis_dissipation.damping_constant
+        dissipation.along_cross.damping_constant: resting_elasto_dynamics.radial_axis_dissipation.damping_constant
+        dissipation.around_main.damping_constant: resting_elasto_dynamics.around_lip_normal_dissipation.damping_constant
+        dissipation.around_normal.damping_constant: resting_elasto_dynamics.around_radial_axis_dissipation.damping_constant
+        dissipation.around_cross.damping_constant: resting_elasto_dynamics.around_radial_axis_dissipation.damping_constant

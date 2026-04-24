@@ -1,0 +1,2 @@
+LinearBody is Body:
+  kinematics becomes LinearKinematics

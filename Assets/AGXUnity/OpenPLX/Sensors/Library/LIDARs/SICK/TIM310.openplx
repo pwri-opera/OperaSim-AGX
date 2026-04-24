@@ -1,0 +1,47 @@
+TIM310 is Physics3D.System:
+    .doc: """
+        SICK TIM310 LIDAR.
+        Data sheet: https://docs.rs-online.com/8c22/A700000006879834.pdf
+        User manual: https://www.sick.com/media/docs/8/98/598/operating_instructions_tim3xx_2d_lidar_sensors_en_im0097598.pdf
+    """
+    body is Physics3D.Bodies.RigidBody:
+        is_dynamic: true
+        inertia:
+            mass: 0.15
+            tensor: Physics3D.Bodies.Inertia.symmetric_tensor(Math.Vec3.from_xyz(1.0, 1.0, 1.0), 0.0, 0.0, 0.0)
+
+    connector is Physics3D.Interactions.RedirectedMateConnector:
+        redirected_parent: body
+
+    logic is Sensors.PulsedLidarLogic:
+        mate_connector_attachment: connector
+        wavelength: 850e-9
+
+        beam_divergence becomes Sensors.Optics.ConicalBeamDivergence:
+            divergence_angle: Math.Functions.deg_to_rad(0.49)
+            waist_radius: 7.0e-3
+
+        ray_source becomes Sensors.Optics.HorizontalSweepRaySource:
+            horizontal_fov:
+                x: Math.Functions.deg_to_rad(-45.0)
+                y: Math.Functions.deg_to_rad(225.0)
+            vertical_fov: Math.Vec2.from_xy(0, 0)
+            horizontal_resolution: 271
+            vertical_resolution: 1
+            frequency: 15
+
+
+        distance_noise is Sensors.LidarDetectionDistanceGaussianNoise:
+            gaussian_distribution.mean: 0.0
+            gaussian_distribution.standard_deviation: 0
+            standard_deviation_slope: 7.5e-3
+
+        sensing_distortions: [ logic.distance_noise ]
+
+        distance_output is Sensors.Signals.LidarOutput:
+            fields: [
+                Sensors.Signals.LidarOutputField.Distance_F32,
+                Sensors.Signals.LidarOutputField.Intensity_F32,
+                Sensors.Signals.LidarOutputField.Position3D_F32
+            ]
+            source: logic

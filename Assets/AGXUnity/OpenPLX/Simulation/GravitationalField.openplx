@@ -1,0 +1,6 @@
+GravitationalField:
+    .doc: """
+    Base type for GravitationalField.
+    A GravitationalField is the map of how strong and in what direction the gravitational
+    forces should act on bodies in different locations in an environment.
+    """

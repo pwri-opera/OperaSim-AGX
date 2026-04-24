@@ -5,8 +5,8 @@
   <Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
   <Parameter.Array  name="@ContactConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
   
-  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction"/>
-  
+  <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="friction" />
+
   <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
 </SolveKernel>
 
@@ -17,7 +17,7 @@
   <Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
   <Parameter.Array  name="@ContactConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
 
-  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction"/>
+  <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="friction" />
 
   <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
 </SolveKernel>
@@ -29,7 +29,7 @@
   <Parameter.Array  name="@ContactConstraintJacobian"       type="Jacobian6DOFElement"  mode="READ"/>
   <Parameter.Array  name="@ContactConstraintGMInv"          type="Jacobian6DOFElement"  mode="READ"/>
 
-  <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction"/>
+  <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="friction" />
 
   <Parameter.EntityData name="@ContactConstraintRow" type="ConstraintRow" read="invD, epsilon, rhs, bound, lambda" write="lambda"/>
 </SolveKernel>

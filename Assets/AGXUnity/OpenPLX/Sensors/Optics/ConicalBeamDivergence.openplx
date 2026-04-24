@@ -1,0 +1,12 @@
+ConicalBeamDivergence is BeamDivergence:
+    .doc: """
+    Beam divergence specification based on the conical approximation of the Gaussian beam
+    radius:
+
+        w(x) = x tan(t_D) + w_0
+
+    which gives a conically expanding radius at a divergence (half-) angle of t_D from an
+    initial of w_0 as the beam traverses the optical length x.
+    """
+    divergence_angle is Real
+    waist_radius is Real: 0.0

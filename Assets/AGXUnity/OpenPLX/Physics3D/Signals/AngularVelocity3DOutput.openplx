@@ -1,0 +1,10 @@
+AngularVelocity3DOutput is Physics.Signals.Output:
+    .doc: """
+A vec3 as angular velocity output.
+For models where it is unambiguous which linear velocity that is requested,
+the output will give the current output value.
+The output is given as a 3D velocity vector in the world coordinate system, expressed in absolute coordinates.
+"""
+    type: Physics.Signals.InputOutputType.AngularVelocity3D
+    source is AngularVelocity3DOutputTrait
+    marshalling becomes Vec3Marshalling

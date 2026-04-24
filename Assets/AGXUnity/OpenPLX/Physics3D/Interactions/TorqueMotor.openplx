@@ -1,0 +1,14 @@
+TorqueMotor is Physics.Interactions.Interaction1DOF:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.Torque1DInputTrait
+    .doc: """
+    A torque-driven motor provides precise and accurate control of the applied torque.
+    The motor will initially be configured to apply the default torque.
+    """
+    default_torque is Real: 0.0
+
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+    torque_input is Physics.Signals.Torque1DInput:
+        source: this

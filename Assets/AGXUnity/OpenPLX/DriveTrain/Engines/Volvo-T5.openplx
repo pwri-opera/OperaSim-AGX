@@ -1,0 +1,14 @@
+VolvoT5 is DriveTrain.MeanValueEngine:
+    .doc: """
+        This engine is used in Volvo V60: B4204T26
+        Reference: https://www.media.volvocars.com/global/en-gb/media/documentfile/224147/technical-specifications-new-volvo-v60
+    """
+    displacement_volume: 0.001969
+    max_torque: 400.0
+    max_torque_RPM: 2125.0
+    max_power_RPM: 4250.0
+    idle_RPM: 1000.0
+    max_RPM: 8000.0
+    crank_shaft_inertia: 0.4
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

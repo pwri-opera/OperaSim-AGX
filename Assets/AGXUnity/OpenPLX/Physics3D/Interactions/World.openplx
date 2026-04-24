@@ -1,0 +1,16 @@
+const World is Physics3D.Interactions.MateConnector:
+    .doc: """
+Represents the world origin and rotation.
+"""
+        position:
+            x: 0
+            y: 0
+            z: 0
+        main_axis:
+            x: 0
+            y: 0
+            z: 1
+        normal:
+            x: 1
+            y: 0
+            z: 0

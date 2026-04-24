@@ -1,0 +1,5 @@
+trait DistortedRayEmission:
+    .doc: """
+    Trait for models where the emitted rays are distorted on emission.
+    """
+    ray_emission_distortions is RayEmissionDistortion[]: []

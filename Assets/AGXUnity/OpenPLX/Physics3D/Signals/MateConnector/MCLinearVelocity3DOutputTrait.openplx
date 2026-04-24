@@ -1,0 +1,4 @@
+trait MCLinearVelocity3DOutputTrait is Physics3D.Signals.LinearVelocity3DOutputTrait:
+    .doc: """
+A trait for MateConnectors providing LinearVelocity3DOutput.
+"""

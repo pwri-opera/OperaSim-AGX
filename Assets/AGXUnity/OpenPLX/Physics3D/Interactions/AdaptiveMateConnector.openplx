@@ -1,0 +1,13 @@
+AdaptiveMateConnector is MateConnector:
+    .doc: """
+    
+    When using one AdaptiveMateConnector in a mate, 
+    it will transform to the relative position of the owning body/system so that it aligns with the other mate connector.
+    There can't be any degrees of freedom left between the MateConnectors, meaning that SNAP has done the work already. 
+    This feature can be used to introduce interactions in a non-violated state, without having to specify 
+    initial conditions for all 6 degrees of freedom for two mate connectors.
+    For example, a mate connector for the suspension that is defined given the chassis of the car may mate with the 
+    other parts, and just adapt to how these are placed relative the chassis.
+    """
+
+    

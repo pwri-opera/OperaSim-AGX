@@ -1,0 +1,4 @@
+LidarSensingDistortion is Distortion:
+    .doc: """
+    An error in the lidar detection or post-processing distorting the sensor output.
+    """

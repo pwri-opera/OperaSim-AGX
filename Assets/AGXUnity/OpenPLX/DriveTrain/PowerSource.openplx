@@ -1,0 +1,5 @@
+PowerSource is Physics.System:
+    # Maximum energy capacity (e.g. in kWh, MJ, liters)
+    maximum_energy_capacity is Real
+
+    initial_energy is Real: maximum_energy_capacity

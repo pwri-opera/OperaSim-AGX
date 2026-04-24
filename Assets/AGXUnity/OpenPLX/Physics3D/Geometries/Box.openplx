@@ -1,0 +1,2 @@
+Box is ContactGeometry:
+    size is Math.Vec3

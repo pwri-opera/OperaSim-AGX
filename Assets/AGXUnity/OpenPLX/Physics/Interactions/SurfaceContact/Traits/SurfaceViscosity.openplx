@@ -1,0 +1,11 @@
+trait SurfaceViscosity:
+    .doc: """
+The surface viscosity in [N/(m/s)].
+To be used with a DryFriction model where 0 (zero) is completely dry
+and viscosity > 0 introduces a viscous friction term.
+
+works with Physics.Interactions.Dissipation.DefaultDryFriction
+"""
+
+    viscosity is Real
+

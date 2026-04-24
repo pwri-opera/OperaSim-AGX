@@ -1,0 +1,7 @@
+DefaultBallDissipation is DefaultMateDissipation:
+    .doc: """
+    Defines one dissipation model for each constrained degree of freedom for a Ball
+    """
+    along_main is Physics.Interactions.Dissipation.DefaultDissipation
+    along_normal is Physics.Interactions.Dissipation.DefaultDissipation
+    along_cross is Physics.Interactions.Dissipation.DefaultDissipation

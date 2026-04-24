@@ -1,0 +1,9 @@
+ThresholdPlasticFracture is DefaultToughness:
+    .doc: """
+    Models the plastic and fracture behaviour for an interaction under stress.
+    The yield_point defines the limit stress for yielding,
+    and the fracture_point defines the point when to break.
+    Force for linear, torque for angular.
+    """
+    yield_point is Real
+    fracture_point is Real

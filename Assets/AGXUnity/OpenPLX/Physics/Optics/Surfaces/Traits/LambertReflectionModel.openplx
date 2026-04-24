@@ -1,0 +1,6 @@
+trait LambertReflectionModel:
+    .doc: """
+    A trait allowing the addition of a perfect Lambert diffuse reflection to the surface of a
+    geometry.
+    """
+    diffuse_reflectivity is Real

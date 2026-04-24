@@ -1,0 +1,17 @@
+System is Physics3D.StructuralPlane:
+    .doc: """
+A Track system.
+All road wheels are expected to be defined in a plane.
+The routing of the primitives of the belt is required to be done by the runtime environment.
+It is expected that the algorithm for routing will start from the first sprocket in the road wheel list.
+It is also expected that the rotational axis of the first sprocket is the normal plane of the track structural plane.
+If there are no sprockets defined, it will choose the first idler, and if there are no idlers, the first roller.
+The initial_distance_tension defines of how stretched, in meters, each node is, which causes an initial tension in the
+system of tracks and wheels.
+"""
+
+    belt is Vehicles.Tracks.Belt
+
+    road_wheels is RoadWheel[]
+
+    initial_distance_tension is Real: 0

@@ -1,0 +1,3 @@
+Shaft is Physics1D.Bodies.RotationalBody:
+    input is Physics1D.Interactions.MateConnector
+    output is Physics1D.Interactions.MateConnector

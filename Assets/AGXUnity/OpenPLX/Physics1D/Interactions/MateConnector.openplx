@@ -1,0 +1,5 @@
+MateConnector is Physics.Interactions.Connector:
+    .doc: """
+    A connector for one dimensional mates.
+    """
+    value is Real: 1.0

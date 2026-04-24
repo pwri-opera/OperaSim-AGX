@@ -1,0 +1,5 @@
+trait LidarFrequency05:
+    .doc: """
+    A trait that adds a frequency of 5 Hz to a LIDAR
+    """
+    logic.ray_source.frequency: 5

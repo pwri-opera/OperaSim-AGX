@@ -1,0 +1,5 @@
+Distortion:
+    .doc: """
+    Distortion that affects the sensor operation, leaving resulting effects in the produced sensor
+    measurements.
+    """

@@ -1,0 +1,23 @@
+#"""
+#Base type for SurfaceContact.Model
+#"""
+Model:
+    .doc: """
+    The SurfaceContact.Model defines the interaction properties
+    between two contacting surfaces.
+    This definition is mapped through the materials, material_1 and material_2,
+    of the contacting objects.
+    This definition must be uniquely defined for a specific pair of materials.
+    """
+    material_1 is Physics.Geometries.Material
+    material_2 is Physics.Geometries.Material
+
+    enabled is Bool: true
+
+    friction is Physics.Interactions.Dissipation.DefaultFriction
+    adhesion is Physics.Interactions.Adhesion.DefaultAdhesion
+    normal_flexibility is Physics.Interactions.Flexibility.DefaultFlexibility
+    dissipation is Physics.Interactions.Dissipation.DefaultDissipation
+    clearance is Physics.Interactions.Clearance.DefaultClearance
+    tangential_restitution is Real
+    normal_restitution is Real

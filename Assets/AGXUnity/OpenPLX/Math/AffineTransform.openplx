@@ -1,0 +1,20 @@
+AffineTransform:
+    .doc: """
+A transform that can represent any combination of translation, rotation, and scale
+from_axes - Returns a transform that 1: rotates from a pair (main = Z, normal = X) to a new pair (new_Z, new_X), and 2: translates to position.
+            Observe that new_X must not be parallell to new_Z in order for the result to be correct.
+            If new_X is not orthogonal to new_Z, new_X will be projected onto the plane orthogonal to new_Z.
+"""
+    position is Vec3
+    rotation is Quat
+
+    static fn create() -> AffineTransform
+    static fn from(p: Vec3, r: Quat) -> AffineTransform
+    static fn from_axes(new_Z: Vec3, new_X: Vec3, position: Vec3) -> AffineTransform
+    static fn inverse_of(p: Vec3, r: Quat) -> AffineTransform
+
+    fn inverse() -> AffineTransform
+    fn transform_vec3_point(in: Vec3) -> Vec3
+    fn transform_vec3_vector(in: Vec3) -> Vec3
+
+operator *(lhs: AffineTransform, rhs: AffineTransform) -> AffineTransform

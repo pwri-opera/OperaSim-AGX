@@ -1,0 +1,6 @@
+PositionOutput is Output:
+    .doc: """
+Emits a ValueOutputSignal where the signal value is the world coordinate position of the source
+You may also specify a MateConnector as the relative_to parameter to get the value relative to that mate connector
+"""
+    type: Physics.Signals.InputOutputType.Position3D

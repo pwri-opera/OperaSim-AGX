@@ -1,0 +1,12 @@
+RigidCylindricalSprocket is CylindricalSprocket:
+    .doc: """
+A CylindricalSprocket with a rigid body and a cylinder as contact_geometry.
+local_center_axis is y direction by default assuming that the non rotated cylinder axis is in y direction.
+"""
+    local_center_axis: Math.Vec3.Y_AXIS()
+    body becomes RigidCylindricalRoadWheelBody:
+        # Center the body in the road wheel
+        # If anything snaps it is the road wheel frame
+        kinematics.local_transform.position.x: 0
+        geometry.radius: radius
+        geometry.height: width

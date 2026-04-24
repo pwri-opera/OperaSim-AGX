@@ -1,0 +1,5 @@
+trait RPYOutputTrait:
+    .doc: """
+A trait that can be implemented for interactions that have an non ambiguous
+interpretation of an internal RPY measurement.
+"""

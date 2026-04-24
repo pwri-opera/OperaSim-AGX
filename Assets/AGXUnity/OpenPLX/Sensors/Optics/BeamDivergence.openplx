@@ -1,0 +1,4 @@
+BeamDivergence:
+    .doc: """
+    Base model for beam divergence specification.
+    """

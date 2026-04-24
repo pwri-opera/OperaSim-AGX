@@ -1,0 +1,38 @@
+RigidBody is Physics3D.Bodies.Body:
+  with Physics3D.Signals.LinearVelocity3DInputTrait
+  with Physics3D.Signals.AngularVelocity3DInputTrait
+  with Physics3D.Signals.LinearVelocity3DOutputTrait
+  with Physics3D.Signals.AngularVelocity3DOutputTrait
+  with Physics3D.Signals.Position3DOutputTrait
+  with Physics3D.Signals.RPYOutputTrait
+  .doc: """
+By default, all bodies follow the laws of dynamics.
+To create exceptions, you must set the is_dynamic boolean attribute to false.
+When set to false, the body is considered kinematically controlled
+their motion is defined by explicit velocities specified in the kinematics attribute of the body.
+is_dynamic - indicates wheather the rigid body is dynamic.
+            The rigid body is expected to be kinematically controlled if set to false.
+"""
+  inertia becomes Physics3D.Bodies.Inertia
+  kinematics becomes Physics3D.Bodies.RigidBodyKinematics
+  is_dynamic is Bool: true
+
+  linear_velocity_world_output is Physics3D.Signals.LinearVelocity3DOutput:
+    source: this
+    enabled: false
+  angular_velocity_world_output is Physics3D.Signals.AngularVelocity3DOutput:
+    source: this
+    enabled: false
+
+  linear_velocity_world_input is Physics3D.Signals.LinearVelocity3DInput:
+    source: this
+  angular_velocity_world_input is Physics3D.Signals.AngularVelocity3DInput:
+    source: this
+
+  position_output is Physics3D.Signals.Position3DOutput:
+    source: this
+    enabled: false
+
+  rpy_output is Physics3D.Signals.RPYOutput:
+    source: this
+    enabled: false

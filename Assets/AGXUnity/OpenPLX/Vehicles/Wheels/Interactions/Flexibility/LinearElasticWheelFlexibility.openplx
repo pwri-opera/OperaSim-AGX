@@ -1,0 +1,13 @@
+LinearElasticWheelFlexibility is DefaultWheelFlexibility:
+    .doc: """
+    Define a linear elastic flexibility model for each constrained degree of freedom for a Wheel.
+    """
+    default_stiffness is Real: 300000.0
+    along_axial becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    along_radial becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    around_axial becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    around_radial becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness

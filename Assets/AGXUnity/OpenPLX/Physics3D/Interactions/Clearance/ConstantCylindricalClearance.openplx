@@ -1,0 +1,8 @@
+ConstantCylindricalClearance is DefaultMateClearance:
+    .doc: """
+    Clearance for the three translational dimensions for a mate
+    and the rotation around the orthogonal axes of the main axis.
+    """
+    along_normal is Physics.Interactions.Clearance.ConstantDistanceClearance
+    along_cross is Physics.Interactions.Clearance.ConstantDistanceClearance
+    around_all_axes is Physics.Interactions.Clearance.ConstantAngleClearance

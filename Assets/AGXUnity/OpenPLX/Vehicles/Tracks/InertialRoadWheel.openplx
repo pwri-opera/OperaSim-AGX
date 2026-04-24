@@ -1,0 +1,9 @@
+IntertialRoadWheel is RoadWheel:
+    .doc: """
+A road wheel with one body.
+"""
+    body is Physics3D.Bodies.Body
+    center_connector.redirected_parent: body
+    center_connector.main_axis: Math.Vec3.Y_AXIS()
+    center_connector.normal: Math.Vec3.Z_AXIS()
+    

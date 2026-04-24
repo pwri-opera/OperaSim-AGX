@@ -33,6 +33,7 @@ namespace AGXUnity.Rendering
 
   [RequireComponent( typeof( DeformableTerrainBase ) )]
   [DisallowMultipleComponent]
+  [AddComponentMenu( "AGXUnity/Rendering/Terrain Patch Renderer" )]
   [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#using-different-terrain-materials" )]
   public class TerrainPatchRenderer : ScriptComponent
   {
@@ -101,7 +102,7 @@ namespace AGXUnity.Rendering
       get
       {
         var res = ImplicitMaterialRenderMap;
-        foreach ( var (mat, tl) in ExplicitMaterialRenderMap ) 
+        foreach ( var (mat, tl) in ExplicitMaterialRenderMap )
           res[ mat ] = tl;
         return res;
       }
@@ -178,6 +179,25 @@ namespace AGXUnity.Rendering
       m_initialData?.Reset( GetComponent<Terrain>().terrainData );
 
       base.OnDestroy();
+    }
+
+    protected override void OnDisable()
+    {
+      if ( Simulation.HasInstance ) {
+        Simulation.Instance.StepCallbacks.SimulationPost-= PostStep;
+        terrain.OnModification -= UpdateTextureAt;
+      }
+
+      base.OnDisable();
+    }
+
+    protected override void OnEnable()
+    {
+      if ( Simulation.HasInstance ) {
+        Simulation.Instance.StepCallbacks.SimulationPost += PostStep;
+        terrain.OnModification += UpdateTextureAt;
+      }
+      base.OnEnable();
     }
 
     private void PostStep()

@@ -1,0 +1,5 @@
+const TriaxialOutputField:
+    # General fields
+    X_F64 is Int: 1 #TODO: Fix units in doc
+    Y_F64 is Int: 2
+    Z_F64 is Int: 3

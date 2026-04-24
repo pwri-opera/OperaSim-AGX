@@ -1,0 +1,7 @@
+RigidCylindricalRoadWheelBody is Physics3D.Bodies.RigidBody:
+    .doc: """
+A RigidBody with a cylinder shape,
+to be used by, for example, rigid RoadWheels
+like the RigidCylindricalIdler, RigidCylindricalRoller or RigidCylindricalSprocket.
+"""
+    geometry is Physics3D.Geometries.Cylinder

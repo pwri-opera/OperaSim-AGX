@@ -1,0 +1,35 @@
+EmpiricalEngine is Physics.Interactions.Interaction1DOF:
+    with DriveTrain.Traits.RotationalPowerGenerator
+    with Physics.Signals.FractionInputTrait
+    with Physics.Signals.RpmOutputTrait
+    with Physics.Signals.Torque1DOutputTrait
+    .doc: """
+    Empirical engine uses a torque curve to determine the maximum available torque for the current RPM.
+
+    'idle_rpm'          - Desired RPM when there is no throttle.
+    'rpm_torque_list'   - The rpm - torque list.
+    'initial_throttle'  - The initial_throttle is a value between 0-1, where 0 is no throttle, and 1 is max throttle.
+    """
+    idle_rpm is Real
+    rpm_torque_list is RPMTorquePair[]: [data_point1, data_point2, data_point3]
+    data_point1 is DriveTrain.RPMTorquePair:
+        rpm: 0.0
+        torque: 100
+    data_point2 is DriveTrain.RPMTorquePair:
+        rpm: 100
+        torque: 800
+    data_point3 is DriveTrain.RPMTorquePair:
+        rpm: 150
+        torque: 0
+
+    initial_throttle is Real
+
+    throttle_input is Physics.Signals.FractionInput:
+        source: this
+
+RPMTorquePair:
+    .doc: """
+    Pair of available torque for a specific RPM.
+    """
+    rpm is Real
+    torque is Real

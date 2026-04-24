@@ -1,0 +1,18 @@
+LidarOutput is Physics.Signals.Output:
+    type: 0
+    fields is Int[]
+    source is LidarLogic reference
+    marshalling: marshalling_from_fields(fields)
+
+    static fn marshalling_from_fields(fields: Int[]) -> Physics.Signals.Marshalling
+
+    # C++ extensions
+    .extend_public: "std::vector<double> readTimeStamps(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<std::shared_ptr<openplx::Math::Vec3>> readPositions(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<double> readDistances(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<std::shared_ptr<openplx::Math::Matrix4x4>> readRayPoses(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<bool> readIsHits(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<double> readIntensities(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<std::int64_t> readEntityIds(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+
+    .extend_public: "std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal> createSignal(const std::vector<double>& time_stamps, const std::vector<std::shared_ptr<openplx::Math::Vec3>>& positions, const std::vector<double>& distances, const std::vector<std::shared_ptr<openplx::Math::Matrix4x4>>& ray_poses, const std::vector<bool>& is_hits, const std::vector<double>& intensities, const std::vector<std::int64_t>& entityIds) const;"

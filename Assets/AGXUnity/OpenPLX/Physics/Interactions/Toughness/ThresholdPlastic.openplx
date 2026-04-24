@@ -1,0 +1,7 @@
+ThresholdPlastic is DefaultToughness:
+    .doc: """
+    Models the plastic behaviour for an interaction under stress.
+    The yield_point defines the limit stress for yielding,
+    Force for linear, torque for angular.
+    """
+    yield_point is Real

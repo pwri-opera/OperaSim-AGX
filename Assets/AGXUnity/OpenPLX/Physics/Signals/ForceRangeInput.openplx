@@ -1,0 +1,11 @@
+ForceRangeInput is Input:
+    .doc: """
+A force range input given an interaction.
+For interactions where it is unambiguous which force range is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.ForceRange
+    source is ForceRangeInputTrait
+    marshalling:
+        min is RealField
+        max is RealField

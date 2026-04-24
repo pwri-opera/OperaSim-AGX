@@ -1,0 +1,3 @@
+
+VelocityMotor is Physics.Interactions.Interaction1DOF:
+    target_speed is Real: 1.0

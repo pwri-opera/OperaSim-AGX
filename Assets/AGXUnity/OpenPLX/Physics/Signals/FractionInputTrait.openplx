@@ -1,0 +1,5 @@
+trait FractionInputTrait:
+    .doc: """
+A trait that can be implemented for types that have a non ambiguous
+fraction as input parameter.
+"""

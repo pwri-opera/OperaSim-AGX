@@ -1,0 +1,5 @@
+trait LinearVelocity1DOutputTrait:
+    .doc: """
+A trait for LinearVelocity1DOutput that can be implemented for interactions
+that have an non ambiguous interpretation of an internal linear velocity measurement.
+"""

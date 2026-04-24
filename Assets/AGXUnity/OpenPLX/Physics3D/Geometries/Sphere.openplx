@@ -1,0 +1,2 @@
+Sphere is ContactGeometry:
+    radius is Real

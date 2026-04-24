@@ -1,0 +1,8 @@
+trait ContactReductionBinResolution:
+    .doc: """
+A trait for specifying the resolution used when evaluating contacts for reduction between objects.
+A high value will keep more contacts, lower will result in more aggressive reduction.
+Commonly a value of 2 or 3 will give good result.
+Values from 0 to 10 are valid, where a value of 0 means this will be overridden by the ContactReductionBinResolution from Space.
+"""
+    bin_resolution is Int

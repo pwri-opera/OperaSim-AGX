@@ -1,0 +1,17 @@
+Ackermann is DualSuspensionSteering:
+    .doc: """
+Ackermann steering mechanism.
+"""
+    with Physics.Signals.AngleInputTrait
+    with Physics.Signals.AngleOutputTrait
+
+    knuckle_angle: -2.007
+    knuckle_length: 0.16
+    side is Int: 0
+
+    steering_angle_input is Physics.Signals.AngleInput:
+        source: this
+
+    steering_angle_output is Physics.Signals.AngleOutput:
+        enabled: false
+        source: this

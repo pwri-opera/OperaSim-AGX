@@ -1,0 +1,6 @@
+DefaultMateToughness:
+    .doc: """
+    The base type for defining thoughness models for each constrained degree of freedom any Mate.
+    The toughness models may model both plastic behaviour and break limits(fractures).
+    The type of mate will define which dimensions we will model toughness for.
+    """

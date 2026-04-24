@@ -1,0 +1,6 @@
+trait GGXReflectionModel is Traits.RefractiveIndex:
+    .doc: """
+    A trait allowing the addition of an isotropic microfacet GGX reflection to the surface of a
+    geometry.
+    """
+    beckman_roughness is Real

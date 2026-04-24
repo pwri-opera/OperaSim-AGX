@@ -1,0 +1,12 @@
+LinearSpringDamper is SingleMateSuspension:
+    .doc: """
+The LinearSpringDamper is a suspension system where the wheel, or other type of locomotion, is attached
+to the chassis with a linear spring damper system, to filter out high frequencies.
+Its performance can be adjusted with the mate.flexibility.spring_constant.stiffness
+and mate.spring_damping.damping_constant.
+The range attribute defines the stroke range for the suspension,
+limiting the possible compression and extension of the spring with a hard cap.
+The stiffness and damping can also be tuned for the range.
+"""
+
+    mate becomes Vehicles.Suspensions.Interactions.LinearSpringDamperMate

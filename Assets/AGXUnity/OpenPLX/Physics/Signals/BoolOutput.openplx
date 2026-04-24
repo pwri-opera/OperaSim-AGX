@@ -1,0 +1,7 @@
+BoolOutput is Output:
+    .doc: """
+An Output that is a boolean.
+"""
+    type: Physics.Signals.InputOutputType.Boolean
+    source is BoolOutputTrait
+    marshalling.value is BoolField

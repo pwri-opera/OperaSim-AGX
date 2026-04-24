@@ -1,0 +1,7 @@
+RigidLink is Physics3D.Bodies.RigidBody:
+    .doc: """
+An empty rigid link, user needs to add geometry, inertia and mate connectors start and end.
+"""
+    start is Physics3D.Interactions.MateConnector
+    end is Physics3D.Interactions.MateConnector
+    contact_geometry is Physics3D.Geometries.ContactGeometry

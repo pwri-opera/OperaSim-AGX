@@ -1,3 +1,0 @@
-<Kernel name="AnalyzeSolverPerformance" dispatch="serial">
-  <Parameter.Pointer name="@Solver" type="agx::Solver" include="agx/Solver.h"/>
-</Kernel>

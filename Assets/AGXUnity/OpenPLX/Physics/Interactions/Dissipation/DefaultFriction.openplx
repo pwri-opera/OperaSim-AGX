@@ -1,0 +1,4 @@
+DefaultFriction is DefaultDissipation:
+    .doc: """
+    Used to specify the default friction chosen by the runtime.
+    """

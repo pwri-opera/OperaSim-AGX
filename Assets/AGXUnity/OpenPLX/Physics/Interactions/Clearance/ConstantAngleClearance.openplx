@@ -1,0 +1,5 @@
+ConstantAngleClearance is DefaultClearance:
+    .doc: """
+    An angular clearance.
+    """
+    angle is Real

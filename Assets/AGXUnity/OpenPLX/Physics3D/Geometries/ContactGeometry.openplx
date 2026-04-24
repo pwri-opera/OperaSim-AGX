@@ -1,0 +1,14 @@
+ContactGeometry is Physics.Geometries.ContactGeometry:
+  .doc: """
+Base model for 3d geometries that provoke collisions in the simulation.
+
+local_transform: The position and orientation relative to the parent system or body.
+
+enable_collisions: When set to false it will not provoke any collisions.
+
+include_in_mass_properties: When set to false the volume of the geometry will
+not be accounted for in implicit mass property calculations.
+"""
+  local_transform is Math.AffineTransform
+  enable_collisions is Bool: true
+  include_in_mass_properties is Bool: true

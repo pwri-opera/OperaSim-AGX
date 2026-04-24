@@ -1,0 +1,26 @@
+
+const InputOutputType:
+    Position1D is Int: 1              # meters
+    Position3D is Int: 2              # meters vec3
+    RPY is Int: 3                     # radians vec3
+    Angle is Int: 4                   # radians
+    Velocity1D is Int: 5              # m/s
+    Velocity3D is Int: 6              # m/s vec3
+    AngularVelocity1D is Int: 7       # radians/sec
+    AngularVelocity3D is Int: 8       # rad/s  vec3
+    Torque1D is Int: 9                # Nm
+    Torque3D is Int: 10               # Nm vec3
+    Force1D is Int: 11                # Nm
+    Force3D is Int: 12                # N vec3
+    Acceleration3D is Int: 13         # m/s2 vec3
+    AngularAcceleration3D is Int: 14  # rad/s2 vec3
+    Boolean is Int: 15                # True/False
+    Percentage is Int: 16             # Real: 0-1
+    Composite is Int: 17
+    Integer is Int: 18
+    Duration is Int: 19
+    TorqueRange is Int: 20            # Nm vec2(min, max)
+    ForceRange is Int: 21             # N vec2(min, max)
+    Rpm is Int: 22
+    Ratio is Int: 23
+    Mass is Int: 24                   # kg

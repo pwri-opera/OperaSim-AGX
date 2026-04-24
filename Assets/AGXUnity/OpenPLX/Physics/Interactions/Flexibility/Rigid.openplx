@@ -1,0 +1,4 @@
+Rigid is DefaultFlexibility:
+    .doc: """
+    Models the interaction between two objects to be perfectly rigid.
+    """

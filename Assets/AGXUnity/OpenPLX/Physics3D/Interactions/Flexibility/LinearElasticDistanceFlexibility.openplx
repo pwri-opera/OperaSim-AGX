@@ -1,0 +1,7 @@
+LinearElasticDistanceFlexibility is DefaultDistanceFlexibility:
+    .doc: """
+    Define a linear elastic flexibility model for each constrained degree of freedom for a Distance mate.
+    """
+    default_stiffness is Real: 100000.0
+    along_distance becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness

@@ -1,0 +1,14 @@
+VolvoTD73KD is DriveTrain.MeanValueEngine:
+    .doc: """
+        Used in Volvo Wheel Loader L120D.
+        Reference: https://www.volvoce.com/-/media/volvoce/global/global-site/product-archive/documents/spec-sheets/wheel-loaders/v-l120d-213-2321-0004.pdf?v=_nxHPw
+    """
+    displacement_volume: 0.0067
+    max_torque: 920.0
+    max_torque_RPM: 1100.0
+    max_power_RPM: 2100.0
+    idle_RPM: 600.0
+    max_RPM: 5000.0
+    crank_shaft_inertia: 2.0
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

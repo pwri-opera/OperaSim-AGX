@@ -1,0 +1,4 @@
+trait MCAngularVelocity3DOutputTrait is Physics3D.Signals.AngularVelocity3DOutputTrait:
+    .doc: """
+A trait for MateConnectors providing AngularVelocity3DOutput.
+"""

@@ -34,11 +34,7 @@ namespace AGXUnityEditor
     {
       get
       {
-#if UNITY_2019_3_OR_NEWER
         return 20.0f;
-#else
-        return 14.0f;
-#endif
       }
     }
 
@@ -128,6 +124,23 @@ namespace AGXUnityEditor
       }
 
       private static int m_pixelsPerLevel = 15;
+    }
+
+    // TODO: This scope is built into Unity 6.0+, remove this when support for older versions is dropped.
+    public class MixedValueScope : IDisposable
+    {
+      private bool PriorMixedValueState { get; set; }
+
+      public MixedValueScope( bool mixedValue )
+      {
+        PriorMixedValueState = EditorGUI.showMixedValue;
+        EditorGUI.showMixedValue = mixedValue;
+      }
+
+      public void Dispose()
+      {
+        EditorGUI.showMixedValue = PriorMixedValueState;
+      }
     }
 
     public static void BrandSeparator( float height = 1.0f, float space = 1.0f )
@@ -454,7 +467,7 @@ namespace AGXUnityEditor
           var relativePath = IO.Utils.MakeRelative( path, Application.dataPath );
           var newInstance = typeof( ScriptAsset ).IsAssignableFrom( instanceType ) ?
                                ScriptAsset.Create( instanceType ) as Object :
-                               new Material( Shader.Find( "Standard" ) );
+                               new Material( Shader.Find( "AGXUnity/Shader Graph/CrossRPDefault" ) );
           newInstance.name = info.Name;
           AssetDatabase.CreateAsset( newInstance, relativePath + ( info.Extension != assetExtension ? assetExtension : "" ) );
           AssetDatabase.SaveAssets();
@@ -519,8 +532,7 @@ namespace AGXUnityEditor
                            MiscButtonData.Create( GUI.MakeLabel( "...",
                                                                  InspectorGUISkin.BrandColor,
                                                                  true ),
-                                                  () =>
-                                                  {
+                                                  () => {
                                                     string result = EditorUtility.OpenFolderPanel( openFolderTitle,
                                                                                                    currentFolder,
                                                                                                    "" );
@@ -540,35 +552,29 @@ namespace AGXUnityEditor
                                    string currentFile,
                                    string openFileTitle,
                                    string openFileDirectory,
-                                   Action<string> onNewFileSelected )
+                                   Action<string> onNewFileSelected,
+                                   bool folder = false )
     {
       var selectNewFolderButtonWidth = 28.0f;
 
-      var rect     = EditorGUILayout.GetControlRect();
-      var orgWidth = rect.width;
-      rect.width   = EditorGUIUtility.labelWidth;
+      EditorGUILayout.PrefixLabel( label );
 
-      EditorGUI.PrefixLabel( rect, label );
+      EditorGUILayout.TextField( currentFile, InspectorEditor.Skin.TextField );
+      if ( UnityEngine.GUILayout.Button( GUI.MakeLabel( "...",
+                                                        InspectorGUISkin.BrandColor,
+                                                        true ),
+                                         InspectorEditor.Skin.ButtonMiddle,
 
-      var indentOffset = IndentScope.PixelLevel - 2;
-
-      rect.x    += EditorGUIUtility.labelWidth - indentOffset;
-      rect.width = orgWidth -
-                   EditorGUIUtility.labelWidth -
-                   selectNewFolderButtonWidth + indentOffset;
-      EditorGUI.SelectableLabel( rect,
-                                 currentFile,
-                                 InspectorEditor.Skin.TextField );
-      rect.x    += rect.width;
-      rect.width = selectNewFolderButtonWidth;
-      if ( UnityEngine.GUI.Button( rect,
-                                   GUI.MakeLabel( "...",
-                                                  InspectorGUISkin.BrandColor,
-                                                  true ),
-                                   InspectorEditor.Skin.ButtonMiddle ) ) {
-        string result = EditorUtility.OpenFilePanel( openFileTitle,
-                                                     openFileDirectory,
-                                                     "" );
+                                         GUILayout.Width( selectNewFolderButtonWidth ) ) ) {
+        string result;
+        if ( folder )
+          result = EditorUtility.OpenFolderPanel( openFileTitle,
+                                                  openFileDirectory,
+                                                  "" );
+        else
+          result = EditorUtility.OpenFilePanel( openFileTitle,
+                                                openFileDirectory,
+                                                "" );
         if ( !string.IsNullOrEmpty( result ) && result != currentFile ) {
           onNewFileSelected?.Invoke( result );
           // Remove focus from any control so that the field is updated.
@@ -892,9 +898,16 @@ namespace AGXUnityEditor
           }
 
           if ( addButtonPressed ) {
+#if UNITY_2022_2_OR_NEWER
+            var sceneItems = availableItemsToAdd ?? ( isAsset ?
+                                                        IO.Utils.FindAssetsOfType<T>( string.Empty ) :
+                                                        Object.FindObjectsByType<T>(FindObjectsSortMode.None) );
+
+#else
             var sceneItems = availableItemsToAdd ?? ( isAsset ?
                                                         IO.Utils.FindAssetsOfType<T>( string.Empty ) :
                                                         Object.FindObjectsOfType<T>() );
+#endif
             var addItemMenu = new GenericMenu();
             addItemMenu.AddDisabledItem( GUI.MakeLabel( itemTypenameSplit +
                                                         "(s) in " +
@@ -905,8 +918,7 @@ namespace AGXUnityEditor
                 continue;
               addItemMenu.AddItem( GUI.MakeLabel( sceneItem.name ),
                                    false,
-                                   () =>
-                                   {
+                                   () => {
                                      onAdd( sceneItem );
                                    } );
             }
@@ -1226,7 +1238,7 @@ namespace AGXUnityEditor
                                           0.45f );
       EditorGUILayout.LabelField( GUI.MakeLabel( info.IsExpired ?
                                                    "License expired" :
-                                                   "License expires" ),
+                                                   "License valid until" ),
                                   info.ValidEndDate ?
                                     GUI.MakeLabel( info.EndDate.ToString( "yyyy-MM-dd" ) +
                                                    GUI.AddColorTag( $" ({info.DiffString} {( info.IsExpired ? "ago" : "remaining" )})",
@@ -1574,8 +1586,7 @@ namespace AGXUnityEditor
     {
       for ( int i = 0; i < s_multiFloat2Values.Length; ++i )
         s_multiFloat2Values[ i ] = value[ i ];
-      Vector234FieldEx( label, s_multiFloat2Values, subLabels, "X,Y", values =>
-      {
+      Vector234FieldEx( label, s_multiFloat2Values, subLabels, "X,Y", values => {
         for ( int i = 0; i < values.Length; ++i )
           value[ i ] = values[ i ];
       } );
@@ -1593,8 +1604,7 @@ namespace AGXUnityEditor
     {
       for ( int i = 0; i < s_multiFloat3Values.Length; ++i )
         s_multiFloat3Values[ i ] = value[ i ];
-      Vector234FieldEx( label, s_multiFloat3Values, subLabels, "X,Y,Z", values =>
-      {
+      Vector234FieldEx( label, s_multiFloat3Values, subLabels, "X,Y,Z", values => {
         for ( int i = 0; i < values.Length; ++i )
           value[ i ] = values[ i ];
       } );
@@ -1612,8 +1622,7 @@ namespace AGXUnityEditor
     {
       for ( int i = 0; i < s_multiFloat4Values.Length; ++i )
         s_multiFloat4Values[ i ] = value[ i ];
-      Vector234FieldEx( label, s_multiFloat4Values, subLabels, "X,Y,Z", values =>
-      {
+      Vector234FieldEx( label, s_multiFloat4Values, subLabels, "X,Y,Z", values => {
         for ( int i = 0; i < values.Length; ++i )
           value[ i ] = values[ i ];
       } );
@@ -1631,8 +1640,7 @@ namespace AGXUnityEditor
     {
       for ( int i = 0; i < s_multiInt2Values.Length; ++i )
         s_multiInt2Values[ i ] = value[ i ];
-      Vector234IntFieldEx( label, s_multiInt2Values, subLabels, "X,Y", values =>
-      {
+      Vector234IntFieldEx( label, s_multiInt2Values, subLabels, "X,Y", values => {
         for ( int i = 0; i < values.Length; ++i )
           value[ i ] = values[ i ];
       } );
@@ -1650,8 +1658,7 @@ namespace AGXUnityEditor
     {
       for ( int i = 0; i < s_multiInt3Values.Length; ++i )
         s_multiInt3Values[ i ] = value[ i ];
-      Vector234IntFieldEx( label, s_multiInt3Values, subLabels, "X,Y,Z", values =>
-      {
+      Vector234IntFieldEx( label, s_multiInt3Values, subLabels, "X,Y,Z", values => {
         for ( int i = 0; i < values.Length; ++i )
           value[ i ] = values[ i ];
       } );

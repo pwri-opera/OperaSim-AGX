@@ -1,0 +1,8 @@
+MagnetometerSignalSpectralGaussianNoise is MagnetometerSensingDistortion:
+    .doc: """
+    A spectral noise affecting the measured magnetometer signal based on its sampling
+    frequency.
+    """
+    noise_density_x is Real
+    noise_density_y is Real
+    noise_density_z is Real

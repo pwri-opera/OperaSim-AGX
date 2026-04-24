@@ -1,0 +1,172 @@
+// CFG Definition scheme v 1.0
+// This file contains all keys available in settings.cfg
+// If you need to update settings.cfg, make sure you also update this file.
+
+ResourcePath "" // Path for finding textures,.cfg, models etc.
+RuntimePath "" // Path for locating plugins
+
+AgX {
+  RemoteCommandServer
+  {
+    Enable INT
+    Port INT
+		AllowExternalRequests INT
+		LogFile ""
+		LogConsole INT
+		JournalDirectory ""
+  }
+
+  UseSSEKernels INT // 0=disabled, 1=enabled
+	AccumulateTaskStatistics INT // 0=disabled, 1=enabled
+  BroadPhase "" // The brod phase algorithm to use. Currenly supported are "sweep-and-prune" and "grid".
+	RenderGrid INT // 0=disabled, 1=enabled
+  Solver
+  {
+    DumpTaskGraph INT // 0=disabled, 1=enabled
+    WriteInteractionGraphDotFile INT // 0=disabled, 1=enabled
+    WriteDetailedInteractionGraphDotFile INT // 0=disabled, 1=enabled
+    ReorderConstraintData INT // 0=disabled, 1=enabled
+    RenderIslands INT // 0=disabled, 1=enabled
+    AnalyzePerformance INT // 0=disabled, 1=enabled
+    ReorderConstraintData INT // 0=disabled, 1=enabled
+    Serialize INT             // 0=disabled, 1=enabled
+    NumImpactIterations INT
+    NumRestingIterations INT
+    NumPPGSRestingIterations INT
+    NumDryFrictionIterations INT
+    ForceIterative INT // 0=disabled, 1=enabled
+    StabilityReportEnable INT // 0=disabled, 1=enabled
+
+    ImpactSpeedThreshold REAL // speed threshold for treating contact as impact, magnitude (always positive) value will be used.
+                              // If not explicitly set through the API MIN(g*h, ImpactSpeedThreshold) will be used
+  }
+
+  ParticleSystem
+  {
+    RenderContactLines INT
+  }
+}
+
+Simulation {
+  debugRenderColorSet INT // Determine the color of rendered geometry based on body state. See Simulation.h
+
+  debugRenderFlags INT // Select what should be rendered, default RENDER_ALL-RENDER_BOUNDING_VOLUMES
+  // Specifies setting for the remote debugging functionality
+  RemoteDebugger
+  {
+    Enabled INT // ==1 is enabled
+    Port INT    // Which TCP port is used for communication
+    UseCompression INT // ==1 is enabled
+  }
+
+  // Specifies setting for the remote debugging over web sockets
+  WebDebugger
+  {
+    Enabled INT // ==1 is enabled
+    Port INT    // Which WebSocket port is used for communication
+  }
+
+  // Specifies settings for global body-body contact reduction
+	ContactReduction {
+	  BinResolution INT   // 2 or 3 is valid values
+	}
+}
+
+RenderManager
+{
+  defaultRenderMode INT // SOLID and or WIREFRAME
+}
+
+IslandPartitioner
+{
+  IslandMinSize INT // Min number of bodies in an island before splitting it
+}
+
+Space
+{
+  OrientedBoundsThreshold REAL
+  // Specifies settings for local geometry-geometry contact reduction if Trimeshes are involved
+	ContactReductionTrimesh {
+	  Enable INT          // ==1 is enabled
+	  BinResolution INT   // 2 or 3 is valid values
+	}
+}
+
+
+
+Statistics {
+	xmlFile ""
+	TextSize REAL // Default size of text. Default is 1.0. Can be overridden in Entry
+
+	WindowEntries {
+
+		Graph {
+		  Width REAL				// Width of graphics plot
+		  Height REAL				// Height of graphics plot
+		  OffsetX REAL			// Position of graphics plot
+		  OffsetY REAL      // Position of graphics plot
+		}
+
+
+		Entry {							// Create a textual statistics entry in the graphics window
+		 Module ""      // Which module is the statistics found in
+		 Data ""        // What is the string value for this measurement
+		 Title ""				// Title for this value
+		 Color VEC4         // Text color for this value
+		 Optional INT       // Controls whether a not-found message should be printed when no statistics data was found.
+		 TextSize REAL      // Size of text. Default is 1.0
+		}
+
+		GraphEntry {				// Create a value plot in the graphics window
+		 Module ""      // Which module is the statistics found in
+		 Data ""				// What is the string value for this measurement
+		 Title ""				// Title for this value
+		 Color VEC4					// Plot color for this value
+		 MinValue REAL      // What value corresponds to 0 in the plot
+		 MaxValue REAL			// What value corresponds to 1 in the plot
+		 TextSize REAL      // Size of text. Default is 1.0
+		}
+	}
+}
+
+
+
+SimulationSerializer
+{
+  Enabled INT // If ==1 then for each frame a file will be dumped with complete simulation content
+  Mode INT // When to write data: 0-PRE_COLLIDE, 1-PRE_STEP, 2-POST_STEP
+  Interval REAL // interval in seconds
+  Filename "" //.aagx for ascii
+}
+
+ScriptManager
+{
+  MaxMemSize INT            // Max memory in KBytes before full garbage collection is performed
+  GarbageCollectionFrequency INT   // Frequency of calling garbage collection
+  IncrementalSize            INT   // Num steps for incremental garbage collection, Larger = slower
+}
+
+RenderStateManager
+{
+  DefaultRenderStateFile "" // Path to .agxScene file with RenderState
+  DefaultRenderState ""
+
+  DiffuseTextureUnit INT
+  ShadowTextureUnit INT
+  // ShadowJitterTextureUnit INT // Always ShadowTextureUnit+1
+  NormalMapTextureUnit 3
+  HeightMapTextureUnit INT
+  SpecularMapTextureUnit INT
+  SphereMapTextureUnit INT
+  CubeMapTextureUnit INT
+  NumTextureUnits INT
+
+  Shadows {
+    TextureResolution INT
+    AmbientBias VEC2
+    JitteringScale REAL
+    SoftnessWidth REAL
+    Bias REAL
+  }
+
+}

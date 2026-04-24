@@ -1,0 +1,6 @@
+DefaultDistanceDissipation is DefaultMateDissipation:
+    .doc: """
+    Defines one dissipation model for each constrained degree of freedom for Distance
+    """
+    along_distance is Physics.Interactions.Dissipation.DefaultDissipation
+

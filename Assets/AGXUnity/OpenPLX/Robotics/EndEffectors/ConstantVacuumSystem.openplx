@@ -1,0 +1,2 @@
+ConstantVacuumSystem is VacuumSystem:
+    vacuum_level is Real: 0.5

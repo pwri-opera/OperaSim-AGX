@@ -1,0 +1,11 @@
+
+KinematicLock:
+    .doc: """
+Locks bodies together kinematically.
+
+All the bodies specified in the `bodies` array will be locked kinematically, i.e.
+they will behave as a single rigid body, they will maintain the translational offset
+from the initial positioning after the SNAP algorithm has run. Any existing constraints
+between locked bodies will be disabled.
+"""
+    bodies is Physics.Bodies.Body[]

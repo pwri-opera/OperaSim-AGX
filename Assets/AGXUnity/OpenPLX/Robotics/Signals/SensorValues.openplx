@@ -1,0 +1,6 @@
+
+SensorValues:
+    name is String
+    values is Physics.Signals.Value[]
+
+    static fn create(name: String, values: Physics.Signals.Value[]) -> SensorValues

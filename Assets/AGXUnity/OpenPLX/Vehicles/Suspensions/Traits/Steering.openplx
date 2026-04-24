@@ -1,0 +1,4 @@
+trait Steering:
+    .doc: """
+A trait that adds steering to suspension.
+"""

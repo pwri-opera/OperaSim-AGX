@@ -1,0 +1,8 @@
+Capsule is ContactGeometry:
+  .doc: """A capsule is a cylinder with rounded ends, the ends will be rounded
+with the same radius as the cylinder.
+
+`height` is the height of the inner cylinder, the total height of the capsule will be: height + 2 * radius
+"""
+  radius is Real
+  height is Real

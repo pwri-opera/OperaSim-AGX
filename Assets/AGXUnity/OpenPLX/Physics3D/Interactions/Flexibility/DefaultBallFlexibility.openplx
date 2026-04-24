@@ -1,0 +1,7 @@
+DefaultBallFlexibility is DefaultMateFlexibility:
+    .doc: """
+    Defines one flexibility model for each constrained degree of freedom for a Ball
+    """
+    along_main is Physics.Interactions.Flexibility.DefaultFlexibility
+    along_normal is Physics.Interactions.Flexibility.DefaultFlexibility
+    along_cross is Physics.Interactions.Flexibility.DefaultFlexibility

@@ -1,0 +1,13 @@
+SuctionCupElastoDynamics:
+    .doc: """
+    Elasticity and dissipation for a suction cup.
+    """
+    lip_normal_flexibility is Physics.Interactions.Flexibility.LinearElastic
+    radial_axis_flexibility is Physics.Interactions.Flexibility.LinearElastic
+    around_lip_normal_flexibility is Physics.Interactions.Flexibility.LinearElastic
+    around_radial_axis_flexibility is Physics.Interactions.Flexibility.LinearElastic
+
+    lip_normal_dissipation is Physics.Interactions.Dissipation.MechanicalDamping
+    radial_axis_dissipation is Physics.Interactions.Dissipation.MechanicalDamping
+    around_lip_normal_dissipation is Physics.Interactions.Dissipation.MechanicalDamping
+    around_radial_axis_dissipation is Physics.Interactions.Dissipation.MechanicalDamping

@@ -1,0 +1,11 @@
+Connector is Physics3D.Interactions.RedirectedMateConnector:
+    .doc: """
+Connector for Vehicle Suspension.
+'up_vector'      - Reference to the up vector of a vehicle.
+'forward_vector' - Reference to the forward vector of a vehicle.
+'main_axis'      - The wheel axis computed by taking the cross product of the up and forward vector.
+"""
+    up_vector is Math.Vec3 reference
+    forward_vector is Math.Vec3 reference
+    main_axis: up_vector.cross(forward_vector)
+    normal: up_vector

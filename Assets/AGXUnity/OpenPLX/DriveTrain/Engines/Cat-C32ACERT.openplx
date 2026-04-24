@@ -1,0 +1,14 @@
+CatC32ACERT is DriveTrain.MeanValueEngine:
+    .doc: """
+        Diesel Engine in CAT D11 Dozer. https://www.eltrakbulgaria.com/uploads/Specalogs/2020/D11.pdf
+        Reference: https://www.teknoxgroup.com/fileadmin/user_upload/C32acert_ind18_1200.pdf
+    """
+    displacement_volume: 0.0321
+    max_torque: 5861.0
+    max_torque_RPM: 1200.0
+    max_power_RPM: 1800.0
+    idle_RPM: 700.0
+    max_RPM: 3500.0
+    crank_shaft_inertia: 10.0
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

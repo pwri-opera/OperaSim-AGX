@@ -1,0 +1,15 @@
+FrontWheelDrive is Vehicles.Vehicle:
+    .doc: """
+    This Vehicle is abstract.
+    The Wheels have the most basic type
+    The suspension could be any System or the Suspension interaction
+    """
+    front_left_wheel is Vehicles.Wheels.Wheel
+    front_right_wheel is Vehicles.Wheels.Wheel
+    rear_left_wheel is Vehicles.Wheels.Wheel
+    rear_right_wheel is Vehicles.Wheels.Wheel
+
+    front_left_suspension is Vehicles.Suspensions.Suspension
+    front_right_suspension is Vehicles.Suspensions.Suspension
+    rear_left_suspension is Vehicles.Suspensions.Suspension
+    rear_right_suspension is Vehicles.Suspensions.Suspension

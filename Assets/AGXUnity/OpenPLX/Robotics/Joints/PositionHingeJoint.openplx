@@ -1,0 +1,3 @@
+PositionHingeJoint is HingeJoint:
+    actuator becomes Physics3D.Interactions.TorsionSpring:
+        angle: mate.initial_angle

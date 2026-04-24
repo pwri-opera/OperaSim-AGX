@@ -1,0 +1,4 @@
+DefaultLinkVariation:
+    .doc: """
+For varying the shape of the links of a track belt.
+"""

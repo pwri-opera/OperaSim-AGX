@@ -1,0 +1,3 @@
+Interaction1DOF is Interaction:
+    min_effort is Real: Math.NEG_INF
+    max_effort is Real: Math.INF

@@ -1,0 +1,9 @@
+
+ConvexMesh is TriMeshGeometry:
+    .doc: """
+        A ConvexMesh contact geometry is defined by a set of vertices is 3D space.
+        The vertices need to span a volume.
+        The convex shape is defined by the minimal convex triangle mesh that
+        span the volume defined by the vertices. 
+        """
+    vertices is Math.Vec3[]

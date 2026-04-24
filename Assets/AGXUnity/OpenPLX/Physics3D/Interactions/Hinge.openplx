@@ -1,0 +1,32 @@
+Hinge is Mate:
+    with Physics.Signals.AngleOutputTrait
+    with Physics.Signals.AngularVelocity1DOutputTrait
+    with Physics3D.Signals.Force3DOutputTrait
+    with Physics3D.Signals.Torque3DOutputTrait
+    .doc: """
+    A hinge which constrain five degrees of freedom between two bodies.
+    The rotation around the main axis of the two connectors is free.
+    The friction around the hinge axis may be specified.
+    """
+    # SNAP will try to reposition connected body according to initial_angle
+    initial_angle is Real: 0.0
+    dissipation becomes Physics3D.Interactions.Dissipation.DefaultHingeDissipation
+    flexibility becomes Physics3D.Interactions.Flexibility.DefaultHingeFlexibility
+    toughness becomes Physics3D.Interactions.Toughness.DefaultHingeToughness
+    friction is Physics.Interactions.Dissipation.DefaultFriction
+
+    angle_output is Physics.Signals.AngleOutput:
+        enabled: false
+        source: this
+
+    angular_velocity_output is Physics.Signals.AngularVelocity1DOutput:
+        enabled: false
+        source: this
+
+    torque_output is Physics3D.Signals.Torque3DOutput:
+        source: this
+        enabled: false
+
+    force_output is Physics3D.Signals.Force3DOutput:
+        source: this
+        enabled: false

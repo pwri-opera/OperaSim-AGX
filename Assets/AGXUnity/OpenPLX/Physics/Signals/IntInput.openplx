@@ -1,0 +1,6 @@
+IntInput is Input:
+    .doc: """
+An Input that is an integer.
+"""
+    type: Physics.Signals.InputOutputType.Integer
+    source is IntInputTrait

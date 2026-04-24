@@ -1,0 +1,37 @@
+AutomaticClutch is ManualClutch:
+    with Physics.Signals.DurationInputTrait
+    with Physics.Signals.DurationOutputTrait
+    .doc: """
+Extends the manual clutch with an automatic engage/disengage feature.
+engagement_duration determine how long it takes to go from fully
+open to fully engaged, while the disengagement_duration determine the time for disengagement.
+The boolean ClutchEngageInput is used to engage and disengage the clutch.
+
+When using the automatic feature the engagement_fraction parameter is irrelevant.
+
+The automatic clutch is engaged by sending true on the engage_input, and disengaged by sending false.
+initially_engaged will tell wether the clutch is engaged or not before any signal has been sent.
+"""
+    engagement_duration is Real: 0.1
+    disengagement_duration is Real: 0.1
+    initially_engaged is Bool: false
+
+    engage_input is Physics.Signals.EngageInput:
+        source: this
+    engaged_output is Physics.Signals.EngagedOutput:
+        enabled: false
+        source: this
+
+    engagement_duration_input is DriveTrain.Signals.AutomaticClutchEngagementDurationInput:
+        source: this
+
+    engagement_duration_output is DriveTrain.Signals.AutomaticClutchEngagementDurationOutput:
+        source: this
+        enabled: false
+
+    disengagement_duration_input is DriveTrain.Signals.AutomaticClutchDisengagementDurationInput:
+        source: this
+
+    disengagement_duration_output is DriveTrain.Signals.AutomaticClutchDisengagementDurationOutput:
+        source: this
+        enabled: false

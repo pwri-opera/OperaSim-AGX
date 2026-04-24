@@ -1,0 +1,8 @@
+RayEmissionAngleGaussianNoise is RayEmissionDistortion:
+    .doc: """
+    Distortion of the ray emission angle, as relative to the local optical system of the ray. The
+    optical system is assumed to be right handed with the Z-axis pointing along the ray traversal
+    direction.
+    """
+    gaussian_distribution is Math.Random.GaussianDistribution
+    rotation_axis is Math.Vec3

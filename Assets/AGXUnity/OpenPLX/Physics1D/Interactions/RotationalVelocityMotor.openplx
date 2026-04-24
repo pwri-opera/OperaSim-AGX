@@ -1,0 +1,26 @@
+
+RotationalVelocityMotor is VelocityMotor:
+    with Physics.Signals.AngularVelocity1DInputTrait
+    with Physics.Signals.AngularVelocity1DOutputTrait
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.Torque1DInputTrait
+    with Physics.Signals.TorqueRangeInputTrait
+    with Physics.Signals.TorqueRangeOutputTrait
+
+    target_angular_velocity_input is Physics.Signals.AngularVelocity1DInput:
+        source: this
+
+    target_angular_velocity_output is Physics.Signals.AngularVelocity1DOutput:
+        source: this
+        enabled: false
+
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+
+    torque_range_input is Physics.Signals.TorqueRangeInput:
+        source: this
+
+    torque_range_output is Physics.Signals.TorqueRangeOutput:
+        source: this
+        enabled: false

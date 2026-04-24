@@ -1,0 +1,4 @@
+RayEmissionDistortion is Distortion:
+    .doc: """
+    Distortion that affects rays as they are emitted from a model.
+    """

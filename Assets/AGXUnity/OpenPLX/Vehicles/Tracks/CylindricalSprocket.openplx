@@ -1,0 +1,8 @@
+CylindricalSprocket is CylindricalRoadWheel:
+    .doc: """
+A sprocket is a profiled wheel with teeth or cogs that engage with the track chain.
+It engages the holes in the links of the track and provides the driving force that moves the track.
+In tracked systems, it is the sprocket that is motorized, as it performs the essential task of actually
+propelling the vehicle forward or backward. It's often located at the front or rear of the vehicle.
+"""
+    

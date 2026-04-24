@@ -1,0 +1,24 @@
+LinearVelocityMotor is VelocityMotor:
+    with Physics.Signals.Force1DOutputTrait
+    with Physics.Signals.LinearVelocity1DOutputTrait
+    with Physics.Signals.LinearVelocity1DInputTrait
+    with Physics.Signals.ForceRangeInputTrait
+    with Physics.Signals.ForceRangeOutputTrait
+
+    force_output is Physics.Signals.Force1DOutput:
+        enabled: false
+        source: this
+
+    target_linear_velocity_input is Physics.Signals.LinearVelocity1DInput:
+        source: this
+
+    target_linear_velocity_output is Physics.Signals.LinearVelocity1DOutput:
+        enabled: false
+        source: this
+
+    force_range_input is Physics.Signals.ForceRangeInput:
+        source: this
+
+    force_range_output is Physics.Signals.ForceRangeOutput:
+        source: this
+        enabled: false

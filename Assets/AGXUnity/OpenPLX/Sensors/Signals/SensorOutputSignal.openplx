@@ -1,0 +1,5 @@
+SensorOutputSignal is Physics.Signals.OutputSignal:
+    data is Blob: {}
+
+    # C++ extensions
+    .extend_public: "static std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal> create(std::shared_ptr<Physics::Signals::Output> source, std::shared_ptr<openplx::Blob> blob);"

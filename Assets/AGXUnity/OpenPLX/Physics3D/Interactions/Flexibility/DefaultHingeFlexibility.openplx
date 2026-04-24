@@ -1,0 +1,9 @@
+DefaultHingeFlexibility is DefaultMateFlexibility:
+    .doc: """
+    Defines one flexibility model for each constrained degree of freedom for a Hinge
+    """
+    along_main is Physics.Interactions.Flexibility.DefaultFlexibility
+    along_normal is Physics.Interactions.Flexibility.DefaultFlexibility
+    along_cross is Physics.Interactions.Flexibility.DefaultFlexibility
+    around_normal is Physics.Interactions.Flexibility.DefaultFlexibility
+    around_cross is Physics.Interactions.Flexibility.DefaultFlexibility

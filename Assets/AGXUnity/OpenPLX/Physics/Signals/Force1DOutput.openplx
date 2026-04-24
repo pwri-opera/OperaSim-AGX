@@ -1,0 +1,9 @@
+Force1DOutput is Output:
+    .doc: """
+A scalar Force output given an interaction.
+For interactions where it is unambiguous which force is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.Force1D
+    source is Force1DOutputTrait
+    marshalling.force is RealField

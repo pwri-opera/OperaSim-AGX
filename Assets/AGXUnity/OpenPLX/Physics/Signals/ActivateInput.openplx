@@ -1,0 +1,4 @@
+ActivateInput is BoolInput:
+    .doc: """
+An Input that is a boolean, specifying weather to activate or deactivate the source.
+"""

@@ -1,0 +1,5 @@
+trait AngleOutputTrait:
+    .doc: """
+A trait for an angle output that can be implemented for interactions
+that have an non ambiguous interpretation of an internal angle measurement.
+"""

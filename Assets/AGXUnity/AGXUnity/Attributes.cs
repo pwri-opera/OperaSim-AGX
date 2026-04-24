@@ -16,7 +16,7 @@ namespace AGXUnity
   /// <summary>
   /// Disable changes of field or property in the Inspector during runtime.
   /// </summary>
-  [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
+  [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
   public class DisableInRuntimeInspectorAttribute : Attribute
   {
   }
@@ -153,7 +153,7 @@ namespace AGXUnity
       else if ( type == typeof( double ) )
         return (double)value > 0 || ( m_acceptZero && (double)value == 0 );
       else if ( type.IsGenericType &&
-                type.GetGenericTypeDefinition() == typeof(OptionalOverrideValue<>) )
+                type.GetGenericTypeDefinition() == typeof( OptionalOverrideValue<> ) )
         return OptionalOverrideIsValid( value );
       return true;
     }
@@ -194,17 +194,17 @@ namespace AGXUnity
 
     public bool OptionalOverrideIsValid( object value )
     {
-      var wrappedType = value.GetType().GenericTypeArguments[0];
-      var ooType = typeof(OptionalOverrideValue<>).MakeGenericType( wrappedType );
+      var wrappedType = value.GetType().GenericTypeArguments[ 0 ];
+      var ooType = typeof( OptionalOverrideValue<> ).MakeGenericType( wrappedType );
       var wrappedVal = ooType.GetProperty( "OverrideValue" ).GetValue( value );
-      var validator = this.GetType().GetMethod("IsValid",new Type[] { wrappedType } );
+      var validator = this.GetType().GetMethod( "IsValid", new Type[] { wrappedType } );
       if ( validator == null )
         return true;
-      return (bool)validator.Invoke( this, new object[] { wrappedVal });
+      return (bool)validator.Invoke( this, new object[] { wrappedVal } );
     }
   }
 
-  [AttributeUsage( AttributeTargets.Class, AllowMultiple = false)]
+  [AttributeUsage( AttributeTargets.Class, AllowMultiple = false )]
   public class DoNotGenerateCustomEditor : Attribute
   {
     public DoNotGenerateCustomEditor()
@@ -218,5 +218,27 @@ namespace AGXUnity
     public AllowRecursiveEditing()
     {
     }
+  }
+
+  [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
+  public class StringAsFilePicker : Attribute
+  {
+    public bool IsFolder { get; private set; }
+    public StringAsFilePicker( bool IsFolder = false ) { this.IsFolder = IsFolder; }
+  }
+
+  [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
+  public class DynamicallyShowInInspector : Attribute
+  {
+    public DynamicallyShowInInspector( string name, bool isMethod = false, bool invert = false )
+    {
+      Name = name;
+      IsMethod = isMethod;
+      Invert = invert;
+    }
+
+    public bool IsMethod { get; private set; }
+    public string Name { get; private set; }
+    public bool Invert { get; private set; }
   }
 }

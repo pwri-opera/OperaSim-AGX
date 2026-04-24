@@ -1,0 +1,12 @@
+Vehicle is Physics3D.System:
+    .doc: """
+An interface for designing vehicles.
+'chassis'         - The chassis of the vehicle.
+'steering'        - What type of steering to use (Rack and Pinion, Bell crank etc...).
+'up_vector'       - The vehicles up vector.
+'forward_vector'  - The vehicles forward vector.
+"""
+    chassis is Physics3D.Bodies.RigidBody or Physics3D.System
+    steering is Vehicles.Steering.Interactions.DualSuspensionSteering or Physics3D.System
+    up_vector is Math.Vec3
+    forward_vector is Math.Vec3

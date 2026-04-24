@@ -1,0 +1,9 @@
+LinearVelocity3DInput is Physics.Signals.Input:
+    .doc: """
+A vec3 as linear velocity input.
+For models which have an unambiguous 3D linear velocity input parameter.
+The input is given as a 3D velocity vector in the world coordinate system, expressed in absolute coordinates.
+"""
+    type: Physics.Signals.InputOutputType.Velocity3D
+    source is LinearVelocity3DInputTrait
+    marshalling becomes Vec3Marshalling

@@ -1,0 +1,39 @@
+TwoWheelTemplate is Physics3D.System:
+    engine_shaft is DriveTrain.Shaft
+    gear_shaft is DriveTrain.Shaft
+    clutch_shaft is DriveTrain.Shaft
+    diff_left_shaft is DriveTrain.Shaft
+    diff_right_shaft is DriveTrain.Shaft
+    left_brake_shaft is DriveTrain.Shaft
+    right_brake_shaft is DriveTrain.Shaft
+
+    engine is Physics.Interactions.Interaction1DOF with DriveTrain.Traits.RotationalPowerGenerator, Physics.Signals.FractionInputTrait:
+        connectors: [engine_shaft.input]
+
+    gear_box is DriveTrain.GearBox:
+        connectors: [engine_shaft.output, gear_shaft.input]
+
+    clutch is DriveTrain.ManualClutch:
+        connectors: [gear_shaft.output, clutch_shaft.input]
+
+    differential is DriveTrain.Differential:
+         drive_shaft: clutch_shaft
+         left_axle_shaft: diff_left_shaft
+         right_axle_shaft: diff_right_shaft
+         locked_up: true
+         locked_up_output.enabled: true
+
+    # We need two brakes to model a TwoWheelTemplate correctly.
+    # We need to send the same signal to both brakes when we use this template.
+    left_brake is DriveTrain.ManualBrake:
+        connectors: [diff_left_shaft.output, left_brake_shaft.input]
+
+    right_brake is DriveTrain.ManualBrake:
+        connectors: [diff_right_shaft.output, right_brake_shaft.input]
+
+    left_actuator is DriveTrain.Actuator:
+        connector_1d: left_brake_shaft.output
+
+    right_actuator is DriveTrain.Actuator:
+        connector_1d: right_brake_shaft.output
+

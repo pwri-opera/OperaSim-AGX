@@ -1,0 +1,2 @@
+FixedJoint is Joint:
+    mate becomes Physics3D.Interactions.Lock

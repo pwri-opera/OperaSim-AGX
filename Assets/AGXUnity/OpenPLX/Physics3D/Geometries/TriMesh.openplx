@@ -1,0 +1,8 @@
+
+TriMesh is TriMeshGeometry:
+    .doc: """
+A geometry consisting of a triangle mesh stored as vertices and indices
+"""
+
+    vertices is Math.Vec3[]
+    indices is Int[]

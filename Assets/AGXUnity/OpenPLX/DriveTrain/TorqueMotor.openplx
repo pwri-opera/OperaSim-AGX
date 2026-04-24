@@ -1,0 +1,10 @@
+TorqueMotor is Physics.Interactions.Interaction1DOF:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.Torque1DInputTrait
+
+    torque_input is Physics.Signals.Torque1DInput:
+        source: this
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+

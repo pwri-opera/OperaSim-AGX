@@ -1,0 +1,13 @@
+LinearElasticCylindricalFlexibility is DefaultCylindricalFlexibility:
+    .doc: """
+    Define a linear elastic flexibility model for each constrained degree of freedom for a Cylindrical.
+    """
+    default_stiffness is Real: 100000.0
+    along_normal becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    along_cross becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    around_normal becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness
+    around_cross becomes Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: default_stiffness

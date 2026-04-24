@@ -1,0 +1,6 @@
+AccelerometerLogic is TriaxialSensorLogic:
+    with Traits.MateConnectorAttachment
+    .doc: """
+    Logical functioning of a three axis accelerometer.
+    """
+    sensing_distortions becomes AccelerometerSensingDistortion[]: []

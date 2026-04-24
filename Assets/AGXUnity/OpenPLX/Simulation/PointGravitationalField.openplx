@@ -1,0 +1,11 @@
+PointGravitationalField is GravitationalField:
+    .doc: """
+    PointGravitationalField calculates a gravity which is uniform in magnitude over the entire
+    environment, but the direction of the force will point towards the center position given.
+    A negative magnitude will result in a force pushing from the center.
+    center - center position of the field. All gravitational forces will point to or from this
+             position
+    magnitude - the magnitude of the gravitational force
+    """
+    center is Math.Vec3: {0, 0, 0}
+    magnitude is Real: 9.80665

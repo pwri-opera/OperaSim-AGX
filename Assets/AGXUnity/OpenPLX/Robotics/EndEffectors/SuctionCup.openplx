@@ -1,0 +1,46 @@
+SuctionCup is Physics3D.StructuralComponent:
+    .doc: """
+A suction cup has object_connector at its origin with the purpose
+to use SNAP position objects at the lip of the cup.
+The characteristics of the flexible cup are considered to be different in the relaxed and collapsed state.
+Therefore there are two mate connectors for attaching the cup to the vacuum gripper.
+It is up to the runtime environment to swap between two states, both should not be active simultaneously.
+
+The mounting_radius define the area for airflow through the top of the cup.
+The lip_radius define the area for gripping.
+The resting_height is the height of the cup when not exposed to any external forces.
+The collapsed_height is the height of the cup when an object is grasped, and the cup has collapsed.
+
+The body of the gripper_connector should point to the body of the gripper to which the cup is connected.
+
+The origin of the body shold be at the surface of the imagined lip of the cup.
+The local body position is by default at negative resting_height relative the cup system along the lip_normal.
+The local_transform of the cup relative its parent system, i.e. the gripper, is required for positioning it.
+"""
+    body is Physics3D.Bodies.RigidBody:
+        kinematics.local_transform.position: lip_normal * resting_height
+    lip_radius is Real
+    mounting_radius is Real
+    resting_height is Real
+    collapsed_height is Real
+
+    lip_normal is Math.Vec3: Math.Vec3.from_xyz(0,0,-1)
+
+    gripper_connector is Physics3D.Interactions.RedirectedMateConnector:
+        main_axis: Math.Vec3.from_xyz(0,0,-1)
+        position: Math.Vec3.from_xyz(0,0,0)
+
+    resting_mounting_connector is Physics3D.Interactions.RedirectedMateConnector:
+        redirected_parent: body
+        main_axis: Math.Vec3.from_xyz(0,0,-1)
+        position: Math.Vec3.from_xyz(0,0,0)
+
+    collapsed_mounting_connector is Physics3D.Interactions.RedirectedMateConnector:
+        redirected_parent: body
+        main_axis: Math.Vec3.from_xyz(0,0,-1)
+        position: -lip_normal.normal() * collapsed_height
+
+    object_connector is Physics3D.Interactions.RedirectedMateConnector:
+        redirected_parent: body
+        main_axis: Math.Vec3.from_xyz(0,0,-1)
+        position: lip_normal * (resting_height)

@@ -1,0 +1,8 @@
+FractionInput is Input:
+    .doc: """
+A Input that is a fraction.
+Preferrably between zero and one, but not forced to be.
+"""
+    type: Physics.Signals.InputOutputType.Percentage
+    source is FractionInputTrait
+    marshalling.value is RealField

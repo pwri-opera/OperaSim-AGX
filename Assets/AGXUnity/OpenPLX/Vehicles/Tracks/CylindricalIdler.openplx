@@ -1,0 +1,11 @@
+CylindricalIdler is CylindricalRoadWheel:
+    .doc: """
+The idler in a tracked system is a wheel, usually at the opposite end of the drive sprocket.
+If the sprocket is at the rear, the idler is at the front, and vice versa.
+The idler serves two main purposes.
+1. It supports the track in spanning the distance between the front and rear of the vehicle, 
+   preventing it from sagging excessively or becoming derailed.
+2. It often has a mechanism to adjust the track tension,
+   ensuring the track remains properly seated on all wheels and sprocket.
+"""
+    

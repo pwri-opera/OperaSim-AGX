@@ -1,4 +1,5 @@
 <Entity name="SolveMaterial">
   <Attribute.Scalar name="adhesiveImpulse" type="Real"/>
   <Attribute.Scalar name="friction" type="Vec2"/>
+  <Attribute.Scalar name="tangentialCohesionImpulse" type="Vec2"/>
 </Entity>

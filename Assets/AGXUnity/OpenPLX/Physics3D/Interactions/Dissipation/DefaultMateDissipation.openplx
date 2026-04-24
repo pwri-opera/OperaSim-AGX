@@ -1,0 +1,5 @@
+DefaultMateDissipation:
+    .doc: """
+    The base type for defining dissipation models for each constrained degree of freedom any Mate.
+    The type of mate will define which dimensions we will model dissipation for.
+    """

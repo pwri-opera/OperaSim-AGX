@@ -1,0 +1,19 @@
+RobotOutput is Physics.Signals.Output:
+  .doc: """
+A filter that accepts signals from specified sources and composes them into a RobotOutputSignal
+- Signal values from `sensors` will be composed into `sensor_values` with possibly multiple values under the name of the sensor.
+
+The following signals are unnamed, so the order is important:
+- Signal values from `joint_sources` with type InputOutputType.Angle will be composed in order into `angles`
+- Signal values from `joint_sources` with type InputOutputType.AngularVelocity1D will be composed in order into `angular_velocities`
+- Signal values from `joint_sources` with type InputOutputType.Torque will be composed in order into `torques`
+- Signal values from `object_sources` will be composed in order into `object_values`.
+
+"""
+    type: Physics.Signals.InputOutputType.Composite
+    joint_sources is Physics.Signals.Output[]: []
+    # object_sources are unnamed and arrives in the order defined by this list
+    object_sources is Physics.Signals.Output[]: []
+
+    sensors is Robotics.Signals.Sensor[]: []
+    fn process(output: Physics.Signals.Output, signals: Physics.Signals.OutputSignal[]) -> Physics.Signals.OutputSignal

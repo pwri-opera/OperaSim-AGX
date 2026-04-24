@@ -1,0 +1,9 @@
+AngleInput is Input:
+    .doc: """
+A scalar angle input given an interaction.
+For interactions where it is unambiguous which angle is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.Angle
+    source is AngleInputTrait
+    marshalling.angle is RealField

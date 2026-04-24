@@ -1,0 +1,6 @@
+RobotInputSignal is Physics.Signals.InputSignal:
+    values is Physics.Signals.RealValue[]
+    control_events is Bool[]
+    # create() uses Real[] to make Python API easier to use, no wrapping in Value.Create needed
+    static fn create(values: Real[], control_events: Bool[], target: Physics.Signals.Input) -> RobotInputSignal
+    static fn from_values(values: Physics.Signals.RealValue[], control_events: Bool[], target: Physics.Signals.Input) -> RobotInputSignal

@@ -1,6 +1,0 @@
-<Component name="IterativeSolver">
-	
-	<Value name="numIterations" type="UInt" value="1"/>
-	
-	
-</Component>

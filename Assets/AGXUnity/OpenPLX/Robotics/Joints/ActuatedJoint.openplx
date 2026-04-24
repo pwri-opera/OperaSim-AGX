@@ -1,0 +1,7 @@
+ActuatedJoint is Joint:
+    .doc: """
+The actuated joint implements the actuation of a free degree of freedom of a joint.
+"""
+    actuator is Physics.Interactions.Interaction1DOF:
+        connectors: mate.connectors
+

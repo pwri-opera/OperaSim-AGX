@@ -1,0 +1,6 @@
+LidarLogic is SensorLogic:
+    with Traits.MateConnectorAttachment
+    .doc: """
+    Logical sensor functioning of a lidar sensor.
+    """
+    sensing_distortions becomes LidarSensingDistortion[]: []

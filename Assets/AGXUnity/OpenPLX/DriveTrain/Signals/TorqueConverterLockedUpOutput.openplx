@@ -1,0 +1,4 @@
+TorqueConverterLockedUpOutput is Physics.Signals.BoolOutput:
+    .doc: """
+An Output that is a boolean, answering if a torque converter is locked up or not.
+"""

@@ -1,0 +1,5 @@
+trait LidarVerticalResolution64:
+    .doc: """
+    A trait that adds a vertical resolution of 64 to a LIDAR
+    """
+    logic.ray_source.vertical_resolution: 64

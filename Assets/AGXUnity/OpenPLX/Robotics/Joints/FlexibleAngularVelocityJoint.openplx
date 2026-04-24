@@ -1,0 +1,8 @@
+
+FlexibleAngularVelocityJoint is HingeJoint:
+    with FlexibleJointTrait
+    actuator becomes Physics1D.Interactions.RotationalVelocityMotor:
+        connectors: [drive_train.motor_shaft.input]
+
+    drive_train becomes FlexibleJointDriveTrain:
+        hinge_actuator.mate_3d: mate

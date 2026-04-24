@@ -1,0 +1,12 @@
+
+Input:
+    .doc: """
+An Input, ie a receiver of signals.
+- Each Input should have a type-attribute, e.g. InputOutputType.Torque1D, Angle, AngularVelocity or any of above.
+- Use type Composite when the Input receives a Signal with multiple values.
+- reference_id is optional and must be unique within each Robot and can be used to identify the sensor, e.g. when communicating using Click or ROS. Typically the full name will be used if not set.
+"""
+    type is Int
+    reference_id is String: ""
+    marshalling is Marshalling
+

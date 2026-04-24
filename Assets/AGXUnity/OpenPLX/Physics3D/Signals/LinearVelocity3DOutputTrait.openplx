@@ -1,0 +1,4 @@
+trait LinearVelocity3DOutputTrait:
+    .doc: """
+A trait for models providing LinearVelocity3DOutput.
+"""

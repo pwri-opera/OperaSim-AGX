@@ -1,0 +1,8 @@
+AsymmetricLimitFriction is DefaultFriction:
+    .doc: """
+    Defines a constant maximum friction force, for linear dof's, or torque for angular dof's.
+    for positive and negative relative directions.
+    """
+    positive_limit is Real
+    negative_limit is Real
+    

@@ -1,0 +1,21 @@
+Field:
+    type is Int # 0 == Bool, 1 == UInt, 2 == Int, 3 == Real
+    size is Int: 0
+    offset is Int: 0
+
+RealField is Field:
+    type: 3
+
+IntField is Field:
+    type: 2
+
+UIntField is Field:
+    type: 1
+
+BoolField is Field:
+    type: 0
+
+Marshalling:
+    size is Int: 0
+    offset is Int: 0
+    array_type is Int: 0 # 0 == None, 1 == Static, 2 == Dynamic, 3 == Flexible

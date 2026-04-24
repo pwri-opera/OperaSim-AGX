@@ -1,0 +1,10 @@
+HorizontalSweepRaySource is RaySource:
+    .doc: """
+    Ray source that creates rays in a circular or semi-circular pattern, sweeping through
+    the entire pattern at the specified frequency.
+    """
+    frequency is Real
+    horizontal_fov is Math.Vec2
+    vertical_fov is Math.Vec2
+    horizontal_resolution is Int
+    vertical_resolution is Int

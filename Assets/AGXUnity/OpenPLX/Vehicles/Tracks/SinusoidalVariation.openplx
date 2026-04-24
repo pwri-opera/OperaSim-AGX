@@ -1,0 +1,9 @@
+SinusoidalVariation is CyclicVariation:
+    .doc: """
+A variation of a pattern, where the amplitude will
+will increase with a sinusiodal variation.
+The additional_amplitude is the amplitude of the function,
+and the period is the wavelength of the function.
+"""
+    additional_amplitude is Real
+    period is Real

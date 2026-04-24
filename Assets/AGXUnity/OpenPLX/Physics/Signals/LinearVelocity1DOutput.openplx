@@ -1,0 +1,9 @@
+LinearVelocity1DOutput is Output:
+    .doc: """
+A scalar linear velocity output given an interaction.
+For interactions where it is unambiguous which position is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.Velocity1D
+    source is LinearVelocity1DOutputTrait
+    marshalling.velocity is RealField

@@ -1,0 +1,8 @@
+RoadWheel is Physics3D.System:
+    .doc: """
+The most basic road wheel definition intended for extension, not for direct usage.
+Assumed to have its origin at the Tracks.System origin,
+thereby center_connector can be placed relative the Tracks.System.
+"""
+    local_center_axis is Math.Vec3: Math.Vec3.Z_AXIS()
+    center_connector is Physics3D.Interactions.RedirectedMateConnector

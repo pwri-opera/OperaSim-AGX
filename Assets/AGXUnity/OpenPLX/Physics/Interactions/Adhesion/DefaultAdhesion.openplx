@@ -1,0 +1,4 @@
+DefaultAdhesion:
+    .doc: """
+    An abstract parent type for describing different types of adhesion.
+    """

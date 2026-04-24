@@ -1,0 +1,14 @@
+RedirectedMateConnector is MateConnector:
+    .doc: """
+A mate connector that is intended to be a charge of the redirected_parent.
+It might be convenient to define mate connectors relative to
+a different coordinate system than the body (or system) we like it to be a charge for.
+The local transform of the charge relative the redirected_parent
+will be defined by the mates (and SNAP) and local transforms of the owner of the
+RedirectedMateConnector and the redirected_parent.
+In this way, for example the mate connectors relative the bogie parts of
+a tracked vehicle can be defined in one coordinate system, independent of
+which body they are relative. Then the road wheels of the tracked system can
+SNAP to those positions, after the bogie parts have SNAP'ed in place.
+"""
+    redirected_parent is Physics3D.Bodies.Body reference

@@ -1,0 +1,6 @@
+BoxLinkVariation is DefaultLinkVariation:
+    .doc: """
+Defines the height and width of box shaped links of a belt of a track system.
+"""
+    height_variation is CyclicVariation
+    width_variation is CyclicVariation

@@ -1,0 +1,9 @@
+Torque3DInput is Physics.Signals.Input:
+    .doc: """
+A 3D Torque input given an interaction.
+For interactions where it is unambiguous which torque is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.Torque3D
+    source is Torque3DInputTrait
+    marshalling becomes Vec3Marshalling

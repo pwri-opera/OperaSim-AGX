@@ -1,0 +1,58 @@
+ValueOutputSignal is OutputSignal:
+    value is Value
+    static fn create(v: Value, source: Output) -> ValueOutputSignal
+    static fn from_angle(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_angular_velocity_1d(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_distance(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_force_1d(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_velocity_1d(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_torque_1d(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_rpm(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_acceleration_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_angular_acceleration_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_angular_velocity_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_force_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_torque_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_velocity_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_position_3d(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_rpy(v: Math.Vec3, source: Output) -> ValueOutputSignal
+    static fn from_int(v: Int, source: Output) -> ValueOutputSignal
+    static fn from_bool(v: Bool, source: Output) -> ValueOutputSignal
+    static fn from_fraction(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_duration(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_torque_range(v: Math.Vec2, source: Output) -> ValueOutputSignal
+    static fn from_force_range(v: Math.Vec2, source: Output) -> ValueOutputSignal
+    static fn from_ratio(v: Real, source: Output) -> ValueOutputSignal
+    static fn from_mass(v: Real, source: Output) -> ValueOutputSignal
+
+    fn is_real() -> Bool
+    fn is_vec3() -> Bool
+    fn is_vec2() -> Bool
+    fn is_int() -> Bool
+    fn is_bool() -> Bool
+    fn as_real() -> Real
+    fn as_vec3() -> Math.Vec3
+    fn as_angle() -> Real
+    fn as_angular_velocity_1d() -> Real
+    fn as_distance() -> Real
+    fn as_force_1d() -> Real
+    fn as_velocity_1d() -> Real
+    fn as_torque_1d() -> Real
+    fn as_rpm() -> Real
+    fn as_acceleration_3d() -> Math.Vec3
+    fn as_angular_acceleration_3d() -> Math.Vec3
+    fn as_angular_velocity_3d() -> Math.Vec3
+    fn as_force_3d() -> Math.Vec3
+    fn as_torque_3d() -> Math.Vec3
+    fn as_velocity_3d() -> Math.Vec3
+    fn as_position_3d() -> Math.Vec3
+    fn as_rpy() -> Math.Vec3
+    fn as_int() -> Int
+    fn as_bool() -> Bool
+    fn as_fraction() -> Real
+    fn as_duration() -> Real
+    fn as_vec2() -> Math.Vec2
+    fn as_torque_range() -> Math.Vec2
+    fn as_force_range() -> Math.Vec2
+    fn as_ratio() -> Real
+    fn as_mass() -> Real

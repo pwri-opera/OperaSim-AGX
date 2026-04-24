@@ -1,0 +1,9 @@
+LinearVelocity1DInput is Input:
+    .doc: """
+A scalar velocity input given an interaction.
+For interactions where it is unambiguous which velocity that is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.Velocity1D
+    source is LinearVelocity1DInputTrait
+    marshalling.velocity is RealField

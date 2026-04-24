@@ -1,0 +1,5 @@
+trait LidarHorizontalResolution2048:
+    .doc: """
+    A trait that adds a horizontal resolution of 2048 to a LIDAR
+    """
+    logic.ray_source.horizontal_resolution: 2048

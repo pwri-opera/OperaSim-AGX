@@ -1,0 +1,42 @@
+Shovel:
+    .doc: """
+    A Shovel can be used to modify terrain.
+    body - the rigid body of the shovel
+    top_edge - a line that defines the upper edge of the shovel opening
+    cutting_edge - a line that defines the lowest edge on the shovel opening
+    enabled - only a enabled shovel can be used for digging in terrain
+    tooth_direction - the direction of the digging teeth on the shovel
+    number_teeth - number of teeth on cutting edge of the shovel
+    tooth_min_radius - minimum radius of the shovel's teeth
+    tooth_max_radius - minimum radius of the shovel's teeth
+    tooth_length - length of shovel's teeth
+
+    Example:
+
+    Scene is Physics3D.System:
+        shovel_body is ShovelRigidBody
+        shovel is Terrain.Shovel:
+            body: shovel_body
+            top_edge: Math.Line.from_points(shovel_body.top_left, shovel_body.top_right)
+            cutting_edge: Math.Line.from_points(shovel_body.bottom_left, shovel_body.bottom_right)
+
+    """
+    with Physics.Signals.MassOutputTrait
+
+    body is Physics3D.Bodies.RigidBody
+    top_edge is Math.Line
+    cutting_edge is Math.Line
+    enabled is Bool: true
+
+    tooth_direction is Math.Vec3
+    number_teeth is Int: Math.Functions.ceil(cutting_edge.length() / 0.5)
+    tooth_min_radius is Real: 0.015
+    tooth_max_radius is Real: 0.075
+    tooth_length is Real: 0.15
+
+    total_soil_mass_output is Physics.Signals.MassOutput:
+        source: this
+        enabled: false
+    inner_soil_mass_output is Physics.Signals.MassOutput:
+        source: this
+        enabled: false

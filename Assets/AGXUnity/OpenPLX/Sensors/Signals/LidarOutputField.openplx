@@ -1,0 +1,15 @@
+const LidarOutputField:
+    # General fields
+    TimeStamp_F64 is Int: 1     # Detection time stamp [seconds]
+
+    # Point location fields
+    Position3D_F32 is Int: 11   # Hit point relative to sensor [meter vec3]
+    Distance_F32 is Int: 12     # Hit distance from emission [meter]
+    RayPose3x4_F32 is Int: 13   # Ray emission pose relative to sensor [1 matrix3x4]
+
+    # Hit information fields
+    IsHit_I32 is Int: 21        # Is hit flag [1]
+    Intensity_F32 is Int: 22    # Emission-relative detected intensity of the hit point [1]
+
+    # Ground truth fields
+    EntityId_I32 is Int: 31     # Id of the scene entity that was hit [1]

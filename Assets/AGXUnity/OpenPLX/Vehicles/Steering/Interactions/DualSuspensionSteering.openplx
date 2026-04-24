@@ -1,0 +1,10 @@
+DualSuspensionSteering is Physics.Interactions.Interaction:
+    .doc: """
+Base class for various steering mechanisms, given two SingleMateSuspensions,
+both having the compatible steering trait.
+"""
+    knuckle_angle is Real
+    knuckle_length is Real
+    left_suspension is Vehicles.Suspensions.SingleMateSuspension with Vehicles.Suspensions.Traits.Steering reference
+    right_suspension is Vehicles.Suspensions.SingleMateSuspension with Vehicles.Suspensions.Traits.Steering reference
+    connectors: []

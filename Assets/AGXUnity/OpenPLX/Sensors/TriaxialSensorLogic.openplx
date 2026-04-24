@@ -1,0 +1,12 @@
+TriaxialRange:
+    x is Math.Vec2
+    y is Math.Vec2
+    z is Math.Vec2
+
+TriaxialSensorLogic is SensorLogic:
+    .doc: """
+    Logical functioning of a sensor with three axes of operation.
+    """
+    range is TriaxialRange
+    cross_axis_sensitivity is Math.Matrix3x3
+    zero_bias is Math.Vec3

@@ -1,0 +1,9 @@
+Position1DInput is Input:
+    .doc: """
+A scalar position input given an interaction.
+For interactions where it is unambiguous which position is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.Position1D
+    source is Position1DInputTrait
+    marshalling.position is RealField

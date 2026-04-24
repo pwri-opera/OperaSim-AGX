@@ -1,3 +1,0 @@
-<Entity name="Mesh" source="Shape">
-  <!-- <Attribute.Scalar name="localBound" type="BoundingAABB"/> -->
-</Entity>

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using AGXUnity.Model;
+﻿using AGXUnity.Model;
 using AGXUnityEditor.Utils;
-
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 using GUI = AGXUnity.Utils.GUI;
 using Object = UnityEngine.Object;
 
@@ -37,13 +36,13 @@ namespace AGXUnityEditor.Tools
         UndoRedoRecordObject = Shovel,
         TransformResult      = OnEdgeResult
       } );
-      AddChild( new LineTool( Shovel.CuttingDirection )
+      AddChild( new LineTool( Shovel.ToothDirection )
       {
         Color                = Color.green,
-        Name                 = "Cutting Direction",
+        Name                 = "Teeth Direction",
         IsSingleInstanceTool = false,
         UndoRedoRecordObject = Shovel,
-        TransformResult      = OnCuttingDirectionResult,
+        TransformResult      = OnToothDirectionResult,
         Mode                 = LineTool.ToolMode.Direction,
         DirectionArrowLength = 0.5f
       } );
@@ -61,8 +60,7 @@ namespace AGXUnityEditor.Tools
       var shouldValidateEdges = !EditorApplication.isPlaying &&
                                 m_requestEdgeValidate &&
                                 TopEdgeLineTool.Line.Valid &&
-                                CuttingEdgeLineTool.Line.Valid &&
-                                CuttingDirectionLineTool.Line.Valid;
+                                CuttingEdgeLineTool.Line.Valid;
       if ( shouldValidateEdges ) {
         m_edgeIssues.Clear();
 
@@ -71,24 +69,29 @@ namespace AGXUnityEditor.Tools
         var rayCenter    = 0.5f * ( CuttingEdgeLineTool.Line.Center + TopEdgeLineTool.Line.Center );
         var rayDir       = Vector3.Cross( cuttingDir, cuttingToTop ).normalized;
 
-        if ( Vector3.Dot( cuttingDir, TopEdgeLineTool.Line.Direction ) < 0.95f )
+
+        var absDot = Mathf.Abs(Vector3.Dot( cuttingDir, TopEdgeLineTool.Line.Direction ));
+        if ( absDot < 0.95f )
           m_edgeIssues.Add( "\u2022 " +
                             GUI.AddColorTag( "Top", Color.Lerp( Color.yellow, Color.white, 0.35f ) ) +
                             " and " +
                             GUI.AddColorTag( "Cutting", Color.Lerp( Color.red, Color.white, 0.35f ) ) +
-                            " edge direction expected to be approximately parallel with dot product > 0.95, currently: " +
-                            GUI.AddColorTag( Vector3.Dot( cuttingDir, TopEdgeLineTool.Line.Direction ).ToString(), Color.red ) );
+                            " edge direction expected to be approximately parallel with (absolute) dot product > 0.95, currently: " +
+                            GUI.AddColorTag( absDot.ToString(), Color.red ) );
         if ( !Utils.Raycast.Intersect( new Ray( rayCenter, rayDir ), Shovel.GetComponentsInChildren<MeshFilter>() ).Hit )
           m_edgeIssues.Add( "\u2022 " +
                             GUI.AddColorTag( "Top", Color.Lerp( Color.yellow, Color.white, 0.35f ) ) +
                             " and " +
                             GUI.AddColorTag( "Cutting", Color.Lerp( Color.red, Color.white, 0.35f ) ) +
                             " edges appears to be directed in the wrong way - raycast from center bucket plane into the bucket didn't hit the bucket." );
-        if ( Vector3.Dot( rayDir, CuttingDirectionLineTool.Line.Direction ) > -0.5f )
-          m_edgeIssues.Add( "\u2022 " +
-                            GUI.AddColorTag( "Cutting direction", Color.Lerp( Color.green, Color.white, 0.35f ) ) +
-                            " appears to be directed towards the bucket - it should be in the bucket separation plate plane, directed out from the bucket." );
-
+        if ( ToothDirectionLineTool.Line != null ) {
+          var teethAbsDot  = Mathf.Abs(Vector3.Dot( CuttingEdgeLineTool.Line.Direction, ToothDirectionLineTool.Line.Direction ));
+          if ( Shovel.HasTeeth && teethAbsDot > 0.05f )
+            m_edgeIssues.Add( "\u2022 " +
+                              GUI.AddColorTag( "Tooth Direction", Color.Lerp( Color.green, Color.white, 0.35f ) ) +
+                              " expected to be aproximately orthogonal to currting direction with (absolute) dot product < 0.05, currently: " +
+                              GUI.AddColorTag( teethAbsDot.ToString(), Color.red ) );
+        }
         m_requestEdgeValidate = false;
       }
     }
@@ -104,14 +107,17 @@ namespace AGXUnityEditor.Tools
 
       HandleLineToolInspectorGUI( CuttingEdgeLineTool, "Cutting Edge" );
 
-      HandleLineToolInspectorGUI( CuttingDirectionLineTool, "Cutting Direction" );
+      Shovel.HasTeeth = EditorGUILayout.Toggle( "Has Teeth", Shovel.HasTeeth );
+      ToothDirectionLineTool.EnableRendering = Shovel.HasTeeth;
+      if ( Shovel.HasTeeth )
+        HandleLineToolInspectorGUI( ToothDirectionLineTool, "Tooth Direction" );
 
       m_requestEdgeValidate = true;
     }
 
     private void HandleLineToolInspectorGUI( LineTool lineTool, string name )
     {
-      using (new DirtyOnLineChangeScope( Shovel, lineTool.Line ) ) {
+      using ( new DirtyOnLineChangeScope( Shovel, lineTool.Line ) ) {
         // If visible, the vertical maker starts under the foldout, otherwise
         // render the marker through the fouldout label.
         var isVisible = GetLineToggleData( name ).Bool;
@@ -137,9 +143,9 @@ namespace AGXUnityEditor.Tools
       get { return FindActive<LineTool>( tool => tool.Line == Shovel.CuttingEdge ); }
     }
 
-    private LineTool CuttingDirectionLineTool
+    private LineTool ToothDirectionLineTool
     {
-      get { return FindActive<LineTool>( tool => tool.Line == Shovel.CuttingDirection ); }
+      get { return FindActive<LineTool>( tool => tool.Line == Shovel.ToothDirection ); }
     }
 
     private EditorDataEntry GetLineToggleData( string name )
@@ -170,7 +176,7 @@ namespace AGXUnityEditor.Tools
       return result;
     }
 
-    private EdgeDetectionTool.EdgeSelectResult OnCuttingDirectionResult( EdgeDetectionTool.EdgeSelectResult result )
+    private EdgeDetectionTool.EdgeSelectResult OnToothDirectionResult( EdgeDetectionTool.EdgeSelectResult result )
     {
       var refCamera = FindDirectionReferenceCamera();
       if ( refCamera == null )

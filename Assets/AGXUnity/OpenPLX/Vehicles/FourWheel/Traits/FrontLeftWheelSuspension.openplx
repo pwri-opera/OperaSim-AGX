@@ -1,0 +1,8 @@
+trait FrontLeftWheelSuspension:
+    front_left_suspension becomes Vehicles.Suspensions.LinearSpringDamper:
+        mate becomes Vehicles.Suspensions.Interactions.LinearSpringDamperMate with Vehicles.Suspensions.Traits.Steering
+        attachment_connector: front_left_wheel.connector
+        chassis_connector: chassis.front_left_connector
+    chassis.front_left_connector is Vehicles.Suspensions.Interactions.Connector:
+        forward_vector: chassis.forward_vector
+        up_vector: chassis.up_vector

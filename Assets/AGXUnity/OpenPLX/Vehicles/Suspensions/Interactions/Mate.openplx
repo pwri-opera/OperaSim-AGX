@@ -1,0 +1,14 @@
+Mate is Physics3D.Interactions.Mate:
+    .doc: """
+A Suspensions.Interactions.Mate defines a single constraint connection for attaching a surface interacting object
+(such as a wheel, track etc) to a chassis or the world.
+By default is has a rotating degree of freedom for a rotating wheel around the main_axis of the connectors.
+If the Vehicles.Suspensions.Traits.Steering trait is given to the owning Suspension, that opens up a second degree of freedom,
+orthogonal to the wheel axis along the normal, so that a Steering interaction can be introduced.
+
+chassis_connector    - The connector that is relative the chassis, and defines the geometry for the suspension.
+attachment_connector - A reference to the object that is attached to the chassis by the suspension
+"""
+    chassis_connector is Vehicles.Suspensions.Interactions.Connector reference
+    attachment_connector is Physics3D.Interactions.MateConnector reference
+    connectors: [chassis_connector, attachment_connector]

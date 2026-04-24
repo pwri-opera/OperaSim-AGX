@@ -1,0 +1,6 @@
+PulsedLidarLogic is LidarLogic:
+    with Optics.Traits.PulsedBeamEmitter
+    with Optics.Traits.DistortedRayEmission
+    .doc: """
+    Logical functioning of a pulsed lidar sensor.
+    """

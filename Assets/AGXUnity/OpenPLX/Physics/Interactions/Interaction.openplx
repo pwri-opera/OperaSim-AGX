@@ -1,0 +1,16 @@
+Interaction:
+    with Physics.Signals.BoolInputTrait
+    with Physics.Signals.BoolOutputTrait
+    .doc: """
+Base type for Interaction
+Examples of interactions are force fields, hinges or static electricity
+"""
+    connectors is Physics.Interactions.Connector[]
+
+    enabled is Bool: true
+
+    enable_interaction_input is Physics.Signals.EnableInteractionInput:
+        source: this
+    interaction_enabled_output is Physics.Signals.InteractionEnabledOutput:
+        source: this
+        enabled: false

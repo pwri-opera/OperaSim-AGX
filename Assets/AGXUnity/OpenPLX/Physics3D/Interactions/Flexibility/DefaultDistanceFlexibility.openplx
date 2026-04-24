@@ -1,0 +1,5 @@
+DefaultDistanceFlexibility is DefaultMateFlexibility:
+    .doc: """
+    Defines one flexibility model for each constrained degree of freedom for a Distance
+    """
+    along_distance is Physics.Interactions.Flexibility.DefaultFlexibility

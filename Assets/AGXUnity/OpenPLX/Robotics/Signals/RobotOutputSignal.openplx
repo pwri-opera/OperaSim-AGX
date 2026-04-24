@@ -1,0 +1,16 @@
+RobotOutputSignal is Physics.Signals.OutputSignal:
+    .doc: """
+The output signal of a robot.
+sensor_values are named sensor values
+
+angles, angular_velocities and torques are per joint in the order defined in RobotOutput
+object_values are object values in the order defined in RobotOutput
+    """
+    sensor_values is SensorValues[]
+
+    angles is Real[]
+    angular_velocities is Real[]
+    torques is Real[]
+    object_values is Physics.Signals.Value[]
+
+    static fn create(source_angle_signals: Physics.Signals.ValueOutputSignal[], source_angular_velocity_signals: Physics.Signals.ValueOutputSignal[], source_torque_signals: Physics.Signals.ValueOutputSignal[], object_values: Physics.Signals.Value[], sensor_values: Robotics.Signals.SensorValues[], source: Physics.Signals.Output) -> RobotOutputSignal

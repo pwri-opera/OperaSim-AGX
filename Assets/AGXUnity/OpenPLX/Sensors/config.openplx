@@ -1,0 +1,5 @@
+
+config is BundleConfig:
+    name: "Sensors"
+    version: "0.20.2"
+    dependencies: ["Physics==0.20.2", "Physics1D==0.20.2", "Physics3D==0.20.2", "DriveTrain==0.20.2"]

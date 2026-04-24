@@ -1,0 +1,9 @@
+Torque1DOutput is Output:
+    .doc: """
+A scalar Torque output given an interaction.
+For interactions where it is unambiguous which torque is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.Torque1D
+    source is Torque1DOutputTrait
+    marshalling.torque is RealField

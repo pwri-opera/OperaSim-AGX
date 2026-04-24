@@ -1,0 +1,6 @@
+DiscretePulseVariation is CyclicVariation:
+    .doc: """
+A variation of a descrete pattern, where every N'th value will increase with the additional_amplitude.    
+"""
+    additional_amplitude is Real
+    discrete_period is Int

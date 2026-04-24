@@ -1,0 +1,7 @@
+BoolInput is Input:
+    .doc: """
+An Input that is a boolean.
+"""
+    type: Physics.Signals.InputOutputType.Boolean
+    source is BoolInputTrait
+    marshalling.value is BoolField

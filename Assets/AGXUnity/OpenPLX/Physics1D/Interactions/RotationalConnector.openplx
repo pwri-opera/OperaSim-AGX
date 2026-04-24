@@ -1,0 +1,2 @@
+RotationalConnector is MateConnector:
+    angle is Real: 0

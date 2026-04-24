@@ -1,0 +1,9 @@
+CylindricalRoller is CylindricalRoadWheel:
+    .doc:  """
+Rollers, both road rollers and return rollers, in tracked vehicles
+are the wheels that bear the weight of the vehicle or guide the track
+on its return path after it leaves the sprocket.
+They spin freely and are not motorized. 
+They facilitate the movement of the tracks around the path.
+"""
+    

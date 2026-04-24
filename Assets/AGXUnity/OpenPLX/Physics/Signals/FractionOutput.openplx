@@ -1,0 +1,8 @@
+FractionOutput is Output:
+    .doc: """
+An Output that is a fraction.
+Preferrably between zero and one, but not forced to be.
+"""
+    type: Physics.Signals.InputOutputType.Percentage
+    source is FractionOutputTrait
+    marshalling.value is RealField

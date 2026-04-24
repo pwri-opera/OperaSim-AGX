@@ -1,0 +1,9 @@
+AngularVelocity1DInput is Input:
+    .doc: """
+A scalar angular velocity input given an interaction.
+For interactions where it is unambiguous which angular velocity is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.AngularVelocity1D
+    source is AngularVelocity1DInputTrait
+    marshalling.angular_velocity is RealField

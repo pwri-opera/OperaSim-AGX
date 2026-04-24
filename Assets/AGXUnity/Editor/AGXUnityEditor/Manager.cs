@@ -1,11 +1,12 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using AGXUnity.Utils;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.PackageManager;
+using UnityEditor.SceneManagement;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace AGXUnityEditor
@@ -78,20 +79,20 @@ namespace AGXUnityEditor
 
       // If compatibility issues, this method will try to fix them and this manager
       // will probably be loaded again after the fix.
-      if ( m_environmentState == EnvironmentState.Initialized && !VerifyCompatibility() )
+      if ( !VerifyCompatibility() )
         return;
 
-#if UNITY_2019_1_OR_NEWER
-      SceneView.duringSceneGui += OnSceneView;
-#else
-      SceneView.onSceneGUIDelegate += OnSceneView;
-#endif
+      VerifyDependencies();
 
-#if UNITY_2018_1_OR_NEWER
+      // Initializes AGX Dynamics. We're trying to be first to do this, preventing:
+      //   - Recursive Serialization is not supported. You can't dereference a PPtr while loading.
+      // when e.g., starting Unity with an empty scene and click on a (agx) restored prefab
+      // in project tab, loading RestoredAGXFile. No clue why this error appears.
+      AGXUnity.NativeHandler.Instance.Register( null );
+
+      SceneView.duringSceneGui += OnSceneView;
+
       EditorApplication.hierarchyChanged += OnHierarchyWindowChanged;
-#else
-      EditorApplication.hierarchyWindowChanged += OnHierarchyWindowChanged;
-#endif
 
       Selection.selectionChanged += OnSelectionChanged;
 
@@ -112,7 +113,21 @@ namespace AGXUnityEditor
 
       CreateDefaultAssets();
 
+      if ( PatchHelper.SceneNeedsPatch() )
+        EditorApplication.update += PatchOnUpdate;
+
+      EditorSceneManager.sceneOpened += ( _, _ ) => {
+        if ( PatchHelper.SceneNeedsPatch() )
+          EditorApplication.update += PatchOnUpdate;
+      };
+
       PrefabUtility.prefabInstanceUpdated += AssetPostprocessorHandler.OnPrefabCreatedFromScene;
+    }
+
+    private static void PatchOnUpdate()
+    {
+      PatchHelper.ApplyPatches();
+      EditorApplication.update -= PatchOnUpdate;
     }
 
     public enum EditorWindowType
@@ -291,7 +306,7 @@ namespace AGXUnityEditor
         return;
 
       // TODO: Fix so that "MouseOver" works for newly created primitives.
-     if ( primitive.Node.transform.parent != VisualsParent )
+      if ( primitive.Node.transform.parent != VisualsParent )
         VisualsParent.AddChild( primitive.Node );
 
       m_visualPrimitives.Add( primitive );
@@ -308,28 +323,24 @@ namespace AGXUnityEditor
       GameObject.DestroyImmediate( primitive.Node );
     }
 
-    internal static bool HasPlayerNetCompatibilityIssueWarning()
+    internal static bool HasNetRuntimeCompatibilityIssueWarning()
     {
-      return HasPlayerNetCompatibility( "warning" );
+      return HasNetRuntimeCompatibility( "warning" );
     }
 
-    internal static bool HasPlayerNetCompatibilityIssueError()
+    internal static bool HasNetRuntimeCompatibilityIssueError()
     {
-      return HasPlayerNetCompatibility( "error" );
+      return HasNetRuntimeCompatibility( "error" );
     }
 
-    private static bool HasPlayerNetCompatibility( string infoWarningOrError )
+    private static bool HasNetRuntimeCompatibility( string infoWarningOrError )
     {
-      // WARNING INFO:
-      //     Unity 2018, 2019: AGX Dynamics for Unity compiles but undefined behavior
-      //                       in players with API compatibility @ .NET Standard 2.0.
-      if ( PlayerSettings.GetApiCompatibilityLevel( BuildTargetGroup.Standalone ) != ApiCompatibilityLevel.NET_4_6 ) {
-        var apiCompatibilityLevelName =
-#if UNITY_2021_2_OR_NEWER
-          ".NET Framework";
+#if UNITY_2023_3_OR_NEWER
+      var hasMonoRuntime = PlayerSettings.GetScriptingBackend( UnityEditor.Build.NamedBuildTarget.Standalone ) == ScriptingImplementation.Mono2x;
 #else
-          ".NET 4.x";
+      var hasMonoRuntime = PlayerSettings.GetScriptingBackend( BuildTargetGroup.Standalone ) == ScriptingImplementation.Mono2x;
 #endif
+      if ( !hasMonoRuntime ) {
         string prefix = string.Empty;
         if ( infoWarningOrError == "info" )
           prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>INFO:</b> ", Color.white );
@@ -339,8 +350,8 @@ namespace AGXUnityEditor
           prefix = AGXUnity.Utils.GUI.AddColorTag( "<b>ERROR:</b> ", Color.red );
 
         var message = prefix +
-                      $"AGX Dynamics for Unity requires .NET API compatibility level: {apiCompatibilityLevelName}.\n" +
-                      $"<b>AGXUnity -> Settings -> .NET Compatibility Level</b>";
+                      $"AGX Dynamics for Unity requires Mono .NET Runtime: .\n" +
+                      $"<b>AGXUnity -> Settings -> .NET Runtime</b>";
         if ( infoWarningOrError == "info" )
           Debug.Log( message );
         else if ( infoWarningOrError == "warning" )
@@ -388,10 +399,7 @@ namespace AGXUnityEditor
     private static void UndoRedoPerformedCallback()
     {
       // Trigger repaint of inspector GUI for our targets.
-      var targets = ToolManager.ActiveTools.SelectMany( tool => tool.Targets );
-      foreach ( var target in targets )
-        if ( target != null )
-          EditorUtility.SetDirty( target );
+      UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
 
       // Collecting scripts that may require synchronize of
       // data post undo/redo where the private serialized
@@ -454,6 +462,7 @@ namespace AGXUnityEditor
       foreach ( var customTargetTool in ToolManager.ActiveTools )
         customTargetTool.OnUndoRedo();
 
+      var targets = ToolManager.ActiveTools.SelectMany( tool => tool.Targets );
       if ( targets.Count() > 0 )
         SceneView.RepaintAll();
 
@@ -472,18 +481,7 @@ namespace AGXUnityEditor
     /// </summary>
     public static void OnEditorTargetsDeleted()
     {
-      var undoGroupId = Undo.GetCurrentGroup();
 
-      // Deleted RigidBody component leaves dangling MassProperties
-      // so we've to delete them explicitly.
-      var mps = Object.FindObjectsOfType<AGXUnity.MassProperties>();
-      foreach ( var mp in mps ) {
-        if ( mp.RigidBody == null ) {
-          Undo.DestroyObjectImmediate( mp );
-        }
-      }
-
-      Undo.CollapseUndoOperations( undoGroupId );
     }
 
     private static void OnSceneView( SceneView sceneView )
@@ -530,9 +528,7 @@ namespace AGXUnityEditor
         EditorData.Instance.GC();
     }
 
-#if UNITY_2020_1_OR_NEWER
     private static double s_lastPickGameObjectTime = 0.0;
-#endif
 
     private static bool TimeToPick()
     {
@@ -542,15 +538,11 @@ namespace AGXUnityEditor
       // and that takes a lot of time (e.g., a scene with many
       // constraints). With this we're only calling PickGameObject
       // in at maximum 10 times per second.
-#if UNITY_2020_1_OR_NEWER
       if ( EditorApplication.timeSinceStartup - s_lastPickGameObjectTime > 0.1 ) {
         s_lastPickGameObjectTime = EditorApplication.timeSinceStartup;
         return true;
       }
       return false;
-#else
-      return true;
-#endif
     }
 
     public static void UpdateMouseOverPrimitives( Event current, bool forced = false )
@@ -783,7 +775,7 @@ namespace AGXUnityEditor
         // to RUNTIME_PATH (for entities and components). The license file is
         // searched for by the license manager.
         var dataAndRuntimePath = AGXUnity.IO.Environment.Get( AGXUnity.IO.Environment.Variable.AGX_PLUGIN_PATH );
-        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataAndRuntimePath );
+        envInstance.getFilePath( agxIO.Environment.Type.RESOURCE_PATH ).pushbackPath( dataAndRuntimePath + "/data" );
         envInstance.getFilePath( agxIO.Environment.Type.RUNTIME_PATH ).pushbackPath( dataAndRuntimePath );
       }
       // Check if user would like to initialize AGX Dynamics with an
@@ -804,11 +796,9 @@ namespace AGXUnityEditor
         return EnvironmentState.Uninitialized;
       }
 
-      HasPlayerNetCompatibilityIssueWarning();
-
       return EnvironmentState.Initialized;
 #endif
-      }
+    }
 
     private static bool HandleScriptReload( bool success )
     {
@@ -822,12 +812,8 @@ namespace AGXUnityEditor
         if ( (float)EditorApplication.timeSinceStartup - lastRequestData.Float > 10.0f ) {
           lastRequestData.Float = (float)EditorApplication.timeSinceStartup;
           lastRequestData.Bool = true;
-#if UNITY_2019_3_OR_NEWER
           Debug.LogWarning( "AGX Dynamics binaries aren't properly loaded into Unity - requesting Unity to reload assemblies..." );
           EditorUtility.RequestScriptReload();
-#else
-          Debug.LogWarning( "AGX Dynamics binaries aren't properly loaded into Unity - restart Unity manually." );
-#endif
         }
       }
 
@@ -882,7 +868,6 @@ namespace AGXUnityEditor
         result = VerifyDotNetAssemblyCompatibility( dotNetAssemblyName ) &&
                  result;
 
-#if UNITY_2019_4_OR_NEWER
       if ( !result ) {
         var defineSymbol = "AGX_DYNAMICS_UPDATE_REBUILD";
         if ( Build.DefineSymbols.Contains( defineSymbol ) )
@@ -890,7 +875,6 @@ namespace AGXUnityEditor
         else
           Build.DefineSymbols.Add( defineSymbol );
       }
-#endif
 
       return result;
     }
@@ -905,12 +889,6 @@ namespace AGXUnityEditor
       if ( installedDll == null || !installedDll.Exists )
         return true;
 
-      // Initializes AGX Dynamics. We're trying to be first to do this, preventing:
-      //   - Recursive Serialization is not supported. You can't dereference a PPtr while loading.
-      // when e.g., starting Unity with an empty scene and click on a (agx) restored prefab
-      // in project tab, loading RestoredAGXFile. No clue why this error appears.
-      AGXUnity.NativeHandler.Instance.Register( null );
-
       if ( !currDll.Exists || HasBeenChanged( currDll, installedDll ) ) {
         Debug.Log( $"<color=green>New version of {dotNetAssemblyName} located in: " + installedDll.Directory + ". Copying it to current project.</color>" );
         installedDll.CopyTo( localDllFilename, true );
@@ -918,6 +896,20 @@ namespace AGXUnityEditor
       }
 
       return true;
+    }
+
+    public static void VerifyDependencies()
+    {
+      var infos = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages();
+      var info = infos.Where( i => i.name == "com.unity.shadergraph" ).FirstOrDefault();
+      if ( info == null ) {
+        bool install = EditorUtility.DisplayDialog(
+          "Install shadergraph dependency",
+          "The Shader Graph package is not installed in the current project. AGXUnity requires the Shader Graph package to render it's components properly. If it is not installed, some components will fail to render",
+          "Install", "Ignore" );
+        if ( install )
+          Client.Add( "com.unity.shadergraph" );
+      }
     }
 
     private static T GetOrCreateAsset<T>( string assetPath, Func<T> createFunc = null )

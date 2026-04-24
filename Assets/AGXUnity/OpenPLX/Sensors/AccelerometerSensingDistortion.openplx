@@ -1,0 +1,5 @@
+AccelerometerSensingDistortion is Distortion:
+    .doc:"""
+    An error in the structural or electronic internals of the accelerometer distorting the sensor
+    output.
+    """

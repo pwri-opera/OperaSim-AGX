@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AGXUnity.Utils;
+using System;
 using UnityEngine;
 
 namespace AGXUnity
@@ -16,7 +17,7 @@ namespace AGXUnity
   /// assert( rb.Native != null );
   /// </example>
   [HelpURL( "https://us.download.algoryx.se/AGXUnity/documentation/current/editor_interface.html#components" )]
-  public abstract class ScriptComponent : MonoBehaviour
+  public abstract class ScriptComponent : MonoBehaviour, IPropertySynchronizable, ISerializationCallbackReceiver
   {
     public enum States
     {
@@ -34,6 +35,41 @@ namespace AGXUnity
     {
       IsSynchronizingProperties = false;
     }
+
+    // Version log:
+    // 1 - Migrate shovel cutting direction to tooth direction
+    private const int CurrentSerializationVersion = 1;
+
+    [SerializeField]
+    [HideInInspector]
+    protected int m_serializationVersion = -1;
+
+    public void OnBeforeSerialize()
+    {
+      m_serializationVersion = CurrentSerializationVersion;
+    }
+
+    public void OnAfterDeserialize()
+    {
+      if ( m_serializationVersion != CurrentSerializationVersion ) {
+        if ( PerformMigration() ) {
+          Debug.Log( $"Performed automatic migration of a component with type '{this.GetType()}'" );
+#if UNITY_EDITOR
+          // Ensure the migration is saved
+          UnityEditor.EditorApplication.delayCall += () => {
+            if ( this != null )
+              UnityEditor.EditorUtility.SetDirty( this );
+          };
+#endif
+        }
+      }
+    }
+
+    /// <summary>
+    /// Implement this to recieve a callback when an old version of a ScriptComponent is deserialized.
+    /// </summary>
+    /// <returns>True if migrations were made, false otherwise</returns>
+    protected virtual bool PerformMigration() => false;
 
     /// <summary>
     /// Returns native simulation object unless the scene is being
@@ -64,6 +100,8 @@ namespace AGXUnity
     /// </summary>
     [HideInInspector]
     public bool IsSynchronizingProperties { get; private set; }
+
+    public static event System.Action<ScriptComponent> OnInitialized;
 
     /// <summary>
     /// Cached synchronized properties.
@@ -104,6 +142,8 @@ namespace AGXUnity
           if ( Application.isPlaying )
             m_uuidHash = Simulation.Instance.ContactCallbacks.Map( this );
         }
+
+        OnInitialized?.Invoke( this );
       }
 
       return State == States.INITIALIZED ? this : null;

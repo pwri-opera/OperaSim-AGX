@@ -1,0 +1,14 @@
+ScaniaK310UB4X2Euro5 is DriveTrain.MeanValueEngine:
+    .doc: """
+        Used in Scania Bus.
+        Reference: https://www.scania.com/content/dam/scanianoe/market/au/products-and-services/buses-and-coaches/spec-sheets/SCA03642AxelCityBusSpecSheet_SAU2016-7-KCity_4x2_WEB.pdf
+    """
+    displacement_volume: 0.009
+    max_torque: 1550.0
+    max_torque_RPM: 1225.0
+    max_power_RPM: 1900.0
+    idle_RPM: 900.0
+    max_RPM: 3500.0
+    crank_shaft_inertia: 3.5
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

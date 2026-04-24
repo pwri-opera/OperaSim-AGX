@@ -1,0 +1,7 @@
+trait OrenNayarReflectionModel:
+    .doc: """
+    A trait allowing the addition of a rough diffuse Oren-Nayar reflection to the surface of a
+    geometry.
+    """
+    diffuse_reflectivity is Real
+    oren_nayar_roughness is Real

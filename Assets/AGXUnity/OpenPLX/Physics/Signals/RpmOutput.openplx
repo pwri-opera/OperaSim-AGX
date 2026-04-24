@@ -1,0 +1,7 @@
+RpmOutput is Output:
+    .doc: """
+A revolutions per minute output.
+"""
+    type: Physics.Signals.InputOutputType.Rpm
+    source is RpmOutputTrait
+    marshalling.rpm is RealField

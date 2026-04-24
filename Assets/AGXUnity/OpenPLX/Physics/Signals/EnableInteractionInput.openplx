@@ -1,0 +1,5 @@
+EnableInteractionInput is BoolInput:
+    .doc: """
+An Input that is a boolean specifying if a interaction should
+be enabled or disabled.
+"""

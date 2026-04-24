@@ -1,0 +1,12 @@
+DefaultDryFriction is DefaultFriction:
+    .doc: """
+    Used to specify the default dry friction model for the runtime environment.
+    Dry friction is the resistance to relative motion between two solid surfaces in contact
+    when there is no lubrication or fluid present between them.
+    It occurs due to intermolecular interactions at the contact points between
+    the surfaces and is proportional to the normal force pressing the surfaces together.
+    Dry friction is characterized by the existence of a friction coefficient
+    that determines the magnitude of the frictional force opposing motion
+    or impending motion between the surfaces.
+    """
+    coefficient is Real: 0.1

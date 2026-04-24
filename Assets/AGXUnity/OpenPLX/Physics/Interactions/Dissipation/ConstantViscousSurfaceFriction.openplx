@@ -1,0 +1,11 @@
+ConstantViscousSurfaceFriction is DefaultFriction:
+    .doc: """
+    Use the ConstantViscousSurfaceFriction to specify the a viscous friction model
+    with constant viscosity between two surfaces.
+
+    The unit for the surface viscosity is [N * s / m] or [Pa * s / m]
+
+    The viscosity is only valid for values >= 0.
+    If set to infinity, a rigid coupling is assumed.
+    """
+    viscosity is Real

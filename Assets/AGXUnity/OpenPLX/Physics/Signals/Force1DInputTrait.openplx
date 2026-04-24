@@ -1,0 +1,5 @@
+trait Force1DInputTrait:
+    .doc: """
+A trait that can be implemented for interactions that have an non ambiguous
+interpretation of a 1D force signal input.
+"""

@@ -1,0 +1,5 @@
+trait PulsedBeamEmitter is BeamEmitter:
+    .doc: """
+    Trait for models that emit (non-continuous) pulsed (non-infinitesimal) beams.
+    """
+    wavelength is Real

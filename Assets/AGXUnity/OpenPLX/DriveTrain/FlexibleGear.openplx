@@ -1,0 +1,13 @@
+
+FlexibleGear is Gear:
+    .doc: """
+The FlexibleGear is a rotational coupling designed to connect
+two RotationalBodies while introducing the ability to flex under load.
+This model incorporates parameters for stiffness and damping,
+allowing it to absorb energy and adapt to variations in force.
+It facilitates a linear relationship in rotational speed and position
+between two Physics1D.Bodies.RotationalBody instances using a specified gear ratio,
+providing resilience and adaptability compared to an ideal gear.
+"""
+    flexibility is Physics.Interactions.Flexibility.DefaultFlexibility
+    dissipation is Physics.Interactions.Dissipation.DefaultDissipation

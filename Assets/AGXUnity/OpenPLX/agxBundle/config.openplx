@@ -1,0 +1,5 @@
+config is BundleConfig:
+    name: "AGX"
+    version: "1.0.0"
+    dependencies: ["Physics1D", "Physics3D", "DriveTrain", "Robotics", "Sensors", "Vehicles", "Terrain", "Visuals", "Simulation", "Urdf"]
+

@@ -1,0 +1,6 @@
+SensorLogic:
+    .doc: """
+    The logical functioning of a sensor as detached from its physical body; The sensing
+    capabilities and the produced output, but no physical presence.
+    """
+    sensing_distortions is Distortion[]: []

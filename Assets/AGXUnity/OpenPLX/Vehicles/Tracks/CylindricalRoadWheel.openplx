@@ -1,0 +1,7 @@
+CylindricalRoadWheel is IntertialRoadWheel:
+    .doc: """
+A RoadWheel that is assumed to be cylindrical.
+"""
+    radius is Real
+    width is Real
+    

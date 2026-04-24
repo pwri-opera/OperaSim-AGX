@@ -1,0 +1,4 @@
+Unbreakable is DefaultToughness:
+    .doc: """
+    Defines an interaction or material to be unbreakable. 
+    """

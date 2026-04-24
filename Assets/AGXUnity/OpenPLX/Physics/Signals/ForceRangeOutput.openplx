@@ -1,0 +1,11 @@
+ForceRangeOutput is Output:
+    .doc: """
+A force range output given an interaction.
+For interactions where it is unambiguous which force range is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.ForceRange
+    source is ForceRangeOutputTrait
+    marshalling:
+        min is RealField
+        max is RealField

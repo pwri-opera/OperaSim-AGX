@@ -1,0 +1,32 @@
+Prismatic is Mate:
+    with Physics.Signals.Position1DOutputTrait
+    with Physics.Signals.LinearVelocity1DOutputTrait
+    with Physics3D.Signals.Force3DOutputTrait
+    with Physics3D.Signals.Torque3DOutputTrait
+    .doc: """
+    A prismatic which constrain five degrees of freedom between two bodies.
+    The translation along the main axis of the two connectors is free.
+    By setting a dry friction coefficient > 0, friction forces will be computed
+    using a normal force defined by the prismatic forces orthogonal to the main axis.
+    """
+    initial_position is Real: 0.0
+    dissipation becomes Physics3D.Interactions.Dissipation.DefaultPrismaticDissipation
+    flexibility becomes Physics3D.Interactions.Flexibility.DefaultPrismaticFlexibility
+    toughness becomes Physics3D.Interactions.Toughness.DefaultPrismaticToughness
+    friction is Physics.Interactions.Dissipation.DefaultFriction
+
+    position_output is Physics.Signals.Position1DOutput:
+        source: this
+        enabled: false
+
+    velocity_output is Physics.Signals.LinearVelocity1DOutput:
+        source: this
+        enabled: false
+
+    torque_output is Physics3D.Signals.Torque3DOutput:
+        source: this
+        enabled: false
+
+    force_output is Physics3D.Signals.Force3DOutput:
+        source: this
+        enabled: false

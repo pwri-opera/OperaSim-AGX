@@ -1,0 +1,9 @@
+ConstraintRelaxationTimeDamping is DefaultDissipation:
+    .doc: """
+        Relaxation time defines the mechanical damping in units of time to
+        restore a violated state of.
+        From the units of stiffness, linear[N/m] and angular [Nm/rad],
+        and the units of mechanical damping, linear [N/(m/s)] and angular [Nm/(rad/s)],
+        The units say that damping / stiffness = [s] which is the relaxation time.
+    """
+    relaxation_time is Real

@@ -1,4 +1,0 @@
-<Task name="IntegrateVelocities" source="Physics.Particle.IntegrateVelocity">
-  <Parameter.EntityData instance="particle" bind="@Particle"/>
-	<Parameter.Scalar instance="clock_timeStep" bind="@clock.timeStep"/>
-</Task>

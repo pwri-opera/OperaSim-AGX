@@ -1,0 +1,4 @@
+InteractionEnabledOutput is BoolOutput:
+    .doc: """
+An Output that is a boolean, specifying weather an interaction is enabled or disabled.
+"""

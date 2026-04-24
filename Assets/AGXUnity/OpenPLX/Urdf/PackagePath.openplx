@@ -1,0 +1,15 @@
+PackagePath:
+    .doc: """
+This is a package path for a URDF package. It is used to specify the location of files that URDFs depend on.
+
+Example:
+
+MyRobot is Robot:
+    package_path is Urdf.PackagePath:
+        name: "my_package"
+        path: @"../packages/my_package"
+"""
+    name is String
+    path is String
+
+    fn on_init()

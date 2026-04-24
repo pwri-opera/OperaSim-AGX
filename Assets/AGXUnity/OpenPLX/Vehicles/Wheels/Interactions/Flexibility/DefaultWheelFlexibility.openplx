@@ -1,0 +1,9 @@
+
+DefaultWheelFlexibility:
+    .doc: """
+    Defines one dissipation model for each constrained degree of freedom for a Wheel
+    """
+    along_axial is Physics.Interactions.Flexibility.DefaultFlexibility
+    along_radial is Physics.Interactions.Flexibility.DefaultFlexibility
+    around_axial is Physics.Interactions.Flexibility.DefaultFlexibility
+    around_radial is Physics.Interactions.Flexibility.DefaultFlexibility

@@ -1,0 +1,6 @@
+RigidTriMeshLink is RigidLink:
+    .doc: """
+A rigid link with mesh contact_geometry, users must add mate connectors start and end.
+"""
+
+    contact_geometry becomes Physics3D.Geometries.ExternalTriMeshGeometry

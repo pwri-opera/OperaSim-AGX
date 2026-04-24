@@ -1,0 +1,14 @@
+VolvoBMTD45B is DriveTrain.MeanValueEngine:
+    .doc: """
+        Engine used in Volvo wheel loader.
+        Reference: https://www.volvoce.com/global/en/product-archive/wheel-loaders/volvo-bm-l-series/l70/
+    """
+    displacement_volume: 0.00448
+    max_torque: 425.0
+    max_torque_RPM: 1400.0
+    max_power_RPM: 2200.0
+    idle_RPM: 800.0
+    max_RPM: 4500.0
+    crank_shaft_inertia: 1.5
+    air_fuel_ratio: 14.5
+    heat_value: 45400000

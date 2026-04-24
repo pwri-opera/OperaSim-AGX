@@ -1,0 +1,9 @@
+<Kernel name="AssignPerContactPointParameters" >
+
+    <Parameter.EntityData name="@GeometryContact" type="GeometryContact" read="instance, points, material" />
+    <Parameter.EntityData name="@ContactPoint" type="ContactPoint" read="instance" write="friction, restitution, tangentialCohesion, youngsModulus" />
+
+    <Parameter.EntityData name="@ContactMaterial" type="ContactMaterial" read="friction, restitution, tangentialCohesion, youngsModulus" required="false" />
+
+    <Parameter.Scalar name="timeStep"        type="Real" bind="@clock.timeStep" required="false" />
+</Kernel>

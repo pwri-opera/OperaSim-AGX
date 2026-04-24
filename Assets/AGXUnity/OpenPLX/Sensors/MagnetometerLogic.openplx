@@ -1,0 +1,6 @@
+MagnetometerLogic is TriaxialSensorLogic:
+    with Traits.MateConnectorAttachment
+    .doc: """
+    Functional logic of a three-axis magnetometer.
+    """
+    sensing_distortions becomes MagnetometerSensingDistortion[]: []

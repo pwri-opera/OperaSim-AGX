@@ -1,0 +1,5 @@
+GyroscopeSignalLinearAccelectionEffect is GyroscopeSensingDistortion:
+    .doc: """
+    A Gaussian noise error affecting the total magnitude of the measured gyroscope signal.
+    """
+    acceleration_effects is Math.Vec3

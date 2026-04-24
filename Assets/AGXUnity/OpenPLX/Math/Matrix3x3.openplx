@@ -1,0 +1,31 @@
+#
+# The elements are on row-major order, i.e. the first index represents the row
+# and the second the column.
+#
+# [ e00 e01 e02 ]
+# [ e10 e11 e12 ]
+# [ e20 e21 e22 ]
+#
+Matrix3x3:
+    # row 0
+    e00 is Real: 1.0
+    e01 is Real: 0.0
+    e02 is Real: 0.0
+    # row 1
+    e10 is Real: 0.0
+    e11 is Real: 1.0
+    e12 is Real: 0.0
+    # row 2
+    e20 is Real: 0.0
+    e21 is Real: 0.0
+    e22 is Real: 1.0
+
+    static fn from_row_major(r0c0: Real, r0c1: Real, r0c2: Real, r1c0: Real, r1c1: Real, r1c2: Real, r2c0: Real, r2c1: Real, r2c2: Real) -> Matrix3x3
+    static fn from_rows(r0: Real[], r1: Real[], r2: Real[]) -> Matrix3x3
+    static fn from_columns(c0: Real[], c1: Real[], c2: Real[]) -> Matrix3x3
+    static fn diag(x: Real, y: Real, z: Real) -> Matrix3x3
+
+operator +(lhs: Matrix3x3, rhs: Matrix3x3) -> Matrix3x3
+operator -(lhs: Matrix3x3, rhs: Matrix3x3) -> Matrix3x3
+operator *(lhs: Matrix3x3, rhs: Matrix3x3) -> Matrix3x3
+operator *(lhs: Matrix3x3, rhs: Vec3) -> Vec3

@@ -1,0 +1,2 @@
+Body is Physics.Bodies.Body:
+  kinematics becomes Physics3D.Bodies.Kinematics

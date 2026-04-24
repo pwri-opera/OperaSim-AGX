@@ -1,0 +1,7 @@
+RatioOutput is Output:
+    .doc: """
+A scalar ratio output.
+"""
+    type: Physics.Signals.InputOutputType.Ratio
+    source is RatioOutputTrait
+    marshalling.ratio is RealField

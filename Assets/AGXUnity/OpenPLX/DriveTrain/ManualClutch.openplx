@@ -1,0 +1,51 @@
+ManualClutch is Physics1D.Interactions.Mate:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.RelativeVelocity1DOutputTrait
+    with Physics.Signals.FractionInputTrait
+    with Physics.Signals.FractionOutputTrait
+    .doc: """
+Single disk plate clutch with dry friction. Input and output shafts are
+connected to plates with rough surfaces.  A spring loaded mechanism increases
+the normal force between the plates between a minimum and maximum, giving rise
+to the concept of torque capacity.  When the plates are at maximum distance
+from each other, no force is transmitted.  When they are at zero distance,
+maximum pressure is applied.
+
+Together with Coulomb friction, this keeps the plates rotating at nearly the
+same angular velocity untill the stick-slip transition is reached,
+alternately, when the torque required to move the output shaft at the same
+velocity as the input shaft reaches the torque capacity.  This happens when
+the load on the output shaft is too difficult to move.  If the two disks move
+relative to each other, this is called slipping and is measured with a
+ClutchSlipVelocity1DOutput at any time.
+
+The engagement_fraction here represents the value of the torque capacity in
+proportion to the maximum capacity, i.e., when the plates are fully closed,
+i.e., maximum normal force is achieved.  As for most clutches, this model
+includes a "locked" mode in which a clamp is activated to prevent any slip.
+This stays "ON" until the clutch is disengaged, or if the output shaft starts
+to move faster but in the same direction as the input shaft, as in the case of
+dynamic breaking.
+
+For a small enough relative slip ratio, when the slip velocity is small
+in proportion to the input shaft velocity, defined by min_relative_slip_ratio.
+The copuling is considered perfect, and no slip is anymore possible.
+The Clutch may slip again either when it is disengaged or when
+the clutch torque is negative -> dynamic braking.
+"""
+
+    initial_engagement_fraction is Real
+    torque_capacity is Real
+    min_relative_slip_ratio is Real
+
+    slip_velocity_output is Physics.Signals.RelativeVelocity1DOutput:
+        source: this
+        enabled: false
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+    engagement_fraction_input is Physics.Signals.FractionInput:
+        source: this
+    engagement_fraction_output is Physics.Signals.FractionOutput:
+        source: this
+        enabled: false

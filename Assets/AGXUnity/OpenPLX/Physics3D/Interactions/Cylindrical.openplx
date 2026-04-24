@@ -1,0 +1,46 @@
+# Cylindrical has two DOFs, both Hinges and Prismatics DOFs
+Cylindrical is Mate:
+    with Physics.Signals.AngleOutputTrait
+    with Physics.Signals.AngularVelocity1DOutputTrait
+    with Physics.Signals.Position1DOutputTrait
+    with Physics.Signals.LinearVelocity1DOutputTrait
+    with Physics3D.Signals.Force3DOutputTrait
+    with Physics3D.Signals.Torque3DOutputTrait
+    .doc: """
+    A cylindrical which constrain four degrees of freedom between two bodies.
+    The rotation around and translation along the main axis of the two connectors is free.
+    The translational friction along and rotational friction around the axis may be specified.
+
+    """
+    # SNAP will try to reposition connected body according to initial_angle
+    initial_angle is Real: 0.0
+    initial_position is Real: 0.0
+    dissipation becomes Physics3D.Interactions.Dissipation.DefaultCylindricalDissipation
+    flexibility becomes Physics3D.Interactions.Flexibility.DefaultCylindricalFlexibility
+    toughness becomes Physics3D.Interactions.Toughness.DefaultCylindricalToughness
+    friction_translational is Physics.Interactions.Dissipation.DefaultFriction
+    friction_rotational is Physics.Interactions.Dissipation.DefaultFriction
+
+    angle_output is Physics.Signals.AngleOutput:
+        enabled: false
+        source: this
+
+    angular_velocity_output is Physics.Signals.AngularVelocity1DOutput:
+        enabled: false
+        source: this
+
+    position_output is Physics.Signals.Position1DOutput:
+        source: this
+        enabled: false
+
+    velocity_output is Physics.Signals.LinearVelocity1DOutput:
+        source: this
+        enabled: false
+
+    torque_output is Physics3D.Signals.Torque3DOutput:
+        source: this
+        enabled: false
+
+    force_output is Physics3D.Signals.Force3DOutput:
+        source: this
+        enabled: false

@@ -1,0 +1,8 @@
+FixedLinkCountBelt is Belt:
+    .doc: """
+Defines the geometrical properties of a Tracks Belt.
+The length is the distance between each connection between links,
+independent of the contact geometry defined for by the link_description.
+"""
+    link_count is Int
+    link_description becomes Vehicles.Tracks.ContactGeometryLinkDescription

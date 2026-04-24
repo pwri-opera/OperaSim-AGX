@@ -1,0 +1,6 @@
+DefaultToughness:
+    .doc: """
+    The default choice of how something would break and/or plastically deform.
+    The intention is for the runtime environment to decide,
+    since the model author has not.
+    """

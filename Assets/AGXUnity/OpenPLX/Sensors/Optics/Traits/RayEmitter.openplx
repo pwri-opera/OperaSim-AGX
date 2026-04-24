@@ -1,0 +1,5 @@
+trait RayEmitter:
+    .doc: """
+    Trait for models that emit rays.
+    """
+    ray_source is RaySource

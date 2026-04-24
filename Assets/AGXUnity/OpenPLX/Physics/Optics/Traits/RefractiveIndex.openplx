@@ -1,0 +1,5 @@
+trait RefractiveIndex:
+    .doc: """
+    A trait that adds a real or complex refractive index to the geometry.
+    """
+    refractive_index is Real or Math.Vec2

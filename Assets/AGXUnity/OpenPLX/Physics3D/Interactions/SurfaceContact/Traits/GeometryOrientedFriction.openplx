@@ -1,0 +1,8 @@
+trait GeometryOrientedFriction is OrientedFriction:
+    .doc: """
+    The GeometryOrientedFriction implement OrientedFriction,
+    for the primary_direction to be relative a reference_geometry.
+
+    works with Physics.Interactions.Dissipation.DefaultDryFriction
+"""
+    reference_geometry is Physics3D.Geometries.ContactGeometry

@@ -1,0 +1,7 @@
+ConstantBallClearance is DefaultMateClearance:
+    .doc: """
+    Clearance for the three translational dimensions for a ball
+    """
+    along_main is Physics.Interactions.Clearance.ConstantDistanceClearance
+    along_normal is Physics.Interactions.Clearance.ConstantDistanceClearance
+    along_cross is Physics.Interactions.Clearance.ConstantDistanceClearance

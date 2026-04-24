@@ -1,0 +1,11 @@
+HingeJoint is ActuatedJoint:
+    .doc: """
+The hinge joint specializes the mate of the actuated joint to be a hinge,
+and declares a range interaction and angle and angular velocity outputs.
+"""
+    mate becomes Physics3D.Interactions.Hinge
+
+    range is Physics3D.Interactions.RotationalRange:
+        start: Math.NEG_INF
+        end: Math.INF
+        connectors: mate.connectors

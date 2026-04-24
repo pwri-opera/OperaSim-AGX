@@ -1,0 +1,94 @@
+VelocityRatioTorqueMultiplicationPair:
+    .doc: """
+    The velocity_ratio is found from the turbine velocity divided by the pump velocity.
+    The torque converter is modeled from measured values of torque multiplication given velocity_ratio.
+    """
+    velocity_ratio is Real
+    multiplier is Real
+
+VelocityRatioGeometryFactorPair:
+    .doc: """
+    The velocity_ratio is found from the turbine velocity divided by the pump velocity.
+    The counter torque on the impeller of the torque converter is modeled given a
+    geometry_factor which varies depending on the velocity ratio.
+    """
+    velocity_ratio is Real
+    geometry_factor is Real
+
+EmpiricalTorqueConverter is Physics1D.Interactions.Mate:
+    with Physics.Signals.RelativeVelocity1DOutputTrait
+    .doc: """
+    The TorqueConverter transfers rotating power from the pump to the impeller.
+    The model is based on the work of Eriksson and Nielsen in "Modeling and control of engines and drivelines".
+    More specifically page 409, section 14.8.
+
+    The fluid coupling is modeled using two tables of empirical data.
+    One descibing the torque multiplication of the transfered torque and
+    the other one describing how the geometry of it affects the counter torque present in the torque converter.
+
+    The model is populated with default values found from Figure 14.9 in "Modeling and control of engines and drivelines".
+
+
+    The oil_density and diameter parameters effect the pump torque as
+    pump_torque = geometry_factor(velocity_ratio) * pump_vel * pump_vel * oil_density * pow(diameter, 5)
+    turbine_torque = torque_multiplier(velocity_ratio) * pump_torque
+    The oil_density, diameter and lock_up_time also has realistic default values, for the converter to work out of the box.
+
+    The converter has a lock up mechanism, and the time for enabling the mechanical lock
+    is modeled with the lock_up_time parameter.
+
+    """
+    oil_density is Real: 890
+    diameter is Real: 0.12
+    lock_up_time is Real: 0.2
+
+    lock_up_input is DriveTrain.Signals.TorqueConverterLockUpInput:
+        source: this
+
+    locked_up_output is DriveTrain.Signals.TorqueConverterLockedUpOutput:
+        enabled: false
+        source: this
+
+    velocity_ratio_torque_multiplier_list is VelocityRatioTorqueMultiplicationPair[]: [mult_pair1, mult_pair2, mult_pair3, mult_pair4, mult_pair5, mult_pair6, mult_pair7]
+    velocity_ratio_geometry_factor_list is VelocityRatioGeometryFactorPair[]: [factor_pair1, factor_pair2,factor_pair3,factor_pair4,factor_pair5]
+
+    factor_pair1 is DriveTrain.VelocityRatioGeometryFactorPair:
+        velocity_ratio: 0.0
+        geometry_factor: 1.0
+    factor_pair2 is DriveTrain.VelocityRatioGeometryFactorPair:
+        velocity_ratio: 0.5
+        geometry_factor: 1.0
+    factor_pair3 is DriveTrain.VelocityRatioGeometryFactorPair:
+        velocity_ratio: 0.75
+        geometry_factor: 0.75
+    factor_pair4 is DriveTrain.VelocityRatioGeometryFactorPair:
+        velocity_ratio: 1.0
+        geometry_factor: 0.0
+    factor_pair5 is DriveTrain.VelocityRatioGeometryFactorPair:
+        velocity_ratio: 1.5
+        geometry_factor: -0.3
+    mult_pair1 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 0.0
+        multiplier: 2.1
+    mult_pair2 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 0.5
+        multiplier: 1.5
+    mult_pair3 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 0.95
+        multiplier: 0.7
+    mult_pair4 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 1.0
+        multiplier: 0.0
+    mult_pair5 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 1.1
+        multiplier: 1.0
+    mult_pair6 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 1.25
+        multiplier: 1.5
+    mult_pair7 is DriveTrain.VelocityRatioTorqueMultiplicationPair:
+        velocity_ratio: 1.25
+        multiplier: 1.5
+
+    slip_velocity_output is Physics.Signals.RelativeVelocity1DOutput:
+        source: this
+        enabled: false

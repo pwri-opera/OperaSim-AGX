@@ -1,0 +1,9 @@
+LinearElasticMaterial is Material:
+    .doc: """
+    Defines an isotropic elastic material.
+    The youngs_modulus, also known as the elastic modulus, is required to define the elasticity.
+    """
+    youngs_modulus is Real
+    flexibility is Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: youngs_modulus
+    dissipation is Physics.Interactions.Dissipation.DefaultDissipation

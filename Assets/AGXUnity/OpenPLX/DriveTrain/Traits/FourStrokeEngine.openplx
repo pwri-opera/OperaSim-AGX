@@ -1,0 +1,6 @@
+trait FourStrokeEngine:
+    .doc: """
+A trait for MeanValueEngine that completes a power cycle with
+four strokes of the piston.
+"""
+    revolutions_per_cycle: 2

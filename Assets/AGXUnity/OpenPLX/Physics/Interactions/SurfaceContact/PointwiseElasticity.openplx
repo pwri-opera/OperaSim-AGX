@@ -1,0 +1,6 @@
+PointwiseElasticity is Physics.Interactions.Flexibility.LinearElastic:
+    .doc: """
+    Models the interaction between two objects in contact with a unidirectional elasticity.
+    Where the model assume contact points, where each is treated individually.
+    """
+

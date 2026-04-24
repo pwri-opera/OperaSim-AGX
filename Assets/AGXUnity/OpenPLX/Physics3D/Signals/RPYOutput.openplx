@@ -1,0 +1,12 @@
+RPYOutput is Physics.Signals.Output:
+    .doc: """
+A Roll Pitch Yaw output given an interaction.
+For interactions where it is unambiguous which position is requested,
+the output will give the current value.
+"""
+    type: Physics.Signals.InputOutputType.RPY
+    source is Physics3D.Signals.RPYOutputTrait
+    marshalling:
+        r is Physics.Signals.RealField
+        p is Physics.Signals.RealField
+        y is Physics.Signals.RealField

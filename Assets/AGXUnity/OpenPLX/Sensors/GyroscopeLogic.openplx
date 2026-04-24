@@ -1,0 +1,6 @@
+GyroscopeLogic is TriaxialSensorLogic:
+    with Traits.MateConnectorAttachment
+    .doc: """
+    Logical functioning of a three axis gyroscope.
+    """
+    sensing_distortions becomes GyroscopeSensingDistortion[]: []

@@ -1,0 +1,16 @@
+SignalInterface:
+    .doc: """
+Input and output reference attributes will be picked up by the signalling interface
+allowing the user to model specific signalling interfaces by grouping inputs and outputs
+and giving them shorter names.
+
+Setting enable to true enables all outputs in the interface. Keeping it as false does not
+disable the outputs.
+"""
+    fn on_init()
+    enable is Bool: false
+
+    # C++ extensions
+    .extend_public: "void enableAllOutputs();"
+    .extend_public: "std::unordered_map<std::string, std::shared_ptr<openplx::Physics::Signals::Input>> getInputs() const;"
+    .extend_public: "std::unordered_map<std::string, std::shared_ptr<openplx::Physics::Signals::Output>> getOutputs() const;"

@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using AGXUnity.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using AGXUnity.Utils;
 
 namespace AGXUnity.Rendering
 {
@@ -332,13 +332,23 @@ namespace AGXUnity.Rendering
 
       // Shapes with inactive game objects will be updated below when we're
       // traversing all children.
-      FindObjectsOfType<Collide.Shape>().ToList().ForEach(
+#if UNITY_2022_2_OR_NEWER
+      FindObjectsByType<Collide.Shape>( FindObjectsInactive.Include, FindObjectsSortMode.None ).ToList().ForEach(
         shape => SynchronizeShape( shape )
       );
 
-      FindObjectsOfType<Constraint>().ToList().ForEach(
+      FindObjectsByType<Constraint>( FindObjectsInactive.Include, FindObjectsSortMode.None ).ToList().ForEach(
         constraint => constraint.AttachmentPair.Synchronize()
       );
+#else
+      FindObjectsOfType<Collide.Shape>( true ).ToList().ForEach(
+        shape => SynchronizeShape( shape )
+      );
+
+      FindObjectsOfType<Constraint>( true ).ToList().ForEach(
+        constraint => constraint.AttachmentPair.Synchronize()
+      );
+#endif
 
       List<GameObject> gameObjectsToDestroy = new List<GameObject>();
       foreach ( var node in Children ) {
@@ -349,10 +359,6 @@ namespace AGXUnity.Rendering
 
         if ( proxy.Target == null )
           gameObjectsToDestroy.Add( node );
-        // FindObjectsOfType will not include the Shape if its game object is inactive.
-        // We're handling that shape here instead.
-        else if ( !proxy.Target.activeInHierarchy && proxy.Component is Collide.Shape )
-          SynchronizeShape( proxy.Component as Collide.Shape );
       }
 
       while ( gameObjectsToDestroy.Count > 0 ) {

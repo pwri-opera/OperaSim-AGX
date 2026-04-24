@@ -1,0 +1,4 @@
+TorqueConverterLockUpInput is Physics.Signals.BoolInput:
+    .doc: """
+An Input that is a boolean, specifying weather a torque converter should be locked up or not.
+"""

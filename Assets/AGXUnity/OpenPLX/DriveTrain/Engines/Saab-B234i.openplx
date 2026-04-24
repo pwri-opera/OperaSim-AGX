@@ -1,0 +1,14 @@
+SaabB234i is DriveTrain.MeanValueEngine:
+    .doc: """
+        Saab 9000 passenger car B234i engine parameters. Source: Figure 4.4, Eriksson2014, Modelling and control of engines. This engine has been installed on the cars such as Saab 900 II, Saab 9000 I and Saab 9-3 I. Check the description of Saab H engine here: https://en.wikipedia.org/wiki/Saab_H_engine
+        Reference: https://www.zemekoni.org/files/files/9000%202.1%20-%20Basic%20Engine%20B234%20M1990-.pdf
+    """
+    displacement_volume: 0.0023
+    max_torque: 212.0
+    max_torque_RPM: 4000.0
+    max_power_RPM: 5500.0
+    idle_RPM: 1000.0
+    max_RPM: 10000.0
+    crank_shaft_inertia: 0.2
+    air_fuel_ratio: 14.7
+    heat_value: 44400000

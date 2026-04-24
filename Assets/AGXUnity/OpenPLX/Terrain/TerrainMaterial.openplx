@@ -1,0 +1,13 @@
+TerrainMaterial is Physics.Geometries.Material:
+    .doc: """
+    A Terrain Material is a Material that in addition to surface properties from Material also
+    defines terrain bulk, compaction, excavation and particle properties.
+
+    .agx_terrain_material - An annotation to use to tell AGX which Terrain Material source file to use.
+                            Example: .agx_terrain_material: "DIRT_1"
+                            This will load the AGX Terrain Material "DIRT_1"
+
+    In the current implementation all these parameters are defined by the Physics Engine, e.g. AGX, but later
+    versions will support defining the parameters here.
+    """
+    fn is_default_terrain_material() -> Bool

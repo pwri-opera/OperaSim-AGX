@@ -1,0 +1,13 @@
+
+HingeJointData is JointData:
+    stiffness_around_normal is Real
+    stiffness_around_cross is Real
+    stiffness_along_main is Real
+    stiffness_along_normal is Real
+    stiffness_along_cross is Real
+
+    damping_around_normal is Real
+    damping_around_cross is Real
+    damping_along_main is Real
+    damping_along_normal is Real
+    damping_along_cross is Real

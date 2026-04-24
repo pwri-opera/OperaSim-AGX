@@ -1,0 +1,16 @@
+LinearSpring is SpringInteraction1DOF:
+    with Physics.Signals.Force1DOutputTrait
+    with Physics.Signals.Position1DOutputTrait
+    with Physics.Signals.Position1DInputTrait
+    position is Real: 0.0
+
+    force_output is Physics.Signals.Force1DOutput:
+        enabled: false
+        source: this
+
+    target_position_output is Physics.Signals.Position1DOutput:
+        enabled: false
+        source: this
+
+    target_position_input is Physics.Signals.Position1DInput:
+        source: this

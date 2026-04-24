@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace AGXUnityEditor.Tools
@@ -83,10 +82,10 @@ namespace AGXUnityEditor.Tools
       };
 
       Handles.color = GetXAxisColor( 0.3f );
-      position      = PlaneHandle( Vector3.right,   Vector3.up,    Vector3.forward );
-      Handles.color = GetYAxisColor( 0.3f );        
-      position      = PlaneHandle( Vector3.up,      Vector3.right, Vector3.forward );
-      Handles.color = GetZAxisColor( 0.3f );        
+      position      = PlaneHandle( Vector3.right, Vector3.up, Vector3.forward );
+      Handles.color = GetYAxisColor( 0.3f );
+      position      = PlaneHandle( Vector3.up, Vector3.right, Vector3.forward );
+      Handles.color = GetZAxisColor( 0.3f );
       position      = PlaneHandle( Vector3.forward, Vector3.right, Vector3.up );
 
       Handles.color = orgColor;
@@ -423,7 +422,7 @@ namespace AGXUnityEditor.Tools
         m_children[ m_children.Count - 1 ].PerformRemoveFromParent();
     }
 
-    protected T GetOrCreateVisualPrimitive<T>( string name, string shader = "Unlit/Color" ) where T : Utils.VisualPrimitive
+    protected T GetOrCreateVisualPrimitive<T>( string name, string shader = "AGXUnity/Shader Graph/UnlitCrossRP" ) where T : Utils.VisualPrimitive
     {
       T primitive = GetVisualPrimitive<T>( name );
       if ( primitive != null )

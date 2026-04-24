@@ -1,0 +1,7 @@
+DistanceMechanicalDamping is DefaultDistanceDissipation:
+    .doc: """
+    Defines mechanical damping for all constrained degrees of freedom for a Distance mate.
+    """
+    default_damping is Real: 1000.0
+    along_distance becomes Physics.Interactions.Dissipation.MechanicalDamping:
+        damping_constant: default_damping

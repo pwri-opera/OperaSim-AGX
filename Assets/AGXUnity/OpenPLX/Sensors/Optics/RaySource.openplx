@@ -1,0 +1,4 @@
+RaySource:
+    .doc: """
+    Base model for sources generating rays.
+    """

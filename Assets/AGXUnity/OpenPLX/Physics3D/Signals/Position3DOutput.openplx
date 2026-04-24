@@ -1,0 +1,9 @@
+Position3DOutput is Physics.Signals.Output:
+    .doc: """
+A 3D position output given an interaction.
+For interactions where it is unambiguous which position is requested,
+the output will give the current output value.
+"""
+    type: Physics.Signals.InputOutputType.Position3D
+    source is Position3DOutputTrait
+    marshalling becomes Vec3Marshalling

@@ -1,0 +1,7 @@
+UniformGravitationalField is GravitationalField:
+    .doc: """
+    UniformGravitationalField calculates a gravity which is uniform in magnitude and direction
+    over the entire environment, directed along a specified vector.
+    vector - specifies the direction and magnitude of the gravity
+    """
+    vector is Math.Vec3: {0, 0, -9.80665}

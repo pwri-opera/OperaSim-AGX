@@ -1,0 +1,5 @@
+trait DurationInputTrait:
+    .doc: """
+A trait for DurationInput that can be implemented for interactions
+that have an non ambiguous interpretation of a time signal input in seconds.
+"""

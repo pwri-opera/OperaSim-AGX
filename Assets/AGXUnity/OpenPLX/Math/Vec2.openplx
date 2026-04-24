@@ -1,0 +1,21 @@
+
+Vec2:
+    x is Real: 0
+    y is Real: 0
+
+    static fn X_AXIS() -> Vec2
+    static fn Y_AXIS() -> Vec2
+    static fn from_xy(x: Real, y: Real) -> Vec2
+    fn length() -> Real
+    fn normal() -> Vec2
+    fn dot(rhs: Vec2) -> Real
+
+# Operator overloads
+operator +(lhs: Vec2, rhs: Vec2) -> Vec2
+operator -(lhs: Vec2, rhs: Vec2) -> Vec2
+operator *(lhs: Real, rhs: Vec2) -> Vec2
+operator *(lhs: Vec2, rhs: Real) -> Vec2
+operator *(lhs: Vec2, rhs: Vec2) -> Real
+operator /(lhs: Vec2, rhs: Real) -> Vec2
+operator -(operand: Vec2) -> Vec2
+

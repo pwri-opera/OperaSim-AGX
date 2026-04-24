@@ -1,0 +1,7 @@
+
+Line:
+    start is Vec3
+    end is Vec3
+
+    static fn from_points(start: Vec3, end: Vec3) -> Line
+    fn length() -> Real

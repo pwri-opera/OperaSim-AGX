@@ -1,0 +1,6 @@
+DefaultDissipation:
+    .doc: """
+        The default choice of how some equation of motion would be damped.
+    The intention is for the runtime environment to decide,
+    since the model author has not.
+    """

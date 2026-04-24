@@ -1,0 +1,26 @@
+#
+# A "horizontal" link with Box as geometry, which calculates the start and end mate connectors at
+# the middle of left and right side:
+#         +---------+
+#         |         |
+#   start o         o end
+#         |         |
+#         +---------+
+
+RigidBoxLink is Robotics.Links.RigidLink:
+    geometry is Physics3D.Geometries.Box:
+        size: Math.Vec3.from_xyz(2, 1, 1)
+    arrow is Physics3D.Geometries.Box:
+        local_transform:
+            position.x: geometry.size.x * 0.5
+            rotation: Math.Quat.angle_axis(Math.PI / 4, Math.Vec3.Y_AXIS())
+        size: Math.Vec3.from_xyz(0.71, 1, 0.71)
+    start:
+        position.x: -geometry.size.x * 0.6
+        main_axis: Math.Vec3.from_xyz(0, -1, 0)
+        normal: Math.Vec3.from_xyz(1, 0, 0)
+    end:
+        position.x: geometry.size.x * 0.6
+        main_axis: Math.Vec3.from_xyz(0, -1, 0)
+        normal: Math.Vec3.from_xyz(1, 0, 0)
+    inertia.mass: 1

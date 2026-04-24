@@ -1,0 +1,3 @@
+TorqueHingeJoint is HingeJoint:
+    actuator becomes Physics3D.Interactions.TorqueMotor:
+        default_torque: 0

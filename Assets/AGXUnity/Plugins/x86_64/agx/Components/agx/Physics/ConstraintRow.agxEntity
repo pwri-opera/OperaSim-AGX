@@ -10,6 +10,7 @@
   <Attribute.Scalar name="velocity"           type="Real"/>
   <Attribute.Scalar name="violation"          type="Real"/>
   <Attribute.Scalar name="bound"              type="RangeReal"/>
+  <Attribute.Scalar name="tangentialCohesion" type="Real"/>
   <Attribute.Scalar name="residual"           type="Real"/>
   <Attribute.Scalar name="indexSetState"      type="Int:8bit"/>
 </Entity>

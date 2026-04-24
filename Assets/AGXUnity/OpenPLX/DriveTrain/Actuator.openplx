@@ -1,0 +1,4 @@
+
+Actuator:
+    connector_1d is Physics1D.Interactions.MateConnector
+    mate_3d is Physics3D.Interactions.Mate

@@ -1,0 +1,13 @@
+AccelerometerOutput is Physics.Signals.Output:
+    type: 0
+    fields is Int[]
+    source is AccelerometerLogic reference
+    marshalling: marshalling_from_fields(fields)
+
+    static fn marshalling_from_fields(fields: Int[]) -> Physics.Signals.Marshalling
+
+    # C++ extensions
+    .extend_public: "std::vector<double> readXValues(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<double> readYValues(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::vector<double> readZValues(const std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal>& signal) const;"
+    .extend_public: "std::shared_ptr<openplx::Sensors::Signals::SensorOutputSignal> createSignal(const std::vector<double>& XValues, const std::vector<double>& YValues, const std::vector<double>& ZValues) const;"

@@ -1,0 +1,6 @@
+EngagedOutput is Physics.Signals.BoolOutput:
+    .doc: """
+An Output that is a boolean, answering if the source is engaged or not.
+Not to be mistaken for ActivatedOutput. For example a clutch can be engaged, but not activated.
+A vacuum gripper can be activated, but is not engaged until an object is in the gripper.
+"""

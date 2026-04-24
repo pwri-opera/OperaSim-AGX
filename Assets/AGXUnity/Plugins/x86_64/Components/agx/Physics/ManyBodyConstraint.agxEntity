@@ -1,5 +1,0 @@
-<Entity name="ManyBodyConstraint" source="ConstraintBase">
-  <Attribute.Array name="bodies" type="UInt"/>
-</Entity>
-
-

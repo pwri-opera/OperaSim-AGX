@@ -1,0 +1,3 @@
+IntInputSignal is InputSignal:
+    value is Int: 0
+    static fn create(value: Int, target: Input) -> IntInputSignal

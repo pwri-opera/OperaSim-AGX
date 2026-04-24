@@ -1,0 +1,42 @@
+ManualBrake is Physics1D.Interactions.Mate:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.RelativeVelocity1DOutputTrait
+    with Physics.Signals.FractionInputTrait
+    with Physics.Signals.FractionOutputTrait
+    .doc: """
+Brake is a mechanism that applies a counter torque against a rotor,
+gradually reducing its motion until it comes to a complete stop.
+
+A typical brake assembly consists of the caliper, brake pads, and hydraulically actuated pistons.
+The pistons exert force on the brake pads, pressing them firmly against the rotating disk to generate
+friction and slow down the rotor.
+
+A brake has an engagement and disengagement process. Note that the engagement fraction,
+indicates the position of the brake pedal relative to the movement of the brake pads during braking operations.
+
+A value of 0 indicates that the brake is fully disengaged, meaning that the brake pedal is lifted up fully,
+no braking torque is applied (free rotation). A value of 1 refers to a fully engaged brake, meaning that the
+brake pedal is pressed down fully, full braking (maximum torque transfer) is applied.
+During the engaging and disengaging process, the engagement fraction is varying within the range of [0,1].
+This parameter simulates how much braking force is applied based on the pedal position.
+
+Note that the brake functions similarly to a Clutch, but in reverse. While a clutch engages when the pedal is fully released,
+a brake engages when the pedal is fully pressed.
+
+"""
+
+    initial_engagement_fraction is Real
+    torque_capacity is Real
+    min_relative_slip_ratio is Real
+
+    slip_velocity_output is Physics.Signals.RelativeVelocity1DOutput:
+        source: this
+        enabled: false
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+    engagement_fraction_input is Physics.Signals.FractionInput:
+        source: this
+    engagement_fraction_output is Physics.Signals.FractionOutput:
+        source: this
+        enabled: false

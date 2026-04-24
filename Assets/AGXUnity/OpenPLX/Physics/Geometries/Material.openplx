@@ -1,0 +1,18 @@
+Material:
+    .doc: """
+    Base type for Material
+    Defines an isotropic material of a rigid volume.
+    To define how the material interacts with other materials
+    a SurfaceContact.Model must be defined referencing two materials.
+
+    unique name - A Material is intended to be globally unique to support interactions between objects.
+        In order to be able to merge identical materials when loading multiple .openplx files
+        that uses the same materials it is strongly recommended to give each material
+        a unique name in the unique_name attribute. If left empty it will default to the
+        <bundle name>.<namespace>.<model name>.
+    """
+    unique_name is String: ""
+    density is Real: 1000.0
+
+    fn on_init()
+    fn is_default_material() -> Bool

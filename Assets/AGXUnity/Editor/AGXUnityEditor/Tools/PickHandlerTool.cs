@@ -1,7 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using AGXUnity;
+using System;
 using UnityEditor;
-using AGXUnity;
+using UnityEngine;
 
 namespace AGXUnityEditor.Tools
 {
@@ -55,9 +55,9 @@ namespace AGXUnityEditor.Tools
     private float m_distanceFromCamera = -1f;
     private Predicate<Event> m_removePredicate = null;
 
-    private Utils.VisualPrimitiveSphere VisualSphereReference { get { return GetOrCreateVisualPrimitive<Utils.VisualPrimitiveSphere>( "reference", "Standard" ); } }
-    private Utils.VisualPrimitiveSphere VisualSphereConnected { get { return GetOrCreateVisualPrimitive<Utils.VisualPrimitiveSphere>( "connected", "Standard" ); } }
-    private Utils.VisualPrimitiveCylinder VisualCylinder { get { return GetOrCreateVisualPrimitive<Utils.VisualPrimitiveCylinder>( "cylinder", "Standard" ); } }
+    private Utils.VisualPrimitiveSphere VisualSphereReference { get { return GetOrCreateVisualPrimitive<Utils.VisualPrimitiveSphere>( "reference", "AGXUnity/Shader Graph/CrossRPDefault" ); } }
+    private Utils.VisualPrimitiveSphere VisualSphereConnected { get { return GetOrCreateVisualPrimitive<Utils.VisualPrimitiveSphere>( "connected", "AGXUnity/Shader Graph/CrossRPDefault" ); } }
+    private Utils.VisualPrimitiveCylinder VisualCylinder { get { return GetOrCreateVisualPrimitive<Utils.VisualPrimitiveCylinder>( "cylinder", "AGXUnity/Shader Graph/CrossRPDefault" ); } }
 
     private void Initialize()
     {

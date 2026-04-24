@@ -1,0 +1,11 @@
+TorqueRangeInput is Input:
+    .doc: """
+A torque range input given an interaction.
+For interactions where it is unambiguous which torque range is considered,
+the input will update that value.
+"""
+    type: Physics.Signals.InputOutputType.TorqueRange
+    source is TorqueRangeInputTrait
+    marshalling:
+        min is RealField
+        max is RealField

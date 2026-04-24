@@ -1,0 +1,21 @@
+RackAndPinion is DualSuspensionSteering:
+    .doc: """
+Rack-pinion steering mechanism.
+"""
+    with Physics.Signals.AngleInputTrait
+    with Physics.Signals.AngleOutputTrait
+
+    knuckle_angle: -1.885
+    knuckle_length: 0.14
+    initial_angle_right_tie_rod is Real: 0
+
+    steering_column_distance is Real: 1.0
+    rack_length is Real: 0.25
+    gear is Real: 1.0
+
+    steering_angle_input is Physics.Signals.AngleInput:
+        source: this
+
+    steering_angle_output is Physics.Signals.AngleOutput:
+        enabled: false
+        source: this

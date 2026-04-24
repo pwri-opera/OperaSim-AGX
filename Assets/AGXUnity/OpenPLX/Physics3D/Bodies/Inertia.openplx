@@ -1,0 +1,18 @@
+Inertia is Physics.Bodies.Inertia:
+  .doc: """
+The tensor is relative to the local center of mass defined by local_cm_transform
+in the body kinematics. It is recommended to use Physics3D.Inertia.symmetric_tensor to initalize
+Physics3D.Inertia.tensor.
+"""
+  mass is Real: 0.0
+  tensor is Math.Matrix3x3:
+    e00: 0.0
+    e10: 0.0
+    e20: 0.0
+    e01: 0.0
+    e02: 0.0
+    e11: 0.0
+    e21: 0.0
+    e12: 0.0
+    e22: 0.0
+  static fn symmetric_tensor(diag: Math.Vec3, e01_10: Real, e02_20: Real, e12_21: Real) -> Math.Matrix3x3

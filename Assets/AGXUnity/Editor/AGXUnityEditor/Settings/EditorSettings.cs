@@ -1,4 +1,6 @@
+using AGXUnity.IO.OpenPLX;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using GUI = AGXUnity.Utils.GUI;
@@ -6,7 +8,7 @@ using GUI = AGXUnity.Utils.GUI;
 namespace AGXUnityEditor
 {
   [PreviousSettingsFile( FileName = "Settings.asset" )]
-  public class EditorSettings : AGXUnitySettings<EditorSettings>
+  public class EditorSettings : AGXUnityEditorSettings<EditorSettings>
   {
     [HideInInspector]
     public static readonly int ToggleButtonSize = 18;
@@ -92,6 +94,48 @@ namespace AGXUnityEditor
         HandleKeyHandlerGUI( GUI.MakeLabel( "Pick handler (scene view)" ), BuiltInToolsTool_PickHandlerKeyHandler );
       }
 
+      InspectorGUI.Separator( 1, 4 );
+      EditorGUILayout.Space( 5 );
+      EditorGUILayout.LabelField( GUI.AddSizeTag( "<b>OpenPLX settings</b>", 15 ) );
+      EditorGUILayout.Space();
+
+      EditorGUILayout.LabelField( "<b>Additional Bundle Directories</b>" );
+      var bundles = OpenPLXSettings.Instance.AdditionalBundleDirs;
+      int toRemove = -1;
+      bool changed = false;
+      using ( new InspectorGUI.IndentScope() ) {
+        for ( int i = 0; i < bundles.Count; i++ ) {
+          using var scope = new EditorGUILayout.HorizontalScope();
+          InspectorGUI.SelectFile( GUI.MakeLabel( "" ), bundles[ i ], "Select Bundle Directory", Application.dataPath, newFile => { bundles[ i ] = newFile; changed = true; }, true );
+          if ( InspectorGUI.Button( MiscIcon.EntryRemove,
+                                    true,
+                                    $"Remove bundle directory.",
+                                    GUILayout.Width( 18 ) ) )
+            toRemove = i;
+        }
+
+        if ( bundles.Count == 0 )
+          EditorGUILayout.LabelField( "<i>No additional bundle directories added</i>" );
+      }
+
+      if ( toRemove >= 0 ) {
+        bundles.RemoveAt( toRemove );
+        changed = true;
+      }
+
+      using ( new EditorGUILayout.HorizontalScope() ) {
+        GUILayout.FlexibleSpace();
+        if ( InspectorGUI.Button( MiscIcon.EntryAdd,
+                                    true,
+                                    $"Add bundle directory.",
+                                    GUILayout.Width( 18 ) ) ) {
+          bundles.Add( "" );
+          changed = true;
+        }
+      }
+
+      if ( changed )
+        OpenPLXSettings.Instance.Save();
 
       // Recommended settings
       InspectorGUI.Separator( 1, 4 );
@@ -102,33 +146,28 @@ namespace AGXUnityEditor
       var ok = GUI.AddColorTag( "<b>OK</b> ", Color.green ) + " <i>Using recommended setting</i>";
       var note = GUI.AddColorTag( "<b>Note</b> ", Color.yellow );
 
+#if UNITY_2023_3_OR_NEWER
+      var hasMonoRuntime = PlayerSettings.GetScriptingBackend( UnityEditor.Build.NamedBuildTarget.Standalone ) == ScriptingImplementation.Mono2x;
+#else
       var hasMonoRuntime = PlayerSettings.GetScriptingBackend( BuildTargetGroup.Standalone ) == ScriptingImplementation.Mono2x;
+#endif
       EditorGUILayout.LabelField( "<b>.NET Runtime</b>" );
       if ( hasMonoRuntime )
         EditorGUILayout.LabelField( ok );
       else {
         EditorGUILayout.LabelField( note + "AGX Dynamics for Unity requires .NET Runtime: Mono", skin.LabelWordWrap );
         if ( InspectorGUI.Link( GUI.MakeLabel( "Click here to update this setting!" ) ) ) {
+#if UNITY_2023_3_OR_NEWER
+          PlayerSettings.SetScriptingBackend( UnityEditor.Build.NamedBuildTarget.Standalone, ScriptingImplementation.Mono2x );
+#else
           PlayerSettings.SetScriptingBackend( BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x );
+#endif
           Debug.Log( "Updated Unity Player Settings -> Scripting Backend to compatible runtime." );
         }
       }
 
-      var hasPlayerNetCompatibility = PlayerSettings.GetApiCompatibilityLevel( BuildTargetGroup.Standalone ) == ApiCompatibilityLevel.NET_4_6;
-      EditorGUILayout.LabelField( "<b>.NET Compatibility Level</b>" );
-      if ( hasPlayerNetCompatibility )
-        EditorGUILayout.LabelField( ok );
-      else {
-        EditorGUILayout.LabelField( note + "AGX Dynamics for Unity requires .NET API Compatibility Level: .NET Framework", skin.LabelWordWrap );
-        if ( InspectorGUI.Link( GUI.MakeLabel( "Click here to update this setting!" ) ) ) {
-          UnityEditor.PlayerSettings.SetApiCompatibilityLevel( BuildTargetGroup.Standalone, ApiCompatibilityLevel.NET_4_6 );
-          Debug.Log( "Updated Unity Player Settings -> Api Compatibility Level to compatible version" );
-          EditorUtility.SetDirty( this );
-        }
-      }
-
       EditorGUILayout.LabelField( "<b>Maximum Allowed Timestep</b>" );
-      var usingRecommendedMaxTimestep = Time.fixedDeltaTime == Time.maximumDeltaTime;
+      var usingRecommendedMaxTimestep = Mathf.Abs(Time.fixedDeltaTime - Time.maximumDeltaTime) < 1e-4;
       if ( usingRecommendedMaxTimestep )
         EditorGUILayout.LabelField( ok );
       else {
@@ -137,6 +176,15 @@ namespace AGXUnityEditor
           Time.maximumDeltaTime = Time.fixedDeltaTime;
           Debug.Log( "Updated Unity Maximum Allowed Timestep to the same as Fixed Timestep " + Time.fixedDeltaTime + " seconds" );
           EditorUtility.SetDirty( this );
+
+          // Reserialize TimeManager to persist change
+          var asset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TimeManager.asset").FirstOrDefault();
+          if ( asset == null ) {
+            Debug.LogError( "Could not find TimeManager.asset, updated setting will not be persisted across restarts of the editor!" );
+            return;
+          }
+          EditorUtility.SetDirty( asset );
+          AssetDatabase.SaveAssets();
         }
       }
 
@@ -209,19 +257,16 @@ namespace AGXUnityEditor
 
         if ( showDropdownPressed ) {
           GenericMenu menu = new GenericMenu();
-          menu.AddItem( GUI.MakeLabel( "Reset to default" ), false, () =>
-          {
+          menu.AddItem( GUI.MakeLabel( "Reset to default" ), false, () => {
             if ( EditorUtility.DisplayDialog( "Reset to default", "Reset key(s) to default?", "OK", "Cancel" ) )
               keyHandler.ResetToDefault();
           } );
-          menu.AddItem( GUI.MakeLabel( "Add key" ), false, () =>
-          {
+          menu.AddItem( GUI.MakeLabel( "Add key" ), false, () => {
             keyHandler.Add( KeyCode.None );
           } );
 
           if ( keyHandler.NumKeyCodes > 1 ) {
-            menu.AddItem( GUI.MakeLabel( "Remove key" ), false, () =>
-            {
+            menu.AddItem( GUI.MakeLabel( "Remove key" ), false, () => {
               if ( EditorUtility.DisplayDialog( "Remove key", "Remove key: " + keyHandler[ keyHandler.NumKeyCodes - 1 ].ToString() + "?", "OK", "Cancel" ) )
                 keyHandler.Remove( keyHandler.NumKeyCodes - 1 );
             } );

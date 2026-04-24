@@ -1,0 +1,46 @@
+{
+   "BulkProperties":{
+      "cohesion": 0.0,
+      "density": 1400.0,
+      "dilatancyAngle" : 0.20,
+      "frictionAngle": 0.79,
+      "maximumDensity" : 1450.0,
+      "poissonsRatio": 0.25,
+      "swellFactor": 1.0,
+      "youngsModulus": 10e6,
+      "deltaReposeAngle": 0.0
+   },
+   "CompactionProperties":{
+      "angleOfReposeCompactionRate": 24.0,
+      "bankStatePhi" :  0.6666,
+      "compactionTimeRelaxationConstant" : 0.050,
+      "compressionIndex" : 0.05,
+      "hardeningConstantKE" : 1.0,
+      "hardeningConstantNE" : 0.0833,
+      "preconsolidationStress" : 98000.0,
+      "stressCutOffFraction" : 0.01,
+      "dilatancyAngleScalingFactor" : 0.261799
+   },
+   "ExcavationContactProperties" : {
+      "aggregateStiffnessMultiplier" : 0.002,
+      "depthDecayFactor" : 2.0,
+      "depthIncreaseFactor" : 1.0,
+      "excavationStiffnessMultiplier" : 1.0,
+      "maximumAggregateNormalForce" : "inf",
+      "maximumContactDepth" : 1.0
+   },
+   "ParticleProperties":{
+      "adhesionOverlapFactor" : 0.050,
+      "particleCohesion" : 0,
+      "particleFriction" : 0.7,
+      "particleRestitution" : 0.0,
+      "particleRollingResistance" : 0.3,
+      "particleTerrainCohesion" : 0,
+      "particleTerrainFriction" : 0.7,
+      "particleTerrainRestitution" : 0.0,
+      "particleTerrainRollingResistance" : 0.7,
+      "particleTerrainYoungsModulus" : 1e8,
+      "particleYoungsModulus" : 1e8
+   },
+   "description" : "This material specification is named limestone_dry_loose and aims to model the behaviour of loose limestone with a particle size of 51mm."
+}

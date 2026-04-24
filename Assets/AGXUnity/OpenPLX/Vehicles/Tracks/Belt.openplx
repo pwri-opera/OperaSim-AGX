@@ -1,0 +1,8 @@
+Belt:
+    .doc: """
+Defines the geometrical properties of a Tracks Belt.
+The length is the distance between each connection between links,
+independent of the contact geometry defined for by the link_description.
+"""
+    
+    link_description is Vehicles.Tracks.DefaultLinkDescription

@@ -1,0 +1,4 @@
+RealInputSignal is InputSignal:
+    value is Real: 0
+    static fn create(value: Real, target: Input) -> RealInputSignal
+

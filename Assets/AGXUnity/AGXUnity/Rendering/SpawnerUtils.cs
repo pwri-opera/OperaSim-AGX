@@ -31,7 +31,7 @@ namespace AGXUnity.Rendering
         if ( gameObject == null )
           return;
 
-        Shader shader = Shader.Find( shaderName ) ?? Shader.Find( "Diffuse" );
+        Shader shader = Shader.Find( shaderName ) ?? Shader.Find( "AGXUnity/Shader Graph/CrossRPDefault" );
         if ( shader == null )
           throw new AGXUnity.Exception( "Enable to load shader: " + shaderName );
 
@@ -65,7 +65,7 @@ namespace AGXUnity.Rendering
       {
         return constantScreenSize ?
                  size * FindConstantScreenSizeScale( position ) :
-                 size;                 
+                 size;
       }
 
       public static Vector3 ConditionalConstantScreenSize( bool constantScreenSize, Vector3 size, Vector3 position )

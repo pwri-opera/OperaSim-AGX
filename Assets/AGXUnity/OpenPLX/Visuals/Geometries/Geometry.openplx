@@ -1,0 +1,4 @@
+
+Geometry:
+    local_transform is Math.AffineTransform
+    material is Materials.Material

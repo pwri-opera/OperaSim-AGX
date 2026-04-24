@@ -1,2 +1,6 @@
 <Entity name="HeightField" source="Mesh">
+	<Attribute.Scalar name="sizeX" type="Real"/>
+	<Attribute.Scalar name="sizeY" type="Real"/>
+	<Attribute.Scalar name="resolutionX" type="UInt:64bit"/>
+	<Attribute.Scalar name="resolutionY" type="UInt:64bit"/>
 </Entity>

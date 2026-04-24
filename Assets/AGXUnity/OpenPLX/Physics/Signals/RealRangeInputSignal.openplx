@@ -1,0 +1,3 @@
+RealRangeInputSignal is InputSignal:
+    value is Math.Vec2: Math.Vec2.from_xy(0,0)
+    static fn create(value: Math.Vec2, target: Input) -> RealRangeInputSignal

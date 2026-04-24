@@ -1,0 +1,8 @@
+Output is Physics.Signals.Output:
+    .doc: """
+Base model for MateConnector Outputs
+Emits a ValueOutputSignal
+You may also specify a MateConnector as the relative_to parameter to get the value relative to that mate connector
+"""
+    source is Physics3D.Interactions.MateConnector reference
+    relative_to is Physics3D.Interactions.MateConnector: Physics3D.Interactions.World

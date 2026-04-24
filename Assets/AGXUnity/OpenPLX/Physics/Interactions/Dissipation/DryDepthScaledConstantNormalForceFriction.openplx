@@ -1,0 +1,16 @@
+
+DryDepthScaledConstantNormalForceFriction is DryConstantNormalForceFriction:
+    .doc: """
+    The DryDepthScaledConstantNormalForceFriction extends the DryConstantNormalForceFriction model
+    by scaling the normal force for each contact point by the depth of the point, depth_p, in meters.
+    For varying elasticity of surface contacts, the geometrical overlap and therefore the contact point depths,
+    may differ  alot. To maintain comparable friction inbetween these different surface contact models a
+    depth_factor parameter is introduced.
+
+    The friction limit, f_l, is always going to be:
+    f_l = normal_force * depth_p * depth_factor * coefficient.
+
+    The model must be considered VERY approximative, since it does not consider friction as
+    a non-linear problem.
+    """
+    depth_factor is Real: 1.0

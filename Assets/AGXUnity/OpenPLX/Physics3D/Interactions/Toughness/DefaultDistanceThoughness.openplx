@@ -1,0 +1,2 @@
+DefaultDistanceThoughness is DefaultMateToughness:
+    along_distance is Physics.Interactions.Toughness.DefaultToughness

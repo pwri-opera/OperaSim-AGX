@@ -1,0 +1,5 @@
+ContactGeometryLinkDescription is DefaultLinkDescription:
+    .doc: """
+Defines links with a contact_geometry for the belt of a track system.
+"""
+    contact_geometry is Physics3D.Geometries.ContactGeometry

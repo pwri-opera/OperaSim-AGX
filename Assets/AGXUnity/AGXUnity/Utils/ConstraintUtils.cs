@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using AGXUnity;
-
-namespace AGXUnity.Utils
+﻿namespace AGXUnity.Utils
 {
   public class ConstraintUtils
   {
@@ -28,9 +25,9 @@ namespace AGXUnity.Utils
         Rotational
       }
 
-      public static ConstraintRowParser Create( Constraint constraint )
+      public static ConstraintRowParser Create( ElementaryConstraint[] ordinaryElementaryConstraints )
       {
-        if ( constraint == null || constraint.ElementaryConstraints.Length == 0 )
+        if ( ordinaryElementaryConstraints.Length == 0 )
           return null;
 
         ConstraintRowParser constraintRowParser = new ConstraintRowParser();
@@ -42,7 +39,6 @@ namespace AGXUnity.Utils
           rows[ constraintRow ] = new ConstraintRow( ec, localRow );
         };
 
-        ElementaryConstraint[] ordinaryElementaryConstraints = constraint.GetOrdinaryElementaryConstraints();
         foreach ( ElementaryConstraint ec in ordinaryElementaryConstraints ) {
           if ( ec.NumRows > 1 ) {
             // Only rotational QuatLock ("QL") and translational SphericalRel ("SR") with three rows.

@@ -1,0 +1,6 @@
+LinearRange is RangeInteraction1DOF:
+    with Physics.Signals.Force1DOutputTrait
+
+    force_output is Physics.Signals.Force1DOutput:
+        enabled: false
+        source: this

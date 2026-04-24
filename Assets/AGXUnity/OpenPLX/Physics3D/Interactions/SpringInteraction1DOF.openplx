@@ -1,0 +1,9 @@
+SpringInteraction1DOF is Physics.Interactions.Interaction1DOF:
+    .doc: """
+    A spring that obeys Hookes law, F = -k * x.
+    The k is defined by the stiffness off the Elastic deformation model.
+    The Spring can also add a damping term, by specifying the damping model.
+    """
+    flexibility is Physics.Interactions.Flexibility.LinearElastic:
+        stiffness: 1000000.0
+    dissipation is Physics.Interactions.Dissipation.DefaultDissipation

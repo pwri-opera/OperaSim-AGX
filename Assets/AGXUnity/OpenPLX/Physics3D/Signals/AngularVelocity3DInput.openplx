@@ -1,0 +1,9 @@
+AngularVelocity3DInput is Physics.Signals.Input:
+    .doc: """
+A vec3 as angular velocity input.
+For models which have an unambiguous 3D angular velocity input parameter.
+The input is given as a 3D velocity vector in the world coordinate system, expressed in absolute coordinates.
+"""
+    type: Physics.Signals.InputOutputType.AngularVelocity3D
+    source is AngularVelocity3DInputTrait
+    marshalling becomes Vec3Marshalling

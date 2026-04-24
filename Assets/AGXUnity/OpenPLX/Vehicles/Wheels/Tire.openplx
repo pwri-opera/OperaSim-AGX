@@ -1,0 +1,6 @@
+Tire is Physics3D.Bodies.RigidBody:
+    with Vehicles.Wheels.TireTrait
+
+    geometry is Physics3D.Geometries.Cylinder:
+        radius: outer_radius
+        height: width

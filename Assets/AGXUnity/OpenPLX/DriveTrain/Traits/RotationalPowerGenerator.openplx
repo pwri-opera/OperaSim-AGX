@@ -1,0 +1,9 @@
+trait RotationalPowerGenerator is PowerGenerator:
+    # Output torque signal for rotational systems
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+    rpm_output is Physics.Signals.RpmOutput:
+        source: this
+        enabled: false
+

@@ -1,0 +1,38 @@
+
+GearBox is Physics1D.Interactions.Mate:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.IntInputTrait
+    with Physics.Signals.IntOutputTrait
+    with Physics.Signals.RatioOutputTrait
+    .doc: """
+    The GearBox is a rotational coupling between two RotationalBodies.
+    It has two defined lists of gears, one for forward and one for reverse gears.
+    With has_neutral_gear set to true the GearBox will have a neutral gear, which is selected
+    with zero as initial_gear or input signal.
+    The forward and reverse gear lists could include additional neutral gears,
+    but it is not recommended.
+    Only the absolute value of the gear ratios will be considered, the sign is defined by the list membership.
+    The current gear defines a relationship between the rotational speeds of the bodies using a specified gear ratio.
+    A positive initial_gear or input signal will select a gear from the forward_gear list.
+    A negative initial_gear or input signal will select a gear from the reverse_gear list.
+    Zero initial_gear or input signal will put the gear in neutral, but only if has_neutral_gear is true.
+    The model supports flexibility and energy dissipation features.
+    """
+    forward_gears is Real[]
+    reverse_gears is Real[]
+    initial_gear is Int: 0
+    has_neutral_gear is Bool: true
+    flexibility is Physics.Interactions.Flexibility.DefaultFlexibility
+    dissipation is Physics.Interactions.Dissipation.DefaultDissipation
+
+    torque_output is Physics.Signals.Torque1DOutput:
+        source: this
+        enabled: false
+    gear_selection_input is Physics.Signals.IntInput:
+        source: this
+    gear_selection_output is Physics.Signals.IntOutput:
+        source: this
+        enabled: false
+    gear_ratio_output is Physics.Signals.RatioOutput:
+        source: this
+        enabled: false

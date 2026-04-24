@@ -1,0 +1,16 @@
+TorsionSpring is SpringInteraction1DOF:
+    with Physics.Signals.Torque1DOutputTrait
+    with Physics.Signals.AngleOutputTrait
+    with Physics.Signals.AngleInputTrait
+    angle is Real: 0.0
+
+    torque_output is Physics.Signals.Torque1DOutput:
+        enabled: false
+        source: this
+
+    target_angle_output is Physics.Signals.AngleOutput:
+        enabled: false
+        source: this
+
+    target_angle_input is Physics.Signals.AngleInput:
+        source: this

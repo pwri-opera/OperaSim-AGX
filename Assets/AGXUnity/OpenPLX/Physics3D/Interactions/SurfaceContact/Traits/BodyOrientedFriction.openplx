@@ -1,0 +1,9 @@
+
+trait BodyOrientedFriction is OrientedFriction:
+    .doc: """
+    The BodyOrientedFriction implement OrientedFriction,
+    for the primary_direction to be relative a reference_body.
+
+    works with Physics.Interactions.Dissipation.DefaultDryFriction
+"""
+    reference_body is Physics3D.Bodies.Body

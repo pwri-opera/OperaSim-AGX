@@ -1,0 +1,6 @@
+Cylinder is ContactGeometry:
+    .doc: """
+A Cylinders height is defined along the local y axis
+"""
+    radius is Real
+    height is Real

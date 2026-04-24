@@ -1,0 +1,11 @@
+
+DryConstantNormalForceFriction is Physics.Interactions.Dissipation.DefaultDryFriction:
+    .doc: """
+    The DryConstantNormalForceFriction extends the DefaultDryFriction model
+    by introducing a constant normal force for friction computation.
+    The friction limit f_L is always going to be:
+    f_L = normal_force * coefficient.
+    The model must be considered VERY approximative, since it does not consider friction as
+    a non-linear problem.
+    """
+    normal_force is Real

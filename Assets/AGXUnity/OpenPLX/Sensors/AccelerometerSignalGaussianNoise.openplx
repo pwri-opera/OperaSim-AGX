@@ -1,0 +1,7 @@
+AccelerometerSignalGaussianNoise is AccelerometerSensingDistortion:
+    .doc: """
+    A Gaussian noise error affecting the total magnitude of the measured accelerometer signal.
+    """
+    distribution_x is Math.Random.GaussianDistribution
+    distribution_y is Math.Random.GaussianDistribution
+    distribution_z is Math.Random.GaussianDistribution
