@@ -44,24 +44,23 @@ namespace PWRISimulator
             SetLock(needsLock);
         }
 
-        void SetLock(bool lockEnabled)
+        private void SetLock(bool lockEnabled)
         {
-            if (backDoorJoint.GetInitialized<LockController>() == null)
+            if (backDoorJoint?.Native == null)
                 return;
 
             if (lockEnabled == backDoorJoint.Enable)
                 return;
+
             
-            //　AgxのLockControllerをEnable/Disable
             backDoorJoint.Enable = lockEnabled;
 
             if (printToConsole)
             {
                 string lockedMsg = lockEnabled ? "Locked" : "Unlocked";
-                Debug.Log($"{name} : {lockedMsg} door ({backDoorJoint.name})");
+                Debug.Log($"{name} : {lockedMsg} door ({backDoorJoint.NativeName})");
             }
 
-            // InspectorのGUIから設定したEventを呼び出す
             if (lockEnabled && lockEvent != null)
                 lockEvent.Invoke();
             else if (!lockEnabled && unlockEvent != null)

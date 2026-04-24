@@ -30,6 +30,8 @@ namespace PWRISimulator
         bool isInitialized = false;
         bool isQuitting = false;
 
+        readonly Dictionary<Shape, agxTerrain.ForbiddenBound> noMergeBounds = new Dictionary<Shape, agxTerrain.ForbiddenBound>();
+
         protected override bool Initialize()
         {
             isInitialized = true;
@@ -88,9 +90,29 @@ namespace PWRISimulator
                 return false;
 
             bool success = true;
-            terrain.Native.removeNoMergeZoneToGeometry(shape.NativeGeometry);
-            if(!remove)
-                success = terrain.Native.addNoMergeZoneToGeometry(shape.NativeGeometry, extensionDistance);
+
+            if (noMergeBounds.TryGetValue(shape, out var forbiddenBound) && forbiddenBound != null)
+            {
+                terrain.Native.removeForbiddenBound(forbiddenBound);
+                noMergeBounds.Remove(shape);
+            }
+
+            if (!remove)
+            {
+                shape.NativeGeometry.updateBoundingVolume();
+                var boundingVolume = shape.NativeGeometry.getBoundingVolume();
+                var localTransform = shape.NativeGeometry.getLocalTransform();
+                var createdBound = new agxTerrain.ForbiddenBound(
+                    boundingVolume,
+                    localTransform,
+                    shape.NativeGeometry.getFrame());
+                if (createdBound != null)
+                {
+                    terrain.Native.addForbiddenBound(createdBound);
+                    noMergeBounds[shape] = createdBound;
+                }
+                success = createdBound != null && success;
+            }
 
             if (!success)
                 Debug.LogWarning($"{name} : Failed to " + (remove ? "remove" : "add") + $" shape \"{shape.name}\" " +
