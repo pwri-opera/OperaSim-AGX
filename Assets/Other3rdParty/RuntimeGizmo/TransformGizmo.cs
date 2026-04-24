@@ -744,7 +744,7 @@ namespace RuntimeGizmos
 				Destroy(targetRootsOrdered[0].gameObject);
 				spic120 = null;
 			}
-			else if (targetRootsOrdered[0].name == "zx200" || targetRootsOrdered[0].name.Contains("zx200_") == true)
+			else if (Zx200ObjectUtility.IsZx200Name(targetRootsOrdered[0].name))
 			{
 				ClearAndAddTarget(targetRootsOrdered[0]);
 				zx200obj spzx200 = new zx200obj();
@@ -840,21 +840,22 @@ namespace RuntimeGizmos
 
                     Debug.Log("TopParent Object: " + target.gameObject.name);
 
+                    bool isZx200 = Zx200ObjectUtility.IsZx200Name(target.gameObject.name);
 
-					if (GlobalVariables.ActionMode == 0 && target.gameObject.name.Contains("ic120_") == false && target.gameObject.name.Contains("zx200_") == false && target.gameObject.name != "zx200")
+					if (GlobalVariables.ActionMode == 0 && target.gameObject.name.Contains("ic120_") == false && isZx200 == false)
 					{
 						ClearTargets();
 						GlobalVariables.CameraSelected = false;
 						return;
 
 					}
-					else if (GlobalVariables.ActionMode == 0 && (target.gameObject.name == "zx200" || target.gameObject.name.Contains("zx200_") == true) && GlobalVariables.SetMoveType == 2) // Delete 押下時は選択クリア
+					else if (GlobalVariables.ActionMode == 0 && isZx200 && GlobalVariables.SetMoveType == 2) // Delete 押下時は選択クリア
 					{
                         ClearTargets();
                         GlobalVariables.CameraSelected = false;
                         return;
                     }
-                    else if (GlobalVariables.ActionMode == 1 && target.gameObject.name.Contains("Camera_") == false)
+					else if (GlobalVariables.ActionMode == 1 && target.gameObject.name.Contains("Camera_") == false)
 					{
 						ClearTargets();
 						GlobalVariables.CameraSelected = false;
@@ -893,7 +894,7 @@ namespace RuntimeGizmos
 						machineObj.machineDeselected();
 						machineObj.machineSelected(target.gameObject.name);
 					}
-					else if (GlobalVariables.ActionMode == 0 && (target.gameObject.name == "zx200" || target.gameObject.name.Contains("zx200_") == true))
+					else if (GlobalVariables.ActionMode == 0 && isZx200)
 					{
 						GlobalVariables.CameraSelected = true;
 						UnityEngine.Debug.Log("CameraSelected");

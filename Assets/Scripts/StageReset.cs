@@ -22,6 +22,7 @@ namespace PWRISimulator
         private DeformableTerrain terrain;
 
         private GameObject shovelObj;
+        private string shovelName = SpawnObject.zx200_objName;
         private Vector3 shovelPos;
         private Quaternion shovelQut;
 
@@ -33,9 +34,10 @@ namespace PWRISimulator
             saveScript.SerializeTerrain(Path.Combine(GlobalVariables.BACKUP_FOLDER, fileName));
 
             // ショベルカーの位置を保存
-            shovelObj = GameObject.Find(SpawnObject.zx200_objName);
+            shovelObj = Zx200ObjectUtility.FindZx200Object();
             if (shovelObj != null)
             {
+                shovelName = shovelObj.name;
                 shovelPos = shovelObj.transform.position;
                 shovelQut = shovelObj.transform.rotation;
             }
@@ -78,9 +80,10 @@ namespace PWRISimulator
 
 
                 // ショベルカーを削除
-                shovelObj = GameObject.Find(SpawnObject.zx200_objName);
+                shovelObj = Zx200ObjectUtility.FindZx200Object();
                 if (shovelObj != null)
                 {
+                    shovelName = shovelObj.name;
                     UnityEngine.Object.Destroy(shovelObj);
                 }
 
@@ -120,7 +123,9 @@ namespace PWRISimulator
                 // ショベルカー再配置
                 GameObject zx200_prefab = Resources.Load<GameObject>(SpawnObject.zx200_path);
                 shovelObj = (GameObject)UnityEngine.Object.Instantiate(zx200_prefab, shovelPos, shovelQut);
-                shovelObj.name = SpawnObject.zx200_objName;
+                shovelObj.name = shovelName;
+
+                StartCoroutine(Zx200ObjectUtility.AttachShovelToTerrainWhenInitialized(terrain, shovelObj));
 
 
                 // ショベルカー
@@ -130,11 +135,6 @@ namespace PWRISimulator
 
                 //GlobalVariables.ForceCameraChange = true;
                 CameraChanger.Reset();
-
-
-                // ショベルカー掘削設定
-                var shovel = FindObjectOfType<DeformableTerrainShovel>();
-                terrain.Native.add(shovel.GetInitialized<DeformableTerrainShovel>()?.Native);
 
 
                 // フラグを下ろす
