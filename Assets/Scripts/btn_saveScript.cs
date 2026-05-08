@@ -20,7 +20,7 @@ using Debug = UnityEngine.Debug;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ’nŒ`‚ÌƒZ[ƒuˆ—
+    /// ï¿½nï¿½`ï¿½ÌƒZï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class saveScript : MonoBehaviour
     {
@@ -71,7 +71,7 @@ namespace PWRISimulator
             public double z;
         }
 
-        // ƒ_ƒ“ƒvƒgƒ‰ƒbƒN‚ÌÏÚ
+        // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌÏï¿½
         [System.Serializable]
         public class SaveDumpSoil
         {
@@ -85,7 +85,7 @@ namespace PWRISimulator
             public double mass;
         }
 
-        // d‹@‚Ìp¨(ŠÔ‚ÆƒXƒRƒA‚à’Ç‰Á)
+        // ï¿½dï¿½@ï¿½Ìpï¿½ï¿½(ï¿½ï¿½ï¿½Ô‚ÆƒXï¿½Rï¿½Aï¿½ï¿½ï¿½Ç‰ï¿½)
         [System.Serializable]
         public class SaveMachines
         {
@@ -128,13 +128,13 @@ namespace PWRISimulator
 
             int i = 0;
 
-            // ƒeƒŒƒCƒ“ƒf[ƒ^‚ğæ“¾
+            // ï¿½eï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½æ“¾
             foreach (Terrain _terrain in Terrain.activeTerrains)
             {
                 TerrainData terrainData = _terrain.terrainData;
 
                 SerializedTerrain st = new SerializedTerrain();
-                st.heights = ConvertToFlat(terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution));
+                st.heights = ConvertToFlat(TerrainSaveUtility.GetSerializableHeights(_terrain));
                 st.alphas = ConvertToFlat(terrainData.GetAlphamaps(0, 0, terrainData.alphamapResolution, terrainData.alphamapResolution));
                 st.name = _terrain.name;
 
@@ -152,7 +152,7 @@ namespace PWRISimulator
             Debug.Log("SaveScript COMPLETED IN " + ((Time.realtimeSinceStartup - time)) + " " + json.Length);
 
 
-            // ˆ—Š®—¹ƒtƒ‰ƒO
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
             completedFlag = true;
         }
 
@@ -226,13 +226,13 @@ namespace PWRISimulator
         }
 
 
-        // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡‚ÉŒÄ‚Ño‚µ
+        // ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ê‡ï¿½ÉŒÄ‚Ñoï¿½ï¿½
         public void OnClick()
         {
-            // ˆ—Š®—¹ƒtƒ‰ƒO
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
             completedFlag = false;
 
-            // •Û‘¶ƒfƒBƒŒƒNƒgƒŠ
+            // ï¿½Û‘ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½
             var dirPath = "";
             if (GlobalVariables.ActionMode == 3)
             {
@@ -243,7 +243,7 @@ namespace PWRISimulator
                 dirPath = Path.Combine(GlobalVariables.BACKUP_FOLDER, setDirName);
             }
 
-            // •Û‘¶ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¯‚ê‚Îì¬
+            // ï¿½Û‘ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½Îì¬
             if (!Directory.Exists(dirPath))
             {
                 Directory.CreateDirectory(dirPath);
@@ -251,12 +251,12 @@ namespace PWRISimulator
 
 
 
-            // ŠÔ‚ÆƒXƒRƒA‚ğ•Û
+            // ï¿½ï¿½ï¿½Ô‚ÆƒXï¿½Rï¿½Aï¿½ï¿½Ûï¿½
             var myTime = CountdownTimer.timeRemaining;
             var myScore = GlobalVariables.score;
 
 
-            // ’nŒ`—±qƒ‚ƒfƒ‹‚ğæ“¾
+            // ï¿½nï¿½`ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
             if (terrain == null)
             {
                 terrain = FindObjectOfType<DeformableTerrain>();
@@ -275,7 +275,7 @@ namespace PWRISimulator
                     //Debug.Log("Index: " + i);
                     save.data[i] = new Particles();
 
-                    // agx::Physics::GranularBodyPtr ‚©‚çˆÊ’u‚âŒa‚ğæ“¾
+                    // agx::Physics::GranularBodyPtr ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ï¿½aï¿½ï¿½ï¿½æ“¾
                     var pos = soilParticles.at(i).getPosition();
                     //Debug.Log("Position: " + pos[0] + ", " + pos[1] + ", " + pos[2]);
                     save.data[i].position = new agxVec3();
@@ -300,7 +300,7 @@ namespace PWRISimulator
                 }
             }
 
-            // ’nŒ`—±qƒ‚ƒfƒ‹‚ğ•Û‘¶
+            // ï¿½nï¿½`ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Û‘ï¿½
             if (save.data != null)
             {
                 string json = JsonUtility.ToJson(save, true);
@@ -311,23 +311,23 @@ namespace PWRISimulator
             }
 
 
-            // ’nŒ`‚ğ•Û‘¶
+            // ï¿½nï¿½`ï¿½ï¿½Û‘ï¿½
             SerializeTerrain(Path.Combine(dirPath, fileName));
 
 
-            // d‹@‚Ìp¨•Û
+            // ï¿½dï¿½@ï¿½Ìpï¿½ï¿½ï¿½Ûï¿½
             SaveMachines sm = new SaveMachines();
             int num = (int)GlobalVariables.Dump_ObjList.Count + 1;
             sm.data = new objProperties[num];
             sm.data[0] = new objProperties();
 
 
-            // ŠÔ‚ÆƒXƒRƒA
+            // ï¿½ï¿½ï¿½Ô‚ÆƒXï¿½Rï¿½A
             sm.time = myTime;
             sm.score = myScore;
 
 
-            // ƒJƒƒ‰”z’u•Û‘¶
+            // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½zï¿½uï¿½Û‘ï¿½
             List<Camera> cameras = new List<Camera>();
             cameras.AddRange(FindObjectsOfType<Camera>(true));
 
@@ -379,7 +379,7 @@ namespace PWRISimulator
             }
 
 
-            // ƒVƒ‡ƒxƒ‹ƒJ[‚Ìp¨‚Æ”z’u‚ğæ“¾
+            // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½Ìpï¿½ï¿½ï¿½Æ”zï¿½uï¿½ï¿½ï¿½æ“¾
             GameObject shovelObj = Zx200ObjectUtility.FindZx200Object();
 
             var shovelInput = shovelObj.GetComponent<ExcavatorInput>();
@@ -405,7 +405,7 @@ namespace PWRISimulator
             Debug.Log("Dump_ObjList.Count: " + GlobalVariables.Dump_ObjList.Count);
 
 
-            // ƒ_ƒ“ƒvƒgƒ‰ƒbƒN‚Ìp¨‚Æ”z’u‚ğæ“¾
+            // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Ìpï¿½ï¿½ï¿½Æ”zï¿½uï¿½ï¿½ï¿½æ“¾
             if ((int)GlobalVariables.Dump_ObjList.Count > 0)
             {
                 SaveDumpSoil sd = new SaveDumpSoil();
@@ -433,8 +433,8 @@ namespace PWRISimulator
 
                     sm.data[i + 1].name = dumpObj.name;
                     sm.data[i + 1].id = id;
-                    sm.data[i + 1].p = dumpObj.transform.Find("base_link/body_link").position;
-                    sm.data[i + 1].q = dumpObj.transform.Find("base_link/body_link").rotation;
+                    sm.data[i + 1].p = TerrainSaveUtility.GetMachineRootPosition(dumpObj);
+                    sm.data[i + 1].q = TerrainSaveUtility.GetMachineRootRotation(dumpObj);
                     sm.data[i + 1].active = dumpObj.activeInHierarchy;
 
                     sm.data[i + 1].joint.right_track = dumpJoint.rightSprocket.CurrentPosition;
@@ -442,7 +442,7 @@ namespace PWRISimulator
                     sm.data[i + 1].joint.dump_joint = dumpJoint.dump_joint.CurrentPosition;
                 }
 
-                // ƒ_ƒ“ƒvƒgƒ‰ƒbƒN‚ÌÏÚ•Û‘¶
+                // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌÏÚ•Û‘ï¿½
                 if (sd.data != null)
                 {
                     string json_sd = JsonUtility.ToJson(sd, true);
@@ -454,7 +454,7 @@ namespace PWRISimulator
             }
 
 
-            // d‹@‚Ìp¨‚ğ•Û‘¶
+            // ï¿½dï¿½@ï¿½Ìpï¿½ï¿½ï¿½ï¿½Û‘ï¿½
             if (sm.data != null)
             {
                 string json_sm = JsonUtility.ToJson(sm, true);
@@ -464,7 +464,7 @@ namespace PWRISimulator
                 }
             }
 
-            // “Dà^ƒGƒŠƒA‚ÌƒJƒEƒ“ƒgs—ñ‚ğ•Û‘¶
+            // ï¿½Dï¿½^ï¿½Gï¿½ï¿½ï¿½Aï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½gï¿½sï¿½ï¿½ï¿½Û‘ï¿½
             using (StreamWriter sw = new StreamWriter(Path.Combine(dirPath, "MudAreaMatrix")))
             {
                 //sw.Write(GlobalVariables.countMat);

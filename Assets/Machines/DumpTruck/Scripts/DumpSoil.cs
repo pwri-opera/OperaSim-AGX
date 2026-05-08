@@ -178,7 +178,9 @@ namespace PWRISimulator
 
         // Spawnが最新に更新されたGameTimeの時刻。
         double lastSpawnUpdateTime = 0.0;
-        
+
+        bool isRuntimeReady = false;
+
         // マージされていない（canMerge=falseのせいで）MergeZoneに入っている。
         int numUnmergedParticlesInMergeZone = 0;
 
@@ -248,6 +250,8 @@ namespace PWRISimulator
                 return false;
 
             StartCoroutine(UpdateParticleDataCoroutine(4.0f));
+
+            isRuntimeReady = true;
 
             return base.Initialize();
         }
@@ -380,6 +384,9 @@ namespace PWRISimulator
         /// </summary>
         void Update()
         {
+            if (!isRuntimeReady)
+                return;
+
             if (needsUpdate)
             {
                 needsUpdate = false;
@@ -423,6 +430,12 @@ namespace PWRISimulator
         /// </summary>
         protected override void OnEnable()
         {
+            if (!isRuntimeReady)
+            {
+                base.OnEnable();
+                return;
+            }
+
             Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
             base.OnEnable();
         }
@@ -432,7 +445,7 @@ namespace PWRISimulator
         /// </summary>
         protected override void OnDisable()
         {
-            if (Simulation.HasInstance)
+            if (isRuntimeReady && Simulation.HasInstance)
                 Simulation.Instance.StepCallbacks.PostStepForward -= OnPostStepForward;
             base.OnDisable();
         }
@@ -444,6 +457,9 @@ namespace PWRISimulator
         /// </summary>
         void UpdateMerge()
         {
+            if (terrainNative == null)
+                return;
+
             agx.AffineMatrix4x4 inverseShapeTransform = new agx.AffineMatrix4x4(
                 transform.rotation.ToHandedQuat(),
                 transform.position.ToHandedVec3()).inverse();
@@ -525,6 +541,9 @@ namespace PWRISimulator
         /// </summary>
         void UpdateSpawn()
         {
+            if (emitter == null || emitterBox == null)
+                return;
+
             float timeSinceLastUpdate = (float)(Time.timeAsDouble - lastSpawnUpdateTime);
             lastSpawnUpdateTime = Time.timeAsDouble;
 
@@ -654,6 +673,9 @@ namespace PWRISimulator
         /// <param name="deltaTime">前回に呼び出したときからかかったGame時間</param>
         void UpdateVisualMaterial(double deltaTime)
         {
+            if (!isRuntimeReady)
+                return;
+
             if (meshRenderer == null)
                 meshRenderer = GetComponent<MeshRenderer>();
 

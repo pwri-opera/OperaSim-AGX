@@ -22,7 +22,7 @@ using Debug = UnityEngine.Debug;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ’nŒ`‚Ìƒ[ƒhˆ—
+    /// ï¿½nï¿½`ï¿½Ìƒï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class loadScript : MonoBehaviour
     {
@@ -39,11 +39,11 @@ namespace PWRISimulator
         {
             double time = Time.realtimeSinceStartup;
 
-            // ƒoƒCƒiƒŠƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+            // ï¿½oï¿½Cï¿½iï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
             StreamReader reader = new StreamReader(path + ".ter");
             string jsonString = reader.ReadToEnd();
 
-            // ’nŒ`ƒf[ƒ^‚Ì”z—ñ‚Åˆµ‚¤
+            // ï¿½nï¿½`ï¿½fï¿½[ï¿½^ï¿½Ì”zï¿½ï¿½Åˆï¿½ï¿½ï¿½
             saveScript.SaveData save = new saveScript.SaveData();
             save = JsonUtility.FromJson<saveScript.SaveData>(jsonString);
 
@@ -52,23 +52,23 @@ namespace PWRISimulator
 
             foreach (saveScript.SerializedTerrain st in save.list)
             {
-                // “¯–¼‚ÌƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 GameObject obj = GameObject.Find(st.name);
 
                 if (obj != null)
                 {
-                    // “¯–¼‚ÌƒIƒuƒWƒFƒNƒg‚ª‘¶İ‚µ‚½‚çæ“¾
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
                     TerrainData terrainData = obj.GetComponent<Terrain>().terrainData;
 
-                    // ’nŒ`“Ç‚İ‚İ
+                    // ï¿½nï¿½`ï¿½Ç‚İï¿½ï¿½ï¿½
                     terrainData.SetAlphamaps(0, 0, ConvertFromFlat(st.alphas, terrainData.alphamapResolution, terrainData.alphamapResolution, terrainData.alphamapLayers));
-                    terrainData.SetHeights(0, 0, ConvertFromFlat(st.heights, terrainData.heightmapResolution, terrainData.heightmapResolution));
+                    TerrainSaveUtility.ApplySerializedHeights(obj, ConvertFromFlat(st.heights, terrainData.heightmapResolution, terrainData.heightmapResolution));
                 }
             }
 
             Debug.Log("COMPLETED IN " + ((Time.realtimeSinceStartup - time)) + " " + jsonString.Length);
 
-            // ˆ—Š®—¹ƒtƒ‰ƒO
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
             completedFlag = true;
         }
 
@@ -142,13 +142,13 @@ namespace PWRISimulator
         }
 
 
-        // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡‚ÉŒÄ‚Ño‚µ
+        // ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ê‡ï¿½ÉŒÄ‚Ñoï¿½ï¿½
         public void OnClick()
         {
-            // ˆ—Š®—¹ƒtƒ‰ƒO
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
             completedFlag = false;
 
-            // •Û‘¶ƒfƒBƒŒƒNƒgƒŠ
+            // ï¿½Û‘ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½
             var dirPath = "";
             if (GlobalVariables.ActionMode == 3)
             {
@@ -159,7 +159,7 @@ namespace PWRISimulator
                 dirPath = Path.Combine(GlobalVariables.BACKUP_FOLDER, setDirName);
             }
 
-            // •Û‘¶ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¯‚ê‚Î“Ç‚İ‚ß‚È‚¢‚Ì‚ÅI—¹
+            // ï¿½Û‘ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î“Ç‚İï¿½ï¿½ß‚È‚ï¿½ï¿½Ì‚ÅIï¿½ï¿½
             if (!Directory.Exists(dirPath))
             {
                 completedFlag = true;
@@ -168,9 +168,9 @@ namespace PWRISimulator
 
 
             //----------
-            // •Û‘¶Œn‚Ìƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+            // ï¿½Û‘ï¿½ï¿½nï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
             //----------
-            // p¨
+            // ï¿½pï¿½ï¿½
             StreamReader rd_ms = new StreamReader(Path.Combine(dirPath, "MachinesJoints"));
             string str_ms = rd_ms.ReadToEnd();
             rd_ms.Close();
@@ -180,7 +180,7 @@ namespace PWRISimulator
             GlobalVariables.saveMachines = json_ms;
 
 
-            // ÏÚ
+            // ï¿½Ïï¿½
             StreamReader rd_ds = new StreamReader(Path.Combine(dirPath, "DumpSoil"));
             string str_ds = rd_ds.ReadToEnd();
             rd_ds.Close();
@@ -190,7 +190,7 @@ namespace PWRISimulator
             GlobalVariables.saveDumpSoil = json_ds;
 
 
-            // “yë—±qƒ‚ƒfƒ‹
+            // ï¿½yï¿½ë—±ï¿½qï¿½ï¿½ï¿½fï¿½ï¿½
             StreamReader rd = new StreamReader(Path.Combine(dirPath, "SoilParticles"));
             string str_p = rd.ReadToEnd();
             rd.Close();
@@ -201,18 +201,18 @@ namespace PWRISimulator
 
 
             //----------
-            // ’nŒ`Ä“Ç‚İ‚İ
+            // ï¿½nï¿½`ï¿½Ä“Ç‚İï¿½ï¿½ï¿½
             //----------
-            // “Dà^ƒGƒŠƒA‚ÌƒJƒEƒ“ƒgƒŠƒZƒbƒg
+            // ï¿½Dï¿½^ï¿½Gï¿½ï¿½ï¿½Aï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Zï¿½bï¿½g
             GlobalVariables.countMat.Clear();
 
-            // AGX’nŒ`æ“¾
+            // AGXï¿½nï¿½`ï¿½æ“¾
             if (terrain == null)
             {
                 terrain = FindObjectOfType<DeformableTerrain>();
             }
 
-            // “yë—±qƒ‚ƒfƒ‹‚ğíœ
+            // ï¿½yï¿½ë—±ï¿½qï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½íœ
             var soilSim = terrain.Native?.getSoilSimulationInterface();
             var soilParticles = soilSim.getSoilParticles();
 
@@ -221,38 +221,36 @@ namespace PWRISimulator
                 soilSim.removeSoilParticle(soilParticles.at(i));
             }
 
-            // ’nŒ`‚ğ“Ç
+            // ï¿½nï¿½`ï¿½ï¿½Çï¿½
             DeserializeTerrain(Path.Combine(dirPath, fileName));
 
-            // ƒŠƒZƒbƒg
-            terrain.ResetHeights();
-
-            // ’nŒ`ƒXƒRƒAƒŠƒ“ƒO‚ÌƒŠƒZƒbƒg
+            // ï¿½nï¿½`ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
             TerrainScore.Reset();
 
 
             //----------
-            // d‹@Ä“Ç‚İ‚İ
+            // ï¿½dï¿½@ï¿½Ä“Ç‚İï¿½ï¿½ï¿½
             //----------
-            // ƒVƒ‡ƒxƒ‹ƒJ[íœ
+            // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½íœ
             GameObject _shovelObj = Zx200ObjectUtility.FindZx200Object();
             if (_shovelObj != null)
             {
                 UnityEngine.Object.Destroy(_shovelObj);
             }
 
-            // ˆÊ’u
+            // ï¿½Ê’u
             Vector3 _pos = new Vector3((float)json_ms.data[0].p.x, (float)json_ms.data[0].p.y, (float)json_ms.data[0].p.z);
             Debug.Log(_pos);
 
-            // ‰ñ“]
+            // ï¿½ï¿½]
             Quaternion _qut = new Quaternion((float)json_ms.data[0].q.x, (float)json_ms.data[0].q.y, (float)json_ms.data[0].q.z, (float)json_ms.data[0].q.w);
             Debug.Log(_qut);
 
-            // ƒVƒ‡ƒxƒ‹ƒJ[Ä”z’u
+            // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½Ä”zï¿½u
             GameObject zx200_prefab = Resources.Load<GameObject>(SpawnObject.zx200_path);
             GameObject shovelObj = (GameObject)UnityEngine.Object.Instantiate(zx200_prefab, _pos, _qut);
             shovelObj.name = string.IsNullOrEmpty(json_ms.data[0].name) ? SpawnObject.zx200_objName : json_ms.data[0].name;
+            shovelObj.SetActive(json_ms.data[0].active);
 
             StartCoroutine(Zx200ObjectUtility.AttachShovelToTerrainWhenInitialized(terrain, shovelObj));
 
@@ -261,14 +259,27 @@ namespace PWRISimulator
             Debug.Log("Dump_ObjList.Count: " + GlobalVariables.Dump_ObjList.Count);
 
 
-            // ƒ_ƒ“ƒvƒgƒ‰ƒbƒNíœ
+            var dumpObjectsToDestroy = new HashSet<GameObject>();
             for (int i = 0; i < GlobalVariables.Dump_ObjList.Count; i++)
             {
-                GameObject dumpObj = GlobalVariables.Dump_ObjList[i];
+                if (GlobalVariables.Dump_ObjList[i] != null)
+                    dumpObjectsToDestroy.Add(GlobalVariables.Dump_ObjList[i]);
+            }
 
+            foreach (var dumpInput in FindObjectsOfType<DumpTruckInput>(true))
+            {
+                var dumpRoot = dumpInput.transform.root.gameObject;
+                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name))
+                    dumpObjectsToDestroy.Add(dumpRoot);
+            }
+
+            // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½íœ
+            foreach (GameObject dumpObj in dumpObjectsToDestroy)
+            {
                 if (dumpObj != null)
                 {
-                    // íœ
+                    // ï¿½íœ
+                    dumpObj.SetActive(false);
                     Destroy(dumpObj);
                     GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
                     if (objMassBody != null) Destroy(objMassBody);
@@ -277,24 +288,33 @@ namespace PWRISimulator
                 }
             }
 
-            // •Û‚µ‚Ä‚¢‚éƒ_ƒ“ƒvƒgƒ‰ƒbƒNƒIƒuƒWƒFƒNƒgƒŠƒXƒg‚ÌƒNƒŠƒA
+            foreach (var dumpInput in FindObjectsOfType<DumpTruckInput>(true))
+            {
+                var dumpRoot = dumpInput.transform.root.gameObject;
+                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name))
+                {
+                    dumpRoot.SetActive(false);
+                }
+            }
+
+            // ï¿½Ûï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒNï¿½ï¿½ï¿½A
             GlobalVariables.Dump_IDList.Clear();
             GlobalVariables.Dump_ObjList.Clear();
 
             GlobalVariables.ic120Counter = 0;
 
 
-            // ƒ_ƒ“ƒvƒgƒ‰ƒbƒN‚ÉŠÖ‚·‚éî•ñ“Ç‚İ‚İ
+            // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÉŠÖ‚ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
             for (int i = 1; i < json_ms.data.Length; i++)
             {
-                // Ä”z’u
+                // ï¿½Ä”zï¿½u
                 GameObject ic120_prefab = Resources.Load<GameObject>("Prefabs/ic120_prefVar");
                 GameObject ic120obj = (GameObject)UnityEngine.Object.Instantiate(ic120_prefab, json_ms.data[i].p, json_ms.data[i].q);
                 ic120obj.name = json_ms.data[i].name;
 
-                // ID‚ğ•Û
+                // IDï¿½ï¿½Ûï¿½
                 GlobalVariables.Dump_IDList.Add(json_ms.data[i].id);
-                // ƒIƒuƒWƒFƒNƒg‚ğ•Û
+                // ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½Ûï¿½
                 GlobalVariables.Dump_ObjList.Add(ic120obj);
 
                 GlobalVariables.ic120Counter += 1;
@@ -302,9 +322,9 @@ namespace PWRISimulator
 
 
             //----------
-            // ƒJƒƒ‰Ä“Ç‚İ‚İ
+            // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ä“Ç‚İï¿½ï¿½ï¿½
             //----------
-            // Œ»İ”z’u‚³‚ê‚Ä‚¢‚éƒJƒƒ‰‚ğíœ
+            // ï¿½ï¿½ï¿½İ”zï¿½uï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½íœ
             List<Camera> cameras = new List<Camera>();
             cameras.AddRange(FindObjectsOfType<Camera>(true));
 
@@ -312,23 +332,23 @@ namespace PWRISimulator
             {
                 //Debug.Log(cameras[i].gameObject.transform.root.gameObject.name.Contains("Camera_"));
 
-                // ’Ç‰Á‚µ‚½ƒJƒƒ‰‚Ì‚İíœ
+                // ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‚İíœ
                 if (cameras[i].gameObject.transform.root.gameObject.name.Contains("Camera_"))
                 {
                     UnityEngine.Object.Destroy(cameras[i].gameObject.transform.root.gameObject);
                 }
             }
 
-            // ƒJƒƒ‰‚ÌƒJƒEƒ“ƒgƒŠƒZƒbƒg
+            // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Zï¿½bï¿½g
             GlobalVariables.CameraCounter = 0;
 
 
-            // ƒJƒƒ‰ˆÊ’u“Ç‚İ‚İ
+            // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½Ç‚İï¿½ï¿½ï¿½
             for (int i = 0; i < json_ms.camera.Length; i++)
             {
                 if (json_ms.camera[i].name.Contains("Camera_"))
                 {
-                    // ’Ç‰Á‚µ‚½ƒJƒƒ‰
+                    // ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
                     var cameraObj = new cameraObj();
                     cameraObj.Spawn_Camera(json_ms.camera[i].p, json_ms.camera[i].q, Int32.Parse(json_ms.camera[i].id), SpawnObject.camera_path);
 
@@ -343,7 +363,7 @@ namespace PWRISimulator
                 }
                 else if (json_ms.camera[i].name.Contains("MainCameraStr"))
                 {
-                    // ƒƒCƒ“ƒJƒƒ‰
+                    // ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
                     var obj = GameObject.Find(json_ms.camera[i].name);
                     if (obj != null)
                     {
@@ -354,16 +374,16 @@ namespace PWRISimulator
                 }
                 else
                 {
-                    // d‹@‚ÌƒJƒƒ‰
+                    // ï¿½dï¿½@ï¿½ÌƒJï¿½ï¿½ï¿½ï¿½
                     GameObject obj = null;
                     if (json_ms.camera[i].name.Contains("zx200"))
                     {
-                        // ƒVƒ‡ƒxƒ‹ƒJ[
+                        // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[
                         obj = shovelObj.transform.Find("base_link/track_link/CameraStr").gameObject;
                     }
                     else
                     {
-                        // ƒ_ƒ“ƒvƒgƒ‰ƒbƒN
+                        // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½N
                         for (int j = 0; j < GlobalVariables.Dump_ObjList.Count; i++)
                         {
                             if (GlobalVariables.Dump_ObjList[j].name == json_ms.camera[i].name)
@@ -389,7 +409,7 @@ namespace PWRISimulator
 
 
 
-            // “Dà^ƒGƒŠƒA‚ÌƒJƒEƒ“ƒgs—ñ“Ç
+            // ï¿½Dï¿½^ï¿½Gï¿½ï¿½ï¿½Aï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½gï¿½sï¿½ï¿½Çï¿½
             using (StreamReader sr = new StreamReader(Path.Combine(dirPath, "MudAreaMatrix")))
             {
                 string content = sr.ReadToEnd();
@@ -432,10 +452,10 @@ namespace PWRISimulator
             //}
 
 
-            // ƒJƒEƒ“ƒgƒŠƒZƒbƒg
+            // ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Zï¿½bï¿½g
             GlobalVariables.SetupJointDumpCount = 0;
 
-            // ƒtƒ‰ƒO‚ğØ‚è‘Ö‚¦‚Ä“®ìŠJn
+            // ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½Ä“ï¿½ï¿½ï¿½Jï¿½n
             GlobalVariables.SetupJointFlag = true;
             GlobalVariables.SetupJointDumpFlag = true;
 
