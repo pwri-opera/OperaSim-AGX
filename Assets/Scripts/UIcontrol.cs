@@ -97,6 +97,10 @@ namespace PWRISimulator
         // Start is called before the first frame update
         void Start()
         {
+            // シーン再ロード時に前回の倍率が残らないようにリセット
+            Time.timeScale = 1.0f;
+            GlobalVariables.SimulationSpeedMultiplier = 1.0f;
+
             machineObj = new MachineObjCamCont();
 
             StatusBoardUIobj = Instantiate(StatusBoardUI);
@@ -390,6 +394,11 @@ namespace PWRISimulator
             save_root.Q<Button>("Save").clicked += () => SaveClicked();
             save_root.Q<Button>("Load").clicked += () => LoadClicked();
             save_root.Q<Button>("Reset").clicked += () => ResetClicked();
+
+            // シミュレーション速度倍率を適用し、リアルタイム性確認用プローブを起動
+            Time.timeScale = GlobalVariables.SimulationSpeedMultiplier;
+            if (GetComponent<RealtimeFidelityProbe>() == null)
+                gameObject.AddComponent<RealtimeFidelityProbe>();
         }
 
 
@@ -525,6 +534,31 @@ namespace PWRISimulator
                     GlobalVariables.ShowScoreBoard = evt.newValue;
                 });
             }
+
+            var simSpeedGroup = root.Q<RadioButtonGroup>("SimulationSpeed");
+            if (simSpeedGroup != null)
+            {
+                simSpeedGroup.SetValueWithoutNotify(IndexFromMultiplier(GlobalVariables.SimulationSpeedMultiplier));
+                simSpeedGroup.RegisterValueChangedCallback(evt =>
+                {
+                    GlobalVariables.SimulationSpeedMultiplier = MultiplierFromIndex(evt.newValue);
+                });
+            }
+        }
+
+        static readonly float[] SimSpeedChoices = { 1.0f, 1.5f, 2.0f, 3.0f, 4.0f };
+
+        static float MultiplierFromIndex(int index)
+        {
+            if (index < 0 || index >= SimSpeedChoices.Length) return 1.0f;
+            return SimSpeedChoices[index];
+        }
+
+        static int IndexFromMultiplier(float multiplier)
+        {
+            for (int i = 0; i < SimSpeedChoices.Length; i++)
+                if (Mathf.Approximately(SimSpeedChoices[i], multiplier)) return i;
+            return 0;
         }
 
 

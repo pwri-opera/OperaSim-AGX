@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ƒXƒRƒAƒŠƒ“ƒO•\¦XVˆ—
+    /// ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½\ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class Score : MonoBehaviour
     {
@@ -20,6 +20,9 @@ namespace PWRISimulator
         {
             root = this.GetComponent<UIDocument>().rootVisualElement;
 
+            var speedLabel = root.Q<UnityEngine.UIElements.Label>("SpeedValue");
+            if (speedLabel != null)
+                speedLabel.text = $"x{GlobalVariables.SimulationSpeedMultiplier:0.0}";
         }
 
 
@@ -41,6 +44,14 @@ namespace PWRISimulator
                 {
                     var Score = root.Q<UnityEngine.UIElements.Label>("Value");
                     Score.text = CalcScore().ToString();
+
+                    var speedLabel = root.Q<UnityEngine.UIElements.Label>("SpeedValue");
+                    if (speedLabel != null)
+                    {
+                        speedLabel.text =
+                            $"x{GlobalVariables.SimulationSpeedMultiplier:0.0} " +
+                            $"(å®Ÿx{RealtimeFidelityProbe.LastRatio:0.0})";
+                    }
                 }
 
                 timeElapsed = 0.0f;
