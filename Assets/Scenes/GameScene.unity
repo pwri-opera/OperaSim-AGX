@@ -11228,6 +11228,77 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e1d2889352af4843b1be19ca7db47fc, type: 3}
+--- !u!1 &315138532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 315138535}
+  - component: {fileID: 315138534}
+  - component: {fileID: 315138533}
+  m_Layer: 0
+  m_Name: AreaPointCloudPublisher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &315138533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315138532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87cf639f3a12d54aabafb23f0c9c375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topicName: /area_pc
+  frameId: map
+  publishPeriod: 0.5
+  resolution: 0.2
+  snapYToTerrainOnStart: 1
+--- !u!114 &315138534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315138532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 362d16744d45e154f9e5d027f576dbdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xSize: 10
+  zSize: 10
+  pointDistance: 0.1
+  originPointObject: {fileID: 315138532}
+  showRangeInSceneWindow: 1
+  showPointVisuals: 0
+  visualMesh: {fileID: 0}
+  visualScale: 1
+  visualColor: {r: 0.3, g: 0.9, b: 1, a: 1}
+--- !u!4 &315138535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315138532}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &322133195
 GameObject:
   m_ObjectHideFlags: 0
@@ -67347,3 +67418,4 @@ SceneRoots:
   - {fileID: 7711977559838823900}
   - {fileID: 71004307}
   - {fileID: 1106646298}
+  - {fileID: 315138535}
