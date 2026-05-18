@@ -172,6 +172,9 @@ namespace PWRISimulator
         // ScoreBoard（総獲得点）の表示フラグ。シミュレーション開始前にメニュー UI のチェックボックスで切り替える。
         public static bool ShowScoreBoard = true;
 
+        // シミュレーション速度倍率。Pre-sim メニューで選択し、開始時に Time.timeScale に適用される。
+        public static float SimulationSpeedMultiplier = 1.0f;
+
         private static Mutex _mutexScore = new Mutex();
         private static Mutex _mutexOOFAT = new Mutex();
         private static Mutex _mutexAOPS = new Mutex();

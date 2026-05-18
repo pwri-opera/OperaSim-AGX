@@ -3,4 +3,7 @@
         <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Value" style="align-items: flex-start; top: 0; width: 219px; height: 46px; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: bold; -unity-text-align: middle-right; font-size: 25px; position: relative;" />
         <ui:Label tabindex="-1" text="Score :" parse-escape-sequences="true" display-tooltip-when-elided="true" name="name" style="top: 8px; position: absolute; left: 5px; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: bold; font-size: 20px; -unity-text-align: upper-left; height: 46px;" />
     </ui:VisualElement>
+    <ui:VisualElement name="Speed" style="position: absolute; height: 32px; width: 180px; top: 70px; right: 10px; background-color: rgba(250, 249, 249, 0.59); align-items: center; justify-content: center;">
+        <ui:Label tabindex="-1" text="x1.0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SpeedValue" style="-unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: bold; font-size: 18px;" />
+    </ui:VisualElement>
 </ui:UXML>

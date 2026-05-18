@@ -5,6 +5,7 @@
         <ui:Button text="Camera Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CameraPositionSetting" style="text-overflow: ellipsis; height: 26px;" />
         <ui:Button text="Camera Selection" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SelectCamera" style="height: 29px;" />
         <ui:Button text="Start Simulation" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SimulationStart" style="height: 27px;" />
+        <ui:RadioButtonGroup label="Sim Speed" name="SimulationSpeed" value="0" choices="x1.0,x1.5,x2.0,x3.0,x4.0" style="margin-top: 12px;" />
     </ui:VisualElement>
     <ui:Toggle label="総得点を標示" name="ShowScore" value="true" style="position: absolute; top: 20px; right: 20px; -unity-font-style: bold; -unity-font: resource('Fonts/BIZUDPGothic-Regular'); -unity-font-definition: initial;" />
 </ui:UXML>
