@@ -157,11 +157,19 @@ namespace AGXUnity.Model
 
       Native.setTransform( Utils.TerrainUtils.CalculateNativeOffset( transform, TerrainData ) );
 
-
-      foreach ( var shovel in Shovels )
-        Native.add( shovel.GetInitialized<DeformableTerrainShovel>()?.Native );
-
       GetSimulation().add( Native );
+
+      foreach ( var shovel in Shovels ) {
+        try {
+          var initializedShovel = shovel.GetInitialized<DeformableTerrainShovel>();
+          if ( initializedShovel?.Native != null )
+            Native.add( initializedShovel.Native );
+        }
+        catch ( System.Exception e ) {
+          Debug.LogWarning( "Failed to initialize deformable terrain shovel. Terrain will continue without this shovel.", shovel );
+          Debug.LogException( e, shovel );
+        }
+      }
     }
 
     private void ResetTerrainDataHeightsAndTransform()
