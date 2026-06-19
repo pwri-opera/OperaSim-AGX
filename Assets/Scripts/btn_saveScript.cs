@@ -399,7 +399,7 @@ namespace PWRISimulator
 
 
             // ショベルカーの姿勢と配置を取得
-            GameObject shovelObj = GameObject.Find(SpawnObject.zx200_objName);
+            GameObject shovelObj = Zx200ObjectUtility.FindZx200Object();
 
             var shovelInput = shovelObj.GetComponent<ExcavatorInput>();
             var shovelJoint = shovelInput.joints;
