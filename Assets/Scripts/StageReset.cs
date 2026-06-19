@@ -10,13 +10,13 @@ using AGXUnity.Model;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ƒŠƒZƒbƒgˆ—
+    /// ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class StageReset : MonoBehaviour
     {
         private const string fileName = "StartTerrain";
 
-        // AgxDynamics‚Ì“à‘ ‚ÌTerrainƒIƒuƒWƒFƒNƒgB
+        // AgxDynamicsï¿½Ì“ï¿½ï¿½ï¿½ï¿½ï¿½Terrainï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½B
         private agxTerrain.Terrain terrainNative;
 
         private DeformableTerrain terrain;
@@ -28,11 +28,12 @@ namespace PWRISimulator
         // Start is called before the first frame update
         void Start()
         {
-            // ‰Šú’nŒ`‚ğ•Û‘¶
-            var saveScript = new saveScript();
+            // ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½`ï¿½ï¿½Û‘ï¿½
+            var saveScript = gameObject.AddComponent<saveScript>();
             saveScript.SerializeTerrain(Path.Combine(GlobalVariables.BACKUP_FOLDER, fileName));
+            Destroy(saveScript);
 
-            // ƒVƒ‡ƒxƒ‹ƒJ[‚ÌˆÊ’u‚ğ•Û‘¶
+            // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½ÌˆÊ’uï¿½ï¿½Û‘ï¿½
             shovelObj = GameObject.Find(SpawnObject.zx200_objName);
             if (shovelObj != null)
             {
@@ -44,19 +45,19 @@ namespace PWRISimulator
         // Update is called once per frame
         void Update()
         {
-            // ƒŠƒZƒbƒg‚ªÀs‚³‚ê‚½ê‡
+            // ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ê‚½ï¿½ê‡
             if (GlobalVariables.SelectMode == 2)
             {
-                // “Dà^ƒGƒŠƒA‚ÌƒJƒEƒ“ƒgƒŠƒZƒbƒg
+                // ï¿½Dï¿½^ï¿½Gï¿½ï¿½ï¿½Aï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Zï¿½bï¿½g
                 GlobalVariables.countMat.Clear();
 
-                // AGX’nŒ`æ“¾
+                // AGXï¿½nï¿½`ï¿½æ“¾
                 if (terrain == null)
                 {
                     terrain = FindObjectOfType<DeformableTerrain>();
                 }
 
-                // “yë—±qƒ‚ƒfƒ‹‚ğíœ
+                // ï¿½yï¿½ë—±ï¿½qï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½íœ
                 var soilSim = terrain.Native?.getSoilSimulationInterface();
                 var soilParticles = soilSim.getSoilParticles();
 
@@ -66,18 +67,19 @@ namespace PWRISimulator
                 }
 
 
-                // •Û‘¶‚µ‚½‰Šú’nŒ`‚ğ“Ç
-                var loadScript = new loadScript();
+                // ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½`ï¿½ï¿½Çï¿½
+                var loadScript = gameObject.AddComponent<loadScript>();
                 loadScript.DeserializeTerrain(Path.Combine(GlobalVariables.BACKUP_FOLDER, fileName));
+                Destroy(loadScript);
 
-                // ƒnƒCƒgƒ}ƒbƒv‚ÌƒŠƒZƒbƒg
+                // ï¿½nï¿½Cï¿½gï¿½}ï¿½bï¿½vï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
                 terrain.ResetHeights();
 
-                // ’nŒ`ƒXƒRƒAƒŠƒ“ƒO‚ÌƒŠƒZƒbƒg
+                // ï¿½nï¿½`ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
                 TerrainScore.Reset();
 
 
-                // ƒVƒ‡ƒxƒ‹ƒJ[‚ğíœ
+                // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½ï¿½ï¿½íœ
                 shovelObj = GameObject.Find(SpawnObject.zx200_objName);
                 if (shovelObj != null)
                 {
@@ -88,7 +90,7 @@ namespace PWRISimulator
                 UnityEngine.Debug.Log("Dump_IDList.Count: " + GlobalVariables.Dump_IDList.Count);
                 UnityEngine.Debug.Log("Dump_ObjList.Count: " + GlobalVariables.Dump_ObjList.Count);
 
-                // ƒ_ƒ“ƒvƒgƒ‰ƒbƒNíœ
+                // ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½íœ
                 for (int i = 0; i < GlobalVariables.Dump_ObjList.Count; i++)
                 {
                     UnityEngine.Debug.Log("ID: " + GlobalVariables.Dump_IDList[i]);
@@ -97,7 +99,7 @@ namespace PWRISimulator
 
                     if (dumpObj != null)
                     {
-                        // íœ
+                        // ï¿½íœ
                         Destroy(dumpObj);
                         GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
                         if (objMassBody != null) Destroy(objMassBody);
@@ -108,22 +110,22 @@ namespace PWRISimulator
 
 
 
-                // •Û‚µ‚Ä‚¢‚éƒ_ƒ“ƒvƒgƒ‰ƒbƒNƒIƒuƒWƒFƒNƒgƒŠƒXƒg‚ÌƒNƒŠƒA
+                // ï¿½Ûï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒNï¿½ï¿½ï¿½A
                 GlobalVariables.Dump_IDList.Clear();
                 GlobalVariables.Dump_ObjList.Clear();
 
-                // ƒJƒEƒ“ƒ^[‚ÌƒNƒŠƒA
+                // ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½[ï¿½ÌƒNï¿½ï¿½ï¿½A
                 GlobalVariables.CameraCounter = 0;
                 GlobalVariables.ic120Counter = 0;
 
 
-                // ƒVƒ‡ƒxƒ‹ƒJ[Ä”z’u
+                // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½Ä”zï¿½u
                 GameObject zx200_prefab = Resources.Load<GameObject>(SpawnObject.zx200_path);
                 shovelObj = (GameObject)UnityEngine.Object.Instantiate(zx200_prefab, shovelPos, shovelQut);
                 shovelObj.name = SpawnObject.zx200_objName;
 
 
-                // ƒVƒ‡ƒxƒ‹ƒJ[
+                // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[
                 Transform obj = shovelObj.transform.Find("base_link/body_link/CameraStr")
                     ?? shovelObj.transform.Find("base_link/track_link/CameraStr");
                 if (obj != null)                {
@@ -134,12 +136,12 @@ namespace PWRISimulator
                 CameraChanger.Reset();
 
 
-                // ƒVƒ‡ƒxƒ‹ƒJ[Œ@íİ’è
+                // ï¿½Vï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Jï¿½[ï¿½@ï¿½ï¿½İ’ï¿½
                 var shovel = FindObjectOfType<DeformableTerrainShovel>();
                 terrain.Native.add(shovel.GetInitialized<DeformableTerrainShovel>()?.Native);
 
 
-                // ƒtƒ‰ƒO‚ğ‰º‚ë‚·
+                // ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ë‚·
                 GlobalVariables.SelectMode = -1;
             }
         }
