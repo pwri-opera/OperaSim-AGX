@@ -34,6 +34,8 @@ namespace PWRISimulator
             float realElapsed = realNow - realStartTime;
             float simElapsed = Time.time - simStartTime;
             float ratio = simElapsed / Mathf.Max(realElapsed, 1e-6f);
+            // ratio を小数点第二位で四捨五入
+            ratio = Mathf.Round(ratio * 100f) / 100f;
             LastRatio = ratio;
 
             if (logToConsole)
