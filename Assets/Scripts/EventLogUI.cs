@@ -48,7 +48,8 @@ namespace PWRISimulator
         private void HandleEvent(GlobalVariables.ScoreEvent evt)
         {
             string name = ScoreEventLogger.GetName(evt.Id);
-            string text = string.Format("{0} {1} {2:+0;-0}pt", evt.Id, name, evt.Point);
+            string time = FormatElapsed(GlobalVariables.GameTime - CountdownTimer.timeRemaining);
+            string text = string.Format("[{0}] {1} {2} {3:+0;-0}pt", time, evt.Id, name, evt.Point);
             Color color = evt.Point >= 0 ? PositiveColor : NegativeColor;
 
             _entries.AddFirst((text, color));
@@ -56,6 +57,15 @@ namespace PWRISimulator
                 _entries.RemoveLast();
 
             Refresh();
+        }
+
+        // Sim 開始からの経過時間を mm:ss 形式で返す。イベント発生時刻として併記する。
+        private static string FormatElapsed(float seconds)
+        {
+            if (seconds < 0f) seconds = 0f;
+            int minutes = Mathf.FloorToInt(seconds / 60f);
+            int secs = Mathf.FloorToInt(seconds % 60f);
+            return string.Format("{0:00}:{1:00}", minutes, secs);
         }
 
         private void Refresh()
