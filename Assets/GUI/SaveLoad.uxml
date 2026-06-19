@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="SaveLoad" style="flex-grow: 1; width: 265px; position: absolute; left: auto; bottom: auto; top: 100px;">
-        <ui:Button text="Save" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Save" style="-unity-font-style: bold; height: 27px;" />
-        <ui:Button text="Load" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Load" style="-unity-font-style: bold; height: 27px;" />
-        <ui:Button text="Reset" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Reset" style="-unity-font-style: bold; height: 27px;" />
+    <ui:VisualElement name="SaveLoad" picking-mode="Ignore" style="flex-grow: 1; width: 265px; position: absolute; left: auto; bottom: 60px; top: 100px; -unity-text-align: upper-left; align-self: flex-end; justify-content: flex-end; right: 10px;">
+        <ui:Button text="Save" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Save" style="-unity-font-style: bold; height: 27px; margin-right: 0;" />
+        <ui:Button text="Load" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Load" style="-unity-font-style: bold; height: 27px; margin-right: 0;" />
+        <ui:Button text="Reset" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Reset" style="-unity-font-style: bold; height: 27px; margin-right: 0;" />
     </ui:VisualElement>
 </ui:UXML>

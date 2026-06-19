@@ -1,0 +1,7 @@
+/* Sim Speed ラジオ群: フィールドラベルが固定幅の列を確保して
+   ラベルとラジオの間に余分な空白ができるのを防ぐ。 */
+#SimulationSpeed > .unity-base-field__label {
+    min-width: auto;
+    width: auto;
+    margin-right: 8px;
+}

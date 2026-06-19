@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="Score" style="flex-grow: 1; position: absolute; height: 50px; width: 252px; align-items: center; background-color: rgba(250, 249, 249, 0.59); top: 10px; left: auto; right: 10px;">
+    <ui:VisualElement name="Score" style="flex-grow: 1; position: absolute; height: 50px; width: 240px; align-items: center; background-color: rgba(250, 249, 249, 0.59); top: 10px; left: auto; right: 10px;">
         <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Value" style="align-items: flex-start; top: 0; width: 219px; height: 46px; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: bold; -unity-text-align: middle-right; font-size: 25px; position: relative;" />
         <ui:Label tabindex="-1" text="Score :" parse-escape-sequences="true" display-tooltip-when-elided="true" name="name" style="top: 8px; position: absolute; left: 5px; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: bold; font-size: 20px; -unity-text-align: upper-left; height: 46px;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Speed" style="position: absolute; height: 32px; width: 180px; top: 70px; right: 10px; background-color: rgba(250, 249, 249, 0.59); align-items: center; justify-content: center;">
-        <ui:Label tabindex="-1" text="x1.0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SpeedValue" style="-unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: bold; font-size: 18px;" />
+    <ui:VisualElement name="Speed" style="position: absolute; height: 40px; width: 200px; bottom: 10px; right: 10px; background-color: rgba(250, 249, 249, 0.59); align-items: center; justify-content: center; font-size: 14px;">
+        <ui:Label tabindex="-1" text="x1.0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SpeedValue" style="-unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; -unity-font-style: normal; font-size: 14px;" />
     </ui:VisualElement>
 </ui:UXML>
