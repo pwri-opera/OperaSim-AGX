@@ -5,7 +5,7 @@ using AGXUnity.Collide;
 using AGXUnity.Model;
 using AGXUnity.Utils;
 using Math = System.Math;
-using System.Diagnostics;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -153,6 +153,65 @@ namespace PWRISimulator
 
         #endregion
 
+        #region Capture Classification Utility
+
+        /// <summary>
+        /// Pure static utility for local-space capture-zone overlap classification.
+        /// Free of AGX runtime dependencies — tested directly in EditMode.
+        /// </summary>
+        public static class CaptureUtil
+        {
+            public struct LocalCaptureBounds
+            {
+                public Vector3 min;
+                public Vector3 max;
+            }
+
+            /// <summary>
+            /// Calculate the local-space capture bounds for the given vessel size and soil height.
+            /// X is centered around 0; Z follows the merge-zone convention: min.z = 0, max.z = originalSize.z
+            /// (rear-half of the vessel from the original center at local z = 0.5).
+            /// </summary>
+            public static LocalCaptureBounds CalculateLocalCaptureBounds(Vector3 originalSize, double soilHeight)
+            {
+                float halfWidth = originalSize.x * 0.5f;
+                float y = (float)soilHeight;
+                return new LocalCaptureBounds
+                {
+                    min = new Vector3(-halfWidth, y, 0f),
+                    max = new Vector3(halfWidth, y, originalSize.z)
+                };
+            }
+
+            /// <summary>
+            /// Calculate the broad-phase world-space AABB expanded by <paramref name="expansion"/>
+            /// on all axes.  Makes the broad-phase bounds expansion rules explicit and testable.
+            /// </summary>
+            public static LocalCaptureBounds CalculateWorldBroadPhaseBounds(Vector3 worldMin, Vector3 worldMax, double expansion)
+            {
+                float e = (float)expansion;
+                return new LocalCaptureBounds
+                {
+                    min = new Vector3(worldMin.x - e, worldMin.y - e, worldMin.z - e),
+                    max = new Vector3(worldMax.x + e, worldMax.y + e, worldMax.z + e)
+                };
+            }
+
+            /// <summary>
+            /// Returns true if a sphere at <paramref name="localPos"/> with <paramref name="radius"/>
+            /// overlaps the axis-aligned capture bounds.
+            /// </summary>
+            public static bool IsSphereOverlappingBounds(Vector3 localPos, double radius, LocalCaptureBounds bounds)
+            {
+                float r = (float)radius;
+                return !(localPos.x - r > bounds.max.x || localPos.x + r < bounds.min.x ||
+                         localPos.z - r > bounds.max.z || localPos.z + r < bounds.min.z ||
+                         localPos.y - r > bounds.max.y || localPos.y + r < bounds.min.y);
+            }
+        }
+
+        #endregion
+
         #region Private Fields
 
         // AgxDynamicsの内蔵のTerrainオブジェクト。
@@ -173,8 +232,14 @@ namespace PWRISimulator
         // このGameObjectのペアレント荷台剛体に対して元々の相対的な位置、回転。
         agx.AffineMatrix4x4 transformRelativeToContainerBody;
 
-        // MergeとSpawnの更新が必要かどうか。
-        bool needsUpdate = true;
+        // 前回のUpdateから蓄積されたシミュレーションステップ通知数。
+        // OnPostStepForwardでインクリメントされ、Update()でProcessCaptureStep()として消費される。
+        int pendingStepCount = 0;
+
+#if UNITY_ASSERTIONS
+        // ProcessCaptureStep()が呼び出された累計回数。主にテスト検証用。
+        int captureStepExecutionCount = 0;
+#endif
 
         // Spawnが最新に更新されたGameTimeの時刻。
         double lastSpawnUpdateTime = 0.0;
@@ -195,6 +260,15 @@ namespace PWRISimulator
 
         // ParticleEmitterが開始から今まで生成した粒子の数。
         double emittedQuantity = 0.0;
+
+        // Per-step vessel-local candidate set.  Populated in the broad-phase pass,
+        // consumed by the exact overlap and decision passes.  Indices into the
+        // current granulars collection, valid only within UpdateCaptureCandidatesPerStep.
+        List<int> captureCandidates = new List<int>();
+
+        // Indices of particles confirmed for merge removal.  Batch-processed in
+        // descending order to keep indices stable during removal.
+        List<int> particlesToMerge = new List<int>();
 
         #endregion
 
@@ -252,6 +326,7 @@ namespace PWRISimulator
             StartCoroutine(UpdateParticleDataCoroutine(4.0f));
 
             isRuntimeReady = true;
+            Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
 
             return base.Initialize();
         }
@@ -265,7 +340,6 @@ namespace PWRISimulator
             GameObject obj = this.transform.root.gameObject;
             if (obj != null)
             {
-                Debug.Log("DumpSoil " + obj.name);
                 name = obj.name;
             }
             else
@@ -387,15 +461,26 @@ namespace PWRISimulator
             if (!isRuntimeReady)
                 return;
 
-            if (needsUpdate)
+            while (pendingStepCount > 0)
             {
-                needsUpdate = false;
-
-                UpdateMerge();
-                UpdateSpawn();
-                UpdateSoilMassBody();
+                pendingStepCount--;
+                ProcessCaptureStep();
             }
             UpdateVisualMaterial(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// ステップクリティカルな処理（マージ、スポーン、質量体更新）を行う。
+        /// 各シミュレーションステップごとに一度実行される。
+        /// </summary>
+        void ProcessCaptureStep()
+        {
+#if UNITY_ASSERTIONS
+            captureStepExecutionCount++;
+#endif
+            UpdateCaptureCandidatesPerStep();
+            UpdateSpawn();
+            UpdateSoilMassBody();
         }
 
         /// <summary>
@@ -421,7 +506,7 @@ namespace PWRISimulator
         /// </summary>
         void OnPostStepForward()
         {
-            needsUpdate = true;
+            pendingStepCount++;
             UpdateDoorForce();
         }
 
@@ -451,12 +536,19 @@ namespace PWRISimulator
         }
 
         /// <summary>
-        /// MergeZoneに入っている粒子を検知して、適当な行動を行う：
-        /// * 放土を行っていない場合は、粒子を消して質量を荷台土量に追加する。つまり、荷台土砂とマージする。
-        /// * 放土を行っている場合は、マージしなくて、荷台の後ろ方向に粒子に力をかける。
+        /// Per-step capture pipeline: broad-phase candidate selection, exact overlap
+        /// classification, decision-making (merge vs force), and batch removal from AGX.
+        ///
+        /// Three-pass design avoids mutating the AGX granular collection while iterating:
+        ///   1. Broad-phase AABB check → narrows to vessel-local <see cref="captureCandidates"/>
+        ///   2. Exact local bounds check on candidates → populates <see cref="particlesToMerge"/>
+        ///      or applies forces; never removes particles from AGX.
+        ///   3. Batch removal from AGX in descending-index order to keep indices stable.
         /// </summary>
-        void UpdateMerge()
+        void UpdateCaptureCandidatesPerStep()
         {
+            numUnmergedParticlesInMergeZone = 0;
+
             if (terrainNative == null)
                 return;
 
@@ -464,35 +556,35 @@ namespace PWRISimulator
                 transform.rotation.ToHandedQuat(),
                 transform.position.ToHandedVec3()).inverse();
 
-            // ワールドバウンディングボックスを計算（現在の土砂高さを無視する）
-            agx.Vec3 aabbMin, aabbMax;
-            AgxUtil.ToAgxMinMax(mergeZoneOriginalBoundsWorld, out aabbMin, out aabbMax);
-            aabbMin -= new agx.Vec3(nominalParticleData.radius);
-            aabbMax += new agx.Vec3(nominalParticleData.radius);
+            // Broad-phase world-space AABB, expanded by particle radius.
+            agx.Vec3 aabbMinAgx, aabbMaxAgx;
+            AgxUtil.ToAgxMinMax(mergeZoneOriginalBoundsWorld, out aabbMinAgx, out aabbMaxAgx);
+            var broadWorldBounds = CaptureUtil.CalculateWorldBroadPhaseBounds(
+                new Vector3((float)aabbMinAgx.x, (float)aabbMinAgx.y, (float)aabbMinAgx.z),
+                new Vector3((float)aabbMaxAgx.x, (float)aabbMaxAgx.y, (float)aabbMaxAgx.z),
+                nominalParticleData.radius);
+            agx.Vec3 aabbMin = new agx.Vec3(broadWorldBounds.min.x, broadWorldBounds.min.y, broadWorldBounds.min.z);
+            agx.Vec3 aabbMax = new agx.Vec3(broadWorldBounds.max.x, broadWorldBounds.max.y, broadWorldBounds.max.z);
 
-            // ローカルバウンディングボックスを計算（現在の土砂高さでY軸のサイズを設定）
-            agx.Vec3 localAABBMin = new agx.Vec3(-mergeZoneCurrentSize.x * 0.5, soilHeight, 0);
-            agx.Vec3 localAABBMax = new agx.Vec3(mergeZoneCurrentSize.x * 0.5, mergeZoneCurrentSize.y, mergeZoneCurrentSize.z);
+            // Local-space capture bounds (current soil height shapes Y).
+            var captureBounds = CaptureUtil.CalculateLocalCaptureBounds(mergeZoneOriginalSize, soilHeight);
 
-            bool canMerge = (soilSpeed <= 0.1 && tiltAngle < mininumDumpAngle) || !spawnParticlesEnabled; // 放土していないときだけにマージさせる
-            double maxPotentialSoilSpeedSqrd = maxPotentialSoilSpeed * maxPotentialSoilSpeed; // 放土の土砂の最大速度
+            bool canMerge = (soilSpeed <= 0.1 && tiltAngle < mininumDumpAngle) || !spawnParticlesEnabled;
+            double maxPotentialSoilSpeedSqrd = maxPotentialSoilSpeed * maxPotentialSoilSpeed;
             agx.Vec3 pushForce = forwardDir.ToHandedVec3() * -CalcPushForce() * particlesPushForceScale;
-            numUnmergedParticlesInMergeZone = 0; // Merge Zoneに入っているけどマージしない粒子の数
 
-            // 全ての粒子を取得
             var soilSimulation = terrainNative.getSoilSimulationInterface();
             var granulars = soilSimulation.getSoilParticles();
-            int granularsCount = (int)granulars.size();
+            int count = (int)granulars.size();
 
-            //  Debug.Log("canMerge: " + canMerge);
-
-            // 各粒子を反復
-            for (int i = 0; i < granularsCount; ++i)
+            // ---- Pass 1: Broad-phase candidate selection ----
+            captureCandidates.Clear();
+            for (int i = 0; i < count; ++i)
             {
                 var granule = granulars.at((uint)i);
-
-                // Check 1: Check if center is inside axis-aligned world space bounding box (expanded by particle radius)
                 agx.Vec3 pos = granule.position();
+
+                // Broad-phase: world-space AABB check (expanded by particle radius).
                 if (pos.x > aabbMax.x || pos.x < aabbMin.x ||
                     pos.z > aabbMax.z || pos.z < aabbMin.z ||
                     pos.y > aabbMax.y || pos.y < aabbMin.y)
@@ -501,38 +593,55 @@ namespace PWRISimulator
                     continue;
                 }
 
-                // Check 2: Convert pos to local shape coordinates, and check if inside local axis-aligned bounding box
-                agx.Vec3 localPos = inverseShapeTransform.transformPoint(pos);
+                captureCandidates.Add(i);
+                // Proxy remains alive — will be processed in Pass 2.
+            }
+
+            // ---- Pass 2: Exact overlap + decide merge/force (no AGX removals) ----
+            particlesToMerge.Clear();
+            foreach (int idx in captureCandidates)
+            {
+                var granule = granulars.at((uint)idx);
+                agx.Vec3 localPos = inverseShapeTransform.transformPoint(granule.position());
                 double radius = granule.getRadius();
-                if (localPos.x - radius > localAABBMax.x || localPos.x + radius < localAABBMin.x ||
-                    localPos.z - radius > localAABBMax.z || localPos.z + radius < localAABBMin.z ||
-                    localPos.y - radius > localAABBMax.y || localPos.y + radius < localAABBMin.y)
+                Vector3 localPosVec = new Vector3((float)localPos.x, (float)localPos.y, (float)localPos.z);
+
+                if (!CaptureUtil.IsSphereOverlappingBounds(localPosVec, radius, captureBounds))
                 {
                     granule.ReturnToPool();
                     continue;
                 }
 
-                if (canMerge) // 放土していない時
+                if (canMerge)
                 {
-                    // 粒子を荷台土砂にマージ、つまり粒子を消し荷台土砂量を更新
-                    soilMass += granule.getMass();
-                    soilSimulation.removeSoilParticle(granule);
+                    // Defer AGX removal to Pass 3.
+                    particlesToMerge.Add(idx);
                 }
-                else  // 放土時
+                else
                 {
-                    // そらに、詰まりを検知するために粒子を数える。
-                    numUnmergedParticlesInMergeZone += 1;
-
-                    // 放土時にMergeZoneに入ってしまう粒子に後ろ方向に力をかける。
+                    numUnmergedParticlesInMergeZone++;
                     if (particlesPushForceEnabled &&
                         granule.getVelocity().length2() <= maxPotentialSoilSpeedSqrd)
                     {
-                            granule.setForce(granule.getForce() + pushForce);
+                        granule.setForce(granule.getForce() + pushForce);
                     }
+                    // Particle stays in simulation — may be captured on a future step.
+                    granule.ReturnToPool();
                 }
+            }
 
-                // Return the proxy class to the pool to avoid garbage.
-                granule.ReturnToPool();
+            // ---- Pass 3: Batch removal from AGX (descending order for index stability) ----
+            if (particlesToMerge.Count > 0)
+            {
+                particlesToMerge.Sort((a, b) => b.CompareTo(a));
+                foreach (int idx in particlesToMerge)
+                {
+                    var granule = granulars.at((uint)idx);
+                    soilMass += granule.getMass();
+                    soilSimulation.removeSoilParticle(granule);
+                    granule.ReturnToPool();
+                }
+                particlesToMerge.Clear();
             }
         }
         
