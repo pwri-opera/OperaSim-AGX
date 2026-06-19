@@ -3,6 +3,7 @@ using AGXUnity.Collide;
 using AGXUnity.Model;
 using PWRISimulator.ROS;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -246,7 +247,7 @@ namespace PWRISimulator
             // 重機再読み込み
             //----------
             // ショベルカー削除
-            GameObject _shovelObj = GameObject.Find(SpawnObject.zx200_objName);
+            GameObject _shovelObj = Zx200ObjectUtility.FindZx200Object();
             if (_shovelObj != null)
             {
                 UnityEngine.Object.Destroy(_shovelObj);
@@ -263,12 +264,9 @@ namespace PWRISimulator
             // ショベルカー再配置
             GameObject zx200_prefab = Resources.Load<GameObject>(SpawnObject.zx200_path);
             GameObject shovelObj = (GameObject)UnityEngine.Object.Instantiate(zx200_prefab, _pos, _qut);
-            shovelObj.name = SpawnObject.zx200_objName;
+            shovelObj.name = string.IsNullOrEmpty(json_ms.data[0].name) ? SpawnObject.zx200_objName : json_ms.data[0].name;
 
-
-            // ショベルカー掘削設定
-            var shovel = FindObjectOfType<DeformableTerrainShovel>();
-            terrain.Native.add(shovel.GetInitialized<DeformableTerrainShovel>()?.Native);
+            StartCoroutine(Zx200ObjectUtility.AttachShovelToTerrainWhenInitialized(terrain, shovelObj));
 
 
             Debug.Log("Dump_IDList.Count: " + GlobalVariables.Dump_IDList.Count);
@@ -403,7 +401,7 @@ namespace PWRISimulator
 
 
 
-            // 泥濘エリアのカウント行列読込    
+            // 泥濘エリアのカウント行列読込
             using (StreamReader sr = new StreamReader(Path.Combine(dirPath, "MudAreaMatrix")))
             {
                 string content = sr.ReadToEnd();

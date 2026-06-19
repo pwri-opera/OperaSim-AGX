@@ -10,33 +10,35 @@ using AGXUnity.Model;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ���Z�b�g����
+    /// リセット処理
     /// </summary>
     public class StageReset : MonoBehaviour
     {
         private const string fileName = "StartTerrain";
 
-        // AgxDynamics�̓�����Terrain�I�u�W�F�N�g�B
+        // AgxDynamicsの内蔵のTerrainオブジェクト。
         private agxTerrain.Terrain terrainNative;
 
         private DeformableTerrain terrain;
 
         private GameObject shovelObj;
+        private string shovelName = SpawnObject.zx200_objName;
         private Vector3 shovelPos;
         private Quaternion shovelQut;
 
         // Start is called before the first frame update
         void Start()
         {
-            // �����n�`��ۑ�
+            // 初期地形を保存
             var saveScript = gameObject.AddComponent<saveScript>();
             saveScript.SerializeTerrain(Path.Combine(GlobalVariables.BACKUP_FOLDER, fileName));
             Destroy(saveScript);
 
-            // �V���x���J�[�̈ʒu��ۑ�
-            shovelObj = GameObject.Find(SpawnObject.zx200_objName);
+            // ショベルカーの位置を保存
+            shovelObj = Zx200ObjectUtility.FindZx200Object();
             if (shovelObj != null)
             {
+                shovelName = shovelObj.name;
                 shovelPos = shovelObj.transform.position;
                 shovelQut = shovelObj.transform.rotation;
             }
@@ -45,19 +47,19 @@ namespace PWRISimulator
         // Update is called once per frame
         void Update()
         {
-            // ���Z�b�g�����s���ꂽ�ꍇ
+            // リセットが実行された場合
             if (GlobalVariables.SelectMode == 2)
             {
-                // �D�^�G���A�̃J�E���g���Z�b�g
+                // 泥濘エリアのカウントリセット
                 GlobalVariables.countMat.Clear();
 
-                // AGX�n�`�擾
+                // AGX地形取得
                 if (terrain == null)
                 {
                     terrain = FindObjectOfType<DeformableTerrain>();
                 }
 
-                // �y�뗱�q���f�����폜
+                // 土壌粒子モデルを削除
                 var soilSim = terrain.Native?.getSoilSimulationInterface();
                 var soilParticles = soilSim.getSoilParticles();
 
@@ -67,22 +69,23 @@ namespace PWRISimulator
                 }
 
 
-                // �ۑ����������n�`��Ǎ�
+                // 保存した初期地形を読込
                 var loadScript = gameObject.AddComponent<loadScript>();
                 loadScript.DeserializeTerrain(Path.Combine(GlobalVariables.BACKUP_FOLDER, fileName));
                 Destroy(loadScript);
 
-                // �n�C�g�}�b�v�̃��Z�b�g
+                // ハイトマップのリセット
                 terrain.ResetHeights();
 
-                // �n�`�X�R�A�����O�̃��Z�b�g
+                // 地形スコアリングのリセット
                 TerrainScore.Reset();
 
 
-                // �V���x���J�[���폜
-                shovelObj = GameObject.Find(SpawnObject.zx200_objName);
+                // ショベルカーを削除
+                shovelObj = Zx200ObjectUtility.FindZx200Object();
                 if (shovelObj != null)
                 {
+                    shovelName = shovelObj.name;
                     UnityEngine.Object.Destroy(shovelObj);
                 }
 
@@ -90,7 +93,7 @@ namespace PWRISimulator
                 UnityEngine.Debug.Log("Dump_IDList.Count: " + GlobalVariables.Dump_IDList.Count);
                 UnityEngine.Debug.Log("Dump_ObjList.Count: " + GlobalVariables.Dump_ObjList.Count);
 
-                // �_���v�g���b�N�폜
+                // ダンプトラック削除
                 for (int i = 0; i < GlobalVariables.Dump_ObjList.Count; i++)
                 {
                     UnityEngine.Debug.Log("ID: " + GlobalVariables.Dump_IDList[i]);
@@ -99,7 +102,7 @@ namespace PWRISimulator
 
                     if (dumpObj != null)
                     {
-                        // �폜
+                        // 削除
                         Destroy(dumpObj);
                         GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
                         if (objMassBody != null) Destroy(objMassBody);
@@ -110,38 +113,36 @@ namespace PWRISimulator
 
 
 
-                // �ێ����Ă���_���v�g���b�N�I�u�W�F�N�g���X�g�̃N���A
+                // 保持しているダンプトラックオブジェクトリストのクリア
                 GlobalVariables.Dump_IDList.Clear();
                 GlobalVariables.Dump_ObjList.Clear();
 
-                // �J�E���^�[�̃N���A
+                // カウンターのクリア
                 GlobalVariables.CameraCounter = 0;
                 GlobalVariables.ic120Counter = 0;
 
 
-                // �V���x���J�[�Ĕz�u
+                // ショベルカー再配置
                 GameObject zx200_prefab = Resources.Load<GameObject>(SpawnObject.zx200_path);
                 shovelObj = (GameObject)UnityEngine.Object.Instantiate(zx200_prefab, shovelPos, shovelQut);
-                shovelObj.name = SpawnObject.zx200_objName;
+                shovelObj.name = shovelName;
+
+                StartCoroutine(Zx200ObjectUtility.AttachShovelToTerrainWhenInitialized(terrain, shovelObj));
 
 
-                // �V���x���J�[
+                // ショベルカー
                 Transform obj = shovelObj.transform.Find("base_link/body_link/CameraStr")
                     ?? shovelObj.transform.Find("base_link/track_link/CameraStr");
                 if (obj != null)                {
                     obj.gameObject.SetActive(false);
                 }
 
+
                 //GlobalVariables.ForceCameraChange = true;
                 CameraChanger.Reset();
 
 
-                // �V���x���J�[�@��ݒ�
-                var shovel = FindObjectOfType<DeformableTerrainShovel>();
-                terrain.Native.add(shovel.GetInitialized<DeformableTerrainShovel>()?.Native);
-
-
-                // �t���O�����낷
+                // フラグを下ろす
                 GlobalVariables.SelectMode = -1;
             }
         }
