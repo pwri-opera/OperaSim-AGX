@@ -8,9 +8,9 @@ namespace PWRISimulator
 {
   /// <summary>
   /// Per-instance registrar for oriented (anisotropic) friction ContactMaterials
-  /// on a crawler dump truck. Clones the base ShapeMaterial / FrictionModel /
-  /// ContactMaterials at runtime so each vehicle instance owns a unique
-  /// (TrackShapeMaterial, Ground-or-Terrain) pair whose friction reference
+  /// on a tracked construction machine. Clones the base ShapeMaterial /
+  /// FrictionModel / ContactMaterials at runtime so each vehicle instance owns a
+  /// unique (TrackShapeMaterial, Ground-or-Terrain) pair whose friction reference
   /// frame is bound to this vehicle's chassis.
   ///
   /// Why per-instance clones are required:
@@ -20,9 +20,12 @@ namespace PWRISimulator
   ///   so a shared FrictionModel cannot serve multiple vehicles with different headings.
   /// Cloning the ShapeMaterial per vehicle makes the pair distinct, and cloning the
   /// FrictionModel avoids cross-instance mutation of the shared asset's native.
+  ///
+  /// Attach this directly to a machine prefab (dump truck, excavator, ...) and
+  /// wire its asset references in the inspector.
   /// </summary>
   [DisallowMultipleComponent]
-  public class DumpTruckContactMaterialRegistrar : MonoBehaviour
+  public class MachineContactMaterialRegistrar : MonoBehaviour
   {
     [Tooltip("Base ShapeMaterial used by track box shapes and Track components. Cloned per instance.")]
     public ShapeMaterial baseTrackShapeMaterial;
@@ -51,7 +54,7 @@ namespace PWRISimulator
       if ( baseTrackShapeMaterial == null || baseFrictionModel == null ||
            baseContactMaterials == null || baseContactMaterials.Length == 0 ||
            referenceObject == null ) {
-        Debug.LogError( $"{nameof( DumpTruckContactMaterialRegistrar )}: required fields missing, skipping per-instance registration.", this );
+        Debug.LogError( $"{GetType().Name}: required fields missing, skipping per-instance registration.", this );
         return;
       }
 
@@ -91,7 +94,7 @@ namespace PWRISimulator
 
       var simulation = Simulation.Instance;
       if ( simulation == null || simulation.Native == null ) {
-        Debug.LogError( $"{nameof( DumpTruckContactMaterialRegistrar )}: AGX Simulation not initialized; cannot register ContactMaterials.", this );
+        Debug.LogError( $"{GetType().Name}: AGX Simulation not initialized; cannot register ContactMaterials.", this );
         return;
       }
 

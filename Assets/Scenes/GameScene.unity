@@ -37664,50 +37664,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_component: {fileID: 326239260}
---- !u!1 &1106646296
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1106646298}
-  - component: {fileID: 1106646297}
-  m_Layer: 0
-  m_Name: AGXUnity.RuntimeObjects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1106646297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1106646296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6a9e4af77e3804aae97d5030ab5f9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1106646298
-Transform:
-  m_ObjectHideFlags: 8
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1106646296}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1109409205
 GameObject:
   m_ObjectHideFlags: 0
@@ -67081,13 +67037,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
+      propertyPath: m_contactMaterials.Array.data[0].m_isOriented
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
+      propertyPath: m_contactMaterials.Array.data[2].m_isOriented
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
       propertyPath: m_contactMaterials.Array.data[3].m_isOriented
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
       propertyPath: m_contactMaterials.Array.data[0].m_referenceObject
       value: 
-      objectReference: {fileID: 55944578}
+      objectReference: {fileID: 0}
     - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
       propertyPath: m_contactMaterials.Array.data[2].m_referenceObject
       value: 
@@ -67462,6 +67426,5 @@ SceneRoots:
   - {fileID: 471436213078114625}
   - {fileID: 7711977559838823900}
   - {fileID: 71004307}
-  - {fileID: 1106646298}
   - {fileID: 315138535}
   - {fileID: 1185963254}

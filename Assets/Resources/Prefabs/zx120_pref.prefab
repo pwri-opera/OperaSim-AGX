@@ -562,6 +562,7 @@ MonoBehaviour:
       m_localPosition: {x: -0.06887913, y: 1.3694409, z: 0.029999822}
       m_localRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_settings: {fileID: 0}
+  m_autoAddToTerrains: 0
 --- !u!1 &558764561017032091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1773,6 +1774,7 @@ GameObject:
   - component: {fileID: 6098821799441780073}
   - component: {fileID: 3661799457271137062}
   - component: {fileID: 6899713255557002162}
+  - component: {fileID: 6410254411577132366}
   m_Layer: 0
   m_Name: zx120_pref
   m_TagString: robot
@@ -1841,6 +1843,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoUpdateConstraints: 1
+  activateDeadTime: 1
+  trackDeadTime: 0
   leftSprocket:
     joint: {fileID: 3613131623100444760}
     convertor: {fileID: 0}
@@ -1850,6 +1854,7 @@ MonoBehaviour:
       controlType: 1
       controlValue: 0
       controlMaxForce: Infinity
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 3613131623100444760}
       actuatorType: 1
@@ -1868,6 +1873,7 @@ MonoBehaviour:
       controlType: 1
       controlValue: 0
       controlMaxForce: Infinity
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 247679283147930853}
       actuatorType: 1
@@ -1886,6 +1892,7 @@ MonoBehaviour:
       controlType: 1
       controlValue: 0
       controlMaxForce: Infinity
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 7413188713834910766}
       actuatorType: 1
@@ -1904,6 +1911,7 @@ MonoBehaviour:
       controlType: 1
       controlValue: 0
       controlMaxForce: Infinity
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 1555942628121142419}
       actuatorType: 0
@@ -1922,6 +1930,7 @@ MonoBehaviour:
       controlType: 1
       controlValue: 0
       controlMaxForce: Infinity
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 7446904566500494358}
       actuatorType: 0
@@ -1940,6 +1949,7 @@ MonoBehaviour:
       controlType: 1
       controlValue: 0
       controlMaxForce: Infinity
+      deadTime: 0
     hydraulicActuator:
       constraint: {fileID: 2360352928815498644}
       actuatorType: 0
@@ -1966,6 +1976,7 @@ MonoBehaviour:
   settingSubscriber: {fileID: 8343472142403836805}
   movementControlType: 1
   controlType: 1
+  joints: {fileID: 0}
   boomCylConv: {fileID: 6335254480707665000}
   armCylConv: {fileID: 92623674561715770}
   bucketCylConv: {fileID: 5309645629477189808}
@@ -2038,6 +2049,7 @@ MonoBehaviour:
   cylinderRoot: {fileID: 1415128103451819155}
   cylinderBindPoint: {fileID: 6183455874599053548}
   armCylinderBindPoint: {fileID: 7480401927246489697}
+  armPin: {fileID: 0}
   HLinkRoot: {fileID: 8400419938937034916}
   ILinkRoot: {fileID: 7490557446708199322}
 --- !u!114 &3833763344659882209
@@ -2085,6 +2097,7 @@ MonoBehaviour:
   useTimeCorrectedValues: 0
   realTimeTracker: {fileID: 0}
   maxBufferSize: 200
+  EmergencyStopCmd: 0
 --- !u!114 &4226024218279855986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2209,6 +2222,36 @@ MonoBehaviour:
     Kp: 0.5
     Ki: 0.01
     Kd: 0.04
+  sproketRadiusToTrackSurface: 0.07
+  maxLinearVelocity: 3
+  maxAngularVelocity: 0.08726646259971647
+  EnableVWBehaviorMode: 0
+  SetVWBehaviorMode: 1
+  VWDecelFactor: 1
+  VWRatioFactor: 0.9
+  MaxTrackVel: 1
+--- !u!114 &6410254411577132366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486867449749353363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbb58e5ff7316b045a581a7b742352f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseTrackShapeMaterial: {fileID: 11400000, guid: 82b172f7ace765e43bc46860443a007e, type: 2}
+  baseFrictionModel: {fileID: 11400000, guid: 0db3c3258e7331947befe8c8db01ffb4, type: 2}
+  baseContactMaterials:
+  - {fileID: 11400000, guid: ed05e4ee02133eb4087447a902cef9a2, type: 2}
+  - {fileID: 11400000, guid: 0918c4f0f39db074996223df4f73098a, type: 2}
+  trackComponents:
+  - {fileID: 7735969015773454020}
+  - {fileID: 5679647361955800741}
+  referenceObject: {fileID: 3695674478785575358}
+  primaryDirection: 2
 --- !u!1 &1499598538538182816
 GameObject:
   m_ObjectHideFlags: 0
