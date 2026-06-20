@@ -5921,7 +5921,7 @@ GameObject:
   - component: {fileID: 5655496608638075688}
   - component: {fileID: 5666105000744087564}
   - component: {fileID: 8744621954012064406}
-  - component: {fileID: 3490847135176786126}
+  - component: {fileID: 4994480478362041917}
   m_Layer: 0
   m_Name: zx200
   m_TagString: robot
@@ -6361,7 +6361,7 @@ MonoBehaviour:
   VWDecelFactor: 0.5
   VWRatioFactor: 0.9900000095367432
   MaxTrackVel: 1
---- !u!114 &3490847135176786126
+--- !u!114 &4994480478362041917
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6370,7 +6370,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3864336166434059174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c7faf2cd94e2f644b0443951c992ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: dbb58e5ff7316b045a581a7b742352f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   baseTrackShapeMaterial: {fileID: 11400000, guid: 82b172f7ace765e43bc46860443a007e, type: 2}

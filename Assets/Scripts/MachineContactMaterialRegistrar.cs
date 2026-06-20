@@ -21,11 +21,12 @@ namespace PWRISimulator
   /// Cloning the ShapeMaterial per vehicle makes the pair distinct, and cloning the
   /// FrictionModel avoids cross-instance mutation of the shared asset's native.
   ///
-  /// This is the machine-agnostic base; concrete per-machine components
-  /// (DumpTruck / Excavator / ...) derive from it and only differ by the
-  /// asset references wired in the prefab inspector.
+  /// Attach this directly to a machine prefab and wire its asset references in
+  /// the inspector. (DumpTruckContactMaterialRegistrar remains as a thin
+  /// subclass only to preserve the existing ic120 prefab's script reference.)
   /// </summary>
-  public abstract class MachineContactMaterialRegistrar : MonoBehaviour
+  [DisallowMultipleComponent]
+  public class MachineContactMaterialRegistrar : MonoBehaviour
   {
     [Tooltip("Base ShapeMaterial used by track box shapes and Track components. Cloned per instance.")]
     public ShapeMaterial baseTrackShapeMaterial;
