@@ -7054,7 +7054,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6907077907001403058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d660c6afee128240a89010588e9ccd8, type: 3}
+  m_Script: {fileID: 11500000, guid: dbb58e5ff7316b045a581a7b742352f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   baseTrackShapeMaterial: {fileID: 11400000, guid: ddc8f068d2cfe184d867b4a1c395b3b9, type: 2}

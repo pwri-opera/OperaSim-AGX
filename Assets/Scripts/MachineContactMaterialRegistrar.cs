@@ -21,9 +21,8 @@ namespace PWRISimulator
   /// Cloning the ShapeMaterial per vehicle makes the pair distinct, and cloning the
   /// FrictionModel avoids cross-instance mutation of the shared asset's native.
   ///
-  /// Attach this directly to a machine prefab and wire its asset references in
-  /// the inspector. (DumpTruckContactMaterialRegistrar remains as a thin
-  /// subclass only to preserve the existing ic120 prefab's script reference.)
+  /// Attach this directly to a machine prefab (dump truck, excavator, ...) and
+  /// wire its asset references in the inspector.
   /// </summary>
   [DisallowMultipleComponent]
   public class MachineContactMaterialRegistrar : MonoBehaviour
