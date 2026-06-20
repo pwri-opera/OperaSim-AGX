@@ -5,7 +5,7 @@
         <ui:Button text="Camera Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CameraPositionSetting" style="text-overflow: ellipsis; height: 26px;" />
         <ui:Button text="Camera Selection" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SelectCamera" style="height: 29px;" />
         <ui:Button text="Start Simulation" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SimulationStart" style="height: 27px;" />
-        <ui:RadioButtonGroup label="Sim Speed" name="SimulationSpeed" value="0" choices="x1.0,x1.5,x2.0,x3.0,x4.0" style="-unity-font-style: bold; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; margin-top: 8px;" />
+        <ui:RadioButtonGroup label="Sim Speed" name="SimulationSpeed" value="0" choices="x1.0,x1.5,x2.0,x3.0,x4.0" style="-unity-font-style: bold; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; margin-top: 8px; font-size: 14px;" />
     </ui:VisualElement>
     <ui:Toggle label="Total Score" name="ShowScore" value="true" style="position: absolute; top: 20px; right: 20px; -unity-font-style: bold; -unity-font: resource(&apos;Fonts/BIZUDPGothic-Regular&apos;); -unity-font-definition: initial; justify-content: flex-start; -unity-text-align: upper-right;" />
 </ui:UXML>
