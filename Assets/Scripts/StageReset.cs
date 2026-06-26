@@ -84,6 +84,7 @@ namespace PWRISimulator
                 if (shovelObj != null)
                 {
                     shovelName = shovelObj.name;
+                    shovelObj.SetActive(false);
                     UnityEngine.Object.Destroy(shovelObj);
                 }
 
@@ -101,11 +102,12 @@ namespace PWRISimulator
                     if (dumpObj != null)
                     {
                         // çÌèú
+                        dumpObj.SetActive(false);
                         Destroy(dumpObj);
                         GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
-                        if (objMassBody != null) Destroy(objMassBody);
+                        if (objMassBody != null) { objMassBody.SetActive(false); Destroy(objMassBody); }
                         GameObject objMassJoint = GameObject.Find(dumpObj.name + "_SoilMassJoint");
-                        if (objMassJoint != null) Destroy(objMassJoint);
+                        if (objMassJoint != null) { objMassJoint.SetActive(false); Destroy(objMassJoint); }
                     }
                 }
 
