@@ -68,12 +68,12 @@ namespace PWRISimulator
 
                 case DumpState.Stop:
                 default:
-                    // 再始動は「目標が更新された時のみ」
-                    if (targetChanged)
-                    {
-                        if (pt > pc) _state = DumpState.DumpUp;
-                        else if (pt < pc) _state = DumpState.DumpDown;
-                    }
+                    // 再始動条件：目標が更新された時、または目標に到達していない時。
+                    // 上方の |pt - pc| < _eps 早期リターンにより、ここに到達時は
+                    // 必ず目標から離れているため、targetChanged のみに依存すると
+                    // オーバーシュート後に同じ目標値を再送しても復帰できない（issue #79）。
+                    if (pt > pc) _state = DumpState.DumpUp;
+                    else if (pt < pc) _state = DumpState.DumpDown;
                     break;
             }
 
