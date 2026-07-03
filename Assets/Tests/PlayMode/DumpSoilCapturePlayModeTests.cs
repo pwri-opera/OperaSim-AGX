@@ -8,11 +8,14 @@ using UnityEngine.TestTools;
 namespace PWRISimulator.Tests
 {
     /// <summary>
-    /// PlayMode tests verifying that multiple physics-step notifications do not
-    /// collapse into a single capture opportunity.  Uses reflection to access
-    /// DumpSoil members because the test assembly (PWRISimulator.Tests.PlayMode)
-    /// does not reference Assembly-CSharp directly — same pattern as
-    /// SimulationSaveLoadTests.
+    /// PlayMode tests verifying that capture processing runs directly in
+    /// OnPostStepForward (per physics step) rather than being deferred and
+    /// batched in Update().  This design prevents both the particle escape
+    /// bug (issue #75) and the death spiral bug (issue #79).
+    ///
+    /// Uses reflection to access DumpSoil members because the test assembly
+    /// (PWRISimulator.Tests.PlayMode) does not reference Assembly-CSharp
+    /// directly — same pattern as SimulationSaveLoadTests.
     /// </summary>
     public class DumpSoilCapturePlayModeTests
     {
@@ -113,20 +116,22 @@ namespace PWRISimulator.Tests
         // ------------------------------------------------------------------ //
 
         /// <summary>
-        /// Verifies that a pendingStepCount field exists on DumpSoil (replacing
-        /// the old needsUpdate bool) and that multiple OnPostStepForward calls
-        /// increment the counter without collapsing.
+        /// Verifies that OnPostStepForward executes ProcessCaptureStep
+        /// directly (not deferred to Update via a pendingStepCount counter).
         ///
-        /// Expected RED failure (before change):
-        ///   GetField("pendingStepCount") returns null ⇒ assertion fails.
+        /// After the issue #79 fix, capture processing runs inside
+        /// OnPostStepForward itself — once per physics step, immediately
+        /// after the step completes.  This eliminates the pendingStepCount
+        /// mechanism and the while-loop batch processing in Update().
         ///
-        /// Expected GREEN pass (after change):
-        ///   Three OnPostStepForward calls ⇒ counter == 3,
-        ///   one Update call              ⇒ counter == 0.
+        /// Expected GREEN pass (after fix):
+        ///   Three OnPostStepForward calls ⇒ captureStepExecutionCount == 3,
+        ///   one Update call              ⇒ captureStepExecutionCount still 3.
         /// </summary>
         [UnityTest]
-        public IEnumerator MultiplePostStepNotifications_IncrementCounter()
+        public IEnumerator OnPostStepForward_ExecutesCapturePerStep()
         {
+#if UNITY_ASSERTIONS
             System.Type type = _dumpSoilType;
 
             // --- Arrange -------------------------------------------------- //
@@ -142,48 +147,66 @@ namespace PWRISimulator.Tests
             Assert.That(updateMethod, Is.Not.Null,
                 "DumpSoil.Update method not found.");
 
+            var execCountField = type.GetField("captureStepExecutionCount", PrivateInstance);
+            Assert.That(execCountField, Is.Not.Null,
+                "DumpSoil.captureStepExecutionCount (int) field not found.");
+
+            // pendingStepCount should no longer exist — the mechanism was
+            // removed as part of the issue #79 fix.
             var pendingField = type.GetField("pendingStepCount", PrivateInstance);
-            Assert.That(pendingField, Is.Not.Null,
-                "DumpSoil.pendingStepCount (int) field not found. " +
-                "Replace the old 'bool needsUpdate' with 'int pendingStepCount'.");
+            Assert.That(pendingField, Is.Null,
+                "DumpSoil.pendingStepCount should not exist — capture " +
+                "processing now runs directly in OnPostStepForward (issue #79 fix).");
 
-            // --- Act & Assert --------------------------------------------- //
+            // --- Act ------------------------------------------------------ //
 
-            // Simulate 3 physics steps occurring before the next Update frame.
+            // Simulate 3 physics steps.  Each should execute capture
+            // processing immediately inside the callback.
             postStepMethod.Invoke(dumpSoil, null);
             postStepMethod.Invoke(dumpSoil, null);
             postStepMethod.Invoke(dumpSoil, null);
 
-            int countBefore = (int)pendingField.GetValue(dumpSoil);
-            Assert.That(countBefore, Is.EqualTo(3),
-                "pendingStepCount should be 3 after three OnPostStepForward calls.");
+            int execAfterSteps = (int)execCountField.GetValue(dumpSoil);
+            Assert.That(execAfterSteps, Is.EqualTo(3),
+                "captureStepExecutionCount should be 3 after three " +
+                "OnPostStepForward calls — capture runs directly in the callback.");
 
-            // Consume all pending steps in a single Update.
+            // Update() should NOT process any capture steps.
             updateMethod.Invoke(dumpSoil, null);
 
-            int countAfter = (int)pendingField.GetValue(dumpSoil);
-            Assert.That(countAfter, Is.EqualTo(0),
-                "pendingStepCount should be 0 after Update processes all steps.");
+            // --- Assert --------------------------------------------------- //
+
+            int execAfterUpdate = (int)execCountField.GetValue(dumpSoil);
+            Assert.That(execAfterUpdate, Is.EqualTo(3),
+                "captureStepExecutionCount should still be 3 after Update() — " +
+                "Update() must not process capture steps (issue #79 fix).");
 
             yield return null;
+#else
+            Assert.Ignore(
+                "captureStepExecutionCount is only compiled when " +
+                "UNITY_ASSERTIONS is defined (Editor/Development builds).");
+            yield break;
+#endif
         }
 
         /// <summary>
         /// Verifies that OnPostStepForward can be successfully subscribed to
         /// the Simulation StepCallbacks.PostStepForward delegate.
         ///
-        /// DumpSoil.Initialize() sets isRuntimeReady = true and subscribes
-        /// OnPostStepForward (see Initialize() line 325).  This test
-        /// validates the subscription mechanism in isolation: it creates a
-        /// DumpSoil without calling Initialize(), then manually performs
-        /// the same registration that Initialize() does, confirming the
-        /// callback appears on the delegate chain.
+        /// DumpSoil.OnEnable() subscribes OnPostStepForward after
+        /// base.OnEnable() (which triggers Initialize() on first activation,
+        /// setting isRuntimeReady = true).  This test validates the
+        /// subscription mechanism in isolation: it creates a DumpSoil
+        /// without calling Initialize(), then manually performs the same
+        /// registration that OnEnable() does, confirming the callback
+        /// appears on the delegate chain.
         ///
-        /// Because the test bypasses Initialize(), it does not verify that
+        /// Because the test bypasses OnEnable(), it does not verify that
         /// the subscription code path itself is reached — that is validated
-        /// indirectly by the MultiplePostStepNotifications_IncrementCounter
-        /// test, which proves OnPostStepForward executes by verifying
-        /// pendingStepCount accumulation.
+        /// indirectly by the OnPostStepForward_ExecutesCapturePerStep test,
+        /// which proves OnPostStepForward executes by verifying
+        /// captureStepExecutionCount increments.
         /// </summary>
         [UnityTest]
         public IEnumerator PostStepCallback_IsSubscribedAfterFirstInitialize()
@@ -227,9 +250,10 @@ namespace PWRISimulator.Tests
             Assert.That(isReadyField, Is.Not.Null);
             isReadyField.SetValue(dumpSoil, true);
 
-            // DumpSoil.Initialize() subscribes OnPostStepForward after setting
-            // isRuntimeReady = true.  Since we bypassed Initialize(), we repeat
-            // the same registration here to validate the mechanism in isolation:
+            // DumpSoil.OnEnable() subscribes OnPostStepForward after
+            // base.OnEnable() sets isRuntimeReady = true via Initialize().
+            // Since we bypassed OnEnable(), we repeat the same registration
+            // here to validate the mechanism in isolation:
 
             var postStepMethod = type.GetMethod("OnPostStepForward", PrivateInstance);
             var onPostStepDelegate = System.Delegate.CreateDelegate(
@@ -254,19 +278,16 @@ namespace PWRISimulator.Tests
             yield return null;
         }
         /// <summary>
-        /// Verifies that ProcessCaptureStep() executes once per queued step,
-        /// not just once per Update frame regardless of step count.
+        /// Verifies that ProcessCaptureStep() executes exactly once per
+        /// OnPostStepForward call — proving per-step capture processing.
         ///
-        /// Uses a dedicated execution counter field (captureStepExecutionCount)
-        /// inside ProcessCaptureStep to prove per-step invocation, going beyond
-        /// the pendingStepCount drain check in the prior test.
+        /// After the issue #75/#79 fix, ProcessCaptureStep() is called
+        /// directly from OnPostStepForward, not deferred to Update().
+        /// This test uses the captureStepExecutionCount counter to prove
+        /// 1:1 correspondence between physics steps and capture executions.
         ///
-        /// Expected RED failure (before field is added):
-        ///   GetField("captureStepExecutionCount") returns null => assertion fails.
-        ///
-        /// Expected GREEN pass (after field is added):
-        ///   Three OnPostStepForward calls + one Update
-        ///   ⇒ captureStepExecutionCount == 3.
+        /// Expected GREEN pass (after fix):
+        ///   Three OnPostStepForward calls ⇒ captureStepExecutionCount == 3.
         /// </summary>
         [UnityTest]
         public IEnumerator ProcessCaptureStep_ExecutesPerQueuedStep()
@@ -283,10 +304,6 @@ namespace PWRISimulator.Tests
             Assert.That(postStepMethod, Is.Not.Null,
                 "DumpSoil.OnPostStepForward method not found.");
 
-            var updateMethod = type.GetMethod("Update", PrivateInstance);
-            Assert.That(updateMethod, Is.Not.Null,
-                "DumpSoil.Update method not found.");
-
             var execCountField = type.GetField("captureStepExecutionCount", PrivateInstance);
             Assert.That(execCountField, Is.Not.Null,
                 "DumpSoil.captureStepExecutionCount (int) field not found. " +
@@ -294,20 +311,19 @@ namespace PWRISimulator.Tests
 
             // --- Act ------------------------------------------------------ //
 
-            // Queue 3 steps.
+            // Simulate 3 physics steps.  Each OnPostStepForward should
+            // execute ProcessCaptureStep exactly once.
             postStepMethod.Invoke(dumpSoil, null);
             postStepMethod.Invoke(dumpSoil, null);
             postStepMethod.Invoke(dumpSoil, null);
-
-            // Consume all queued steps in one Update frame.
-            updateMethod.Invoke(dumpSoil, null);
 
             // --- Assert --------------------------------------------------- //
 
             int execCount = (int)execCountField.GetValue(dumpSoil);
             Assert.That(execCount, Is.EqualTo(3),
-                "captureStepExecutionCount should be 3 after draining " +
-                "3 queued steps — one ProcessCaptureStep invocation per step.");
+                "captureStepExecutionCount should be 3 after three " +
+                "OnPostStepForward calls — one ProcessCaptureStep per step, " +
+                "executed directly in the callback (issue #75/#79 fix).");
 
             yield return null;
 #else
@@ -316,6 +332,181 @@ namespace PWRISimulator.Tests
                 "UNITY_ASSERTIONS is defined (Editor/Development builds).");
             yield break;
 #endif
+        }
+
+        /// <summary>
+        /// Verifies the issue #79 fix: Update() must NOT process any capture
+        /// steps.  All capture processing happens in OnPostStepForward (per
+        /// physics step), so Update() only does visual updates.
+        ///
+        /// Before the fix, the `while (pendingStepCount > 0)` loop in
+        /// Update() processed ALL accumulated physics steps in a single
+        /// frame, causing a death spiral when the frame rate dropped.
+        ///
+        /// After the fix, Update() processes zero capture steps regardless
+        /// of how many OnPostStepForward calls preceded it.
+        ///
+        /// See: https://github.com/pwri-opera/OperaSim-AGX/issues/79
+        /// </summary>
+#if UNITY_ASSERTIONS
+        [UnityTest]
+        public IEnumerator Update_DoesNotProcessCaptureSteps_Issue79()
+        {
+            System.Type type = _dumpSoilType;
+
+            // --- Arrange -------------------------------------------------- //
+
+            object dumpSoil = CreateMinimalDumpSoil();
+            ForceRuntimeReady(dumpSoil, type);
+
+            var postStepMethod = type.GetMethod("OnPostStepForward", PrivateInstance);
+            Assert.That(postStepMethod, Is.Not.Null);
+
+            var updateMethod = type.GetMethod("Update", PrivateInstance);
+            Assert.That(updateMethod, Is.Not.Null);
+
+            var execCountField = type.GetField("captureStepExecutionCount", PrivateInstance);
+            Assert.That(execCountField, Is.Not.Null,
+                "DumpSoil.captureStepExecutionCount field not found.");
+
+            // Simulate 30 physics steps (e.g. a frame stall where many
+            // FixedUpdate calls occur).  Each step processes capture
+            // immediately in OnPostStepForward.
+            const int QueuedSteps = 30;
+            for (int i = 0; i < QueuedSteps; i++)
+                postStepMethod.Invoke(dumpSoil, null);
+
+            int execBefore = (int)execCountField.GetValue(dumpSoil);
+            Assert.That(execBefore, Is.EqualTo(QueuedSteps),
+                "All 30 steps should have been processed in OnPostStepForward.");
+
+            // --- Act ------------------------------------------------------ //
+
+            // A single Update() call — one rendered frame.
+            updateMethod.Invoke(dumpSoil, null);
+
+            // --- Assert --------------------------------------------------- //
+
+            int execAfter = (int)execCountField.GetValue(dumpSoil);
+            Assert.That(execAfter, Is.EqualTo(QueuedSteps),
+                $"Update() must not process capture steps. " +
+                $"captureStepExecutionCount was {execBefore} before Update() " +
+                $"and {execAfter} after — Update() must not increment it " +
+                $"(issue #79 fix: no while-loop batch processing in Update).");
+
+            yield return null;
+        }
+#else
+        [UnityTest]
+        public IEnumerator Update_DoesNotProcessCaptureSteps_Issue79()
+        {
+            Assert.Ignore(
+                "captureStepExecutionCount is only compiled when " +
+                "UNITY_ASSERTIONS is defined (Editor/Development builds).");
+            yield break;
+        }
+#endif
+
+        /// <summary>
+        /// Verifies the issue #79 secondary fix: OnPostStepForward is
+        /// registered only in OnEnable() (not in both Initialize() and
+        /// OnEnable() as before), so a disable→enable cycle does not cause
+        /// double-registration on the Simulation.StepCallbacks.PostStepForward
+        /// delegate.
+        ///
+        /// Before the fix, registration happened in both Initialize() and
+        /// OnEnable(), so a re-enable cycle could add the delegate twice,
+        /// doubling capture processing per physics step and worsening the
+        /// death spiral.
+        ///
+        /// After the fix, registration happens only in OnEnable(), and
+        /// OnDisable() unregisters — so the count stays at 1 after re-enable.
+        ///
+        /// Expected GREEN pass (after fix): delegate count after re-enable
+        /// does not exceed count after initial registration.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator PostStepForward_NotDoubleRegisteredAfterReEnable_Issue79()
+        {
+            System.Type type = _dumpSoilType;
+
+            // --- Arrange -------------------------------------------------- //
+
+            // Create inactive to avoid OnEnable firing before we set up.
+            _gameObject = new GameObject("TestDumpSoil",
+                typeof(MeshFilter), typeof(MeshRenderer));
+            _gameObject.SetActive(false);
+            object dumpSoil = _gameObject.AddComponent(type) as Component;
+            _gameObject.SetActive(true);
+
+            yield return null;
+
+            if (!Simulation.HasInstance)
+            {
+                Assert.Ignore(
+                    "AGX Simulation.Instance not available — cannot verify " +
+                    "delegate registration count.");
+                yield break;
+            }
+
+            var stepCallbacks = Simulation.Instance.StepCallbacks;
+            var isReadyField = type.GetField("isRuntimeReady", PrivateInstance);
+            Assert.That(isReadyField, Is.Not.Null);
+
+            var postStepMethod = type.GetMethod("OnPostStepForward", PrivateInstance);
+            Assert.That(postStepMethod, Is.Not.Null);
+
+            // Simulate what Initialize() does: set isRuntimeReady and register.
+            isReadyField.SetValue(dumpSoil, true);
+            var onPostStepDelegate = System.Delegate.CreateDelegate(
+                typeof(StepCallbackFunctions.StepCallbackDef),
+                dumpSoil,
+                postStepMethod);
+            stepCallbacks.PostStepForward +=
+                (StepCallbackFunctions.StepCallbackDef)onPostStepDelegate;
+
+            // Count entries on the delegate after initial registration.
+            int countAfterInit = stepCallbacks.PostStepForward?.GetInvocationList().Length ?? 0;
+            Assert.That(countAfterInit, Is.GreaterThanOrEqualTo(1),
+                "PostStepForward should have at least 1 entry after Initialize.");
+
+            // --- Act: simulate disable → re-enable cycle ----------------- //
+
+            var onDisableMethod = type.GetMethod("OnDisable",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            var onEnableMethod = type.GetMethod("OnEnable",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // OnDisable should unregister.
+            if (onDisableMethod != null)
+                onDisableMethod.Invoke(dumpSoil, null);
+
+            int countAfterDisable = stepCallbacks.PostStepForward?.GetInvocationList().Length ?? 0;
+
+            // OnEnable should re-register — but must not duplicate.
+            if (onEnableMethod != null)
+                onEnableMethod.Invoke(dumpSoil, null);
+
+            // --- Assert --------------------------------------------------- //
+
+            int countAfterReEnable = stepCallbacks.PostStepForward?.GetInvocationList().Length ?? 0;
+
+            // The count after re-enable should not exceed the count after
+            // initial registration.  If OnEnable blindly adds without checking
+            // for an existing registration (or if Initialize already registered
+            // and OnEnable adds again), the count will be higher.
+            Assert.That(countAfterReEnable, Is.LessThanOrEqualTo(countAfterInit),
+                $"PostStepForward has {countAfterReEnable} entries after " +
+                $"re-enable, but should not exceed {countAfterInit} (the count " +
+                $"after initial registration). Double-registration of " +
+                $"OnPostStepForward causes capture processing to run 2x per " +
+                $"physics step, worsening the death spiral (issue #79).");
+
+            // Clean up: unregister our delegate if still present.
+            stepCallbacks.PostStepForward -=
+                (StepCallbackFunctions.StepCallbackDef)onPostStepDelegate;
+
+            yield return null;
         }
     }
 }
