@@ -232,10 +232,6 @@ namespace PWRISimulator
         // このGameObjectのペアレント荷台剛体に対して元々の相対的な位置、回転。
         agx.AffineMatrix4x4 transformRelativeToContainerBody;
 
-        // 前回のUpdateから蓄積されたシミュレーションステップ通知数。
-        // OnPostStepForwardでインクリメントされ、Update()でProcessCaptureStep()として消費される。
-        int pendingStepCount = 0;
-
 #if UNITY_ASSERTIONS
         // ProcessCaptureStep()が呼び出された累計回数。主にテスト検証用。
         int captureStepExecutionCount = 0;
@@ -326,7 +322,6 @@ namespace PWRISimulator
             StartCoroutine(UpdateParticleDataCoroutine(4.0f));
 
             isRuntimeReady = true;
-            Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
 
             return base.Initialize();
         }
@@ -455,17 +450,15 @@ namespace PWRISimulator
         
         /// <summary>
         /// Unityが各Frameに一回呼び出すメソッド。
+        /// ステップクリティカルな処理（マージ、スポーン、質量体更新）は
+        /// OnPostStepForward()で物理ステップごとに直接実行されるため、
+        /// ここではビジュアル更新のみ行う。
         /// </summary>
         void Update()
         {
             if (!isRuntimeReady)
                 return;
 
-            while (pendingStepCount > 0)
-            {
-                pendingStepCount--;
-                ProcessCaptureStep();
-            }
             UpdateVisualMaterial(Time.deltaTime);
         }
 
@@ -503,26 +496,26 @@ namespace PWRISimulator
 
         /// <summary>
         /// AgxUnityが各シミュレーションステップの後に呼び出すメソッド。このクラスのOnEnable()からコールバックとして登録される。
+        /// 物理ステップ直後に捕捉処理を実行することで、粒子が薄い荷台壁面をすり抜ける前に回収する（issue #75）。
+        /// また、Update()でのバッチ処理を避けることでデススパイラルを防止する（issue #79）。
         /// </summary>
         void OnPostStepForward()
         {
-            pendingStepCount++;
+            ProcessCaptureStep();
             UpdateDoorForce();
         }
 
         /// <summary>
         /// このスクリプトがEnableになるときUnityが呼び出すメソッド。
+        /// 初回有効化時はbase.OnEnable()経由でInitialize()が呼ばれ、isRuntimeReadyがtrueになる。
+        /// その後、コールバックを登録する。再有効化時も同様に登録する（OnDisableで解除されるため二重登録なし）。
         /// </summary>
         protected override void OnEnable()
         {
-            if (!isRuntimeReady)
-            {
-                base.OnEnable();
-                return;
-            }
-
-            Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
             base.OnEnable();
+
+            if (isRuntimeReady && Simulation.HasInstance)
+                Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
         }
 
         /// <summary>
