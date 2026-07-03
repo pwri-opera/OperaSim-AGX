@@ -2247,6 +2247,8 @@ MonoBehaviour:
   baseContactMaterials:
   - {fileID: 11400000, guid: ed05e4ee02133eb4087447a902cef9a2, type: 2}
   - {fileID: 11400000, guid: 0918c4f0f39db074996223df4f73098a, type: 2}
+  baseNonOrientedContactMaterials:
+  - {fileID: 11400000, guid: 97ae3feb5d2b6674396a0ea04be718ed, type: 2}
   trackComponents:
   - {fileID: 7735969015773454020}
   - {fileID: 5679647361955800741}

@@ -36,6 +36,9 @@ namespace PWRISimulator
     [Tooltip("Base ContactMaterials whose Material1 is the track ShapeMaterial. Each is cloned and rebound to the cloned ShapeMaterial + cloned FrictionModel.")]
     public ContactMaterial[] baseContactMaterials;
 
+    [Tooltip("Base ContactMaterials whose Material1 is the track ShapeMaterial but which must NOT use oriented friction (e.g. track vs wheel). Each is cloned and rebound to the cloned ShapeMaterial, keeping its own FrictionModel.")]
+    public ContactMaterial[] baseNonOrientedContactMaterials;
+
     [Tooltip("AGXUnity Track components (e.g. TrackL / TrackR) whose Material field feeds runtime-spawned shoes.")]
     public Track[] trackComponents;
 
@@ -48,6 +51,7 @@ namespace PWRISimulator
     private ShapeMaterial m_clonedShapeMaterial;
     private FrictionModel m_clonedFrictionModel;
     private readonly List<ContactMaterial> m_clonedContactMaterials = new List<ContactMaterial>();
+    private readonly List<ContactMaterial> m_clonedNonOrientedContactMaterials = new List<ContactMaterial>();
 
     private void Awake()
     {
@@ -85,11 +89,22 @@ namespace PWRISimulator
         clone.FrictionModel = m_clonedFrictionModel;
         m_clonedContactMaterials.Add( clone );
       }
+
+      if ( baseNonOrientedContactMaterials != null ) {
+        foreach ( var baseCM in baseNonOrientedContactMaterials ) {
+          if ( baseCM == null ) continue;
+          var clone = Instantiate( baseCM );
+          clone.name = baseCM.name + "_" + GetInstanceID();
+          // FrictionModel intentionally left as-is: these pairs (e.g. track vs wheel) must not become oriented.
+          clone.Material1 = m_clonedShapeMaterial;
+          m_clonedNonOrientedContactMaterials.Add( clone );
+        }
+      }
     }
 
     private void Start()
     {
-      if ( m_clonedContactMaterials.Count == 0 )
+      if ( m_clonedContactMaterials.Count == 0 && m_clonedNonOrientedContactMaterials.Count == 0 )
         return;
 
       var simulation = Simulation.Instance;
@@ -113,6 +128,17 @@ namespace PWRISimulator
         if ( manager != null )
           manager.Add( clone );
       }
+
+      foreach ( var clone in m_clonedNonOrientedContactMaterials ) {
+        var initialized = clone.GetInitialized<ContactMaterial>();
+        if ( initialized == null )
+          continue;
+
+        nativeManager.add( clone.Native );
+
+        if ( manager != null )
+          manager.Add( clone );
+      }
     }
 
     private void OnDestroy()
@@ -127,6 +153,15 @@ namespace PWRISimulator
         Destroy( clone );
       }
       m_clonedContactMaterials.Clear();
+
+      foreach ( var clone in m_clonedNonOrientedContactMaterials ) {
+        if ( clone == null ) continue;
+        if ( manager != null )
+          manager.Remove( clone );
+        clone.Destroy();
+        Destroy( clone );
+      }
+      m_clonedNonOrientedContactMaterials.Clear();
 
       if ( m_clonedFrictionModel != null ) {
         m_clonedFrictionModel.Destroy();
