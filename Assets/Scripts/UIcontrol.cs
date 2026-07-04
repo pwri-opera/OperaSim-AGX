@@ -397,8 +397,31 @@ namespace PWRISimulator
 
             // シミュレーション速度倍率を適用し、リアルタイム性確認用プローブを起動
             Time.timeScale = GlobalVariables.SimulationSpeedMultiplier;
+            if (GlobalVariables.SimulationSpeedMultiplier != 1.0f)
+                ValidateSimulationSteppingSettings();
             if (GetComponent<RealtimeFidelityProbe>() == null)
                 gameObject.AddComponent<RealtimeFidelityProbe>();
+        }
+
+        /// <summary>
+        /// 速度倍率はFixedUpdate毎にAGXが1ステップ進むことに依存する(ref #55)。
+        /// FixedUpdateRealTimeFactorが0以外だとAGXのステップがwall clockベースで実時間ペースに制限され、
+        /// Time.timeがN倍で進むのに物理が1倍のままとなって非同期になるため、倍率適用時に設定を検証する。
+        /// なお、AutoSteppingModeはControlPhysicsがポーズ機構として切り替えており、このタイミングでは
+        /// Disabledが正常なためチェックしない。
+        /// </summary>
+        void ValidateSimulationSteppingSettings()
+        {
+            if (!Simulation.HasInstance)
+                return;
+
+            var simulation = Simulation.Instance;
+
+            if (simulation.FixedUpdateRealTimeFactor != 0.0f)
+                Debug.LogError(
+                    $"Simulation speed multiplier requires AGXUnity Simulation.FixedUpdateRealTimeFactor == 0, " +
+                    $"but it is {simulation.FixedUpdateRealTimeFactor}. AGX stepping will be throttled to real time " +
+                    $"and desynchronize from game time. Set FixedUpdateRealTimeFactor to 0 in the Simulation inspector.");
         }
 
 
