@@ -84,7 +84,7 @@ namespace PWRISimulator
             foreach (var dumpInput in FindObjectsOfType<DumpTruckInput>(true))
             {
                 var dumpRoot = dumpInput.transform.root.gameObject;
-                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name) && !seen.Contains(dumpRoot))
+                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name) && !seen.Contains(dumpRoot) && dumpRoot.activeSelf)
                 {
                     seen.Add(dumpRoot);
                     savedDumpTrucks.Add(new DumpTruckSaveData
