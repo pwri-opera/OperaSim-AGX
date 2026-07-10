@@ -20,6 +20,10 @@ namespace PWRISimulator
 
             for (int i = 0; i < deformableTerrain.Shovels.Length; i++)
             {
+                // ショベルのネイティブ初期化に失敗した場合はスキップ
+                if (deformableTerrain.Shovels[i].Native == null)
+                    continue;
+
                 // 左右側面と背面を削減
                 deformableTerrain.Shovels[i].Native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_RIGHT).setEnable(false);
                 deformableTerrain.Shovels[i].Native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_LEFT).setEnable(false);

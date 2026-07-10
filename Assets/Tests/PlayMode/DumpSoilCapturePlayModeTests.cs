@@ -191,42 +191,27 @@ namespace PWRISimulator.Tests
         }
 
         /// <summary>
-        /// Verifies that OnPostStepForward can be successfully subscribed to
-        /// the Simulation StepCallbacks.PostStepForward delegate.
+        /// Verifies that OnEnable() does NOT register the PostStepForward
+        /// callback when isRuntimeReady is false (i.e., before Initialize()
+        /// has run).
         ///
-        /// DumpSoil.OnEnable() subscribes OnPostStepForward after
-        /// base.OnEnable() (which triggers Initialize() on first activation,
-        /// setting isRuntimeReady = true).  This test validates the
-        /// subscription mechanism in isolation: it creates a DumpSoil
-        /// without calling Initialize(), then manually performs the same
-        /// registration that OnEnable() does, confirming the callback
-        /// appears on the delegate chain.
+        /// ScriptComponent.OnEnable() is an empty virtual method — it does
+        /// NOT call Initialize().  Initialize() is called from Start() →
+        /// InitializeCallback().  Since Unity calls OnEnable() before
+        /// Start(), isRuntimeReady is always false on first activation.
+        /// The callback registration must therefore happen in Initialize(),
+        /// not in OnEnable().
         ///
-        /// Because the test bypasses OnEnable(), it does not verify that
-        /// the subscription code path itself is reached — that is validated
-        /// indirectly by the OnPostStepForward_ExecutesCapturePerStep test,
-        /// which proves OnPostStepForward executes by verifying
-        /// captureStepExecutionCount increments.
+        /// This is a regression test for the issue #79 fix bug where the
+        /// callback registration was moved from Initialize() to OnEnable(),
+        /// causing OnPostStepForward to never fire (soil particles were
+        /// never captured or spawned).
         /// </summary>
         [UnityTest]
-        public IEnumerator PostStepCallback_IsSubscribedAfterFirstInitialize()
+        public IEnumerator OnEnable_DoesNotRegisterCallbackBeforeInitialize()
         {
             System.Type type = _dumpSoilType;
 
-            // --------------------------------------------------------------- //
-            // 1.  Create DumpSoil in inactive state (prevents OnEnable crash) //
-            // --------------------------------------------------------------- //
-            _gameObject = new GameObject("TestDumpSoil",
-                typeof(MeshFilter), typeof(MeshRenderer));
-            _gameObject.SetActive(false);
-            var dumpSoil = _gameObject.AddComponent(type) as Component;
-            _gameObject.SetActive(true);
-
-            yield return null;
-
-            // --------------------------------------------------------------- //
-            // 2.  Check Simulation availability                               //
-            // --------------------------------------------------------------- //
             if (!Simulation.HasInstance)
             {
                 Assert.Ignore(
@@ -235,45 +220,94 @@ namespace PWRISimulator.Tests
                 yield break;
             }
 
-            // --------------------------------------------------------------- //
-            // 3.  Inspect PostStepForward (public field, no reflection needed)//
-            // --------------------------------------------------------------- //
             var stepCallbacks = Simulation.Instance.StepCallbacks;
 
-            // The PostStepForward is a public StepCallbackDef delegate field.
-            // Before any subscriber: it is null.
+            // Snapshot the delegate chain before creating the component.
+            var delBefore = stepCallbacks.PostStepForward;
 
-            // --------------------------------------------------------------- //
-            // 4.  Simulate the post-Initialize state                          //
-            // --------------------------------------------------------------- //
+            // Create DumpSoil on an active GameObject — OnEnable() fires
+            // immediately, but isRuntimeReady is still false.
+            _gameObject = new GameObject("TestDumpSoil",
+                typeof(MeshFilter), typeof(MeshRenderer));
+            var dumpSoil = _gameObject.AddComponent(type) as Component;
+
+            yield return null;
+
+            // Verify isRuntimeReady is false (Initialize hasn't succeeded
+            // because terrain/containerBody are not set up).
+            var isReadyField = type.GetField("isRuntimeReady", PrivateInstance);
+            Assert.That(isReadyField, Is.Not.Null);
+            bool isReady = (bool)isReadyField.GetValue(dumpSoil);
+            Assert.That(isReady, Is.False,
+                "isRuntimeReady should be false without terrain/containerBody setup.");
+
+            // The callback must NOT have been registered by OnEnable alone.
+            var delAfter = stepCallbacks.PostStepForward;
+            Assert.That(delAfter, Is.EqualTo(delBefore),
+                "PostStepForward delegate should be unchanged after OnEnable() " +
+                "when isRuntimeReady is false. Callback registration must happen " +
+                "in Initialize(), not OnEnable() (regression: issue #79 fix bug).");
+
+            yield return null;
+        }
+
+        /// <summary>
+        /// Verifies that OnEnable() registers the PostStepForward callback
+        /// when isRuntimeReady is already true (re-enable after Initialize).
+        ///
+        /// After Initialize() has run (setting isRuntimeReady=true and
+        /// registering the callback), if the component is disabled and
+        /// re-enabled, OnEnable() must re-register the callback because
+        /// OnDisable() unregistered it.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator OnEnable_RegistersCallbackOnReEnableAfterInitialize()
+        {
+            System.Type type = _dumpSoilType;
+
+            if (!Simulation.HasInstance)
+            {
+                Assert.Ignore(
+                    "AGX Simulation.Instance not available — cannot verify " +
+                    "event subscription.");
+                yield break;
+            }
+
+            var stepCallbacks = Simulation.Instance.StepCallbacks;
+
+            // Create inactive GameObject, add DumpSoil, then simulate
+            // post-Initialize state via reflection.
+            _gameObject = new GameObject("TestDumpSoil",
+                typeof(MeshFilter), typeof(MeshRenderer));
+            _gameObject.SetActive(false);
+            var dumpSoil = _gameObject.AddComponent(type) as Component;
+
             var isReadyField = type.GetField("isRuntimeReady", PrivateInstance);
             Assert.That(isReadyField, Is.Not.Null);
             isReadyField.SetValue(dumpSoil, true);
 
-            // DumpSoil.OnEnable() subscribes OnPostStepForward after
-            // base.OnEnable() sets isRuntimeReady = true via Initialize().
-            // Since we bypassed OnEnable(), we repeat the same registration
-            // here to validate the mechanism in isolation:
+            var delBefore = stepCallbacks.PostStepForward;
 
-            var postStepMethod = type.GetMethod("OnPostStepForward", PrivateInstance);
-            var onPostStepDelegate = System.Delegate.CreateDelegate(
-                typeof(StepCallbackFunctions.StepCallbackDef),
-                dumpSoil,
-                postStepMethod);
+            // Activate — OnEnable() fires with isRuntimeReady=true.
+            _gameObject.SetActive(true);
 
-            stepCallbacks.PostStepForward +=
-                (StepCallbackFunctions.StepCallbackDef)onPostStepDelegate;
+            yield return null;
 
-            // --------------------------------------------------------------- //
-            // 5.  Verify the callback is now on the delegate chain            //
-            // --------------------------------------------------------------- //
-            var delAfter = stepCallbacks.PostStepForward;
+            // Callback should now be registered by OnEnable().
+            var delAfterEnable = stepCallbacks.PostStepForward;
+            Assert.That(delAfterEnable, Is.Not.EqualTo(delBefore),
+                "PostStepForward delegate should change after OnEnable() when " +
+                "isRuntimeReady is true (re-enable path).");
 
-            Assert.That(delAfter, Is.Not.Null,
-                "PostStepForward delegate should be non-null after " +
-                "subscription. DumpSoil.Initialize() performs this " +
-                "registration (see Initialize() end, after " +
-                "isRuntimeReady = true).");
+            // Disable — OnDisable() should unregister.
+            _gameObject.SetActive(false);
+
+            yield return null;
+
+            var delAfterDisable = stepCallbacks.PostStepForward;
+            Assert.That(delAfterDisable, Is.EqualTo(delBefore),
+                "PostStepForward delegate should return to baseline after " +
+                "OnDisable() unregisters the callback.");
 
             yield return null;
         }

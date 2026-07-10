@@ -323,6 +323,12 @@ namespace PWRISimulator
 
             isRuntimeReady = true;
 
+            // Register the PostStepForward callback here (not in OnEnable) because
+            // OnEnable runs before Start/Initialize, so isRuntimeReady is still false
+            // on first activation. OnEnable handles re-registration on re-enable.
+            if (Simulation.HasInstance)
+                Simulation.Instance.StepCallbacks.PostStepForward += OnPostStepForward;
+
             return base.Initialize();
         }
         
@@ -507,8 +513,9 @@ namespace PWRISimulator
 
         /// <summary>
         /// このスクリプトがEnableになるときUnityが呼び出すメソッド。
-        /// 初回有効化時はbase.OnEnable()経由でInitialize()が呼ばれ、isRuntimeReadyがtrueになる。
-        /// その後、コールバックを登録する。再有効化時も同様に登録する（OnDisableで解除されるため二重登録なし）。
+        /// 初回有効化時はisRuntimeReadyがfalseのためコールバック登録をスキップし、
+        /// Initialize()内で登録される。再有効化時（OnDisableで解除された後）は
+        /// isRuntimeReadyがtrueなのでここで再登録する。
         /// </summary>
         protected override void OnEnable()
         {
