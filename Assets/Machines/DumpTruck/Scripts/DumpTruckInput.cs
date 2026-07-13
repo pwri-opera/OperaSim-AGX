@@ -18,6 +18,10 @@ namespace PWRISimulator.ROS
         [SerializeField] public ControlType vesselControlType = ControlType.Position;
         [SerializeField] public ControlType rotateControlType = ControlType.Position;
 
+        [Header("Diagnostics")]
+        [SerializeField] private bool logDumpCommandDiagnostics = true;
+        private float _nextDumpLogTime;
+
         [Header("Dummy")]
         [SerializeField] bool enabledDummy;
         [SerializeField] double rotate_joint;
@@ -56,9 +60,24 @@ namespace PWRISimulator.ROS
         private const string FORWARD_VOLUME = "forward_volume";
         private const string TURN_VOLUME = "turn_volume";
 
+        private const byte POSITION_CONTROL = 0;
+        private const byte SPEED_CONTROL = 1;
+        private const byte FORCE_CONTROL = 2;
+
         void Start()
         {
-            joints = dumpTruckJoint;
+            joints = dumpTruckJoint != null ? dumpTruckJoint : GetComponent<DumpTruckJoint>();
+            if (joints == null)
+            {
+                Debug.LogError("[DumpTruckInput] DumpTruckJoint is not assigned.", this);
+                enabled = false;
+                return;
+            }
+
+            dumpTruckJoint = joints;
+            if (vesselStateController == null)
+                vesselStateController = GetComponent<DumpVesselStateController>();
+
             rotateDeadTimeDelay         = new DeadTimeDelay<double>(joints.rotate_joint.deadTime);
             dumpDeadTimeDelay           = new DeadTimeDelay<double>(joints.dump_joint.deadTime);
             rightSprocketDeadTimeDelay  = new DeadTimeDelay<double>(joints.rightSprocket.deadTime);
@@ -93,7 +112,8 @@ namespace PWRISimulator.ROS
                 double nowMs = (Time.fixedTimeAsDouble - Time.fixedDeltaTime) * 1000.0;
 
                 // 上部（回転・ダンプ）
-                switch (vesselControlType)
+                ControlType dumpControlType = GetDumpControlType();
+                switch (dumpControlType)
                 {
                     case ControlType.Position:
                         if (GetJointValue(RotDumpSubscriber.DumpCmd.position, JOINT_DUMP, _dumpIndexMap, out double dumpPos))
@@ -196,30 +216,25 @@ namespace PWRISimulator.ROS
                 // ベッセル角度
                 double currentVesselPos = joints.dump_joint.CurrentPosition;
 
-                switch (vesselControlType)
+                ControlType dumpControlType = GetDumpControlType();
+                switch (dumpControlType)
                 {
                     case ControlType.Position:
-                        if (GetEffectiveJointValue(currentTimeMs, JOINT_DUMP, vesselControlType, _dumpIndexMap, out double dumpPos))
+                        if (GetEffectiveJointValue(currentTimeMs, JOINT_DUMP, dumpControlType, _dumpIndexMap, out double dumpPos))
                         {
-                            /*** この部分を微修正  ***/
-                            // double vessel_vel_param;
-                            joints.dump_joint.controlType = ControlType.Speed;
-                            joints.dump_joint.controlValue = vesselStateController.computeAngularVelocity (currentVesselPos, dumpPos);
-                            // joints.dump_joint.controlValue = dumpPos;
+                            ApplyDumpCommand(ControlType.Position, dumpPos, currentVesselPos, "ROS");
                         }
                         break;
                     case ControlType.Speed:
-                        if (GetEffectiveJointValue(currentTimeMs, JOINT_DUMP, vesselControlType, _dumpIndexMap, out double dumpVel))
+                        if (GetEffectiveJointValue(currentTimeMs, JOINT_DUMP, dumpControlType, _dumpIndexMap, out double dumpVel))
                         {
-                            joints.dump_joint.controlType = ControlType.Speed;
-                            joints.dump_joint.controlValue = dumpVel;
+                            ApplyDumpCommand(ControlType.Speed, dumpVel, currentVesselPos, "ROS");
                         }
                         break;
                     case ControlType.Force:
-                        if (GetEffectiveJointValue(currentTimeMs, JOINT_DUMP, vesselControlType, _dumpIndexMap, out double dumpEff))
+                        if (GetEffectiveJointValue(currentTimeMs, JOINT_DUMP, dumpControlType, _dumpIndexMap, out double dumpEff))
                         {
-                            joints.dump_joint.controlType = ControlType.Force;
-                            joints.dump_joint.controlValue = dumpEff;
+                            ApplyDumpCommand(ControlType.Force, dumpEff, currentVesselPos, "ROS");
                         }
                         break;
                 }
@@ -400,6 +415,71 @@ namespace PWRISimulator.ROS
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// JointCmd.control_type: 0=position, 1=velocity, 2=effort.
+        /// Unknown values retain the Inspector setting for backward compatibility.
+        /// </summary>
+        private ControlType GetDumpControlType()
+        {
+            JointCmdMsg cmd = RotDumpSubscriber != null ? RotDumpSubscriber.DumpCmd : null;
+            if (cmd == null)
+                return vesselControlType;
+
+            switch (cmd.control_type)
+            {
+                case POSITION_CONTROL:
+                    return ControlType.Position;
+                case SPEED_CONTROL:
+                    return ControlType.Speed;
+                case FORCE_CONTROL:
+                    return ControlType.Force;
+                default:
+                    return vesselControlType;
+            }
+        }
+
+        private void ApplyDumpCommand(ControlType requestedType, double requestedValue, double currentPosition, string source)
+        {
+            ControlType appliedType = requestedType;
+            double appliedValue = requestedValue;
+
+            // The IC120 position command is driven through the tuned vessel speed controller.
+            // Legacy scene objects without that component use AGX position control directly.
+            if (requestedType == ControlType.Position && vesselStateController != null)
+            {
+                appliedType = ControlType.Speed;
+                appliedValue = vesselStateController.computeAngularVelocity(currentPosition, requestedValue);
+            }
+
+            joints.dump_joint.controlType = appliedType;
+            joints.dump_joint.controlValue = appliedValue;
+
+            if (logDumpCommandDiagnostics && Time.unscaledTime >= _nextDumpLogTime)
+            {
+                _nextDumpLogTime = Time.unscaledTime + 1.0f;
+                int index = _dumpIndexMap.TryGetValue(JOINT_DUMP, out int mappedIndex) ? mappedIndex : -1;
+                byte messageControlType = RotDumpSubscriber != null && RotDumpSubscriber.DumpCmd != null
+                    ? RotDumpSubscriber.DumpCmd.control_type
+                    : byte.MaxValue;
+
+                Debug.Log(
+                    $"[DumpTruckInput] source={source}, joint={JOINT_DUMP}, index={index}, " +
+                    $"control_type={messageControlType}, requestedType={requestedType}, target={requestedValue:F6}, " +
+                    $"current={currentPosition:F6}, appliedType={appliedType}, appliedValue={appliedValue:F6}",
+                    this
+                );
+            }
+        }
+
+        public void ApplyManualDumpSpeed(double speed)
+        {
+            if (joints == null)
+                joints = dumpTruckJoint != null ? dumpTruckJoint : GetComponent<DumpTruckJoint>();
+
+            if (joints != null && joints.dump_joint != null)
+                ApplyDumpCommand(ControlType.Speed, speed, joints.dump_joint.CurrentPosition, "Manual");
         }
 
         private bool GetEffectiveJointValue(double nowMs, string jointName, ControlType mode, Dictionary<string, int> map, out double jointValue)

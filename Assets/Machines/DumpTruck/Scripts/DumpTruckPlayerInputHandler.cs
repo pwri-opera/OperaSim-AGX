@@ -10,9 +10,12 @@ namespace PWRISimulator.ROS
     {
         public DumpTruckJoint dumpTrack;
         public bool printDebugMessages = false;
+        private DumpTruckInput dumpTruckInput;
 
         private void Start()
         {
+            dumpTruckInput = GetComponent<DumpTruckInput>();
+
             if (dumpTrack != null)
             {
                 SetConstraintVelocityControl(dumpTrack.leftSprocket);
@@ -34,8 +37,11 @@ namespace PWRISimulator.ROS
         
         public void OnContainerTilt(InputValue value)
         {
-            // SetConstraintControlValue(dumpTrack?.containerTilt, value.Get<float>());
-            SetConstraintControlValue(dumpTrack?.dump_joint, value.Get<float>());
+            double speed = value.Get<float>();
+            if (dumpTruckInput != null)
+                dumpTruckInput.ApplyManualDumpSpeed(speed);
+            else
+                SetConstraintControlValue(dumpTrack?.dump_joint, speed);
         }
         
         protected void SetConstraintControlValue(ConstraintControl constraintControl, double value)
