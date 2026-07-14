@@ -299,6 +299,27 @@ namespace PWRISimulator
         }
 
 
+        /// <summary>
+        /// Unity Terrain の正規化 Heightmap 積算差分を物理体積 [m^3] に変換する。
+        /// Heightmap は terrainData.size.y を 1.0 とする高さで、隣接サンプル間は
+        /// Terrain の幅・奥行きを (heightmapResolution - 1) 分割した距離になる。
+        /// </summary>
+        private static double normalizedHeightSumToVolume(double normalizedHeightSum, TerrainData terrainData)
+        {
+            int sampleIntervals = terrainData.heightmapResolution - 1;
+            if (sampleIntervals <= 0)
+            {
+                return 0.0;
+            }
+
+            Vector3 terrainSize = terrainData.size;
+            double cellWidth = terrainSize.x / sampleIntervals;
+            double cellDepth = terrainSize.z / sampleIntervals;
+
+            return normalizedHeightSum * terrainSize.y * cellWidth * cellDepth;
+        }
+
+
         private IEnumerator wait()
         {
             // process pre-yield
@@ -557,27 +578,34 @@ namespace PWRISimulator
             //Debug.Log("curt_dmpSum_margin: " + curt_dmpSum_margin + ", init_dmpSum_margin: " + init_dmpSum_margin);
 
 
-            if (dmpDiff > 0.0 && dmpDiff > prev_dmpDiff && init_dmpSum_margin - curt_dmpSum_margin <= 0)
+            if (dmpDiff > prev_dmpDiff)
             {
-                var _diff = dmpDiff - prev_dmpDiff;
-                //dmpScore += GlobalVariables.UnloadSoilCoef * Math.Abs(dmpDiff) / 0.1;
-                dmpScore += GlobalVariables.UnloadSoilCoef * Math.Abs(_diff);
+                // 一度評価した標高増加を次フレームで重複加算しない。
+                double normalizedHeightDiff = dmpDiff - prev_dmpDiff;
 
-                //Debug.Log("_diff: " + _diff + ", dmpDiff: " + dmpDiff + ", prev_dmpDiff: " + prev_dmpDiff);
-
-                //Debug.Log("***** dmpScore: " + dmpScore);
-
-                if (Math.Abs(dmpScore) >= 1.0)
+                if (dmpDiff > 0.0 && init_dmpSum_margin - curt_dmpSum_margin <= 0)
                 {
-                    // スコア反映
-                    GlobalVariables.incrementScore((int)dmpScore);
+                    // UnloadSoilCoef の単位は [pt/m^3]。
+                    // 現設定の 100 [pt/m^3] は +10 pt / 0.1 m^3 に相当する。
+                    double volumeDiff = normalizedHeightSumToVolume(normalizedHeightDiff, terrainData);
+                    dmpScore += GlobalVariables.UnloadSoilCoef * volumeDiff;
 
-                    // スコア積算リセット
-                    dmpScore = dmpScore - (int)dmpScore;
+                    //Debug.Log("volumeDiff: " + volumeDiff + ", dmpDiff: " + dmpDiff + ", prev_dmpDiff: " + prev_dmpDiff);
 
-                    // 差分保持
-                    prev_dmpDiff = dmpDiff;
+                    //Debug.Log("***** dmpScore: " + dmpScore);
+
+                    if (Math.Abs(dmpScore) >= 1.0)
+                    {
+                        // スコア反映
+                        GlobalVariables.incrementScore((int)dmpScore);
+
+                        // 1点未満の端数は次回の体積増加へ繰り越す。
+                        dmpScore = dmpScore - (int)dmpScore;
+                    }
                 }
+
+                // 得点条件を満たさない増加も評価済みにし、後から加算しない。
+                prev_dmpDiff = dmpDiff;
             }
 
             double sumDiff = curt_sum - init_sum;
