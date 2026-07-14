@@ -105,6 +105,10 @@ namespace AGXUnity.Model
       // Only printing the errors if something is wrong.
       LicenseManager.LicenseInfo.HasModuleLogError( LicenseInfo.Module.AGXTerrain | LicenseInfo.Module.AGXGranular, this );
 
+#if UNITY_EDITOR
+      UseRuntimeTerrainDataCopy();
+#endif
+
       RemoveInvalidShovels( true, true );
 
       m_initialHeights = TerrainData.GetHeights( 0, 0, TerrainDataResolution, TerrainDataResolution );
@@ -126,6 +130,10 @@ namespace AGXUnity.Model
     protected override void OnDestroy()
     {
       ResetTerrainDataHeightsAndTransform();
+
+#if UNITY_EDITOR
+      RestoreSourceTerrainData();
+#endif
 
       if ( TerrainProperties != null )
         TerrainProperties.Unregister( this );
@@ -181,12 +189,54 @@ namespace AGXUnity.Model
       transform.position = transform.position + MaximumDepth * Vector3.up;
 
 #if UNITY_EDITOR
-      // If the editor is closed during play the modified height
-      // data isn't saved, this resolves corrupt heights in such case.
-      UnityEditor.EditorUtility.SetDirty( TerrainData );
-      UnityEditor.AssetDatabase.SaveAssets();
+      if ( m_runtimeTerrainData == null ) {
+        // If the editor is closed during play the modified height
+        // data isn't saved, this resolves corrupt heights in such case.
+        UnityEditor.EditorUtility.SetDirty( TerrainData );
+        UnityEditor.AssetDatabase.SaveAssets();
+      }
 #endif
     }
+
+#if UNITY_EDITOR
+    private void UseRuntimeTerrainDataCopy()
+    {
+      if ( m_runtimeTerrainData != null )
+        return;
+
+      var sourceTerrainData = Terrain.terrainData;
+      if ( sourceTerrainData == null || !UnityEditor.AssetDatabase.Contains( sourceTerrainData ) )
+        return;
+
+      m_sourceTerrainData = sourceTerrainData;
+      m_runtimeTerrainData = UnityEngine.Object.Instantiate( sourceTerrainData );
+      m_runtimeTerrainData.name = sourceTerrainData.name + " (Runtime)";
+      m_runtimeTerrainData.hideFlags = HideFlags.DontSave;
+
+      Terrain.terrainData = m_runtimeTerrainData;
+      var terrainCollider = GetComponent<TerrainCollider>();
+      if ( terrainCollider != null )
+        terrainCollider.terrainData = m_runtimeTerrainData;
+
+      Debug.Log( $"[DeformableTerrain] Using runtime TerrainData copy for {sourceTerrainData.name}.", this );
+    }
+
+    private void RestoreSourceTerrainData()
+    {
+      if ( m_runtimeTerrainData == null )
+        return;
+
+      Terrain.terrainData = m_sourceTerrainData;
+      var terrainCollider = GetComponent<TerrainCollider>();
+      if ( terrainCollider != null )
+        terrainCollider.terrainData = m_sourceTerrainData;
+
+      UnityEngine.Object.DestroyImmediate( m_runtimeTerrainData );
+      Debug.Log( $"[DeformableTerrain] Restored source TerrainData for {m_sourceTerrainData.name}.", this );
+      m_runtimeTerrainData = null;
+      m_sourceTerrainData = null;
+    }
+#endif
 
     private void OnPostStepForward()
     {
@@ -264,6 +314,11 @@ namespace AGXUnity.Model
 
     private Terrain m_terrain = null;
     private float[,] m_initialHeights = null;
+
+#if UNITY_EDITOR
+    private TerrainData m_sourceTerrainData = null;
+    private TerrainData m_runtimeTerrainData = null;
+#endif
 
     // -----------------------------------------------------------------------------------------------------------
     // ------------------------------- Implementation of DeformableTerrainBase -----------------------------------
