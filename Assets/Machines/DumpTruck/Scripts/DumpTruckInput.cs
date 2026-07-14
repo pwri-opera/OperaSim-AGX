@@ -456,6 +456,10 @@ namespace PWRISimulator.ROS
             joints.dump_joint.controlType = appliedType;
             joints.dump_joint.controlValue = appliedValue;
 
+            // Physics Stop/Start 後はAGX側のコントローラ値がリセットされる場合がある。
+            // 指令値が前回と同じでも、ダンプ制御値はネイティブ側へ再適用する。
+            joints.dump_joint.ReapplyControlValue();
+
             if (logDumpCommandDiagnostics && Time.unscaledTime >= _nextDumpLogTime)
             {
                 _nextDumpLogTime = Time.unscaledTime + 1.0f;
@@ -463,11 +467,16 @@ namespace PWRISimulator.ROS
                 byte messageControlType = RotDumpSubscriber != null && RotDumpSubscriber.DumpCmd != null
                     ? RotDumpSubscriber.DumpCmd.control_type
                     : byte.MaxValue;
+                bool nativeEnabled = joints.dump_joint.constraint != null &&
+                                     joints.dump_joint.constraint.Native != null &&
+                                     joints.dump_joint.constraint.Native.getEnable();
 
                 Debug.Log(
                     $"[DumpTruckInput] source={source}, joint={JOINT_DUMP}, index={index}, " +
                     $"control_type={messageControlType}, requestedType={requestedType}, target={requestedValue:F6}, " +
-                    $"current={currentPosition:F6}, appliedType={appliedType}, appliedValue={appliedValue:F6}",
+                    $"current={currentPosition:F6}, speed={joints.dump_joint.CurrentSpeed:F6}, " +
+                    $"force={joints.dump_joint.CurrentForce:F3}, maxForce={joints.dump_joint.controlMaxForce:F3}, " +
+                    $"nativeEnabled={nativeEnabled}, appliedType={appliedType}, appliedValue={appliedValue:F6}",
                     this
                 );
             }

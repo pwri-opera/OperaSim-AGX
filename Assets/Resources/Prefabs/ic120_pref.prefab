@@ -6760,7 +6760,7 @@ MonoBehaviour:
     controlEnabled: 1
     controlType: 1
     controlValue: 0
-    controlMaxForce: 60000
+    controlMaxForce: 600000
     deadTime: 0.21789073
   rotate_joint:
     constraint: {fileID: 0}
