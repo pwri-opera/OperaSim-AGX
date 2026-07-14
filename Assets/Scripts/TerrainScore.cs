@@ -87,6 +87,14 @@ namespace PWRISimulator
         // 放土エリア
         private double dmpScore;
 
+        [Header("Unload Score Diagnostics")]
+        [SerializeField] private bool logUnloadScoreDiagnostics = true;
+        [SerializeField, Min(0.1f)] private float unloadScoreLogIntervalSeconds = 1.0f;
+
+        private double pendingUnloadDiagnosticVolume;
+        private int pendingUnloadDiagnosticPoints;
+        private float nextUnloadScoreLogTime;
+
 
         public static double[,] CreateMatrix(int rows, int cols, double value)
         {
@@ -319,6 +327,28 @@ namespace PWRISimulator
             return normalizedHeightSum * terrainSize.y * cellWidth * cellDepth;
         }
 
+        private void LogUnloadScoreDiagnosticsIfDue()
+        {
+            if (!logUnloadScoreDiagnostics || pendingUnloadDiagnosticVolume <= 0.0 ||
+                Time.unscaledTime < nextUnloadScoreLogTime)
+            {
+                return;
+            }
+
+            double calculatedPoints = GlobalVariables.UnloadSoilCoef * pendingUnloadDiagnosticVolume;
+            Debug.Log(
+                $"[TerrainScore][Unload] detectedVolume={pendingUnloadDiagnosticVolume:F6} m^3, " +
+                $"coefficient={GlobalVariables.UnloadSoilCoef:F3} pt/m^3, " +
+                $"calculatedPoints={calculatedPoints:F3}, addedPoints={pendingUnloadDiagnosticPoints}, " +
+                $"carryPoints={dmpScore:F3}, totalScore={GlobalVariables.score}",
+                this
+            );
+
+            pendingUnloadDiagnosticVolume = 0.0;
+            pendingUnloadDiagnosticPoints = 0;
+            nextUnloadScoreLogTime = Time.unscaledTime + unloadScoreLogIntervalSeconds;
+        }
+
 
         private IEnumerator wait()
         {
@@ -359,6 +389,10 @@ namespace PWRISimulator
             excScore = 0.0;
             // 放土エリア
             dmpScore = 0.0;
+
+            pendingUnloadDiagnosticVolume = 0.0;
+            pendingUnloadDiagnosticPoints = 0;
+            nextUnloadScoreLogTime = Time.unscaledTime + unloadScoreLogIntervalSeconds;
 
             init_sum = 0.0;
             curt_sum = 0.0;
@@ -460,6 +494,10 @@ namespace PWRISimulator
                 excScore = 0.0;
                 // 放土エリア
                 dmpScore = 0.0;
+
+                pendingUnloadDiagnosticVolume = 0.0;
+                pendingUnloadDiagnosticPoints = 0;
+                nextUnloadScoreLogTime = Time.unscaledTime + unloadScoreLogIntervalSeconds;
 
                 init_sum = 0.0;
                 curt_sum = 0.0;
@@ -589,6 +627,7 @@ namespace PWRISimulator
                     // 現設定の 100 [pt/m^3] は +10 pt / 0.1 m^3 に相当する。
                     double volumeDiff = normalizedHeightSumToVolume(normalizedHeightDiff, terrainData);
                     dmpScore += GlobalVariables.UnloadSoilCoef * volumeDiff;
+                    pendingUnloadDiagnosticVolume += volumeDiff;
 
                     //Debug.Log("volumeDiff: " + volumeDiff + ", dmpDiff: " + dmpDiff + ", prev_dmpDiff: " + prev_dmpDiff);
 
@@ -597,16 +636,20 @@ namespace PWRISimulator
                     if (Math.Abs(dmpScore) >= 1.0)
                     {
                         // スコア反映
-                        GlobalVariables.incrementScore((int)dmpScore);
+                        int addedPoints = (int)dmpScore;
+                        GlobalVariables.incrementScore(addedPoints);
+                        pendingUnloadDiagnosticPoints += addedPoints;
 
                         // 1点未満の端数は次回の体積増加へ繰り越す。
-                        dmpScore = dmpScore - (int)dmpScore;
+                        dmpScore -= addedPoints;
                     }
                 }
 
                 // 得点条件を満たさない増加も評価済みにし、後から加算しない。
                 prev_dmpDiff = dmpDiff;
             }
+
+            LogUnloadScoreDiagnosticsIfDue();
 
             double sumDiff = curt_sum - init_sum;
             //Debug.Log("sumDiff: " + sumDiff + ",curt_sum: " + curt_sum + ", init_sum: " + init_sum);
