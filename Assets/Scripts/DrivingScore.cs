@@ -53,12 +53,17 @@ namespace PWRISimulator
                 // 積載量の増加分
                 var diff = volume - prevVolume;
 
-                // スコア積算
-                //volScore += GlobalVariables.LoadSoilCoef * diff / 0.1;
-                volScore += GlobalVariables.LoadSoilCoef * diff;
+                if (diff > 0.0)
+                {
+                    // 増加差分は一度だけスコアへ積算する。
+                    volScore += GlobalVariables.LoadSoilCoef * diff;
 
-                Debug.Log("***** scoringDumpSoil: " + volScore + " *****");
-                Debug.Log("volume: " + volume + ", prevVolume: " + prevVolume);
+                    Debug.Log("***** scoringDumpSoil: " + volScore + " *****");
+                    Debug.Log("volume: " + volume + ", prevVolume: " + prevVolume + ", diff: " + diff);
+                }
+
+                // 1点未満の増加も評価済みにし、次フレームで重複加算しない。
+                prevVolume = volume;
 
                 if (Math.Abs(volScore) >= 1.0)
                 {
@@ -68,8 +73,6 @@ namespace PWRISimulator
                     // スコア積算リセット
                     volScore = volScore - (int)volScore;
                     
-                    // 値を保持
-                    prevVolume = volume;
                 }
             }
             else {
