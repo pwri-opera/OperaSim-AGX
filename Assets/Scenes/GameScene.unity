@@ -67037,14 +67037,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
-      propertyPath: m_contactMaterials.Array.data[0].m_isOriented
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
-      propertyPath: m_contactMaterials.Array.data[2].m_isOriented
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 82746090824763390, guid: deef945b4d20f4d4f917132756d9e3d5, type: 3}
       propertyPath: m_contactMaterials.Array.data[3].m_isOriented
       value: 0
       objectReference: {fileID: 0}
