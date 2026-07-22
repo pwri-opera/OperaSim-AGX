@@ -30,7 +30,7 @@ namespace PWRISimulator.ROS
         // 細かい周波数では1ステップに複数回 publish される(Float64Msg のため stamp は無い)
         void FixedUpdate()
         {
-            if (rosConnection == null)
+            if (rosConnection == null || publishPeriod <= 0)
                 return;
             double now = Time.fixedTimeAsDouble;
             while (scheduleOrigin + publishedCount * publishPeriod <= now)

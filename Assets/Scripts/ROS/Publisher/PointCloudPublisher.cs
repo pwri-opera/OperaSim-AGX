@@ -65,7 +65,7 @@ namespace PWRISimulator.ROS
         // 発火時刻は scheduleOrigin + n×publishPeriod の均一グリッドで、stamp もグリッド時刻を使う
         void FixedUpdate()
         {
-            if (rosConnection == null)
+            if (rosConnection == null || publishPeriod <= 0)
                 return;
             double now = Time.fixedTimeAsDouble;
             while (scheduleOrigin + publishedCount * (double)publishPeriod <= now)

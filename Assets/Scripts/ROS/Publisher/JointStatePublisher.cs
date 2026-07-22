@@ -32,7 +32,7 @@ namespace PWRISimulator.ROS
         // fixed step (20ms) より細かい周波数では1ステップに複数回 publish される(データは直近 step の状態)
         void FixedUpdate()
         {
-            if (rosConnection == null)
+            if (rosConnection == null || publishPeriod <= 0)
                 return;
             double now = Time.fixedTimeAsDouble;
             while (scheduleOrigin + publishedCount * publishPeriod <= now)
