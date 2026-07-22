@@ -62,6 +62,8 @@ namespace PWRISimulator
         return;
       }
 
+      ValidateReferences();
+
       m_clonedShapeMaterial = Instantiate( baseTrackShapeMaterial );
       m_clonedShapeMaterial.name = baseTrackShapeMaterial.name + "_" + GetInstanceID();
 
@@ -100,6 +102,41 @@ namespace PWRISimulator
           m_clonedNonOrientedContactMaterials.Add( clone );
         }
       }
+    }
+
+    /// <summary>
+    /// Detects broken inspector references that the required-fields guard does not
+    /// cover (issue #67). Emits LogError only; registration continues either way so
+    /// the behavior stays the same as before the checks were added.
+    /// </summary>
+    private void ValidateReferences()
+    {
+      foreach ( var baseCM in baseContactMaterials ) {
+        if ( baseCM == null )
+          Debug.LogError( $"{GetType().Name}: baseContactMaterials contains a null element; that entry is skipped.", this );
+      }
+
+      if ( baseNonOrientedContactMaterials != null ) {
+        foreach ( var baseCM in baseNonOrientedContactMaterials ) {
+          if ( baseCM == null )
+            Debug.LogError( $"{GetType().Name}: baseNonOrientedContactMaterials contains a null element; that entry is skipped.", this );
+        }
+      }
+
+      if ( trackComponents == null || trackComponents.Length == 0 ) {
+        Debug.LogError( $"{GetType().Name}: trackComponents is empty; runtime-spawned track shoes will keep the base material.", this );
+      }
+      else {
+        foreach ( var track in trackComponents ) {
+          if ( track == null )
+            Debug.LogError( $"{GetType().Name}: trackComponents contains a null element; that track keeps the base material.", this );
+        }
+      }
+
+      if ( referenceObject.GetComponent<RigidBody>() == null &&
+           referenceObject.GetComponent<Shape>() == null &&
+           referenceObject.GetComponent<ObserverFrame>() == null )
+        Debug.LogError( $"{GetType().Name}: referenceObject '{referenceObject.name}' has no RigidBody, Shape or ObserverFrame; the oriented friction reference frame cannot be resolved.", this );
     }
 
     private void Start()
