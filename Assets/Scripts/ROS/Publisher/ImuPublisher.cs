@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Sensor;
@@ -33,7 +32,10 @@ namespace PWRISimulator.ROS
 
         [SerializeField]uint frequency = 60;
         [SerializeField]string frameId = "";
-        
+
+        int stepInterval;
+        int stepCount;
+
         void Start()
         {
             if (upperBody == null)
@@ -48,18 +50,20 @@ namespace PWRISimulator.ROS
                 return;
             }
 
-            StartCoroutine(UpdateAndPublishMessage());
+            RegisterTopic();
+            stepInterval = MessageUtil.ToFixedStepInterval(1.0 / Math.Max(1, frequency));
         }
 
-        public IEnumerator UpdateAndPublishMessage()
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)
+        void FixedUpdate()
         {
-            RegisterTopic();
-            while(true)
-            {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, frequency));
-                DoUpdate();
-                PublishMessage();
-            }
+            if (rosConnection == null)
+                return;
+            if (++stepCount < stepInterval)
+                return;
+            stepCount = 0;
+            DoUpdate();
+            PublishMessage();
         }
 
         void RegisterTopic()

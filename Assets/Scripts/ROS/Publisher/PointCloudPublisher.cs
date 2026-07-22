@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Runtime.InteropServices;
 using RosMessageTypes.Sensor;
 using Unity.Robotics.ROSTCPConnector;
@@ -34,6 +33,8 @@ namespace PWRISimulator.ROS
         ROSConnection rosConnection;
         PointCloud2Msg msg;
         byte[] dataBuffer = Array.Empty<byte>();
+        int stepInterval;
+        int stepCount;
 
         void Start()
         {
@@ -57,17 +58,18 @@ namespace PWRISimulator.ROS
                 fields = Fields,
             };
 
-            StartCoroutine(PublishLoop());
+            stepInterval = MessageUtil.ToFixedStepInterval(publishPeriod);
         }
 
-        IEnumerator PublishLoop()
+        // sim-time 定義の周期を保つため FixedUpdate 起点で publish する(#56)
+        void FixedUpdate()
         {
-            var wait = new WaitForSecondsRealtime(publishPeriod);
-            while (true)
-            {
-                yield return wait;
-                PublishOnce();
-            }
+            if (rosConnection == null)
+                return;
+            if (++stepCount < stepInterval)
+                return;
+            stepCount = 0;
+            PublishOnce();
         }
 
         void PublishOnce()

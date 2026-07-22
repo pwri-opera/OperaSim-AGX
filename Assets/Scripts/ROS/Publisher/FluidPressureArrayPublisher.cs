@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -16,20 +15,25 @@ namespace PWRISimulator.ROS
         private ROSConnection rosConnection;
         private string topicName;
         protected FluidPressureArrayMsg fluidPressureArrayMsg;
+        private int stepInterval;
+        private int stepCount;
         // Start is called before the first frame update
         void Start()
         {
-            StartCoroutine(UpdateAndPublishMessage());
-        }
-        IEnumerator UpdateAndPublishMessage()
-        {
             RegisterTopic();
-            while(true)
-            {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, Frequency()));
-                DoUpdate();
-                PublishMessage();
-            }
+            stepInterval = MessageUtil.ToFixedStepInterval(1.0 / Math.Max(1, Frequency()));
+        }
+
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)
+        void FixedUpdate()
+        {
+            if (rosConnection == null)
+                return;
+            if (++stepCount < stepInterval)
+                return;
+            stepCount = 0;
+            DoUpdate();
+            PublishMessage();
         }
         void RegisterTopic()
         {

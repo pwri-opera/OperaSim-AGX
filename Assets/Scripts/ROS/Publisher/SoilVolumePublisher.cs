@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Std;
-using System.Collections;
 using System;
 
 namespace PWRISimulator.ROS
@@ -14,22 +13,26 @@ namespace PWRISimulator.ROS
         private ROSConnection rosConnection;
         private string topicName;
         protected Float64Msg soilVolumeMsg;
+        private int stepInterval;
+        private int stepCount;
         // Start is called before the first frame update
         void Start()
         {
             DoStart();
-            StartCoroutine(UpdateAndPublishMessage());
+            RegisterTopic();
+            stepInterval = MessageUtil.ToFixedStepInterval(1.0 / Math.Max(1, Frequency()));
         }
 
-        IEnumerator UpdateAndPublishMessage()
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)
+        void FixedUpdate()
         {
-            RegisterTopic();
-            while(true)
-            {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, Frequency()));
-                DoUpdate();
-                PublishMessage();
-            }
+            if (rosConnection == null)
+                return;
+            if (++stepCount < stepInterval)
+                return;
+            stepCount = 0;
+            DoUpdate();
+            PublishMessage();
         }
 
         void RegisterTopic()

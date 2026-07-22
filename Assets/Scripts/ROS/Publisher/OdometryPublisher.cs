@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
@@ -16,21 +15,25 @@ namespace PWRISimulator.ROS
         private ROSConnection rosConnection;
         private string topicName;
         protected OdometryMsg odometryMsg;
+        private int stepInterval;
+        private int stepCount;
 
         void Start()
         {
-            StartCoroutine(UpdateAndPublishMessage());
+            RegisterTopic();
+            stepInterval = MessageUtil.ToFixedStepInterval(1.0 / Math.Max(1, Frequency()));
         }
 
-        public IEnumerator UpdateAndPublishMessage()
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)
+        void FixedUpdate()
         {
-            RegisterTopic();
-            while(true)
-            {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, Frequency()));
-                DoUpdate();
-                PublishMessage();
-            }
+            if (rosConnection == null)
+                return;
+            if (++stepCount < stepInterval)
+                return;
+            stepCount = 0;
+            DoUpdate();
+            PublishMessage();
         }
 
         void RegisterTopic()
