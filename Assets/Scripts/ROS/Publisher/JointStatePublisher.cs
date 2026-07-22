@@ -15,26 +15,33 @@ namespace PWRISimulator.ROS
         private ROSConnection rosConnection;
         private string topicName;
         protected JointStateMsg jointStateMsg;
-        private int stepInterval;
-        private int stepCount;
+        private double publishPeriod;
+        private double scheduleOrigin;
+        private long publishedCount;
 
         // Start is called before the first frame update
         void Start()
         {
             RegisterTopic();
-            stepInterval = MessageUtil.ToFixedStepInterval(1.0 / Math.Max(1, Frequency()));
+            publishPeriod = 1.0 / Math.Max(1, Frequency());
+            scheduleOrigin = Time.fixedTimeAsDouble;
         }
 
-        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)。
+        // 発火時刻は scheduleOrigin + n×period の均一グリッドで、stamp もグリッド時刻を使う。
+        // fixed step (20ms) より細かい周波数では1ステップに複数回 publish される(データは直近 step の状態)
         void FixedUpdate()
         {
             if (rosConnection == null)
                 return;
-            if (++stepCount < stepInterval)
-                return;
-            stepCount = 0;
-            DoUpdate();
-            PublishMessage();
+            double now = Time.fixedTimeAsDouble;
+            while (scheduleOrigin + publishedCount * publishPeriod <= now)
+            {
+                DoUpdate();
+                MessageUtil.UpdateTimeMsg(jointStateMsg.header.stamp, scheduleOrigin + publishedCount * publishPeriod);
+                PublishMessage();
+                publishedCount++;
+            }
         }
 
         void RegisterTopic()

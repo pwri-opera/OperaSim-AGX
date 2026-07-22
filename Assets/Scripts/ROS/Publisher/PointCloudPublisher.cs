@@ -33,8 +33,8 @@ namespace PWRISimulator.ROS
         ROSConnection rosConnection;
         PointCloud2Msg msg;
         byte[] dataBuffer = Array.Empty<byte>();
-        int stepInterval;
-        int stepCount;
+        double scheduleOrigin;
+        long publishedCount;
 
         void Start()
         {
@@ -58,21 +58,24 @@ namespace PWRISimulator.ROS
                 fields = Fields,
             };
 
-            stepInterval = MessageUtil.ToFixedStepInterval(publishPeriod);
+            scheduleOrigin = Time.fixedTimeAsDouble;
         }
 
-        // sim-time 定義の周期を保つため FixedUpdate 起点で publish する(#56)
+        // sim-time 定義の周期を保つため FixedUpdate 起点で publish する(#56)。
+        // 発火時刻は scheduleOrigin + n×publishPeriod の均一グリッドで、stamp もグリッド時刻を使う
         void FixedUpdate()
         {
             if (rosConnection == null)
                 return;
-            if (++stepCount < stepInterval)
-                return;
-            stepCount = 0;
-            PublishOnce();
+            double now = Time.fixedTimeAsDouble;
+            while (scheduleOrigin + publishedCount * (double)publishPeriod <= now)
+            {
+                PublishOnce(scheduleOrigin + publishedCount * (double)publishPeriod);
+                publishedCount++;
+            }
         }
 
-        void PublishOnce()
+        void PublishOnce(double stampTime)
         {
             float[] pts = generator.GeneratePointCloud(flipX: false);
             int numPoints = pts.Length / 3;
@@ -94,7 +97,7 @@ namespace PWRISimulator.ROS
                 floatView[3 * i + 2] = uy;
             }
 
-            msg.header = MessageUtil.ToHeadermessage(Time.fixedTimeAsDouble, frameId);
+            msg.header = MessageUtil.ToHeadermessage(stampTime, frameId);
             msg.width = (uint)numPoints;
             msg.row_step = (uint)byteSize;
             msg.data = dataBuffer;

@@ -70,17 +70,6 @@ namespace PWRISimulator.ROS
         }
 
         /// <summary>
-        /// publish 周期(秒)を FixedUpdate のステップ数に換算します.
-        /// sim-time 定義の周波数を fps 非依存で保つための値で、最小1ステップに丸めます
-        /// </summary>
-        /// <param name="periodSeconds">publish 周期(sim-time 秒)</param>
-        /// <returns>publish する間隔のステップ数(1以上)</returns>
-        public static int ToFixedStepInterval(double periodSeconds)
-        {
-            return System.Math.Max(1, (int)System.Math.Round(periodSeconds / UnityEngine.Time.fixedDeltaTime));
-        }
-
-        /// <summary>
         /// 引数で入力したmsgのパラメータをtimeを使って更新します.
         /// ROS1とROS2に対応しています
         /// </summary>
