@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Std;
-using System.Collections;
 using System;
 
 namespace PWRISimulator.ROS
@@ -14,21 +13,31 @@ namespace PWRISimulator.ROS
         private ROSConnection rosConnection;
         private string topicName;
         protected Float64Msg soilVolumeMsg;
+        private double publishPeriod;
+        private double scheduleOrigin;
+        private long publishedCount;
         // Start is called before the first frame update
         void Start()
         {
             DoStart();
-            StartCoroutine(UpdateAndPublishMessage());
+            RegisterTopic();
+            publishPeriod = 1.0 / Math.Max(1, Frequency());
+            scheduleOrigin = Time.fixedTimeAsDouble;
         }
 
-        IEnumerator UpdateAndPublishMessage()
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)。
+        // 発火時刻は scheduleOrigin + n×period の均一グリッドで、fixed step (20ms) より
+        // 細かい周波数では1ステップに複数回 publish される(Float64Msg のため stamp は無い)
+        void FixedUpdate()
         {
-            RegisterTopic();
-            while(true)
+            if (rosConnection == null || publishPeriod <= 0)
+                return;
+            double now = Time.fixedTimeAsDouble;
+            while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, Frequency()));
                 DoUpdate();
                 PublishMessage();
+                publishedCount++;
             }
         }
 
