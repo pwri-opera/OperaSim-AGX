@@ -68,14 +68,16 @@ namespace PWRISimulator
         }
 
 
-        // SpeedValue ラベルの表示更新。RT Perf が 100 未満なら #Speed の背景をオレンジにする。
+        // SpeedValue ラベルの表示更新。RT Perf は目標倍率に対する達成率(%)で、
+        // 100 未満(目標未達)なら #Speed の背景をオレンジにする。
         private void UpdateSpeedLabel()
         {
             var speedLabel = root.Q<UnityEngine.UIElements.Label>("SpeedValue");
             if (speedLabel == null)
                 return;
 
-            int perf = Mathf.RoundToInt(RealtimeFidelityProbe.LastRatio * 100f);
+            int perf = Mathf.RoundToInt(
+                RealtimeFidelityProbe.LastRatio / Mathf.Max(GlobalVariables.SimulationSpeedMultiplier, 0.01f) * 100f);
             speedLabel.text =
                 $"Sim Speed: {GlobalVariables.SimulationSpeedMultiplier:0.0} x\n" +
                 $"RT Perf: {perf}%";
