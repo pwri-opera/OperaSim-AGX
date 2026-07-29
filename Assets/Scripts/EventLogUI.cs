@@ -68,6 +68,15 @@ namespace PWRISimulator
             return string.Format("{0:00}:{1:00}", minutes, secs);
         }
 
+        /// <summary>
+        /// 表示中のイベントを全て消す。Reset 時に UIcontrol から呼ばれる。
+        /// </summary>
+        public void Clear()
+        {
+            _entries.Clear();
+            Refresh();
+        }
+
         private void Refresh()
         {
             if (_labels == null) return;

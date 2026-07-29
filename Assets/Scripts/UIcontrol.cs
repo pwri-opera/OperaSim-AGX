@@ -782,6 +782,13 @@ namespace PWRISimulator
                     // スコアリセット
                     GlobalVariables.score = 0;
 
+                    // イベントログ表示をクリア
+                    if (EventLogUIobj != null)
+                    {
+                        var eventLog = EventLogUIobj.GetComponent<EventLogUI>();
+                        if (eventLog != null) eventLog.Clear();
+                    }
+
 
                     // 設定画面に戻る
                     StatusBoardUIobj = Instantiate(StatusBoardUI);
