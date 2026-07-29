@@ -18,12 +18,29 @@ namespace PWRISimulator
             if (deformableTerrain == null)
                 deformableTerrain = GetComponent<DeformableTerrain>();
 
-            for (int i = 0; i < deformableTerrain.Shovels.Length; i++)
+            if (deformableTerrain == null)
+                return base.Initialize();
+
+            // ScriptComponent の初期化順は保証されないため、地形の初期化を待つ。
+            // 待たないと Shovels の Native が未生成のことがある。
+            deformableTerrain = deformableTerrain.GetInitialized<DeformableTerrain>();
+            if (deformableTerrain == null)
+                return base.Initialize();
+
+            foreach (var shovel in deformableTerrain.Shovels)
             {
+                // 参照切れや初期化失敗のショベルは飛ばす
+                if (shovel == null)
+                    continue;
+
+                var native = shovel.GetInitialized<DeformableTerrainShovel>()?.Native;
+                if (native == null)
+                    continue;
+
                 // 左右側面と背面を削減
-                deformableTerrain.Shovels[i].Native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_RIGHT).setEnable(false);
-                deformableTerrain.Shovels[i].Native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_LEFT).setEnable(false);
-                deformableTerrain.Shovels[i].Native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_BACK).setEnable(false);
+                native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_RIGHT).setEnable(false);
+                native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_LEFT).setEnable(false);
+                native.getExcavationSettings(agxTerrain.Shovel.ExcavationMode.DEFORM_BACK).setEnable(false);
             }
 
             return base.Initialize();
