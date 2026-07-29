@@ -48,6 +48,15 @@ namespace PWRISimulator
     [Tooltip("Primary (longitudinal) axis of the oriented friction frame, in the reference object's local coordinates.")]
     public FrictionModel.PrimaryDirection primaryDirection = FrictionModel.PrimaryDirection.X;
 
+    /// <summary>
+    /// Appended to every diagnostic so that whoever reads the Console learns where
+    /// track friction is configured. AGXUnity's manual points at ContactMaterialManager,
+    /// which is not where this project sets it up.
+    /// </summary>
+    private const string RegistrarNote =
+      "Note: track friction is registered per machine instance by this component, not by AGXUnity's " +
+      "ContactMaterialManager. Do not set a Reference Object on the manager entry.";
+
     private ShapeMaterial m_clonedShapeMaterial;
     private FrictionModel m_clonedFrictionModel;
     private readonly List<ContactMaterial> m_clonedContactMaterials = new List<ContactMaterial>();
@@ -58,7 +67,10 @@ namespace PWRISimulator
       if ( baseTrackShapeMaterial == null || baseFrictionModel == null ||
            baseContactMaterials == null || baseContactMaterials.Length == 0 ||
            referenceObject == null ) {
-        Debug.LogError( $"{GetType().Name}: required fields missing, skipping per-instance registration.", this );
+        Debug.LogError( $"{GetType().Name} ({name}): required inspector fields are missing, so per-instance registration is skipped. " +
+                        "This machine's tracks fall back to the base ContactMaterial, whose anisotropic friction follows the world axes " +
+                        "instead of the machine heading. Assign Base Track Shape Material, Base Friction Model, Base Contact Materials " +
+                        $"and Reference Object on this component. {RegistrarNote}", this );
         return;
       }
 
@@ -106,37 +118,48 @@ namespace PWRISimulator
 
     /// <summary>
     /// Detects broken inspector references that the required-fields guard does not
-    /// cover (issue #67). Emits LogError only; registration continues either way so
+    /// cover. Emits LogError only; registration continues either way so
     /// the behavior stays the same as before the checks were added.
     /// </summary>
     private void ValidateReferences()
     {
       foreach ( var baseCM in baseContactMaterials ) {
         if ( baseCM == null )
-          Debug.LogError( $"{GetType().Name}: baseContactMaterials contains a null element; that entry is skipped.", this );
+          Debug.LogError( $"{GetType().Name} ({name}): Base Contact Materials contains a null element, so that entry is skipped. " +
+                          "The corresponding track vs ground/terrain pair keeps the base ContactMaterial and loses its per-instance " +
+                          "oriented friction. Re-assign the missing asset on this component; editing the machine prefab is the usual " +
+                          $"way these references break. {RegistrarNote}", this );
       }
 
       if ( baseNonOrientedContactMaterials != null ) {
         foreach ( var baseCM in baseNonOrientedContactMaterials ) {
           if ( baseCM == null )
-            Debug.LogError( $"{GetType().Name}: baseNonOrientedContactMaterials contains a null element; that entry is skipped.", this );
+            Debug.LogError( $"{GetType().Name} ({name}): Base Non Oriented Contact Materials contains a null element, so that entry is skipped. " +
+                            "The corresponding pair (track vs wheel) keeps the base ContactMaterial instead of the per-instance clone. " +
+                            $"Re-assign the missing asset on this component. {RegistrarNote}", this );
         }
       }
 
       if ( trackComponents == null || trackComponents.Length == 0 ) {
-        Debug.LogError( $"{GetType().Name}: trackComponents is empty; runtime-spawned track shoes will keep the base material.", this );
+        Debug.LogError( $"{GetType().Name} ({name}): Track Components is empty, so runtime-spawned track shoes keep the base ShapeMaterial " +
+                        "and stay outside this machine's oriented friction. Assign the AGXUnity Track components (TrackL / TrackR) " +
+                        $"on this component. {RegistrarNote}", this );
       }
       else {
         foreach ( var track in trackComponents ) {
           if ( track == null )
-            Debug.LogError( $"{GetType().Name}: trackComponents contains a null element; that track keeps the base material.", this );
+            Debug.LogError( $"{GetType().Name} ({name}): Track Components contains a null element, so that track's shoes keep the base " +
+                            "ShapeMaterial and stay outside this machine's oriented friction. Re-assign the missing Track component " +
+                            $"on this component. {RegistrarNote}", this );
         }
       }
 
       if ( referenceObject.GetComponent<RigidBody>() == null &&
            referenceObject.GetComponent<Shape>() == null &&
            referenceObject.GetComponent<ObserverFrame>() == null )
-        Debug.LogError( $"{GetType().Name}: referenceObject '{referenceObject.name}' has no RigidBody, Shape or ObserverFrame; the oriented friction reference frame cannot be resolved.", this );
+        Debug.LogError( $"{GetType().Name} ({name}): Reference Object '{referenceObject.name}' has no RigidBody, Shape or ObserverFrame, " +
+                        "so the oriented friction reference frame cannot be resolved and the tracks fall back to world-axis friction. " +
+                        $"Assign the chassis rigid body (body_link) to Reference Object on this component. {RegistrarNote}", this );
     }
 
     private void Start()
@@ -146,7 +169,9 @@ namespace PWRISimulator
 
       var simulation = Simulation.Instance;
       if ( simulation == null || simulation.Native == null ) {
-        Debug.LogError( $"{GetType().Name}: AGX Simulation not initialized; cannot register ContactMaterials.", this );
+        Debug.LogError( $"{GetType().Name} ({name}): the AGX Simulation is not initialized, so the cloned ContactMaterials cannot be " +
+                        "registered and this machine's tracks use the base ContactMaterial. This usually means the machine was spawned " +
+                        $"before AGXUnity's Simulation was created. {RegistrarNote}", this );
         return;
       }
 
