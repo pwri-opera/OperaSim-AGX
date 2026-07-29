@@ -221,6 +221,11 @@ namespace PWRISimulator
         public static void RegisterScoreEvent(ScoreEvent evt)
         {
             incrementScore(evt.Point);
+
+            // シミュレーション中以外(重機配置中や Reset 後)は地形の初期化などで
+            // スコアイベントが発生するため、表示・ログ向けの通知は行わない
+            if (ActionMode != 3) return;
+
             OnScoreEvent?.Invoke(evt);
         }
 
