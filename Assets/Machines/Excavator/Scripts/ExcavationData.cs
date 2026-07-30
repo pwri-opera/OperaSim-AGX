@@ -208,10 +208,10 @@ namespace PWRISimulator
 
             if (data.showDataInGUI)
             {
-                Vector3 penatrationForceKn = data.penetrationForce * 1e3f;
-                Vector3 separationForceKn = data.separationForce * 1e3f;
-                Vector3 deformationForceKn = data.deformationForce * 1e3f;
-                Vector3 contactForceKn = data.contactForce * 1e3f;
+                Vector3 penetrationForceKn = data.penetrationForce / 1e3f;
+                Vector3 separationForceKn = data.separationForce / 1e3f;
+                Vector3 deformationForceKn = data.deformationForce / 1e3f;
+                Vector3 contactForceKn = data.contactForce / 1e3f;
 
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Volumes", EditorStyles.boldLabel);
@@ -224,7 +224,7 @@ namespace PWRISimulator
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Force Magnitudes", EditorStyles.boldLabel);
 
-                EditorGUILayout.LabelField("Penetration Force Size", penatrationForceKn.magnitude.ToString("0.####") + " kN");
+                EditorGUILayout.LabelField("Penetration Force Size", penetrationForceKn.magnitude.ToString("0.####") + " kN");
                 EditorGUILayout.LabelField("Separation Force Size", separationForceKn.magnitude.ToString("0.####") + " kN");
                 EditorGUILayout.LabelField("Deformation Force Size", deformationForceKn.magnitude.ToString("0.####") + " kN");
                 EditorGUILayout.LabelField("Contact Force Size", contactForceKn.magnitude.ToString("0.####") + " kN");
@@ -232,7 +232,7 @@ namespace PWRISimulator
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Force Vectors", EditorStyles.boldLabel);
 
-                EditorGUILayout.Vector3Field("Penetration Force", penatrationForceKn);
+                EditorGUILayout.Vector3Field("Penetration Force", penetrationForceKn);
                 EditorGUILayout.Vector3Field("Separation Force", separationForceKn);
                 EditorGUILayout.Vector3Field("Deformation Force", deformationForceKn);
                 EditorGUILayout.Vector3Field("Contact Force", contactForceKn);
