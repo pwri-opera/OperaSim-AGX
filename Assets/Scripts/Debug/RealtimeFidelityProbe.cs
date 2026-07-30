@@ -18,8 +18,9 @@ namespace PWRISimulator
         // 直近の sim_time / real_time 比率。ScoreBoard 等から参照される。
         public static float LastRatio = 1.0f;
 
-        // (実時間, sim時間) のサンプル列。logIntervalSec ごとに積み、窓内の最古サンプルとの差分で ratio を出す
-        readonly Queue<(float real, float sim)> samples = new Queue<(float real, float sim)>();
+        // (実時間, sim時間, フレーム番号) のサンプル列。logIntervalSec ごとに積み、
+        // 窓内の最古サンプルとの差分で ratio と fps を出す
+        readonly Queue<(float real, float sim, int frame)> samples = new Queue<(float real, float sim, int frame)>();
         float lastLogReal;
         float belowSinceReal = -1f;
         bool warned;
@@ -27,7 +28,7 @@ namespace PWRISimulator
         void Start()
         {
             lastLogReal = Time.realtimeSinceStartup;
-            samples.Enqueue((Time.realtimeSinceStartup, Time.time));
+            samples.Enqueue((Time.realtimeSinceStartup, Time.time, Time.frameCount));
             LastRatio = GlobalVariables.SimulationSpeedMultiplier;
         }
 
@@ -47,10 +48,11 @@ namespace PWRISimulator
             float realElapsed = realNow - oldest.real;
             float simElapsed = simNow - oldest.sim;
             float ratio = simElapsed / Mathf.Max(realElapsed, 1e-6f);
+            float fps = (Time.frameCount - oldest.frame) / Mathf.Max(realElapsed, 1e-6f);
             // ratio を小数点第二位で四捨五入
             ratio = Mathf.Round(ratio * 100f) / 100f;
             LastRatio = ratio;
-            samples.Enqueue((realNow, simNow));
+            samples.Enqueue((realNow, simNow, Time.frameCount));
 
             // 1.0 未満が warnDelaySec 続いたときだけ1回警告する(#34 / #75)。
             // 閾値ちょうど付近で 0.99↔1.01 と揺れるだけでは警告しない
@@ -78,7 +80,7 @@ namespace PWRISimulator
             {
                 Debug.Log(
                     $"[RealtimeFidelity] window sim={simElapsed:F2}s real={realElapsed:F2}s " +
-                    $"ratio={ratio:F2} target=x{GlobalVariables.SimulationSpeedMultiplier:0.0}");
+                    $"ratio={ratio:F2} fps={fps:F1} target=x{GlobalVariables.SimulationSpeedMultiplier:0.0}");
             }
         }
     }
