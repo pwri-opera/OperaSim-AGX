@@ -186,9 +186,18 @@ namespace PWRISimulator
                     Destroy(SaveLoadUIobj);
                     SaveLoadUIobj = null;
                 }
+
+                // 速度倍率を戻す
+                Time.timeScale = 1.0f;
             }
 
             EndGame();
+        }
+
+        // Play を抜けるときに倍率が Unity のプロジェクト設定へ書き戻されるのを防ぐ
+        void OnApplicationQuit()
+        {
+            Time.timeScale = 1.0f;
         }
 
 
@@ -781,6 +790,9 @@ namespace PWRISimulator
 
                     // スコアリセット
                     GlobalVariables.score = 0;
+
+                    // 速度倍率を戻す
+                    Time.timeScale = 1.0f;
 
                     // イベントログ表示をクリア
                     if (EventLogUIobj != null)
