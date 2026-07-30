@@ -86,6 +86,7 @@ namespace PWRISimulator
                 if (shovelObj != null)
                 {
                     shovelName = shovelObj.name;
+                    UnregisterStepCallbacks(shovelObj);
                     UnityEngine.Object.Destroy(shovelObj);
                 }
 
@@ -103,10 +104,15 @@ namespace PWRISimulator
                     if (dumpObj != null)
                     {
                         // 削除
-                        Destroy(dumpObj);
                         GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
-                        if (objMassBody != null) Destroy(objMassBody);
                         GameObject objMassJoint = GameObject.Find(dumpObj.name + "_SoilMassJoint");
+
+                        UnregisterStepCallbacks(dumpObj);
+                        UnregisterStepCallbacks(objMassBody);
+                        UnregisterStepCallbacks(objMassJoint);
+
+                        Destroy(dumpObj);
+                        if (objMassBody != null) Destroy(objMassBody);
                         if (objMassJoint != null) Destroy(objMassJoint);
                     }
                 }
@@ -145,6 +151,41 @@ namespace PWRISimulator
                 // フラグを下ろす
                 GlobalVariables.SelectMode = -1;
             }
+        }
+
+        /// <summary>
+        /// 破棄するオブジェクト配下のコンポーネントを、AGX の PostSynchronizeTransforms
+        /// から登録解除する。
+        ///
+        /// AGXUnity の Shape は Initialize / SetRigidBody / OnDestroy の3経路で
+        /// 登録と解除を行うため、実行時に生成した機体では登録が残ることがある。
+        /// 残った登録は毎ステップ破棄済みの Transform を参照して
+        /// NullReferenceException を投げ、そこで PostSynchronizeTransforms の
+        /// 呼び出しが中断する。以降どの機体も Transform が更新されなくなる。
+        ///
+        /// Destroy は遅延実行なので、破棄を要求する前に呼ぶこと。
+        /// </summary>
+        private static void UnregisterStepCallbacks(GameObject obj)
+        {
+            if (obj == null || !Simulation.HasInstance)
+                return;
+
+            var callbacks = Simulation.Instance.StepCallbacks;
+            var registered = callbacks.PostSynchronizeTransforms;
+            if (registered == null)
+                return;
+
+            foreach (var entry in registered.GetInvocationList())
+            {
+                var component = entry.Target as Component;
+                if (component != null && component.transform.IsChildOf(obj.transform))
+                {
+                    registered = (StepCallbackFunctions.StepCallbackDef)
+                        System.Delegate.Remove(registered, entry);
+                }
+            }
+
+            callbacks.PostSynchronizeTransforms = registered;
         }
     }
 }
