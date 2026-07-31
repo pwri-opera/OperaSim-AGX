@@ -78,8 +78,33 @@ namespace PWRISimulator
 
             if (File.Exists(filePath))
             {
-                string json = File.ReadAllText(filePath);
-                SettingData sdata = JsonUtility.FromJson<SettingData>(json);
+                SettingData sdata;
+                try
+                {
+                    string json = File.ReadAllText(filePath);
+                    try
+                    {
+                        sdata = JsonUtility.FromJson<SettingData>(json);
+                    }
+                    catch (System.ArgumentException)
+                    {
+                        int rootEnd = json.LastIndexOf('}');
+                        if (rootEnd < 0)
+                            throw;
+
+                        string recoveredJson = json.Substring(0, rootEnd + 1);
+                        sdata = JsonUtility.FromJson<SettingData>(recoveredJson);
+                        File.WriteAllText(filePath, recoveredJson);
+                        UnityEngine.Debug.LogWarning($"設定JSON末尾の不正なデータを除去しました: {filePath}");
+                    }
+                }
+                catch (System.Exception exception)
+                {
+                    UnityEngine.Debug.LogError($"設定データを読み込めないため初期設定へ戻します: {filePath}\n{exception}");
+                    LoadDefaultSetting();
+                    SaveSetting();
+                    return;
+                }
 
                 UnityEngine.Debug.Log("データを読み込みました: ");
 

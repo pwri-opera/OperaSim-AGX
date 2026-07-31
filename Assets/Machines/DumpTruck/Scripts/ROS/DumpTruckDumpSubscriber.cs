@@ -5,24 +5,44 @@ using RosMessageTypes.Com3;
 
 namespace PWRISimulator.ROS
 {
-    /// <summary>
-    /// ダンプトラックの上部構造体の制御信号を受信するクラス
-    /// </summary>
     public class DumpTruckDumpSubscriber : MessageSubscriptionBase
     {
-        JointCmdMsg dumpCmd = new(2);
-        public JointCmdMsg DumpCmd {
+        private JointCmdMsg dumpCmd = new JointCmdMsg(2);
+        private float nextLogTime;
+
+        [SerializeField] private bool logReceivedCommands;
+
+        public JointCmdMsg DumpCmd
+        {
             get => dumpCmd;
             private set => dumpCmd = value;
         }
 
-        readonly string rotDumpCmdPhrase = "/rot_dump_cmd";
+        private const string RotDumpCmdPhrase = "/rot_dump_cmd";
 
         protected override void CreateSubscriptions()
         {
             string machineName = gameObject.name;
-            
-            AddSubscriptionHandler<JointCmdMsg>($"/{machineName}{rotDumpCmdPhrase}", msg => DumpCmd = msg);
+            string topicName = $"/{machineName}{RotDumpCmdPhrase}";
+
+            Debug.Log($"[DumpTruckDumpSubscriber] 購読: {topicName}", this);
+
+            AddSubscriptionHandler<JointCmdMsg>(
+                topicName,
+                msg =>
+                {
+                    DumpCmd = msg;
+
+                    if (logReceivedCommands && Time.unscaledTime >= nextLogTime)
+                    {
+                        nextLogTime = Time.unscaledTime + 1.0f;
+                        Debug.Log(
+                            $"[DumpTruckDumpSubscriber] 受信内容: {JsonUtility.ToJson(msg)}",
+                            this
+                        );
+                    }
+                }
+            );
         }
     }
 }

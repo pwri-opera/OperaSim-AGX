@@ -120,6 +120,24 @@ namespace PWRISimulator
             // GetConstraintParam();
         }
 
+        /// <summary>
+        /// 前回値キャッシュに関係なく、現在の制御値をAGXコントローラへ再適用する。
+        /// 物理演算の停止・再開やネイティブ側の再初期化後に、指令値自体が変化しない場合に使用する。
+        /// </summary>
+        public void ReapplyControlValue()
+        {
+            if (!controlEnabled)
+                return;
+
+            if (controlType != controlTypePrev)
+                UpdateControlType();
+
+            if (controlMaxForce != controlMaxForcePrev)
+                UpdateMaxForce();
+
+            UpdateControlValue();
+        }
+
         private ControlType? controlTypePrev = null;
         private double? controlValuePrev = null;// controlValueが変わったか検知するための値。
         private double? controlMaxForcePrev = null;
@@ -200,7 +218,15 @@ namespace PWRISimulator
                     break;
                 case ControlType.Speed:
                     if (targetSpeedController != null)
+                    {
+                        // A zero-speed command may lock the constraint at its current position.
+                        // Explicitly release that lock before applying the next non-zero command;
+                        // otherwise the controller can remain stuck at a range endpoint while
+                        // reporting the maximum drive force.
+                        bool lockAtZeroSpeed = System.Math.Abs(controlValue) <= 1.0e-9;
+                        targetSpeedController.setLockedAtZeroSpeed(lockAtZeroSpeed);
                         targetSpeedController.setSpeed(controlValue);
+                    }
                     break;
                 case ControlType.Force:
                     if (targetSpeedController != null)

@@ -66,7 +66,9 @@ namespace PWRISimulator
 
         private double init_dmpSum;
         private double curt_dmpSum;
-        private double prev_dmpDiff;
+        private double prev_dmpVolumeDiff;
+        private readonly Dictionary<int, double> previousDumpSoilVolumes = new Dictionary<int, double>();
+        private double cumulativeUnloadedSoilVolume;
 
 
         // teat 20250902
@@ -86,6 +88,14 @@ namespace PWRISimulator
         private double excScore;
         // 放土エリア
         private double dmpScore;
+
+        [Header("Unload Score Diagnostics")]
+        [SerializeField] private bool logUnloadScoreDiagnostics = false;
+        [SerializeField, Min(0.1f)] private float unloadScoreLogIntervalSeconds = 1.0f;
+
+        private double pendingUnloadDiagnosticVolume;
+        private int pendingUnloadDiagnosticPoints;
+        private float nextUnloadScoreLogTime;
 
 
         public static double[,] CreateMatrix(int rows, int cols, double value)
@@ -299,6 +309,85 @@ namespace PWRISimulator
         }
 
 
+        /// <summary>
+        /// Unity Terrain の正規化 Heightmap 積算差分を物理体積 [m^3] に変換する。
+        /// Heightmap は terrainData.size.y を 1.0 とする高さで、隣接サンプル間は
+        /// Terrain の幅・奥行きを (heightmapResolution - 1) 分割した距離になる。
+        /// </summary>
+        private static double normalizedHeightSumToVolume(double normalizedHeightSum, TerrainData terrainData)
+        {
+            int sampleIntervals = terrainData.heightmapResolution - 1;
+            if (sampleIntervals <= 0)
+            {
+                return 0.0;
+            }
+
+            Vector3 terrainSize = terrainData.size;
+            double cellWidth = terrainSize.x / sampleIntervals;
+            double cellDepth = terrainSize.z / sampleIntervals;
+
+            return normalizedHeightSum * terrainSize.y * cellWidth * cellDepth;
+        }
+
+        /// <summary>
+        /// 各ダンプの現在積載体積を基準値として保持する。
+        /// Terrain標高差が土砂の膨張などで過大になっても、実際の放出量を超えて加点しないために使用する。
+        /// </summary>
+        private void ResetUnloadedSoilVolumeTracking()
+        {
+            previousDumpSoilVolumes.Clear();
+            cumulativeUnloadedSoilVolume = 0.0;
+
+            foreach (DumpSoil dumpSoil in FindObjectsOfType<DumpSoil>())
+            {
+                previousDumpSoilVolumes[dumpSoil.GetInstanceID()] = Math.Max(0.0, dumpSoil.soilVolume);
+            }
+        }
+
+        private void UpdateUnloadedSoilVolumeTracking()
+        {
+            foreach (DumpSoil dumpSoil in FindObjectsOfType<DumpSoil>())
+            {
+                int instanceId = dumpSoil.GetInstanceID();
+                double currentVolume = Math.Max(0.0, dumpSoil.soilVolume);
+
+                if (previousDumpSoilVolumes.TryGetValue(instanceId, out double previousVolume) &&
+                    currentVolume < previousVolume)
+                {
+                    cumulativeUnloadedSoilVolume += previousVolume - currentVolume;
+                }
+
+                previousDumpSoilVolumes[instanceId] = currentVolume;
+            }
+        }
+
+        private void LogUnloadScoreDiagnosticsIfDue()
+        {
+            if (!logUnloadScoreDiagnostics || pendingUnloadDiagnosticVolume <= 0.0 ||
+                Time.unscaledTime < nextUnloadScoreLogTime)
+            {
+                return;
+            }
+
+            double calculatedPoints = GlobalVariables.UnloadSoilCoef * pendingUnloadDiagnosticVolume;
+            double terrainVolumeDiff = normalizedHeightSumToVolume(curt_dmpSum - init_dmpSum,
+                                                                    obj.GetComponent<Terrain>().terrainData);
+            Debug.Log(
+                $"[TerrainScore][Unload] creditedVolume={pendingUnloadDiagnosticVolume:F6} m^3, " +
+                $"terrainVolumeDiff={terrainVolumeDiff:F6} m^3, " +
+                $"unloadedVolumeCap={cumulativeUnloadedSoilVolume:F6} m^3, " +
+                $"coefficient={GlobalVariables.UnloadSoilCoef:F3} pt/m^3, " +
+                $"calculatedPoints={calculatedPoints:F3}, addedPoints={pendingUnloadDiagnosticPoints}, " +
+                $"carryPoints={dmpScore:F3}, totalScore={GlobalVariables.score}",
+                this
+            );
+
+            pendingUnloadDiagnosticVolume = 0.0;
+            pendingUnloadDiagnosticPoints = 0;
+            nextUnloadScoreLogTime = Time.unscaledTime + unloadScoreLogIntervalSeconds;
+        }
+
+
         private IEnumerator wait()
         {
             // process pre-yield
@@ -339,6 +428,10 @@ namespace PWRISimulator
             // 放土エリア
             dmpScore = 0.0;
 
+            pendingUnloadDiagnosticVolume = 0.0;
+            pendingUnloadDiagnosticPoints = 0;
+            nextUnloadScoreLogTime = Time.unscaledTime + unloadScoreLogIntervalSeconds;
+
             init_sum = 0.0;
             curt_sum = 0.0;
             prev_sumDiff = 0.0;
@@ -349,7 +442,8 @@ namespace PWRISimulator
 
             init_dmpSum = 0.0;
             curt_dmpSum = 0.0;
-            prev_dmpDiff = 0.0;
+            prev_dmpVolumeDiff = 0.0;
+            ResetUnloadedSoilVolumeTracking();
 
             init_dmpSum_margin = 0.0;
             curt_dmpSum_margin = 0.0;
@@ -440,6 +534,10 @@ namespace PWRISimulator
                 // 放土エリア
                 dmpScore = 0.0;
 
+                pendingUnloadDiagnosticVolume = 0.0;
+                pendingUnloadDiagnosticPoints = 0;
+                nextUnloadScoreLogTime = Time.unscaledTime + unloadScoreLogIntervalSeconds;
+
                 init_sum = 0.0;
                 curt_sum = 0.0;
                 prev_sumDiff = 0.0;
@@ -450,7 +548,8 @@ namespace PWRISimulator
 
                 init_dmpSum = 0.0;
                 curt_dmpSum = 0.0;
-                prev_dmpDiff = 0.0;
+                prev_dmpVolumeDiff = 0.0;
+                ResetUnloadedSoilVolumeTracking();
 
                 init_dmpSum_margin = 0.0;
                 curt_dmpSum_margin = 0.0;
@@ -551,34 +650,47 @@ namespace PWRISimulator
             }
 
 
-            double dmpDiff = curt_dmpSum - init_dmpSum;
-            //Debug.Log("dmpDiff: " + dmpDiff + ", curt_dmpSum: " + curt_dmpSum + ", init_dmpSum: " + init_dmpSum);
+            double dmpHeightSumDiff = curt_dmpSum - init_dmpSum;
+            double dmpTerrainVolumeDiff = normalizedHeightSumToVolume(dmpHeightSumDiff, terrainData);
+            UpdateUnloadedSoilVolumeTracking();
+
+            // 得点対象は標高増加量。ただしTerrain表現上の体積が膨張しても、
+            // 各ダンプから実際に放出された累積体積を超えて加点しない。
+            double dmpDepositedVolumeDiff = Math.Min(Math.Max(0.0, dmpTerrainVolumeDiff),
+                                                     cumulativeUnloadedSoilVolume);
 
             //Debug.Log("curt_dmpSum_margin: " + curt_dmpSum_margin + ", init_dmpSum_margin: " + init_dmpSum_margin);
 
 
-            if (dmpDiff > 0.0 && dmpDiff > prev_dmpDiff && init_dmpSum_margin - curt_dmpSum_margin <= 0)
+            if (dmpDepositedVolumeDiff > prev_dmpVolumeDiff)
             {
-                var _diff = dmpDiff - prev_dmpDiff;
-                //dmpScore += GlobalVariables.UnloadSoilCoef * Math.Abs(dmpDiff) / 0.1;
-                dmpScore += GlobalVariables.UnloadSoilCoef * Math.Abs(_diff);
+                // 放土エリア内のTerrain標高増加について、過去最大値を超えた体積だけを評価する。
+                double depositedVolumeIncrement = dmpDepositedVolumeDiff - prev_dmpVolumeDiff;
 
-                //Debug.Log("_diff: " + _diff + ", dmpDiff: " + dmpDiff + ", prev_dmpDiff: " + prev_dmpDiff);
+                // 発生条件は放土エリア内の堆積体積が過去最大値から増加したこと。
+                // UnloadSoilCoef の単位は [pt/m^3]。
+                // 現設定の 100 [pt/m^3] は +10 pt / 0.1 m^3 に相当する。
+                dmpScore += GlobalVariables.UnloadSoilCoef * depositedVolumeIncrement;
+                pendingUnloadDiagnosticVolume += depositedVolumeIncrement;
 
                 //Debug.Log("***** dmpScore: " + dmpScore);
 
                 if (Math.Abs(dmpScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)dmpScore);
+                    int addedPoints = (int)dmpScore;
+                    GlobalVariables.incrementScore(addedPoints);
+                    pendingUnloadDiagnosticPoints += addedPoints;
 
-                    // スコア積算リセット
-                    dmpScore = dmpScore - (int)dmpScore;
-
-                    // 差分保持
-                    prev_dmpDiff = dmpDiff;
+                    // 1点未満の端数は次回の体積増加へ繰り越す。
+                    dmpScore -= addedPoints;
                 }
+
+                // 評価済みの最大堆積体積を更新する。
+                prev_dmpVolumeDiff = dmpDepositedVolumeDiff;
             }
+
+            LogUnloadScoreDiagnosticsIfDue();
 
             double sumDiff = curt_sum - init_sum;
             //Debug.Log("sumDiff: " + sumDiff + ",curt_sum: " + curt_sum + ", init_sum: " + init_sum);
