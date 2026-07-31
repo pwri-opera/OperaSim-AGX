@@ -19,7 +19,7 @@ namespace PWRISimulator.ROS
         [SerializeField] public ControlType rotateControlType = ControlType.Position;
 
         [Header("Diagnostics")]
-        [SerializeField] private bool logDumpCommandDiagnostics = true;
+        [SerializeField] private bool logDumpCommandDiagnostics = false;
         private float _nextDumpLogTime;
 
         [Header("Dummy")]

@@ -90,7 +90,7 @@ namespace PWRISimulator
         private double dmpScore;
 
         [Header("Unload Score Diagnostics")]
-        [SerializeField] private bool logUnloadScoreDiagnostics = true;
+        [SerializeField] private bool logUnloadScoreDiagnostics = false;
         [SerializeField, Min(0.1f)] private float unloadScoreLogIntervalSeconds = 1.0f;
 
         private double pendingUnloadDiagnosticVolume;
