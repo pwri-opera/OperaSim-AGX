@@ -36,6 +36,9 @@ namespace PWRISimulator
         // 放土エリアの枠からエリア座標を取得する
         public GameObject dmpFrame;
 
+        // 放土専用地形（issue #59: 掘削地形から分離）
+        private Terrain dumpTerrain;
+
         // AGX
         //public DeformableTerrain terrain;
         //public DeformableTerrainShovel shovel;
@@ -285,6 +288,25 @@ namespace PWRISimulator
             return sum1;
         }
 
+        /// <summary>
+        /// 放土専用地形のハイトマップ全体の合計を返す。
+        /// 放土地形は放土エリア+マージンのみを覆盖するため、全体が放土スコア対象となる。
+        /// </summary>
+        private double calcSumDumpTerrain()
+        {
+            if (dumpTerrain == null || dumpTerrain.terrainData == null)
+                return 0.0;
+
+            TerrainData dumpData = dumpTerrain.terrainData;
+            int dumpRes = dumpData.heightmapResolution;
+            float[,] dumpHeights = dumpData.GetHeights(0, 0, dumpRes, dumpRes);
+            double sum = 0.0;
+            for (int y = 0; y < dumpRes; y++)
+                for (int x = 0; x < dumpRes; x++)
+                    sum += dumpHeights[x, y];
+            return sum;
+        }
+
 
         private double calcSumDmpAreaMargin(MathNet.Numerics.LinearAlgebra.Matrix<float> mat)
         {
@@ -370,8 +392,9 @@ namespace PWRISimulator
             }
 
             double calculatedPoints = GlobalVariables.UnloadSoilCoef * pendingUnloadDiagnosticVolume;
+            TerrainData diagTerrainData = dumpTerrain != null ? dumpTerrain.terrainData : obj.GetComponent<Terrain>().terrainData;
             double terrainVolumeDiff = normalizedHeightSumToVolume(curt_dmpSum - init_dmpSum,
-                                                                    obj.GetComponent<Terrain>().terrainData);
+                                                                    diagTerrainData);
             Debug.Log(
                 $"[TerrainScore][Unload] creditedVolume={pendingUnloadDiagnosticVolume:F6} m^3, " +
                 $"terrainVolumeDiff={terrainVolumeDiff:F6} m^3, " +
@@ -464,6 +487,16 @@ namespace PWRISimulator
                 shovel = FindObjectOfType<DeformableTerrainShovel>();
             }
 
+            // 放土専用地形を検索（DumpTerrainFactory により Awake で生成済み）
+            dumpTerrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump)?.Terrain;
+            if (dumpTerrain == null)
+            {
+                // フォールバック: 放土専用地形がない場合はメイン地形を使用
+                dumpTerrain = obj.GetComponent<Terrain>();
+                Debug.LogWarning("[TerrainScore] Dump terrain not found. Using main terrain for dump scoring. " +
+                                 "DumpTerrainFactory may not be configured.");
+            }
+
 
             //---------------
             // エリア設定画像の読み込み
@@ -502,7 +535,7 @@ namespace PWRISimulator
             init_excSum = calcSumExcArea(mat);
 
             // 放土エリアのHeightmap行列のSum取得
-            init_dmpSum = calcSumDmpArea(mat);
+            init_dmpSum = calcSumDumpTerrain();
 
             // 放土エリアのマージン
             init_dmpSum_margin = calcSumDmpAreaMargin(mat) - init_dmpSum;
@@ -575,7 +608,7 @@ namespace PWRISimulator
                 init_excSum = calcSumExcArea(_mat);
 
                 // 放土エリアのHeightmap行列のSum取得
-                init_dmpSum = calcSumDmpArea(_mat);
+                init_dmpSum = calcSumDumpTerrain();
 
                 // 放土エリアのマージン
                 init_dmpSum_margin = calcSumDmpAreaMargin(_mat) - init_dmpSum;
@@ -607,7 +640,7 @@ namespace PWRISimulator
             curt_excSum = calcSumExcArea(mat);
 
             // 放土エリアのHeightmap行列のSum取得
-            curt_dmpSum = calcSumDmpArea(mat);
+            curt_dmpSum = calcSumDumpTerrain();
 
             // 放土エリアのマージン
             curt_dmpSum_margin = calcSumDmpAreaMargin(mat) - curt_dmpSum;
@@ -651,7 +684,8 @@ namespace PWRISimulator
 
 
             double dmpHeightSumDiff = curt_dmpSum - init_dmpSum;
-            double dmpTerrainVolumeDiff = normalizedHeightSumToVolume(dmpHeightSumDiff, terrainData);
+            TerrainData dumpTerrainData = dumpTerrain != null ? dumpTerrain.terrainData : terrainData;
+            double dmpTerrainVolumeDiff = normalizedHeightSumToVolume(dmpHeightSumDiff, dumpTerrainData);
             UpdateUnloadedSoilVolumeTracking();
 
             // 得点対象は標高増加量。ただしTerrain表現上の体積が膨張しても、
