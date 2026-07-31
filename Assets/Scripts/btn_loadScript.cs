@@ -209,6 +209,12 @@ namespace PWRISimulator
             // AGX�n�`�擾
             if (terrain == null)
             {
+                // Prefer the excavation terrain for soil particle removal (issue #59:
+                // dump terrain is isolated; excavation particles are the load target).
+                terrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Excavation);
+            }
+            if (terrain == null)
+            {
                 terrain = FindObjectOfType<DeformableTerrain>();
             }
 
