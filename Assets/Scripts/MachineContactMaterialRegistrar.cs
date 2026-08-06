@@ -24,6 +24,36 @@ namespace PWRISimulator
   /// Attach this directly to a machine prefab (dump truck, excavator, ...) and
   /// wire its asset references in the inspector.
   /// </summary>
+  /// <remarks>
+  /// 運用上の注意
+  ///
+  /// 履帯の oriented friction はこのクラスが担当する。
+  /// AGXUnity 標準の ContactMaterialManager では設定しないこと。
+  /// Manager のエントリに Reference Object を設定すると #10 が再発する。
+  ///
+  /// 適用先は ic120 / zx120 / zx200 の3プレハブ。
+  /// ブルドーザは未適用で、ワールド軸基準の異方性になっている (#84)。
+  ///
+  /// 落とし穴
+  /// - Manager のエントリは m_isOriented: 0 のままにする
+  /// - プレハブ編集でインスペクタ参照が外れることがある。
+  ///   開始時に LogError を出す (#67)。自動復元はしない
+  /// - 異方性を効かせたくない CM (履帯 vs 転輪) は
+  ///   baseNonOrientedContactMaterials に入れる (#59)
+  /// - Registrar を持たない機体は base CM にフォールバックし、
+  ///   ワールド軸基準になる。機体の向きには追従しない
+  ///
+  /// 新しい機体に適用するとき
+  /// 1. 機体プレハブのルートにこのコンポーネントを付ける
+  /// 2. Base Track Shape Material と Base Friction Model を設定
+  /// 3. Base Contact Materials に履帯 vs Ground/Terrain の CM、
+  ///    Base Non Oriented Contact Materials に履帯 vs 転輪の CM
+  /// 4. Track Components に TrackL / TrackR
+  /// 5. Reference Object に body_link、Primary Direction に前方軸
+  /// 6. Manager 側の対応エントリは m_isOriented: 0 のまま
+  ///
+  /// 詳細は業務報告書 付録 E に記載した。
+  /// </remarks>
   [DisallowMultipleComponent]
   public class MachineContactMaterialRegistrar : MonoBehaviour
   {
