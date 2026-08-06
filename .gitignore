@@ -106,3 +106,6 @@ $RECYCLE.BIN/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# GitHub の設定はこのブランチに含めない。ローカルには置いてよい
+.github/
