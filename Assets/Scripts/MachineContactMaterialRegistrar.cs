@@ -35,7 +35,7 @@ namespace PWRISimulator
   /// ブルドーザは未適用で、ワールド軸基準の異方性になっている (#84)。
   ///
   /// 落とし穴
-  /// - Manager のエントリは m_isOriented: 0 のままにする
+  /// - Manager のエントリは Is Oriented を off のままにする
   /// - プレハブ編集でインスペクタ参照が外れることがある。
   ///   開始時に LogError を出す (#67)。自動復元はしない
   /// - 異方性を効かせたくない CM (履帯 vs 転輪) は
@@ -50,7 +50,7 @@ namespace PWRISimulator
   ///    Base Non Oriented Contact Materials に履帯 vs 転輪の CM
   /// 4. Track Components に TrackL / TrackR
   /// 5. Reference Object に body_link、Primary Direction に前方軸
-  /// 6. Manager 側の対応エントリは m_isOriented: 0 のまま
+  /// 6. Manager 側の対応エントリは Is Oriented を off のまま
   ///
   /// 詳細は業務報告書 付録 E に記載した。
   /// </remarks>
