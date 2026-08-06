@@ -52,7 +52,7 @@ namespace PWRISimulator
   /// 5. Reference Object に body_link、Primary Direction に前方軸
   /// 6. Manager 側の対応エントリは Is Oriented を off のまま
   ///
-  /// 詳細は業務報告書 付録 E に記載した。
+  /// 詳細は業務報告書 付録 B に記載した。
   /// </remarks>
   [DisallowMultipleComponent]
   public class MachineContactMaterialRegistrar : MonoBehaviour
