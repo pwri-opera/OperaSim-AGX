@@ -250,6 +250,7 @@ namespace PWRISimulator
             GameObject _shovelObj = Zx200ObjectUtility.FindZx200Object();
             if (_shovelObj != null)
             {
+                StageReset.UnregisterStepCallbacks(_shovelObj);
                 UnityEngine.Object.Destroy(_shovelObj);
             }
 
@@ -281,10 +282,15 @@ namespace PWRISimulator
                 if (dumpObj != null)
                 {
                     // 削除
-                    Destroy(dumpObj);
                     GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
-                    if (objMassBody != null) Destroy(objMassBody);
                     GameObject objMassJoint = GameObject.Find(dumpObj.name + "_SoilMassJoint");
+
+                    StageReset.UnregisterStepCallbacks(dumpObj);
+                    StageReset.UnregisterStepCallbacks(objMassBody);
+                    StageReset.UnregisterStepCallbacks(objMassJoint);
+
+                    Destroy(dumpObj);
+                    if (objMassBody != null) Destroy(objMassBody);
                     if (objMassJoint != null) Destroy(objMassJoint);
                 }
             }
@@ -376,7 +382,7 @@ namespace PWRISimulator
                     else
                     {
                         // ダンプトラック
-                        for (int j = 0; j < GlobalVariables.Dump_ObjList.Count; i++)
+                        for (int j = 0; j < GlobalVariables.Dump_ObjList.Count; j++)
                         {
                             if (GlobalVariables.Dump_ObjList[j].name == json_ms.camera[i].name)
                             {

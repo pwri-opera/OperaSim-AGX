@@ -164,8 +164,10 @@ namespace PWRISimulator
         /// 呼び出しが中断する。以降どの機体も Transform が更新されなくなる。
         ///
         /// Destroy は遅延実行なので、破棄を要求する前に呼ぶこと。
+        ///
+        /// Load でも同じ後始末が要るため、loadScript から呼んでいる。
         /// </summary>
-        private static void UnregisterStepCallbacks(GameObject obj)
+        public static void UnregisterStepCallbacks(GameObject obj)
         {
             if (obj == null || !Simulation.HasInstance)
                 return;
