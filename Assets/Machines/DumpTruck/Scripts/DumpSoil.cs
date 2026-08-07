@@ -567,11 +567,26 @@ namespace PWRISimulator
                 transform.position.ToHandedVec3()).inverse();
 
             // Broad-phase world-space AABB, expanded by particle radius.
+            // Y max is extended to follow soilHeight so that particles above the
+            // original merge zone box height can still be captured (issue #88).
+            // Without this, once soilHeight exceeds the box height, no new
+            // particles pass the broad-phase filter and capture stops.
             agx.Vec3 aabbMinAgx, aabbMaxAgx;
             AgxUtil.ToAgxMinMax(mergeZoneOriginalBoundsWorld, out aabbMinAgx, out aabbMaxAgx);
+            float soilHeightFloat = (float)soilHeight;
+            float boxHeight = mergeZoneOriginalSize.y;
+            float aabbMaxYLocal = Math.Max(boxHeight, soilHeightFloat + (float)nominalParticleData.radius);
+            // Transform the local Y extension to world space Y delta.
+            // The merge zone transform may be rotated, but for typical dump truck
+            // orientations the local Y maps primarily to world Y.
+            float worldYMax = (float)aabbMaxAgx.y;
+            if (aabbMaxYLocal > boxHeight)
+            {
+                worldYMax = (float)aabbMinAgx.y + aabbMaxYLocal;
+            }
             var broadWorldBounds = CaptureUtil.CalculateWorldBroadPhaseBounds(
                 new Vector3((float)aabbMinAgx.x, (float)aabbMinAgx.y, (float)aabbMinAgx.z),
-                new Vector3((float)aabbMaxAgx.x, (float)aabbMaxAgx.y, (float)aabbMaxAgx.z),
+                new Vector3((float)aabbMaxAgx.x, worldYMax, (float)aabbMaxAgx.z),
                 nominalParticleData.radius);
             agx.Vec3 aabbMin = new agx.Vec3(broadWorldBounds.min.x, broadWorldBounds.min.y, broadWorldBounds.min.z);
             agx.Vec3 aabbMax = new agx.Vec3(broadWorldBounds.max.x, broadWorldBounds.max.y, broadWorldBounds.max.z);
