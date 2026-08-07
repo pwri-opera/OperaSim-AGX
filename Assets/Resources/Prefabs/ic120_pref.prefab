@@ -7008,13 +7008,13 @@ MonoBehaviour:
     Ki: 0.01
     Kd: 0.005
   sproketRadiusToTrackSurface: 0.07
-  maxLinearVelocity: 1.7
-  maxAngularVelocity: 0.9
-  EnableVWBehaviorMode: 1
-  SetVWBehaviorMode: 2
+  maxLinearVelocity: 3
+  maxAngularVelocity: 0.08726646259971647
+  EnableVWBehaviorMode: 0
+  SetVWBehaviorMode: 1
   VWDecelFactor: 1
   VWRatioFactor: 0.9
-  MaxTrackVel: 1.66
+  MaxTrackVel: 1
 --- !u!114 &906789761961088836
 MonoBehaviour:
   m_ObjectHideFlags: 0
