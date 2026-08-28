@@ -179,6 +179,18 @@ namespace PWRISimulator
 
             GlobalVariables.saveMachines = json_ms;
 
+            GlobalVariables.MachineCameraSliders.Clear();
+            if (json_ms.cameraSliders != null)
+            {
+                foreach (var s in json_ms.cameraSliders)
+                {
+                    if (s != null && !string.IsNullOrEmpty(s.machineName))
+                    {
+                        GlobalVariables.MachineCameraSliders[s.machineName] = s;
+                    }
+                }
+            }
+
 
             // �ύ�
             StreamReader rd_ds = new StreamReader(Path.Combine(dirPath, "DumpSoil"));

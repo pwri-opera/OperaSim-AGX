@@ -93,6 +93,18 @@ namespace PWRISimulator
             public int score;
             public objProperties[] data;
             public objProperties[] camera;
+            public MachineCameraSliderState[] cameraSliders;
+        }
+
+        [System.Serializable]
+        public class MachineCameraSliderState
+        {
+            public string machineName;
+            public float horizontalAngle;
+            public float verticalAngle;
+            public float upDownPos;
+            public float frontRearPos;
+            public float leftRightPos;
         }
 
         [System.Serializable]
@@ -376,6 +388,13 @@ namespace PWRISimulator
             {
                 sm.camera[i] = new objProperties();
                 sm.camera[i] = tmpList[i];
+            }
+
+            sm.cameraSliders = new MachineCameraSliderState[GlobalVariables.MachineCameraSliders.Count];
+            int sliderIdx = 0;
+            foreach (var kvp in GlobalVariables.MachineCameraSliders)
+            {
+                sm.cameraSliders[sliderIdx++] = kvp.Value;
             }
 
 
