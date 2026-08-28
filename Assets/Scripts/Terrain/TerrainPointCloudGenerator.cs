@@ -147,8 +147,18 @@ namespace PWRISimulator
                 Matrix4x4 transform = Matrix4x4.TRS(originPosition, originRotation, Vector3.one);
                 Gizmos.matrix = transform;
 
-                Vector3 size = new Vector3(xSize, 2.0f, zSize);
-                Vector3 localPos = 0.5f * size;
+                // 凹凸のある地形でも点群が箱に収まるように、縦の範囲を取得範囲内のTerrain高さにフィットさせる(ref #53)
+                const float heightMargin = 0.5f;
+                float bottomY = 0.0f;
+                float topY = 2.0f;
+                if (TryComputeTerrainHeightRange(out float minY, out float maxY))
+                {
+                    bottomY = minY - heightMargin;
+                    topY = maxY + heightMargin;
+                }
+
+                Vector3 size = new Vector3(xSize, topY - bottomY, zSize);
+                Vector3 localPos = new Vector3(0.5f * xSize, bottomY + 0.5f * size.y, 0.5f * zSize);
                 Color color = visualColor;
 
                 color.a = 0.3f;
@@ -159,6 +169,47 @@ namespace PWRISimulator
                 Gizmos.color = color;
                 Gizmos.DrawWireCube(localPos, size);
             }
+        }
+
+        /// <summary>
+        /// Gizmo表示用に、取得範囲内のTerrain高さのmin/max(originPosition基準のローカルY)を計算する。
+        /// 点群グリッドと同じ間隔でサンプリングするが、Gizmo描画のたびに呼ばれるため軸ごとに上限を設ける。
+        /// 粗くなった場合は目安であり、サンプル間の細かい凹凸は範囲から外れることがある。
+        /// </summary>
+        internal bool TryComputeTerrainHeightRange(out float minY, out float maxY)
+        {
+            minY = 0.0f;
+            maxY = 0.0f;
+
+            Terrain terrain = Terrain.activeTerrain;
+            if (terrain == null)
+                return false;
+
+            const int maxSamplesPerAxis = 33;
+            int xSamples = Mathf.Clamp(1 + Mathf.RoundToInt(xSize / pointDistance), 2, maxSamplesPerAxis);
+            int zSamples = Mathf.Clamp(1 + Mathf.RoundToInt(zSize / pointDistance), 2, maxSamplesPerAxis);
+
+            float invTerrainSizeX = 1.0f / terrain.terrainData.size.x;
+            float invTerrainSizeZ = 1.0f / terrain.terrainData.size.z;
+
+            minY = float.MaxValue;
+            maxY = float.MinValue;
+            for (int i = 0; i < xSamples; i++)
+            {
+                for (int j = 0; j < zSamples; j++)
+                {
+                    Vector3 worldPos = originPosition + originRotation * new Vector3(
+                        xSize * i / (xSamples - 1), 0, zSize * j / (zSamples - 1));
+                    Vector3 localPos = terrain.transform.InverseTransformPoint(worldPos);
+                    float height = terrain.transform.position.y + terrain.terrainData.GetInterpolatedHeight(
+                        localPos.x * invTerrainSizeX, localPos.z * invTerrainSizeZ);
+
+                    float y = height - originPosition.y;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+            return true;
         }
 
         /// <summary>

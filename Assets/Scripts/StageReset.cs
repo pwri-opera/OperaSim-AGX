@@ -227,8 +227,10 @@ namespace PWRISimulator
 
 
                 // ショベルカー
-                var cameraObj = shovelObj.transform.Find("base_link/track_link/CameraStr").gameObject;
-                cameraObj.SetActive(false);
+                var cameraStr = shovelObj.transform.Find("base_link/body_link/CameraStr")
+                    ?? shovelObj.transform.Find("base_link/track_link/CameraStr");
+                if (cameraStr != null)
+                    cameraStr.gameObject.SetActive(false);
 
 
                 // ダンプトラック再配置

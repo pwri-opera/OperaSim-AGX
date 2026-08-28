@@ -379,12 +379,14 @@ namespace PWRISimulator
                     if (json_ms.camera[i].name.Contains("zx200"))
                     {
                         // �V���x���J�[
-                        obj = shovelObj.transform.Find("base_link/track_link/CameraStr").gameObject;
+                        var shovelCameraStr = shovelObj.transform.Find("base_link/body_link/CameraStr")
+                            ?? shovelObj.transform.Find("base_link/track_link/CameraStr");
+                        obj = shovelCameraStr != null ? shovelCameraStr.gameObject : null;
                     }
                     else
                     {
                         // �_���v�g���b�N
-                        for (int j = 0; j < GlobalVariables.Dump_ObjList.Count; i++)
+                        for (int j = 0; j < GlobalVariables.Dump_ObjList.Count; j++)
                         {
                             if (GlobalVariables.Dump_ObjList[j].name == json_ms.camera[i].name)
                             {

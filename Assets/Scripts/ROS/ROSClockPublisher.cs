@@ -16,16 +16,13 @@ namespace PWRISimulator.ROS
         [SerializeField, HideInInspector]
         Clock.ClockMode m_LastSetClockMode;
         
-        [SerializeField] 
+        [SerializeField]
         double m_PublishRateHz = 100f;
 
-        double m_LastPublishTimeSeconds;
+        int m_StepInterval;
+        int m_StepCount;
 
         ROSConnection m_ROS;
-
-        double PublishPeriodSeconds => 1.0f / m_PublishRateHz;
-
-        bool ShouldPublishMessage => Clock.FrameStartTimeInSeconds - PublishPeriodSeconds > m_LastPublishTimeSeconds;
 
         void OnValidate()
         {
@@ -56,6 +53,9 @@ namespace PWRISimulator.ROS
             SetClockMode(m_ClockMode);
             m_ROS = ROSConnection.GetOrCreateInstance();
             m_ROS.RegisterPublisher<ClockMsg>("clock");
+            // publish 周期を fixed step 数に換算する。fixed step (50 Hz) より細かい設定は毎ステップに丸まる
+            m_StepInterval = Math.Max(1,
+                (int)Math.Round(1.0 / (Math.Max(m_PublishRateHz, 0.01) * Time.fixedDeltaTime)));
         }
 
         void PublishMessage()
@@ -67,16 +67,19 @@ namespace PWRISimulator.ROS
                 sec = timestamp.Seconds,
                 nanosec = timestamp.NanoSeconds
             };
-            m_LastPublishTimeSeconds = publishTime;
             m_ROS.Publish("clock", clockMsg);
         }
 
-        void Update()
+        // /clock の sim-time 刻みを fps 非依存で fixed step に揃えるため FixedUpdate 起点で publish する(#58)。
+        // Clock.time (UnityScaled = Time.timeAsDouble) は FixedUpdate 内では fixed step 時刻を返す
+        void FixedUpdate()
         {
-            if (ShouldPublishMessage)
-            {
-                PublishMessage();
-            }
+            if (m_ROS == null)
+                return;
+            if (++m_StepCount < m_StepInterval)
+                return;
+            m_StepCount = 0;
+            PublishMessage();
         }
     }
 }

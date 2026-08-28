@@ -11,21 +11,21 @@ using MathNet.Numerics.LinearAlgebra.Double;
 namespace PWRISimulator
 {
     /// <summary>
-    /// ƒOƒ[ƒoƒ‹•Ï”ŠÇ—
+    /// ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ç®¡ç†
     /// </summary>
     public class GlobalVariables
     {
         // add 202507
-        // ”z’u‚µ‚½ƒ_ƒ“ƒvƒgƒ‰ƒbƒNƒIƒuƒWƒFƒNƒg‚Ì•Û
+        // é…ç½®ã—ãŸãƒ€ãƒ³ãƒ—ãƒˆãƒ©ãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä¿æŒ
         public static List<string> Dump_IDList = new List<string>();
         public static List<GameObject> Dump_ObjList = new List<GameObject>();
 
-        // ƒZ[ƒuEƒ[ƒh‹@”\‚Å‚Ìp¨“Ç‚İ‚İƒtƒ‰ƒO
+        // ã‚»ãƒ¼ãƒ–ãƒ»ãƒ­ãƒ¼ãƒ‰æ©Ÿèƒ½ã§ã®å§¿å‹¢èª­ã¿è¾¼ã¿ãƒ•ãƒ©ã‚°
         public static bool SetupJointFlag = false;
         public static bool SetupJointDumpFlag = false;
         public static int SetupJointDumpCount = 0;
 
-        // ƒZ[ƒuEƒ[ƒh‹@”\‚Å‚Ìp¨“Ç‚İ‚İŠ®—¹ƒtƒ‰ƒO
+        // ã‚»ãƒ¼ãƒ–ãƒ»ãƒ­ãƒ¼ãƒ‰æ©Ÿèƒ½ã§ã®å§¿å‹¢èª­ã¿è¾¼ã¿å®Œäº†ãƒ•ãƒ©ã‚°
         public static bool SetupJointCompletedFlag = false;
         public static bool SetupJointDumpCompletedFlag = false;
 
@@ -33,22 +33,25 @@ namespace PWRISimulator
         public static saveScript.SaveDumpSoil saveDumpSoil = new saveScript.SaveDumpSoil();
         public static saveScript.SaveParticles saveParticles = new saveScript.SaveParticles();
 
+        public static Dictionary<string, saveScript.MachineCameraSliderState> MachineCameraSliders
+            = new Dictionary<string, saveScript.MachineCameraSliderState>();
+
         //public static bool ObjectRemoveFlag = false;
-        public static int ConfirmWaitFlag = 0; // 0: ‰Šú’lA1FŠm”F‰æ–Ê•\¦’†A2FŠm”F‰æ–ÊOKƒNƒŠƒbƒN
+        public static int ConfirmWaitFlag = 0; // 0: åˆæœŸå€¤ã€1ï¼šç¢ºèªç”»é¢è¡¨ç¤ºä¸­ã€2ï¼šç¢ºèªç”»é¢OKã‚¯ãƒªãƒƒã‚¯
 
 
-        // ƒtƒ@ƒCƒ‹o—Í‚ÌƒtƒHƒ‹ƒ_ƒpƒX
+        // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›æ™‚ã®ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹
         public static string BACKUP_FOLDER = "Assets/SaveData/";
 
 
-        // ƒGƒŠƒA”»’ès—ñ
+        // ã‚¨ãƒªã‚¢åˆ¤å®šè¡Œåˆ—
         public static MathNet.Numerics.LinearAlgebra.Matrix<double> areaMat;
 
-        // ƒsƒNƒZƒ‹ŠÔ‚Ì‹——£
+        // ãƒ”ã‚¯ã‚»ãƒ«é–“ã®è·é›¢
         public static double step_x = 0.0;
         public static double step_z = 0.0;
 
-        // “Dà^ƒGƒŠƒA‚ÌƒJƒEƒ“ƒgs—ñ
+        // æ³¥æ¿˜ã‚¨ãƒªã‚¢ã®ã‚«ã‚¦ãƒ³ãƒˆè¡Œåˆ—
         public static MathNet.Numerics.LinearAlgebra.Matrix<double> countMat;
 
         private static Mutex _mutexAreaMat = new Mutex();
@@ -124,21 +127,21 @@ namespace PWRISimulator
 
 
 
-        //İ’èƒf[ƒ^
-        public static int MaxDunpTracks;   //Å‘åİ’u‰Â”\ƒ_ƒ“ƒvƒgƒ‰ƒbƒN”
-        public static int MaxCameras;      //Å‘åİ’u‰Â”\ƒJƒƒ‰”
-        public static int MinScore;      //Å‘åİ’u‰Â”\ƒJƒƒ‰”
-        public static float MiningCoef;    //ÌŒ@ƒXƒRƒAŒW”
-        public static float LoadSoilCoef;  //“y»Ï‚İƒXƒRƒAŒW”
-        public static float UnloadSoilCoef;//“y»Ï‚İ~‚ë‚µƒXƒRƒAŒW”
-        public static float CollisionCoef; //d‹@Õ“ËƒXƒRƒAŒW”
-        public static float OffTruckCoef;  //ƒR[ƒXƒAƒEƒgƒXƒRƒAŒW”
-        public static float OverlappCoef;  //ƒR[ƒXd•¡ƒXƒRƒAŒW”
-        public static string datapath;     //ƒf[ƒ^•Û‘¶ƒpƒX
-        public static string RosIP;        //ROSÚ‘±æIP
-        public static float GameTime;               //ƒQ[ƒ€ŠÔi•bj      
-        public static float TimeBarRedThreshold;      //ƒ^ƒCƒ€ƒo[‚ÌÔF‚Ö‚ÌØ‚è‘Ö‚¦Š„‡i“j
-        public static float TimeBarYellowThreshold;   //ƒ^ƒCƒ€ƒo[‚Ì‰©F‚Ö‚ÌØ‚è‘Ö‚¦Š„‡i“j
+        //è¨­å®šãƒ‡ãƒ¼ã‚¿
+        public static int MaxDunpTracks;   //æœ€å¤§è¨­ç½®å¯èƒ½ãƒ€ãƒ³ãƒ—ãƒˆãƒ©ãƒƒã‚¯æ•°
+        public static int MaxCameras;      //æœ€å¤§è¨­ç½®å¯èƒ½ã‚«ãƒ¡ãƒ©æ•°
+        public static int MinScore;      //æœ€å¤§è¨­ç½®å¯èƒ½ã‚«ãƒ¡ãƒ©æ•°
+        public static float MiningCoef;    //æ¡æ˜ã‚¹ã‚³ã‚¢ä¿‚æ•°
+        public static float LoadSoilCoef;  //åœŸç ‚ç©è¾¼ã¿ã‚¹ã‚³ã‚¢ä¿‚æ•°
+        public static float UnloadSoilCoef;//åœŸç ‚ç©ã¿é™ã‚ã—ã‚¹ã‚³ã‚¢ä¿‚æ•°
+        public static float CollisionCoef; //é‡æ©Ÿè¡çªã‚¹ã‚³ã‚¢ä¿‚æ•°
+        public static float OffTruckCoef;  //ã‚³ãƒ¼ã‚¹ã‚¢ã‚¦ãƒˆã‚¹ã‚³ã‚¢ä¿‚æ•°
+        public static float OverlappCoef;  //ã‚³ãƒ¼ã‚¹é‡è¤‡ã‚¹ã‚³ã‚¢ä¿‚æ•°
+        public static string datapath;     //ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ‘ã‚¹
+        public static string RosIP;        //ROSæ¥ç¶šå…ˆIP
+        public static float GameTime;               //ã‚²ãƒ¼ãƒ æ™‚é–“ï¼ˆç§’ï¼‰      
+        public static float TimeBarRedThreshold;      //ã‚¿ã‚¤ãƒ ãƒãƒ¼ã®èµ¤è‰²ã¸ã®åˆ‡ã‚Šæ›¿ãˆå‰²åˆï¼ˆï¼…ï¼‰
+        public static float TimeBarYellowThreshold;   //ã‚¿ã‚¤ãƒ ãƒãƒ¼ã®é»„è‰²ã¸ã®åˆ‡ã‚Šæ›¿ãˆå‰²åˆï¼ˆï¼…ï¼‰
 
 
         public static int score = 0;
@@ -153,9 +156,9 @@ namespace PWRISimulator
 
         public static double AmountOfLoadedSoil = 0.0;
 
-        public static int ActionMode = -1; //0:ƒgƒ‰ƒbƒN”z’u,@1:ƒJƒƒ‰”z’u,@2:g—pƒJƒƒ‰‘I‘ğ,@3:ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“
-        public static int SelectMode = -1; //0:ƒZ[ƒu,@1:ƒ[ƒh,@2:ƒŠƒZƒbƒg
-        public static int SetMoveType = 0; //0:•Ài,@1:‰ñ“],@2:íœ,@3:ƒƒCƒ“ƒJƒƒ‰
+        public static int ActionMode = -1; //0:ãƒˆãƒ©ãƒƒã‚¯é…ç½®,ã€€1:ã‚«ãƒ¡ãƒ©é…ç½®,ã€€2:ä½¿ç”¨ã‚«ãƒ¡ãƒ©é¸æŠ,ã€€3:ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
+        public static int SelectMode = -1; //0:ã‚»ãƒ¼ãƒ–,ã€€1:ãƒ­ãƒ¼ãƒ‰,ã€€2:ãƒªã‚»ãƒƒãƒˆ
+        public static int SetMoveType = 0; //0:ä¸¦é€²,ã€€1:å›è»¢,ã€€2:å‰Šé™¤,ã€€3:ãƒ¡ã‚¤ãƒ³ã‚«ãƒ¡ãƒ©
 
         public static int TimeOutSpan = 100;
 
@@ -165,6 +168,12 @@ namespace PWRISimulator
         public static int CameraCounter = 0;
 
         public static bool ForceCameraChange = false;
+
+        // ScoreBoardï¼ˆç·ç²å¾—ç‚¹ï¼‰ã®è¡¨ç¤ºãƒ•ãƒ©ã‚°ã€‚ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹å‰ã«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ UI ã®ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã§åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+        public static bool ShowScoreBoard = true;
+
+        // ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦å€ç‡ã€‚Pre-sim ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠã—ã€é–‹å§‹æ™‚ã« Time.timeScale ã«é©ç”¨ã•ã‚Œã‚‹ã€‚
+        public static float SimulationSpeedMultiplier = 1.0f;
 
         private static Mutex _mutexScore = new Mutex();
         private static Mutex _mutexOOFAT = new Mutex();
@@ -180,7 +189,7 @@ namespace PWRISimulator
             {
                 try
                 {
-                    // ƒXƒRƒA‰ºŒÀ’l‚Ìê‡‚ÍŒ¸Z‚µ‚È‚¢
+                    // ã‚¹ã‚³ã‚¢ä¸‹é™å€¤ã®å ´åˆã¯æ¸›ç®—ã—ãªã„
                     if (score <= MinScore && point < 0) {
                         score = MinScore;
                         return;
@@ -197,6 +206,27 @@ namespace PWRISimulator
             {
                 UnityEngine.Debug.Log("Error : Could not get _mutexScore.");
             }
+        }
+
+        public enum ScoreEventId { P01, P02, P03, M01, M02, M03, M04 }
+
+        public struct ScoreEvent
+        {
+            public ScoreEventId Id;
+            public int Point;
+        }
+
+        public static event System.Action<ScoreEvent> OnScoreEvent;
+
+        public static void RegisterScoreEvent(ScoreEvent evt)
+        {
+            incrementScore(evt.Point);
+
+            // ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ä»¥å¤–(é‡æ©Ÿé…ç½®ä¸­ã‚„ Reset å¾Œ)ã¯åœ°å½¢ã®åˆæœŸåŒ–ãªã©ã§
+            // ã‚¹ã‚³ã‚¢ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºç”Ÿã™ã‚‹ãŸã‚ã€è¡¨ç¤ºãƒ»ãƒ­ã‚°å‘ã‘ã®é€šçŸ¥ã¯è¡Œã‚ãªã„
+            if (ActionMode != 3) return;
+
+            OnScoreEvent?.Invoke(evt);
         }
 
         public static void decrementScore(int point)

@@ -1,0 +1,31 @@
+#SimulationSpeed {
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: flex-start;
+    width: auto;
+}
+
+#SimulationSpeed .unity-radio-button-group__container {
+    flex-direction: row;
+}
+
+#SimulationSpeed .unity-radio-button__input {
+    flex-direction: column;
+    align-items: center;
+}
+
+#SimulationSpeed .unity-radio-button__text {
+    -unity-font-style: normal;
+}
+
+#SimulationSpeed > .unity-base-field__label {
+    min-width: auto;
+    width: auto;
+    margin-left: 0;
+    margin-bottom: 2px;
+}
+
+#SimulationSpeed .unity-radio-button {
+    margin-right: 6px;
+    margin-left: 0;
+}

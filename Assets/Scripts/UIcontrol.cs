@@ -58,6 +58,9 @@ namespace PWRISimulator
         private GameObject StatusBoardUIobj;
         private StatusBoard sBoard;
 
+        [SerializeField] GameObject EventLogUI;
+        private GameObject EventLogUIobj;
+
         [SerializeField] GameObject SubdisplayUI;
         private GameObject SubdisplayUIobj;
 
@@ -94,12 +97,21 @@ namespace PWRISimulator
         // Start is called before the first frame update
         void Start()
         {
+            // シーン再ロード時に前回の倍率が残らないようにリセット
+            Time.timeScale = 1.0f;
+            GlobalVariables.SimulationSpeedMultiplier = 1.0f;
+
             machineObj = new MachineObjCamCont();
 
             StatusBoardUIobj = Instantiate(StatusBoardUI);
             sBoard = StatusBoardUIobj.GetComponent<StatusBoard>();
             sBoard.SetStatusMessage("Start!!");
             sBoard.SetMessageColor(Color.blue);
+
+            if (EventLogUI != null)
+            {
+                EventLogUIobj = Instantiate(EventLogUI);
+            }
 
 
             munuUIobj = Instantiate(MenuUI);
@@ -174,9 +186,18 @@ namespace PWRISimulator
                     Destroy(SaveLoadUIobj);
                     SaveLoadUIobj = null;
                 }
+
+                // 速度倍率を戻す
+                Time.timeScale = 1.0f;
             }
 
             EndGame();
+        }
+
+        // Play を抜けるときに倍率が Unity のプロジェクト設定へ書き戻されるのを防ぐ
+        void OnApplicationQuit()
+        {
+            Time.timeScale = 1.0f;
         }
 
 
@@ -351,7 +372,7 @@ namespace PWRISimulator
             //CountdownTimerUIobj_disp2.GetComponent<UIDocument>().panelSettings.targetTexture = cameraTexture;
 
             ScoreUIobj = Instantiate(ScoreUI);
-            ScoreUIobj.SetActive(true);
+            ScoreUIobj.SetActive(GlobalVariables.ShowScoreBoard);
 
             //ScoreUIobj_disp2 = Instantiate(ScoreUI_disp2);
             //ScoreUIobj_disp2.GetComponent<UIDocument>().panelSettings.targetTexture = cameraTexture;
@@ -382,6 +403,34 @@ namespace PWRISimulator
             save_root.Q<Button>("Save").clicked += () => SaveClicked();
             save_root.Q<Button>("Load").clicked += () => LoadClicked();
             save_root.Q<Button>("Reset").clicked += () => ResetClicked();
+
+            // シミュレーション速度倍率を適用し、リアルタイム性確認用プローブを起動
+            Time.timeScale = GlobalVariables.SimulationSpeedMultiplier;
+            if (GlobalVariables.SimulationSpeedMultiplier != 1.0f)
+                ValidateSimulationSteppingSettings();
+            if (GetComponent<RealtimeFidelityProbe>() == null)
+                gameObject.AddComponent<RealtimeFidelityProbe>();
+        }
+
+        /// <summary>
+        /// 速度倍率はFixedUpdate毎にAGXが1ステップ進むことに依存する(ref #55)。
+        /// FixedUpdateRealTimeFactorが0以外だとAGXのステップがwall clockベースで実時間ペースに制限され、
+        /// Time.timeがN倍で進むのに物理が1倍のままとなって非同期になるため、倍率適用時に設定を検証する。
+        /// なお、AutoSteppingModeはControlPhysicsがポーズ機構として切り替えており、このタイミングでは
+        /// Disabledが正常なためチェックしない。
+        /// </summary>
+        void ValidateSimulationSteppingSettings()
+        {
+            if (!Simulation.HasInstance)
+                return;
+
+            var simulation = Simulation.Instance;
+
+            if (simulation.FixedUpdateRealTimeFactor != 0.0f)
+                Debug.LogError(
+                    $"Simulation speed multiplier requires AGXUnity Simulation.FixedUpdateRealTimeFactor == 0, " +
+                    $"but it is {simulation.FixedUpdateRealTimeFactor}. AGX stepping will be throttled to real time " +
+                    $"and desynchronize from game time. Set FixedUpdateRealTimeFactor to 0 in the Simulation inspector.");
         }
 
 
@@ -507,6 +556,41 @@ namespace PWRISimulator
             root.Q<Button>("CameraPositionSetting").clicked += () => OnCameraPositionSettingClicked();
             root.Q<Button>("SelectCamera").clicked += () => OnSelectCameraClicked();
             root.Q<Button>("SimulationStart").clicked += () => OnSimulationStartClicked();
+
+            var showScoreToggle = root.Q<Toggle>("ShowScore");
+            if (showScoreToggle != null)
+            {
+                showScoreToggle.SetValueWithoutNotify(GlobalVariables.ShowScoreBoard);
+                showScoreToggle.RegisterValueChangedCallback(evt =>
+                {
+                    GlobalVariables.ShowScoreBoard = evt.newValue;
+                });
+            }
+
+            var simSpeedGroup = root.Q<RadioButtonGroup>("SimulationSpeed");
+            if (simSpeedGroup != null)
+            {
+                simSpeedGroup.SetValueWithoutNotify(IndexFromMultiplier(GlobalVariables.SimulationSpeedMultiplier));
+                simSpeedGroup.RegisterValueChangedCallback(evt =>
+                {
+                    GlobalVariables.SimulationSpeedMultiplier = MultiplierFromIndex(evt.newValue);
+                });
+            }
+        }
+
+        static readonly float[] SimSpeedChoices = { 1.0f, 1.5f, 2.0f, 3.0f, 4.0f };
+
+        static float MultiplierFromIndex(int index)
+        {
+            if (index < 0 || index >= SimSpeedChoices.Length) return 1.0f;
+            return SimSpeedChoices[index];
+        }
+
+        static int IndexFromMultiplier(float multiplier)
+        {
+            for (int i = 0; i < SimSpeedChoices.Length; i++)
+                if (Mathf.Approximately(SimSpeedChoices[i], multiplier)) return i;
+            return 0;
         }
 
 
@@ -706,6 +790,16 @@ namespace PWRISimulator
 
                     // スコアリセット
                     GlobalVariables.score = 0;
+
+                    // 速度倍率を戻す
+                    Time.timeScale = 1.0f;
+
+                    // イベントログ表示をクリア
+                    if (EventLogUIobj != null)
+                    {
+                        var eventLog = EventLogUIobj.GetComponent<EventLogUI>();
+                        if (eventLog != null) eventLog.Clear();
+                    }
 
 
                     // 設定画面に戻る
