@@ -691,7 +691,7 @@ namespace PWRISimulator
         }
 
 
-        IEnumerator LoadCoroutine(loadScript loadscript)
+        IEnumerator LoadCoroutine(loadScript loadscript, RuntimeGizmos.TransformGizmo gizmo, string selectedRootName)
         {
             Debug.Log("GlobalVariables.ConfirmWaitFlag: " + GlobalVariables.ConfirmWaitFlag);
             Debug.Log("completedFlag: " + loadscript.completedFlag);
@@ -710,12 +710,22 @@ namespace PWRISimulator
                 //root.Q<UnityEngine.UIElements.Label>("Message").text = "Load completed.";
 
                 loadscript.completedFlag = false;
+
+                // 旧オブジェクトの Destroy はフレーム末に処理されるため、
+                // 1 フレーム待ってから同名の新オブジェクトを選び直す
+                yield return null;
+                ReselectAfterLoad(gizmo, selectedRootName);
             }
         }
 
         void LoadClicked()
         {
             Debug.Log("LoadClicked!");
+
+            // ロードで選択中の対象が作り直されるため、名前を控えてロード後に選び直す (#125)
+            var gizmo = FindObjectOfType<RuntimeGizmos.TransformGizmo>();
+            string selectedRootName = (gizmo != null && gizmo.mainTargetRoot != null)
+                ? gizmo.mainTargetRoot.gameObject.name : null;
 
             loadScript loadscript = null;
 
@@ -734,8 +744,56 @@ namespace PWRISimulator
                 loadscript.OnClick();
             }
 
-            // コルーチンの実行  
-            StartCoroutine(LoadCoroutine(loadscript));
+            // コルーチンの実行
+            StartCoroutine(LoadCoroutine(loadscript, gizmo, selectedRootName));
+        }
+
+        /// <summary>
+        /// ロード後に作り直された同名の対象を選び直し、プレビュー(Subdisplay)と
+        /// 機体カメラのスライダーを更新する (#125)
+        /// </summary>
+        void ReselectAfterLoad(RuntimeGizmos.TransformGizmo gizmo, string selectedRootName)
+        {
+            if (gizmo == null || string.IsNullOrEmpty(selectedRootName)) return;
+
+            // 旧選択は破棄済みオブジェクトを指しているためクリアする
+            gizmo.ClearTargets();
+
+            var newTarget = GameObject.Find(selectedRootName);
+            if (newTarget == null) return;
+
+            var subdisp = GameObject.Find("SubdisplayForSpawnCamera");
+
+            if (GlobalVariables.ActionMode == 1 && selectedRootName.Contains("Camera_"))
+            {
+                gizmo.AddTarget(newTarget.transform);
+
+                var cam = newTarget.transform.Find("CameraStr/Camera");
+                if (subdisp != null && cam != null)
+                {
+                    subdisp.GetComponent<Subdisplay>().SetDisplay(cam.GetComponent<Camera>());
+                }
+            }
+            else if (GlobalVariables.ActionMode == 0 &&
+                     (selectedRootName.Contains("ic120_") || Zx200ObjectUtility.IsZx200Name(selectedRootName)))
+            {
+                gizmo.AddTarget(newTarget.transform);
+
+                Transform cameraStr = newTarget.transform.Find("base_link/body_link/CameraStr")
+                    ?? newTarget.transform.Find("base_link/track_link/CameraStr");
+                Transform cam = cameraStr != null ? cameraStr.Find("Camera") : null;
+                if (subdisp != null && cameraStr != null && cam != null)
+                {
+                    cameraStr.gameObject.SetActive(true);
+                    cam.gameObject.SetActive(true);
+                    subdisp.GetComponent<Subdisplay>().SetDisplay(cam.GetComponent<Camera>());
+                }
+
+                // スライダーのパネルを作り直した機体で初期化し直す
+                var machineCamCont = new MachineObjCamCont();
+                machineCamCont.machineDeselected();
+                machineCamCont.machineSelected(selectedRootName);
+            }
         }
 
 
