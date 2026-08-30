@@ -291,6 +291,12 @@ namespace PWRISimulator.Tests
             int dumpTruckCount = 0;
             foreach (var go in machineRoots)
             {
+                // DumpSoil creates an auxiliary "<machine>_SoilMassBody" rigid body at the
+                // scene root (it cannot live under an ArticulatedRoot), which would match
+                // the ic120 prefix below even though it is not a machine (#151).
+                if (go.name.Contains("_SoilMassBody"))
+                    continue;
+
                 if (go.name.StartsWith("zx200", StringComparison.OrdinalIgnoreCase))
                     excavatorCount++;
                 else if (go.name.StartsWith("ic120", StringComparison.OrdinalIgnoreCase))
