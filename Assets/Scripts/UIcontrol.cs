@@ -723,9 +723,32 @@ namespace PWRISimulator
             Debug.Log("LoadClicked!");
 
             // ロードで選択中の対象が作り直されるため、名前を控えてロード後に選び直す (#125)
-            var gizmo = FindObjectOfType<RuntimeGizmos.TransformGizmo>();
+            // gizmo は Main Camera と各機体プレハブに複数あり、カメラ切替で
+            // 非アクティブなことがあるため、includeInactive で探す (#134)
+            RuntimeGizmos.TransformGizmo gizmo = null;
+            foreach (var g in FindObjectsOfType<RuntimeGizmos.TransformGizmo>(true))
+            {
+                if (gizmo == null) gizmo = g;
+                if (g.mainTargetRoot != null)
+                {
+                    gizmo = g;
+                    break;
+                }
+            }
             string selectedRootName = (gizmo != null && gizmo.mainTargetRoot != null)
                 ? gizmo.mainTargetRoot.gameObject.name : null;
+
+            // UI のクリックで gizmo の選択は外れていることがあるため、
+            // スライダーパネルが開いていればその機体を復元対象にする (#134)
+            if (selectedRootName == null)
+            {
+                var panel = FindObjectOfType<MachineCamControl>();
+                if (panel != null)
+                {
+                    selectedRootName = panel.gameObject.name.Replace("_ControlForMachineCamera", "");
+                }
+            }
+            Debug.Log("LoadClicked: selectedRootName=" + (selectedRootName ?? "(none)"));
 
             loadScript loadscript = null;
 
@@ -754,19 +777,31 @@ namespace PWRISimulator
         /// </summary>
         void ReselectAfterLoad(RuntimeGizmos.TransformGizmo gizmo, string selectedRootName)
         {
-            if (gizmo == null || string.IsNullOrEmpty(selectedRootName)) return;
+            if (string.IsNullOrEmpty(selectedRootName))
+            {
+                Debug.Log("ReselectAfterLoad: skipped (no target name)");
+                return;
+            }
 
-            // 旧選択は破棄済みオブジェクトを指しているためクリアする
-            gizmo.ClearTargets();
+            // 旧選択は破棄済みオブジェクトを指しているためクリアする。
+            // gizmo が見つからなくてもパネルとプレビューの復元は行う (#134)
+            if (gizmo != null)
+            {
+                gizmo.ClearTargets();
+            }
 
             var newTarget = GameObject.Find(selectedRootName);
+            Debug.Log("ReselectAfterLoad: name=" + selectedRootName + ", found=" + (newTarget != null) + ", gizmo=" + (gizmo != null) + ", mode=" + GlobalVariables.ActionMode);
             if (newTarget == null) return;
 
             var subdisp = GameObject.Find("SubdisplayForSpawnCamera");
 
             if (GlobalVariables.ActionMode == 1 && selectedRootName.Contains("Camera_"))
             {
-                gizmo.AddTarget(newTarget.transform);
+                if (gizmo != null && gizmo.isActiveAndEnabled)
+                {
+                    gizmo.AddTarget(newTarget.transform);
+                }
 
                 var cam = newTarget.transform.Find("CameraStr/Camera");
                 if (subdisp != null && cam != null)
@@ -777,7 +812,10 @@ namespace PWRISimulator
             else if (GlobalVariables.ActionMode == 0 &&
                      (selectedRootName.Contains("ic120_") || Zx200ObjectUtility.IsZx200Name(selectedRootName)))
             {
-                gizmo.AddTarget(newTarget.transform);
+                if (gizmo != null && gizmo.isActiveAndEnabled)
+                {
+                    gizmo.AddTarget(newTarget.transform);
+                }
 
                 Transform cameraStr = newTarget.transform.Find("base_link/body_link/CameraStr")
                     ?? newTarget.transform.Find("base_link/track_link/CameraStr");
