@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
+using RosMessageTypes.Geometry;
 using RosMessageTypes.Nav;
 using System;
 
@@ -37,10 +38,31 @@ namespace PWRISimulator.ROS
             while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
                 DoUpdate();
-                MessageUtil.UpdateTimeMsg(odometryMsg.header.stamp, scheduleOrigin + publishedCount * publishPeriod);
-                PublishMessage();
+                PublishMessage(CreateSnapshot(scheduleOrigin + publishedCount * publishPeriod));
                 publishedCount++;
             }
+        }
+
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの odometryMsg をそのまま渡すと、送信前に次の publish で内容が上書きされ、
+        // 同一ステップ内の連続 publish で stamp が重複・欠落する。
+        // 派生クラスが odometryMsg に odometry を累積するため、作り直しではなく複製を渡す (#138)
+        OdometryMsg CreateSnapshot(double stampTime)
+        {
+            var src = odometryMsg;
+            return new OdometryMsg(
+                header: MessageUtil.ToHeadermessage(stampTime, src.header.frame_id),
+                child_frame_id: src.child_frame_id,
+                pose: new PoseWithCovarianceMsg(
+                    new PoseMsg(
+                        new PointMsg(src.pose.pose.position.x, src.pose.pose.position.y, src.pose.pose.position.z),
+                        new QuaternionMsg(src.pose.pose.orientation.x, src.pose.pose.orientation.y, src.pose.pose.orientation.z, src.pose.pose.orientation.w)),
+                    (double[])src.pose.covariance.Clone()),
+                twist: new TwistWithCovarianceMsg(
+                    new TwistMsg(
+                        new Vector3Msg(src.twist.twist.linear.x, src.twist.twist.linear.y, src.twist.twist.linear.z),
+                        new Vector3Msg(src.twist.twist.angular.x, src.twist.twist.angular.y, src.twist.twist.angular.z)),
+                    (double[])src.twist.covariance.Clone()));
         }
 
         void RegisterTopic()
@@ -67,9 +89,9 @@ namespace PWRISimulator.ROS
 
         /// <returns>更新周期(FPS)</returns>
         abstract protected uint Frequency();
-        void PublishMessage()
+        void PublishMessage(OdometryMsg msg)
         {
-            rosConnection.Publish(topicName, odometryMsg);
+            rosConnection.Publish(topicName, msg);
         }
     }
 }

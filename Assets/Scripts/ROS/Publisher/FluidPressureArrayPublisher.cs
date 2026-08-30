@@ -37,11 +37,26 @@ namespace PWRISimulator.ROS
             while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
                 DoUpdate();
-                foreach (var item in fluidPressureArrayMsg.array)
-                    MessageUtil.UpdateTimeMsg(item.header.stamp, scheduleOrigin + publishedCount * publishPeriod);
-                PublishMessage();
+                PublishMessage(CreateSnapshot(scheduleOrigin + publishedCount * publishPeriod));
                 publishedCount++;
             }
+        }
+
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの fluidPressureArrayMsg をそのまま渡すと、送信前に次の publish で内容が上書きされ、
+        // 同一ステップ内の連続 publish で stamp が重複・欠落する。複製を渡す (#138)
+        FluidPressureArrayMsg CreateSnapshot(double stampTime)
+        {
+            var array = new FluidPressureMsg[fluidPressureArrayMsg.array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                var src = fluidPressureArrayMsg.array[i];
+                array[i] = new FluidPressureMsg(
+                    MessageUtil.ToHeadermessage(stampTime, src.header.frame_id),
+                    src.fluid_pressure,
+                    src.variance);
+            }
+            return new FluidPressureArrayMsg(array);
         }
         void RegisterTopic()
         {
@@ -76,9 +91,9 @@ namespace PWRISimulator.ROS
 
         /// <returns>fluidPressureArrayMsgの要素数</returns>
         abstract protected uint NumberOfItems();
-        void PublishMessage()
+        void PublishMessage(FluidPressureArrayMsg msg)
         {
-            rosConnection.Publish(topicName, fluidPressureArrayMsg);
+            rosConnection.Publish(topicName, msg);
         }
     }
 }

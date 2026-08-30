@@ -38,10 +38,22 @@ namespace PWRISimulator.ROS
             while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
                 DoUpdate();
-                MessageUtil.UpdateTimeMsg(jointStateMsg.header.stamp, scheduleOrigin + publishedCount * publishPeriod);
-                PublishMessage();
+                PublishMessage(CreateSnapshot(scheduleOrigin + publishedCount * publishPeriod));
                 publishedCount++;
             }
+        }
+
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの jointStateMsg をそのまま渡すと、送信前に次の publish で内容が上書きされ、
+        // 同一ステップ内の連続 publish で stamp が重複・欠落する。複製を渡す (#138)
+        JointStateMsg CreateSnapshot(double stampTime)
+        {
+            return new JointStateMsg(
+                header: MessageUtil.ToHeadermessage(stampTime, jointStateMsg.header.frame_id),
+                name: (string[])jointStateMsg.name.Clone(),
+                position: (double[])jointStateMsg.position.Clone(),
+                velocity: (double[])jointStateMsg.velocity.Clone(),
+                effort: (double[])jointStateMsg.effort.Clone());
         }
 
         void RegisterTopic()
@@ -85,9 +97,9 @@ namespace PWRISimulator.ROS
         /// <returns>jointStateMsgの各要素の名前</returns>
         abstract protected string[] JointNames();
 
-        void PublishMessage()
+        void PublishMessage(JointStateMsg msg)
         {
-            rosConnection.Publish(topicName, jointStateMsg);
+            rosConnection.Publish(topicName, msg);
         }
     }
 }

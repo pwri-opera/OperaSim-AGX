@@ -68,9 +68,11 @@ namespace PWRISimulator.ROS
         /// <returns>更新周期(FPS)</returns>
         abstract protected uint Frequency();
 
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの soilVolumeMsg をそのまま渡すと、送信前に次の publish で値が上書きされ得るため複製を渡す (#138)
         void PublishMessage()
         {
-            rosConnection.Publish(topicName, soilVolumeMsg);
+            rosConnection.Publish(topicName, new Float64Msg(soilVolumeMsg.data));
         }
     }
 }
