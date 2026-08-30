@@ -67,10 +67,24 @@ namespace PWRISimulator.ROS
             while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
                 DoUpdate();
-                MessageUtil.UpdateTimeMsg(imuMsg.header.stamp, scheduleOrigin + publishedCount * publishPeriod);
-                PublishMessage();
+                PublishMessage(CreateSnapshot(scheduleOrigin + publishedCount * publishPeriod));
                 publishedCount++;
             }
+        }
+
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの imuMsg をそのまま渡すと、送信前に次の publish で内容が上書きされ、
+        // 同一ステップ内の連続 publish で stamp が重複・欠落する。複製を渡す (#138)。
+        // orientation などは DoUpdate が毎回新しいインスタンスを代入するため参照共有でよい
+        ImuMsg CreateSnapshot(double stampTime)
+        {
+            return new ImuMsg
+            {
+                header = MessageUtil.ToHeadermessage(stampTime, frameId),
+                orientation = imuMsg.orientation,
+                angular_velocity = imuMsg.angular_velocity,
+                linear_acceleration = imuMsg.linear_acceleration,
+            };
         }
 
         void RegisterTopic()
@@ -100,9 +114,9 @@ namespace PWRISimulator.ROS
         {
             return "/upper_body_rot";
         }
-        void PublishMessage()
+        void PublishMessage(ImuMsg msg)
         {
-            rosConnection.Publish(topicName, imuMsg);
+            rosConnection.Publish(topicName, msg);
         }
     }
 }
