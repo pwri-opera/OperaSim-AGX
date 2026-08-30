@@ -22,7 +22,7 @@ using Debug = UnityEngine.Debug;
 namespace PWRISimulator
 {
     /// <summary>
-    /// �n�`�̃��[�h����
+    /// 地形のロード処理
     /// </summary>
     public class loadScript : MonoBehaviour
     {
@@ -39,11 +39,11 @@ namespace PWRISimulator
         {
             double time = Time.realtimeSinceStartup;
 
-            // �o�C�i���t�@�C���ǂݍ���
+            // バイナリファイル読み込み
             StreamReader reader = new StreamReader(path + ".ter");
             string jsonString = reader.ReadToEnd();
 
-            // �n�`�f�[�^�̔z��ň���
+            // 地形データの配列で扱う
             saveScript.SaveData save = new saveScript.SaveData();
             save = JsonUtility.FromJson<saveScript.SaveData>(jsonString);
 
@@ -52,15 +52,15 @@ namespace PWRISimulator
 
             foreach (saveScript.SerializedTerrain st in save.list)
             {
-                // �����̃I�u�W�F�N�g������
+                // 同名のオブジェクトを検索
                 GameObject obj = GameObject.Find(st.name);
 
                 if (obj != null)
                 {
-                    // �����̃I�u�W�F�N�g�����݂�����擾
+                    // 同名のオブジェクトが存在したら取得
                     TerrainData terrainData = obj.GetComponent<Terrain>().terrainData;
 
-                    // �n�`�ǂݍ���
+                    // 地形読み込み
                     terrainData.SetAlphamaps(0, 0, ConvertFromFlat(st.alphas, terrainData.alphamapResolution, terrainData.alphamapResolution, terrainData.alphamapLayers));
                     TerrainSaveUtility.ApplySerializedHeights(obj, ConvertFromFlat(st.heights, terrainData.heightmapResolution, terrainData.heightmapResolution));
                 }
@@ -68,7 +68,7 @@ namespace PWRISimulator
 
             Debug.Log("COMPLETED IN " + ((Time.realtimeSinceStartup - time)) + " " + jsonString.Length);
 
-            // ���������t���O
+            // 処理完了フラグ
             completedFlag = true;
         }
 
@@ -142,13 +142,13 @@ namespace PWRISimulator
         }
 
 
-        // �{�^���������ꂽ�ꍇ�ɌĂяo��
+        // ボタンが押された場合に呼び出し
         public void OnClick()
         {
-            // ���������t���O
+            // 処理完了フラグ
             completedFlag = false;
 
-            // �ۑ��f�B���N�g��
+            // 保存ディレクトリ
             var dirPath = "";
             if (GlobalVariables.ActionMode == 3)
             {
@@ -159,7 +159,7 @@ namespace PWRISimulator
                 dirPath = Path.Combine(GlobalVariables.BACKUP_FOLDER, setDirName);
             }
 
-            // �ۑ��f�B���N�g�����Ȃ���Γǂݍ��߂Ȃ��̂ŏI��
+            // 保存ディレクトリがなければ読み込めないので終了
             if (!Directory.Exists(dirPath))
             {
                 completedFlag = true;
@@ -168,9 +168,9 @@ namespace PWRISimulator
 
 
             //----------
-            // �ۑ��n�̃t�@�C���ǂݍ���
+            // 保存系のファイル読み込み
             //----------
-            // �p��
+            // 姿勢
             StreamReader rd_ms = new StreamReader(Path.Combine(dirPath, "MachinesJoints"));
             string str_ms = rd_ms.ReadToEnd();
             rd_ms.Close();
@@ -192,7 +192,7 @@ namespace PWRISimulator
             }
 
 
-            // �ύ�
+            // 積載
             // DumpSoil は追加ダンプがある場合しか保存されないため、無ければ空データとして扱う (#126)
             saveScript.SaveDumpSoil json_ds = new saveScript.SaveDumpSoil();
             json_ds.data = new saveScript.TransDumpSoil[0];
@@ -210,7 +210,7 @@ namespace PWRISimulator
             GlobalVariables.saveDumpSoil = json_ds;
 
 
-            // �y�뗱�q���f��
+            // 土壌粒子モデル
             StreamReader rd = new StreamReader(Path.Combine(dirPath, "SoilParticles"));
             string str_p = rd.ReadToEnd();
             rd.Close();
@@ -221,18 +221,18 @@ namespace PWRISimulator
 
 
             //----------
-            // �n�`�ēǂݍ���
+            // 地形再読み込み
             //----------
-            // �D�^�G���A�̃J�E���g���Z�b�g
+            // 泥濘エリアのカウントリセット
             GlobalVariables.countMat.Clear();
 
-            // AGX�n�`�擾
+            // AGX地形取得
             if (terrain == null)
             {
                 terrain = FindObjectOfType<DeformableTerrain>();
             }
 
-            // �y�뗱�q���f�����폜
+            // 土壌粒子モデルを削除
             var soilSim = terrain.Native?.getSoilSimulationInterface();
             var soilParticles = soilSim.getSoilParticles();
 
@@ -241,32 +241,32 @@ namespace PWRISimulator
                 soilSim.removeSoilParticle(soilParticles.at(i));
             }
 
-            // �n�`��Ǎ�
+            // 地形を読込
             DeserializeTerrain(Path.Combine(dirPath, fileName));
 
-            // �n�`�X�R�A�����O�̃��Z�b�g
+            // 地形スコアリングのリセット
             TerrainScore.Reset();
 
 
             //----------
-            // �d�@�ēǂݍ���
+            // 重機再読み込み
             //----------
-            // �V���x���J�[�폜
+            // ショベルカー削除
             GameObject _shovelObj = Zx200ObjectUtility.FindZx200Object();
             if (_shovelObj != null)
             {
                 UnityEngine.Object.Destroy(_shovelObj);
             }
 
-            // �ʒu
+            // 位置
             Vector3 _pos = new Vector3((float)json_ms.data[0].p.x, (float)json_ms.data[0].p.y, (float)json_ms.data[0].p.z);
             Debug.Log(_pos);
 
-            // ��]
+            // 回転
             Quaternion _qut = new Quaternion((float)json_ms.data[0].q.x, (float)json_ms.data[0].q.y, (float)json_ms.data[0].q.z, (float)json_ms.data[0].q.w);
             Debug.Log(_qut);
 
-            // �V���x���J�[�Ĕz�u
+            // ショベルカー再配置
             GameObject zx200_prefab = Resources.Load<GameObject>(SpawnObject.zx200_path);
             GameObject shovelObj = (GameObject)UnityEngine.Object.Instantiate(zx200_prefab, _pos, _qut);
             shovelObj.name = string.IsNullOrEmpty(json_ms.data[0].name) ? SpawnObject.zx200_objName : json_ms.data[0].name;
@@ -293,12 +293,12 @@ namespace PWRISimulator
                     dumpObjectsToDestroy.Add(dumpRoot);
             }
 
-            // �_���v�g���b�N�폜
+            // ダンプトラック削除
             foreach (GameObject dumpObj in dumpObjectsToDestroy)
             {
                 if (dumpObj != null)
                 {
-                    // �폜
+                    // 削除
                     dumpObj.SetActive(false);
                     Destroy(dumpObj);
                     GameObject objMassBody = GameObject.Find(dumpObj.name + "_SoilMassBody");
@@ -317,24 +317,24 @@ namespace PWRISimulator
                 }
             }
 
-            // �ێ����Ă���_���v�g���b�N�I�u�W�F�N�g���X�g�̃N���A
+            // 保持しているダンプトラックオブジェクトリストのクリア
             GlobalVariables.Dump_IDList.Clear();
             GlobalVariables.Dump_ObjList.Clear();
 
             GlobalVariables.ic120Counter = 0;
 
 
-            // �_���v�g���b�N�Ɋւ�����ǂݍ���
+            // ダンプトラックに関する情報読み込み
             for (int i = 1; i < json_ms.data.Length; i++)
             {
-                // �Ĕz�u
+                // 再配置
                 GameObject ic120_prefab = Resources.Load<GameObject>("Prefabs/ic120_prefVar");
                 GameObject ic120obj = (GameObject)UnityEngine.Object.Instantiate(ic120_prefab, json_ms.data[i].p, json_ms.data[i].q);
                 ic120obj.name = json_ms.data[i].name;
 
-                // ID��ێ�
+                // IDを保持
                 GlobalVariables.Dump_IDList.Add(json_ms.data[i].id);
-                // �I�u�W�F�N�g��ێ�
+                // オブジェクトを保持
                 GlobalVariables.Dump_ObjList.Add(ic120obj);
 
                 GlobalVariables.ic120Counter += 1;
@@ -342,9 +342,9 @@ namespace PWRISimulator
 
 
             //----------
-            // �J�����ēǂݍ���
+            // カメラ再読み込み
             //----------
-            // ���ݔz�u����Ă���J�������폜
+            // 現在配置されているカメラを削除
             List<Camera> cameras = new List<Camera>();
             cameras.AddRange(FindObjectsOfType<Camera>(true));
 
@@ -352,23 +352,23 @@ namespace PWRISimulator
             {
                 //Debug.Log(cameras[i].gameObject.transform.root.gameObject.name.Contains("Camera_"));
 
-                // �ǉ������J�����̂ݍ폜
+                // 追加したカメラのみ削除
                 if (cameras[i].gameObject.transform.root.gameObject.name.Contains("Camera_"))
                 {
                     UnityEngine.Object.Destroy(cameras[i].gameObject.transform.root.gameObject);
                 }
             }
 
-            // �J�����̃J�E���g���Z�b�g
+            // カメラのカウントリセット
             GlobalVariables.CameraCounter = 0;
 
 
-            // �J�����ʒu�ǂݍ���
+            // カメラ位置読み込み
             for (int i = 0; i < json_ms.camera.Length; i++)
             {
                 if (json_ms.camera[i].name.Contains("Camera_"))
                 {
-                    // �ǉ������J����
+                    // 追加したカメラ
                     var cameraObj = new cameraObj();
                     cameraObj.Spawn_Camera(json_ms.camera[i].p, json_ms.camera[i].q, Int32.Parse(json_ms.camera[i].id), SpawnObject.camera_path);
 
@@ -383,7 +383,7 @@ namespace PWRISimulator
                 }
                 else if (json_ms.camera[i].name.Contains("MainCameraStr"))
                 {
-                    // ���C���J����
+                    // メインカメラ
                     var obj = GameObject.Find(json_ms.camera[i].name);
                     if (obj != null)
                     {
@@ -394,18 +394,18 @@ namespace PWRISimulator
                 }
                 else
                 {
-                    // �d�@�̃J����
+                    // 重機のカメラ
                     GameObject obj = null;
                     if (json_ms.camera[i].name.Contains("zx200"))
                     {
-                        // �V���x���J�[
+                        // ショベルカー
                         var shovelCameraStr = shovelObj.transform.Find("base_link/body_link/CameraStr")
                             ?? shovelObj.transform.Find("base_link/track_link/CameraStr");
                         obj = shovelCameraStr != null ? shovelCameraStr.gameObject : null;
                     }
                     else
                     {
-                        // �_���v�g���b�N
+                        // ダンプトラック
                         for (int j = 0; j < GlobalVariables.Dump_ObjList.Count; j++)
                         {
                             if (GlobalVariables.Dump_ObjList[j].name == json_ms.camera[i].name)
@@ -431,7 +431,7 @@ namespace PWRISimulator
 
 
 
-            // �D�^�G���A�̃J�E���g�s��Ǎ�
+            // 泥濘エリアのカウント行列読込
             using (StreamReader sr = new StreamReader(Path.Combine(dirPath, "MudAreaMatrix")))
             {
                 string content = sr.ReadToEnd();
@@ -474,10 +474,10 @@ namespace PWRISimulator
             //}
 
 
-            // �J�E���g���Z�b�g
+            // カウントリセット
             GlobalVariables.SetupJointDumpCount = 0;
 
-            // �t���O��؂�ւ��ē���J�n
+            // フラグを切り替えて動作開始
             GlobalVariables.SetupJointFlag = true;
             GlobalVariables.SetupJointDumpFlag = true;
 
