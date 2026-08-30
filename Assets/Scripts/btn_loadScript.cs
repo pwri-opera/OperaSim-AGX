@@ -193,11 +193,19 @@ namespace PWRISimulator
 
 
             // 積載
-            StreamReader rd_ds = new StreamReader(Path.Combine(dirPath, "DumpSoil"));
-            string str_ds = rd_ds.ReadToEnd();
-            rd_ds.Close();
+            // DumpSoil は追加ダンプがある場合しか保存されないため、無ければ空データとして扱う (#126)
+            saveScript.SaveDumpSoil json_ds = new saveScript.SaveDumpSoil();
+            json_ds.data = new saveScript.TransDumpSoil[0];
 
-            saveScript.SaveDumpSoil json_ds = JsonUtility.FromJson<saveScript.SaveDumpSoil>(str_ds);
+            string dumpSoilPath = Path.Combine(dirPath, "DumpSoil");
+            if (File.Exists(dumpSoilPath))
+            {
+                StreamReader rd_ds = new StreamReader(dumpSoilPath);
+                string str_ds = rd_ds.ReadToEnd();
+                rd_ds.Close();
+
+                json_ds = JsonUtility.FromJson<saveScript.SaveDumpSoil>(str_ds);
+            }
 
             GlobalVariables.saveDumpSoil = json_ds;
 
