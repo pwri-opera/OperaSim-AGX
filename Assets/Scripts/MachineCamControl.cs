@@ -133,7 +133,7 @@ namespace PWRISimulator
             else
             {
                 UnityEngine.Debug.Log("Object Not NULL");
-                baseLocalX = obj.localPosition.x;
+                baseLocalX = GetNeutralLocalX(machineObj.name) ?? obj.localPosition.x;
             }
 
             var root = GetComponent<UIDocument>().rootVisualElement;
@@ -180,6 +180,36 @@ namespace PWRISimulator
             LeftRightSlider.UnregisterValueChangedCallback(LeftRightSliderOnValueChanged);
             LeftRightSlider.RegisterValueChangedCallback(LeftRightSliderOnValueChanged);
 
+        }
+
+        /// <summary>
+        /// CameraStr の基準 X をプレハブから取得する。
+        /// シーン上の localPosition.x は Update やロード時のカメラ位置復元で
+        /// スライダーのオフセットが加算済みのことがあり、そこから基準を取ると
+        /// 以後の可動域が加算分だけずれる (#127)
+        /// </summary>
+        private static float? GetNeutralLocalX(string machineName)
+        {
+            string prefabPath;
+            if (machineName.Contains("ic120"))
+            {
+                prefabPath = SpawnObject.ic120_path;
+            }
+            else if (Zx200ObjectUtility.IsZx200Name(machineName))
+            {
+                prefabPath = SpawnObject.zx200_path;
+            }
+            else
+            {
+                return null;
+            }
+
+            var prefab = Resources.Load<GameObject>(prefabPath);
+            var cameraStr = prefab != null
+                ? (prefab.transform.Find("base_link/body_link/CameraStr")
+                    ?? prefab.transform.Find("base_link/track_link/CameraStr"))
+                : null;
+            return cameraStr != null ? (float?)cameraStr.localPosition.x : null;
         }
 
         public void ClearCallBack()
