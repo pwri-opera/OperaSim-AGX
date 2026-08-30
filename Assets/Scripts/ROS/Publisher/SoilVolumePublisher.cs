@@ -46,7 +46,9 @@ namespace PWRISimulator.ROS
             topicName = $"/{MachineName()}{TopicPhrase()}";
             soilVolumeMsg = new();
             rosConnection = ROSConnection.GetOrCreateInstance();
-            rosConnection.RegisterPublisher<Float64Msg>(topicName);
+            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
+            rosConnection.RegisterPublisher<Float64Msg>(topicName, (int)Math.Max(10, Frequency()));
         }
 
         /// <summary>

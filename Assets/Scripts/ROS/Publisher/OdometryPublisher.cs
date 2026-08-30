@@ -73,7 +73,9 @@ namespace PWRISimulator.ROS
             odometryMsg.child_frame_id = $"{MachineName()}/base_link";
 
             rosConnection = ROSConnection.GetOrCreateInstance();
-            rosConnection.RegisterPublisher<OdometryMsg>(topicName);
+            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
+            rosConnection.RegisterPublisher<OdometryMsg>(topicName, (int)Math.Max(10, Frequency()));
         }
 
         /// <summary>

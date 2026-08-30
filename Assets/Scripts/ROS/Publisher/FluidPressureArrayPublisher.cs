@@ -71,8 +71,10 @@ namespace PWRISimulator.ROS
             }
 
             // register publisher
+            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
             rosConnection = ROSConnection.GetOrCreateInstance();
-            rosConnection.RegisterPublisher<FluidPressureArrayMsg>(topicName);
+            rosConnection.RegisterPublisher<FluidPressureArrayMsg>(topicName, (int)Math.Max(10, Frequency()));
         }
 
         /// <summary>
