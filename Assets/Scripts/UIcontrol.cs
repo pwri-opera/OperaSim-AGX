@@ -803,9 +803,14 @@ namespace PWRISimulator
                     gizmo.AddTarget(newTarget.transform);
                 }
 
-                var cam = newTarget.transform.Find("CameraStr/Camera");
-                if (subdisp != null && cam != null)
+                // カメラ切替で非アクティブになっていると描画されずプレビューが真っ黒のままになるため、
+                // 機体側と同様に点灯してから表示する (#150)
+                Transform camStr = newTarget.transform.Find("CameraStr");
+                Transform cam = camStr != null ? camStr.Find("Camera") : null;
+                if (subdisp != null && camStr != null && cam != null)
                 {
+                    camStr.gameObject.SetActive(true);
+                    cam.gameObject.SetActive(true);
                     subdisp.GetComponent<Subdisplay>().SetDisplay(cam.GetComponent<Camera>());
                 }
             }
