@@ -52,10 +52,13 @@ namespace PWRISimulator.ROS
         {
             SetClockMode(m_ClockMode);
             m_ROS = ROSConnection.GetOrCreateInstance();
-            m_ROS.RegisterPublisher<ClockMsg>("clock");
             // publish 周期を fixed step 数に換算する。fixed step (50 Hz) より細かい設定は毎ステップに丸まる
             m_StepInterval = Math.Max(1,
                 (int)Math.Round(1.0 / (Math.Max(m_PublishRateHz, 0.01) * Time.fixedDeltaTime)));
+            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+            // メッセージが捨てられるため、実効レートの 1 秒分を保持できる深さにする (#139)
+            int queueSize = Math.Max(10, (int)Math.Round(1.0 / (m_StepInterval * Time.fixedDeltaTime)));
+            m_ROS.RegisterPublisher<ClockMsg>("clock", queueSize);
         }
 
         void PublishMessage()
