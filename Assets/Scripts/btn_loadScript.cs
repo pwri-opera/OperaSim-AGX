@@ -279,6 +279,15 @@ namespace PWRISimulator
             Debug.Log("Dump_ObjList.Count: " + GlobalVariables.Dump_ObjList.Count);
 
 
+            // 保存データに名前が含まれるダンプだけを破棄対象にする。
+            // シーン埋め込みの ic120_0 は Dump_ObjList に入らず保存もされないため、
+            // 破棄すると再生成されず消えてしまう (#135)
+            var savedDumpNames = new HashSet<string>();
+            for (int i = 1; i < json_ms.data.Length; i++)
+            {
+                savedDumpNames.Add(json_ms.data[i].name);
+            }
+
             var dumpObjectsToDestroy = new HashSet<GameObject>();
             for (int i = 0; i < GlobalVariables.Dump_ObjList.Count; i++)
             {
@@ -289,7 +298,7 @@ namespace PWRISimulator
             foreach (var dumpInput in FindObjectsOfType<DumpTruckInput>(true))
             {
                 var dumpRoot = dumpInput.transform.root.gameObject;
-                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name))
+                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name) && savedDumpNames.Contains(dumpRoot.name))
                     dumpObjectsToDestroy.Add(dumpRoot);
             }
 
@@ -311,7 +320,7 @@ namespace PWRISimulator
             foreach (var dumpInput in FindObjectsOfType<DumpTruckInput>(true))
             {
                 var dumpRoot = dumpInput.transform.root.gameObject;
-                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name))
+                if (TerrainSaveUtility.IsSavedDumpTruckRootName(dumpRoot.name) && savedDumpNames.Contains(dumpRoot.name))
                 {
                     dumpRoot.SetActive(false);
                 }
