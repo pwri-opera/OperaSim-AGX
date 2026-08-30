@@ -209,6 +209,8 @@ namespace PWRISimulator
       var nativeManager = simulation.Native.getMaterialManager();
 
       // Mirrors ContactMaterialManager.Initialize(entry): create native, bind oriented friction, add explicit.
+      // GetInitialized initializes the clone in place and returns it (or null on failure),
+      // so using clone below is safe once initialized is non-null (#123).
       foreach ( var clone in m_clonedContactMaterials ) {
         var initialized = clone.GetInitialized<ContactMaterial>();
         if ( initialized == null )
