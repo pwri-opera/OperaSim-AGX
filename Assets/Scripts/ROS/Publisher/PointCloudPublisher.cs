@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using RosMessageTypes.Sensor;
 using Unity.Robotics.ROSTCPConnector;
@@ -31,8 +30,6 @@ namespace PWRISimulator.ROS
 
         PointCloudGenerator generator;
         ROSConnection rosConnection;
-        PointCloud2Msg msg;
-        byte[] dataBuffer = Array.Empty<byte>();
         double scheduleOrigin;
         long publishedCount;
 
@@ -48,15 +45,6 @@ namespace PWRISimulator.ROS
 
             rosConnection = ROSConnection.GetOrCreateInstance();
             rosConnection.RegisterPublisher<PointCloud2Msg>(topicName);
-
-            msg = new PointCloud2Msg
-            {
-                height = 1,
-                is_bigendian = false,
-                is_dense = true,
-                point_step = PointStep,
-                fields = Fields,
-            };
 
             scheduleOrigin = Time.fixedTimeAsDouble;
         }
@@ -81,8 +69,9 @@ namespace PWRISimulator.ROS
             int numPoints = pts.Length / 3;
             int byteSize = numPoints * PointStep;
 
-            if (dataBuffer.Length != byteSize)
-                dataBuffer = new byte[byteSize];
+            // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行うため、
+            // メッセージとデータバッファは使い回さず publish ごとに新規作成する (#138)
+            byte[] dataBuffer = new byte[byteSize];
 
             // Unity (FRU, left-handed) -> ROS (FLU, right-handed):
             // x_ros = z_u, y_ros = -x_u, z_ros = y_u
@@ -97,10 +86,18 @@ namespace PWRISimulator.ROS
                 floatView[3 * i + 2] = uy;
             }
 
-            msg.header = MessageUtil.ToHeadermessage(stampTime, frameId);
-            msg.width = (uint)numPoints;
-            msg.row_step = (uint)byteSize;
-            msg.data = dataBuffer;
+            var msg = new PointCloud2Msg
+            {
+                height = 1,
+                is_bigendian = false,
+                is_dense = true,
+                point_step = PointStep,
+                fields = Fields,
+                header = MessageUtil.ToHeadermessage(stampTime, frameId),
+                width = (uint)numPoints,
+                row_step = (uint)byteSize,
+                data = dataBuffer,
+            };
 
             rosConnection.Publish(topicName, msg);
         }

@@ -1,4 +1,5 @@
 import { getServerConfig, getRTCConfiguration } from "../../js/config.js";
+import { createDisplayStringArray } from "../../js/stats.js";
 import { RenderStreaming } from "../../module/renderstreaming.js";
 import { Signaling, WebSocketSignaling } from "../../module/signaling.js";
 
@@ -12,6 +13,10 @@ let streamingActive = false;
 const playerGrid = document.getElementById('playerGrid');
 const messageDiv = document.getElementById('message');
 messageDiv.style.display = 'none';
+
+const codecPreferences = document.getElementById('codecPreferences');
+const supportsSetCodecPreferences = window.RTCRtpTransceiver &&
+  'setCodecPreferences' in window.RTCRtpTransceiver.prototype;
 
 /** @type {HTMLInputElement[]} */
 const cameraCheckboxes = Array.from(document.querySelectorAll('input.cameraCheckbox'));
@@ -53,6 +58,7 @@ async function setup() {
     cb.addEventListener('change', onCheckboxChange);
   }
 
+  showCodecSelect();
   showPlayButton();
 }
 
@@ -79,12 +85,16 @@ async function onClickPlayButton() {
   playButton.style.display = 'none';
   streamingActive = true;
 
+  // ストリーミング開始後にコーデック選択を固定
+  codecPreferences.disabled = true;
+
   for (const cb of cameraCheckboxes) {
     if (cb.checked) {
       await startStream(cb.value, cb.dataset.label || cb.value);
     }
   }
   updateGridLayout();
+  startStatsPolling();
 }
 
 async function onCheckboxChange(evt) {
@@ -144,7 +154,16 @@ async function startStream(cameraValue, label) {
     }
   };
   renderstreaming.onDisconnect = () => {
-    stopStream(cameraValue).then(updateGridLayout);
+    stopStream(cameraValue).then(() => {
+      updateGridLayout();
+      if (streams.size === 0) {
+        stopStatsPolling();
+      }
+    });
+  };
+  // onGotOffer でコーデック選択を全ストリームに適用
+  renderstreaming.onGotOffer = () => {
+    applyCodecPreferences(renderstreaming);
   };
 
   /** @type {StreamEntry} */
@@ -181,11 +200,15 @@ function updateGridLayout() {
   if (n === 0) {
     playerGrid.style.gridTemplateColumns = '1fr';
     playerGrid.style.gridTemplateRows = '1fr';
-    if (streamingActive && !document.getElementById('playButton')) {
-      // No streams but session was started: let user re-add by clicking the button again
+    if (streamingActive) {
+      // No streams but session was started: let user re-add by clicking the button again.
+      // playButton is hidden (not removed) after play, so re-show it instead of
+      // testing for its absence (#120).
       showPlayButton();
       playButton.style.display = '';
       streamingActive = false;
+      codecPreferences.disabled = false;
+      stopStatsPolling();
     }
     return;
   }
@@ -193,4 +216,98 @@ function updateGridLayout() {
   const rows = Math.ceil(n / cols);
   playerGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   playerGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+}
+
+// ─── Codec selection ───────────────────────────────────────────────
+
+function showCodecSelect() {
+  if (!supportsSetCodecPreferences) {
+    messageDiv.style.display = 'block';
+    messageDiv.innerHTML = `Current Browser does not support <a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCRtpTransceiver/setCodecPreferences">RTCRtpTransceiver.setCodecPreferences</a>.`;
+    return;
+  }
+
+  const codecs = RTCRtpSender.getCapabilities('video').codecs;
+  codecs.forEach(codec => {
+    if (['video/red', 'video/ulpfec', 'video/rtx'].includes(codec.mimeType)) {
+      return;
+    }
+    const option = document.createElement('option');
+    option.value = (codec.mimeType + ' ' + (codec.sdpFmtpLine || '')).trim();
+    option.innerText = option.value;
+    codecPreferences.appendChild(option);
+  });
+  codecPreferences.disabled = false;
+}
+
+/**
+ * 選択中のコーデックを指定 RenderStreaming インスタンスの全 video transceiver に適用する。
+ * onGotOffer 発火時に各ストリームから呼ばれる。
+ */
+function applyCodecPreferences(rs) {
+  if (!supportsSetCodecPreferences) return;
+
+  const preferredCodec = codecPreferences.options[codecPreferences.selectedIndex];
+  if (!preferredCodec || preferredCodec.value === '') return;
+
+  const [mimeType, sdpFmtpLine] = preferredCodec.value.split(' ');
+  const { codecs } = RTCRtpSender.getCapabilities('video');
+  const selectedCodec = codecs.find(c => c.mimeType === mimeType && c.sdpFmtpLine === sdpFmtpLine);
+  if (!selectedCodec) return;
+
+  const transceivers = rs.getTransceivers();
+  if (transceivers && transceivers.length > 0) {
+    transceivers
+      .filter(t => t.receiver.track.kind === 'video')
+      .forEach(t => t.setCodecPreferences([selectedCodec]));
+  }
+}
+
+// ─── Statistics overlay ────────────────────────────────────────────
+
+/** @type {Map<string, RTCStatsReport>} 各ストリームの直近 stats (bitrate 計算用) */
+const lastStatsByCamera = new Map();
+/** @type {number} */
+let statsIntervalId = null;
+
+function startStatsPolling() {
+  if (statsIntervalId) return;
+  statsIntervalId = setInterval(pollStats, 1000);
+}
+
+function stopStatsPolling() {
+  if (statsIntervalId) {
+    clearInterval(statsIntervalId);
+    statsIntervalId = null;
+  }
+  lastStatsByCamera.clear();
+  messageDiv.style.display = 'none';
+  messageDiv.innerHTML = '';
+}
+
+async function pollStats() {
+  if (streams.size === 0) return;
+
+  const lines = [];
+  for (const [cameraValue, entry] of streams) {
+    try {
+      const stats = await entry.renderstreaming.getStats();
+      if (!stats) continue;
+
+      const last = lastStatsByCamera.get(cameraValue);
+      const array = createDisplayStringArray(stats, last);
+      if (array.length) {
+        lines.push(`[${entry.label}]`);
+        lines.push(...array);
+      }
+      lastStatsByCamera.set(cameraValue, stats);
+    } catch (e) {
+      // ストリーム停止中などは無視
+    }
+  }
+
+  if (lines.length) {
+    messageDiv.style.display = 'block';
+    messageDiv.innerHTML = lines.join('<br>');
+  }
 }

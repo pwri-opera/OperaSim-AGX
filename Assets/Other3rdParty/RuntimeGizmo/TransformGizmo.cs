@@ -875,6 +875,10 @@ namespace RuntimeGizmos
 						{
 							//Debug.Log("test");
 							//20250829 subdisp.GetComponent<Subdisplay>().SetDisplay(target.Find("Camera").gameObject.GetComponent<Camera>());
+							// カメラ切替で非アクティブになっていると描画されずプレビューが真っ黒のままになるため、
+							// 機体の分岐と同様に点灯してから表示する (#150)
+							target.Find("CameraStr").gameObject.SetActive(true);
+							target.Find("CameraStr/Camera").gameObject.SetActive(true);
 							subdisp.GetComponent<Subdisplay>().SetDisplay(target.Find("CameraStr/Camera").gameObject.GetComponent<Camera>());
 						}
 
