@@ -43617,7 +43617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ClockMode: 0
   m_LastSetClockMode: 0
-  m_PublishRateHz: 100
+  m_PublishRateHz: 60
 --- !u!1 &1309681129
 GameObject:
   m_ObjectHideFlags: 0
