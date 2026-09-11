@@ -691,7 +691,7 @@ namespace PWRISimulator
         }
 
 
-        IEnumerator LoadCoroutine(loadScript loadscript)
+        IEnumerator LoadCoroutine(loadScript loadscript, RuntimeGizmos.TransformGizmo gizmo, string selectedRootName)
         {
             Debug.Log("GlobalVariables.ConfirmWaitFlag: " + GlobalVariables.ConfirmWaitFlag);
             Debug.Log("completedFlag: " + loadscript.completedFlag);
@@ -710,12 +710,45 @@ namespace PWRISimulator
                 //root.Q<UnityEngine.UIElements.Label>("Message").text = "Load completed.";
 
                 loadscript.completedFlag = false;
+
+                // 旧オブジェクトの Destroy はフレーム末に処理されるため、
+                // 1 フレーム待ってから同名の新オブジェクトを選び直す
+                yield return null;
+                ReselectAfterLoad(gizmo, selectedRootName);
             }
         }
 
         void LoadClicked()
         {
             Debug.Log("LoadClicked!");
+
+            // ロードで選択中の対象が作り直されるため、名前を控えてロード後に選び直す (#125)
+            // gizmo は Main Camera と各機体プレハブに複数あり、カメラ切替で
+            // 非アクティブなことがあるため、includeInactive で探す (#134)
+            RuntimeGizmos.TransformGizmo gizmo = null;
+            foreach (var g in FindObjectsOfType<RuntimeGizmos.TransformGizmo>(true))
+            {
+                if (gizmo == null) gizmo = g;
+                if (g.mainTargetRoot != null)
+                {
+                    gizmo = g;
+                    break;
+                }
+            }
+            string selectedRootName = (gizmo != null && gizmo.mainTargetRoot != null)
+                ? gizmo.mainTargetRoot.gameObject.name : null;
+
+            // UI のクリックで gizmo の選択は外れていることがあるため、
+            // スライダーパネルが開いていればその機体を復元対象にする (#134)
+            if (selectedRootName == null)
+            {
+                var panel = FindObjectOfType<MachineCamControl>();
+                if (panel != null)
+                {
+                    selectedRootName = panel.gameObject.name.Replace("_ControlForMachineCamera", "");
+                }
+            }
+            Debug.Log("LoadClicked: selectedRootName=" + (selectedRootName ?? "(none)"));
 
             loadScript loadscript = null;
 
@@ -734,8 +767,76 @@ namespace PWRISimulator
                 loadscript.OnClick();
             }
 
-            // コルーチンの実行  
-            StartCoroutine(LoadCoroutine(loadscript));
+            // コルーチンの実行
+            StartCoroutine(LoadCoroutine(loadscript, gizmo, selectedRootName));
+        }
+
+        /// <summary>
+        /// ロード後に作り直された同名の対象を選び直し、プレビュー(Subdisplay)と
+        /// 機体カメラのスライダーを更新する (#125)
+        /// </summary>
+        void ReselectAfterLoad(RuntimeGizmos.TransformGizmo gizmo, string selectedRootName)
+        {
+            if (string.IsNullOrEmpty(selectedRootName))
+            {
+                Debug.Log("ReselectAfterLoad: skipped (no target name)");
+                return;
+            }
+
+            // 旧選択は破棄済みオブジェクトを指しているためクリアする。
+            // gizmo が見つからなくてもパネルとプレビューの復元は行う (#134)
+            if (gizmo != null)
+            {
+                gizmo.ClearTargets();
+            }
+
+            var newTarget = GameObject.Find(selectedRootName);
+            Debug.Log("ReselectAfterLoad: name=" + selectedRootName + ", found=" + (newTarget != null) + ", gizmo=" + (gizmo != null) + ", mode=" + GlobalVariables.ActionMode);
+            if (newTarget == null) return;
+
+            var subdisp = GameObject.Find("SubdisplayForSpawnCamera");
+
+            if (GlobalVariables.ActionMode == 1 && selectedRootName.Contains("Camera_"))
+            {
+                if (gizmo != null && gizmo.isActiveAndEnabled)
+                {
+                    gizmo.AddTarget(newTarget.transform);
+                }
+
+                // カメラ切替で非アクティブになっていると描画されずプレビューが真っ黒のままになるため、
+                // 機体側と同様に点灯してから表示する (#150)
+                Transform camStr = newTarget.transform.Find("CameraStr");
+                Transform cam = camStr != null ? camStr.Find("Camera") : null;
+                if (subdisp != null && camStr != null && cam != null)
+                {
+                    camStr.gameObject.SetActive(true);
+                    cam.gameObject.SetActive(true);
+                    subdisp.GetComponent<Subdisplay>().SetDisplay(cam.GetComponent<Camera>());
+                }
+            }
+            else if (GlobalVariables.ActionMode == 0 &&
+                     (selectedRootName.Contains("ic120_") || Zx200ObjectUtility.IsZx200Name(selectedRootName)))
+            {
+                if (gizmo != null && gizmo.isActiveAndEnabled)
+                {
+                    gizmo.AddTarget(newTarget.transform);
+                }
+
+                Transform cameraStr = newTarget.transform.Find("base_link/body_link/CameraStr")
+                    ?? newTarget.transform.Find("base_link/track_link/CameraStr");
+                Transform cam = cameraStr != null ? cameraStr.Find("Camera") : null;
+                if (subdisp != null && cameraStr != null && cam != null)
+                {
+                    cameraStr.gameObject.SetActive(true);
+                    cam.gameObject.SetActive(true);
+                    subdisp.GetComponent<Subdisplay>().SetDisplay(cam.GetComponent<Camera>());
+                }
+
+                // スライダーのパネルを作り直した機体で初期化し直す
+                var machineCamCont = new MachineObjCamCont();
+                machineCamCont.machineDeselected();
+                machineCamCont.machineSelected(selectedRootName);
+            }
         }
 
 

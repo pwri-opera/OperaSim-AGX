@@ -8,6 +8,7 @@ namespace PWRISimulator
     /// Time.timeScale による速度倍率設定が実時間で確保できているかを検証する補助コンポーネント。
     /// ratio は直近 ratioWindowSec 秒の移動窓で計算する(#75)。
     /// </summary>
+    [DisallowMultipleComponent]
     public class RealtimeFidelityProbe : MonoBehaviour
     {
         [SerializeField, Min(0.1f)] float logIntervalSec = 1.0f;

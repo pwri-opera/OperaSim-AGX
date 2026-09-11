@@ -20,7 +20,7 @@ using Debug = UnityEngine.Debug;
 namespace PWRISimulator
 {
     /// <summary>
-    /// �n�`�̃Z�[�u����
+    /// 地形のセーブ処理
     /// </summary>
     public class saveScript : MonoBehaviour
     {
@@ -71,7 +71,7 @@ namespace PWRISimulator
             public double z;
         }
 
-        // �_���v�g���b�N�̐ύ�
+        // ダンプトラックの積載
         [System.Serializable]
         public class SaveDumpSoil
         {
@@ -85,7 +85,7 @@ namespace PWRISimulator
             public double mass;
         }
 
-        // �d�@�̎p��(���ԂƃX�R�A���ǉ�)
+        // 重機の姿勢(時間とスコアも追加)
         [System.Serializable]
         public class SaveMachines
         {
@@ -140,7 +140,7 @@ namespace PWRISimulator
 
             int i = 0;
 
-            // �e���C���f�[�^���擾
+            // テレインデータを取得
             foreach (Terrain _terrain in Terrain.activeTerrains)
             {
                 TerrainData terrainData = _terrain.terrainData;
@@ -164,7 +164,7 @@ namespace PWRISimulator
             Debug.Log("SaveScript COMPLETED IN " + ((Time.realtimeSinceStartup - time)) + " " + json.Length);
 
 
-            // ���������t���O
+            // 処理完了フラグ
             completedFlag = true;
         }
 
@@ -238,13 +238,13 @@ namespace PWRISimulator
         }
 
 
-        // �{�^���������ꂽ�ꍇ�ɌĂяo��
+        // ボタンが押された場合に呼び出し
         public void OnClick()
         {
-            // ���������t���O
+            // 処理完了フラグ
             completedFlag = false;
 
-            // �ۑ��f�B���N�g��
+            // 保存ディレクトリ
             var dirPath = "";
             if (GlobalVariables.ActionMode == 3)
             {
@@ -255,7 +255,7 @@ namespace PWRISimulator
                 dirPath = Path.Combine(GlobalVariables.BACKUP_FOLDER, setDirName);
             }
 
-            // �ۑ��f�B���N�g�����Ȃ���΍쐬
+            // 保存ディレクトリがなければ作成
             if (!Directory.Exists(dirPath))
             {
                 Directory.CreateDirectory(dirPath);
@@ -263,12 +263,12 @@ namespace PWRISimulator
 
 
 
-            // ���ԂƃX�R�A��ێ�
+            // 時間とスコアを保持
             var myTime = CountdownTimer.timeRemaining;
             var myScore = GlobalVariables.score;
 
 
-            // �n�`���q���f�����擾
+            // 地形粒子モデルを取得
             if (terrain == null)
             {
                 terrain = FindObjectOfType<DeformableTerrain>();
@@ -287,7 +287,7 @@ namespace PWRISimulator
                     //Debug.Log("Index: " + i);
                     save.data[i] = new Particles();
 
-                    // agx::Physics::GranularBodyPtr ����ʒu��a���擾
+                    // agx::Physics::GranularBodyPtr から位置や径を取得
                     var pos = soilParticles.at(i).getPosition();
                     //Debug.Log("Position: " + pos[0] + ", " + pos[1] + ", " + pos[2]);
                     save.data[i].position = new agxVec3();
@@ -312,7 +312,7 @@ namespace PWRISimulator
                 }
             }
 
-            // �n�`���q���f����ۑ�
+            // 地形粒子モデルを保存
             if (save.data != null)
             {
                 string json = JsonUtility.ToJson(save, true);
@@ -323,23 +323,23 @@ namespace PWRISimulator
             }
 
 
-            // �n�`��ۑ�
+            // 地形を保存
             SerializeTerrain(Path.Combine(dirPath, fileName));
 
 
-            // �d�@�̎p���ێ�
+            // 重機の姿勢保持
             SaveMachines sm = new SaveMachines();
             int num = (int)GlobalVariables.Dump_ObjList.Count + 1;
             sm.data = new objProperties[num];
             sm.data[0] = new objProperties();
 
 
-            // ���ԂƃX�R�A
+            // 時間とスコア
             sm.time = myTime;
             sm.score = myScore;
 
 
-            // �J�����z�u�ۑ�
+            // カメラ配置保存
             List<Camera> cameras = new List<Camera>();
             cameras.AddRange(FindObjectsOfType<Camera>(true));
 
@@ -398,7 +398,7 @@ namespace PWRISimulator
             }
 
 
-            // �V���x���J�[�̎p���Ɣz�u���擾
+            // ショベルカーの姿勢と配置を取得
             GameObject shovelObj = Zx200ObjectUtility.FindZx200Object();
 
             var shovelInput = shovelObj.GetComponent<ExcavatorInput>();
@@ -424,7 +424,7 @@ namespace PWRISimulator
             Debug.Log("Dump_ObjList.Count: " + GlobalVariables.Dump_ObjList.Count);
 
 
-            // �_���v�g���b�N�̎p���Ɣz�u���擾
+            // ダンプトラックの姿勢と配置を取得
             if ((int)GlobalVariables.Dump_ObjList.Count > 0)
             {
                 SaveDumpSoil sd = new SaveDumpSoil();
@@ -461,7 +461,7 @@ namespace PWRISimulator
                     sm.data[i + 1].joint.dump_joint = dumpJoint.dump_joint.CurrentPosition;
                 }
 
-                // �_���v�g���b�N�̐ύڕۑ�
+                // ダンプトラックの積載保存
                 if (sd.data != null)
                 {
                     string json_sd = JsonUtility.ToJson(sd, true);
@@ -473,7 +473,7 @@ namespace PWRISimulator
             }
 
 
-            // �d�@�̎p����ۑ�
+            // 重機の姿勢を保存
             if (sm.data != null)
             {
                 string json_sm = JsonUtility.ToJson(sm, true);
@@ -483,7 +483,7 @@ namespace PWRISimulator
                 }
             }
 
-            // �D�^�G���A�̃J�E���g�s���ۑ�
+            // 泥濘エリアのカウント行列を保存
             using (StreamWriter sw = new StreamWriter(Path.Combine(dirPath, "MudAreaMatrix")))
             {
                 //sw.Write(GlobalVariables.countMat);
