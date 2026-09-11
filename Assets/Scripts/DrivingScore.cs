@@ -68,7 +68,7 @@ namespace PWRISimulator
                 if (Math.Abs(volScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)volScore);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.P02, Point = (int)volScore });
 
                     // スコア積算リセット
                     volScore = volScore - (int)volScore;
@@ -106,7 +106,7 @@ namespace PWRISimulator
                     if (Math.Abs(mudScore) > 0.5)
                     {
                         // スコア反映
-                        GlobalVariables.incrementScore((int)mudScore);
+                        GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.M04, Point = (int)mudScore });
 
                         // スコア積算リセット
                         mudScore = mudScore - (int)mudScore;
@@ -129,7 +129,7 @@ namespace PWRISimulator
             if ((int)stayTime >= 1)
             {
                 // 1秒以上経過で減算
-                GlobalVariables.incrementScore((int)(GlobalVariables.OffTruckCoef * (int)stayTime));
+                GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.M03, Point = (int)(GlobalVariables.OffTruckCoef * (int)stayTime) });
                 // スコア計算した分は経過時間から引いておく
                 stayTime = stayTime - (int)stayTime;
             }
@@ -161,7 +161,7 @@ namespace PWRISimulator
                     // 他の重機との接触
 
                     // スコア計算
-                    GlobalVariables.incrementScore((int)GlobalVariables.CollisionCoef);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.M02, Point = (int)GlobalVariables.CollisionCoef });
 
                     sepTime = Time.time;
                 }

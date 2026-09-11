@@ -67,11 +67,12 @@ namespace PWRISimulator.ROS
 
         /// <summary>
         /// inputValueDelay及びUnityがカットしたGameTimeに対応して、UnityのGameTimeの時点をリアルタイム時点へ変換する。
+        /// Time.timeScaleが1以外の場合も、フレーム開始時点のアンカーと現在のtimeScaleに基づいてスケール換算する。
         /// </summary>
         /// <param name="gameTimeOrFixedTime">UnityのGameTimeまたはFixedTime</param>
         public double ConvertUnityTimeToRealTime(double gameTimeOrFixedTime)
         {
-            return gameTimeOrFixedTime - inputValueDelay + skippedGameTime;
+            return realTimeAtFrame + (gameTimeOrFixedTime - gameTimeAtFrame) / conversionTimeScale - inputValueDelay;
         }
 
         #region Private
@@ -86,8 +87,18 @@ namespace PWRISimulator.ROS
         double realtimeAtStartOfFramePrev = 0.0;
         bool realtimeAtStartOfFrameIsUpToDate = false;
 
-        double skippedGameTime = 0.0; // パフォーマンスなどのせいでUnityがカットしたGameTime（とFixedTime）。 
+        double skippedGameTime = 0.0; // パフォーマンスなどのせいでUnityがカットしたGameTime（とFixedTime）。
         double skippedGameTimePrev = 0.0;
+
+        // ConvertUnityTimeToRealTime用に各Frameの終わりにキャッシュするアンカー。FixedUpdate中のTime.time/unscaledTimeは
+        // fixed系の値を返すため、呼び出し時点ではなくFrameタイムラインで測った値を使う。
+        double realTimeAtFrame = 0.0;      // Frame開始時点のリアルタイム（unscaledTime - unscaledTimeCorrection）
+        double gameTimeAtFrame = 0.0;      // Frame開始時点のGameTime（Time.timeAsDouble）
+        // 変換と累積に使うtimeScale。Time.deltaTimeはFrame開始時点のtimeScaleで計算されるため、他のスクリプトが
+        // Frame途中でtimeScaleを変更しても収支がずれないように、Frame開始時（実行順-32000）に取得する。
+        // Time.timeScaleが0のときは直前の値を維持。
+        double conversionTimeScale = 1.0;
+        double realPacedGameTime = 0.0;    // GameTimeの進行を実時間の秒数に換算した累積（Σ deltaTime/timeScale）
 
         bool resyncRequested = true;  // unscaledTimeCorrectionをまた計算して更新したいかどうか
         double unscaledTimeCorrection = 0.0; //　Time.unscaledTimeとrealTimeWatchの差
@@ -122,13 +133,21 @@ namespace PWRISimulator.ROS
                 watchStarted = true;
                 realtimeAtStartOfFrame = 0.0;
                 realtimeAtStartOfFrameIsUpToDate = true;
+                CaptureFrameStartTimeScale();
             }
             else if (!realtimeAtStartOfFrameIsUpToDate)
             {
                 realtimeAtStartOfFramePrev = realtimeAtStartOfFrame;
                 realtimeAtStartOfFrame = realTimeWatch.Elapsed.TotalSeconds;
                 realtimeAtStartOfFrameIsUpToDate = true;
+                CaptureFrameStartTimeScale();
             }
+        }
+
+        void CaptureFrameStartTimeScale()
+        {
+            if (Time.timeScale > 0.0f)
+                conversionTimeScale = Time.timeScale;
         }
 
         void LateUpdate()
@@ -156,9 +175,20 @@ namespace PWRISimulator.ROS
                 if (resyncRequested)
                 {
                     unscaledTimeCorrection = Time.unscaledTimeAsDouble - RealTimeAtStartOfFrame;
+                    realPacedGameTime = Time.unscaledTimeAsDouble - unscaledTimeCorrection; // resync時点でskipped=0
                     resyncRequested = false;
                 }
-                skippedGameTime = (Time.unscaledTimeAsDouble - unscaledTimeCorrection) - Time.timeAsDouble;
+                else
+                {
+                    realPacedGameTime += Time.deltaTime / conversionTimeScale;
+                }
+
+                realTimeAtFrame = Time.unscaledTimeAsDouble - unscaledTimeCorrection;
+                gameTimeAtFrame = Time.timeAsDouble;
+
+                // timeScale=1のときは従来の (unscaledTime - correction) - time と同様に、クランプで
+                // カットされた時間の累積として単調増加する（resync時点を0とする）
+                skippedGameTime = realTimeAtFrame - realPacedGameTime;
             }
             
             if (Math.Abs(skippedGameTime - skippedGameTimePrev) >= 1e-04)

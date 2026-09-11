@@ -131,11 +131,12 @@ namespace PWRISimulator
 
                     if (GlobalVariables.ActionMode == 0) {
 
-                        if (GlobalVariables.ic120Counter < GlobalVariables.MaxDunpTracks)
+                        // シーンに埋め込まれた ic120_0 はカウンタに含まれないため、
+                        // 存在するオブジェクトの空き番号で上限を判定する (#116)
+                        int objID = findSpawnObjID("ic120_", GlobalVariables.MaxDunpTracks);
+
+                        if (objID >= 0)
                         {
-
-                            int objID = findSpawnObjID("ic120_", GlobalVariables.ic120Counter, GlobalVariables.MaxDunpTracks);
-
                             ic120obj.Spawn_ic120(mousePosition, Quaternion.identity, objID, ic120_path);
                             GlobalVariables.ic120Counter = GlobalVariables.ic120Counter + 1;
                             //GameObject.Find(ic120_pref.name + "/base_link/track_link").SetActive(false);
@@ -157,9 +158,10 @@ namespace PWRISimulator
                     }
                     else if (GlobalVariables.ActionMode == 1) {
 
-                        if (GlobalVariables.CameraCounter < GlobalVariables.MaxCameras)
+                        int objID = findSpawnObjID("Camera_", GlobalVariables.MaxCameras);
+
+                        if (objID >= 0)
                         {
-                            int objID = findSpawnObjID("Camera_", GlobalVariables.CameraCounter, GlobalVariables.MaxCameras);
                             cameraObj.Spawn_Camera(mousePosition, Quaternion.identity, objID, camera_path);
                             GlobalVariables.CameraCounter = GlobalVariables.CameraCounter + 1;
                             Debug.Log("Camera Spawn");
@@ -195,19 +197,20 @@ namespace PWRISimulator
 
         }
 
-        int findSpawnObjID(String ObjeName, int currentNum, int maxNum)
+        /// <summary>
+        /// ObjeName + 番号 (0 〜 maxNum-1) のうち、シーンに存在しない最小の番号を返す。
+        /// すべて使われていれば -1 を返す。
+        /// </summary>
+        int findSpawnObjID(String ObjeName, int maxNum)
         {
-            int id = 0;
-
             for (int i = 0; i < maxNum; i++)
             {
                 GameObject obj = GameObject.Find(ObjeName + i.ToString());
                 if (obj == null) {
-                    id = i;
-                    break;
+                    return i;
                 }
             }
-            return id;
+            return -1;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Sensor;
@@ -33,7 +32,11 @@ namespace PWRISimulator.ROS
 
         [SerializeField]uint frequency = 60;
         [SerializeField]string frameId = "";
-        
+
+        double publishPeriod;
+        double scheduleOrigin;
+        long publishedCount;
+
         void Start()
         {
             if (upperBody == null)
@@ -48,18 +51,40 @@ namespace PWRISimulator.ROS
                 return;
             }
 
-            StartCoroutine(UpdateAndPublishMessage());
+            RegisterTopic();
+            publishPeriod = 1.0 / Math.Max(1, frequency);
+            scheduleOrigin = Time.fixedTimeAsDouble;
         }
 
-        public IEnumerator UpdateAndPublishMessage()
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)。
+        // 発火時刻は scheduleOrigin + n×period の均一グリッドで、stamp もグリッド時刻を使う。
+        // fixed step (20ms) より細かい周波数では1ステップに複数回 publish される(データは直近 step の状態)
+        void FixedUpdate()
         {
-            RegisterTopic();
-            while(true)
+            if (rosConnection == null || publishPeriod <= 0)
+                return;
+            double now = Time.fixedTimeAsDouble;
+            while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, frequency));
                 DoUpdate();
-                PublishMessage();
+                PublishMessage(CreateSnapshot(scheduleOrigin + publishedCount * publishPeriod));
+                publishedCount++;
             }
+        }
+
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの imuMsg をそのまま渡すと、送信前に次の publish で内容が上書きされ、
+        // 同一ステップ内の連続 publish で stamp が重複・欠落する。複製を渡す (#138)。
+        // orientation などは DoUpdate が毎回新しいインスタンスを代入するため参照共有でよい
+        ImuMsg CreateSnapshot(double stampTime)
+        {
+            return new ImuMsg
+            {
+                header = MessageUtil.ToHeadermessage(stampTime, frameId),
+                orientation = imuMsg.orientation,
+                angular_velocity = imuMsg.angular_velocity,
+                linear_acceleration = imuMsg.linear_acceleration,
+            };
         }
 
         void RegisterTopic()
@@ -68,7 +93,9 @@ namespace PWRISimulator.ROS
             imuMsg = new();
 
             rosConnection = ROSConnection.GetOrCreateInstance();
-            rosConnection.RegisterPublisher<ImuMsg>(topicName);
+            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
+            rosConnection.RegisterPublisher<ImuMsg>(topicName, Math.Max(10, (int)frequency));
         }
 
         void DoUpdate()
@@ -89,9 +116,9 @@ namespace PWRISimulator.ROS
         {
             return "/upper_body_rot";
         }
-        void PublishMessage()
+        void PublishMessage(ImuMsg msg)
         {
-            rosConnection.Publish(topicName, imuMsg);
+            rosConnection.Publish(topicName, msg);
         }
     }
 }

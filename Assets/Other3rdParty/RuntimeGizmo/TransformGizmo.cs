@@ -875,6 +875,10 @@ namespace RuntimeGizmos
 						{
 							//Debug.Log("test");
 							//20250829 subdisp.GetComponent<Subdisplay>().SetDisplay(target.Find("Camera").gameObject.GetComponent<Camera>());
+							// カメラ切替で非アクティブになっていると描画されずプレビューが真っ黒のままになるため、
+							// 機体の分岐と同様に点灯してから表示する (#150)
+							target.Find("CameraStr").gameObject.SetActive(true);
+							target.Find("CameraStr/Camera").gameObject.SetActive(true);
 							subdisp.GetComponent<Subdisplay>().SetDisplay(target.Find("CameraStr/Camera").gameObject.GetComponent<Camera>());
 						}
 
@@ -903,9 +907,26 @@ namespace RuntimeGizmos
 						var subdisp = GameObject.Find("SubdisplayForSpawnCamera");
 						if (subdisp != null)
 						{
-							target.Find("base_link/track_link/CameraStr").gameObject.GetComponent<Camera>().gameObject.SetActive(true);
-							target.Find("base_link/track_link/CameraStr/Camera").gameObject.GetComponent<Camera>().gameObject.SetActive(true);
-							subdisp.GetComponent<Subdisplay>().SetDisplay(target.Find("base_link/track_link/CameraStr/Camera").gameObject.GetComponent<Camera>());
+							Transform obj = target.Find("base_link/body_link/CameraStr") ?? target.Find("base_link/track_link/CameraStr");
+							if (obj != null)
+							{
+								Camera cameraComponent = obj.gameObject.GetComponent<Camera>();
+								if (cameraComponent != null)
+								{
+									cameraComponent.gameObject.SetActive(true);
+								}
+
+								Transform objSub = obj.Find("Camera");
+								if (objSub != null)
+								{
+									Camera subCameraComponent = objSub.gameObject.GetComponent<Camera>();
+									if (subCameraComponent != null)
+									{
+										subCameraComponent.gameObject.SetActive(true);
+										subdisp.GetComponent<Subdisplay>().SetDisplay(subCameraComponent);
+									}
+								}	
+							}
 						}
 
 						UnityEngine.Debug.Log("********************************************");

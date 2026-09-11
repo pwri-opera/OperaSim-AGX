@@ -31,7 +31,7 @@ namespace PWRISimulator
             if ((int)stayTime >= 1)
             {
                 // 1秒以上経過で減算
-                GlobalVariables.incrementScore((int)(GlobalVariables.OffTruckCoef * (int)stayTime));
+                GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.M03, Point = (int)(GlobalVariables.OffTruckCoef * (int)stayTime) });
                 // スコア計算した分は経過時間から引いておく
                 stayTime = stayTime - (int)stayTime;
             }

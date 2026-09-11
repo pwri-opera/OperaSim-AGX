@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6671796981414900255}
   - component: {fileID: -4736589532873420603}
-  - component: {fileID: 526947412847558570}
-  - component: {fileID: 8050173523091345179}
   m_Layer: 0
   m_Name: ObjectTransRot
   m_TagString: Untagged
@@ -50,27 +48,3 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 6a886f05f0c1b5248a4535d40c145c00, type: 3}
   m_SortingOrder: 0
---- !u!114 &526947412847558570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 381044771569677435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fd5efcdaa9c8f44c973ca7cad030eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8050173523091345179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 381044771569677435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f526cfd91ad30442859881491c24efa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

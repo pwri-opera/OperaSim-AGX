@@ -672,7 +672,7 @@ namespace PWRISimulator
                 if (Math.Abs(excScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)excScore);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.P01, Point = (int)excScore });
 
                     // スコア積算リセット
                     excScore = excScore - (int)excScore;
@@ -713,7 +713,7 @@ namespace PWRISimulator
                 {
                     // スコア反映
                     int addedPoints = (int)dmpScore;
-                    GlobalVariables.incrementScore(addedPoints);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.P03, Point = addedPoints });
                     pendingUnloadDiagnosticPoints += addedPoints;
 
                     // 1点未満の端数は次回の体積増加へ繰り越す。
@@ -740,7 +740,7 @@ namespace PWRISimulator
                 if (Math.Abs(sumScore) >= 1.0)
                 {
                     // スコア反映
-                    GlobalVariables.incrementScore((int)sumScore);
+                    GlobalVariables.RegisterScoreEvent(new GlobalVariables.ScoreEvent { Id = GlobalVariables.ScoreEventId.M01, Point = (int)sumScore });
 
                     // スコア積算リセット
                     sumScore = sumScore - (int)sumScore;

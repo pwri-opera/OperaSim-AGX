@@ -305,7 +305,7 @@ namespace PWRISimulator.ROS
                         break;
                     case ConstractionMovementControlType.TwistCommand:
                         joints.leftSprocket.controlType = ControlType.Speed;
-                        joints.leftSprocket.controlType = ControlType.Speed;
+                        joints.rightSprocket.controlType = ControlType.Speed;
 
                         if (joints.activateDeadTime)
                         {
@@ -328,7 +328,7 @@ namespace PWRISimulator.ROS
                         break;
                     case ConstractionMovementControlType.VolumeCommand:
                         joints.leftSprocket.controlType = ControlType.Speed;
-                        joints.leftSprocket.controlType = ControlType.Speed;
+                        joints.rightSprocket.controlType = ControlType.Speed;
 
                         if (joints.activateDeadTime)
                         {
@@ -338,8 +338,8 @@ namespace PWRISimulator.ROS
                                     GetJointValue(cmdVel.effort, TURN_VOLUME, _volumeIndexMap, out double turnValue))
                                 {
                                     volumeCommandConvertor.SetCommand(forwardValue, turnValue);
-                                    joints.leftSprocket.controlValue = twistCommandConvertor.sprocketSpeed_L;
-                                    joints.rightSprocket.controlValue = twistCommandConvertor.sprocketSpeed_R;
+                                    joints.leftSprocket.controlValue = volumeCommandConvertor.twistCommandConvertor.sprocketSpeed_L;
+                                    joints.rightSprocket.controlValue = volumeCommandConvertor.twistCommandConvertor.sprocketSpeed_R;
 
                                 }
                             }

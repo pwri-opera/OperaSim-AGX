@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
+using RosMessageTypes.Geometry;
 using RosMessageTypes.Nav;
 using System;
 
@@ -16,21 +16,53 @@ namespace PWRISimulator.ROS
         private ROSConnection rosConnection;
         private string topicName;
         protected OdometryMsg odometryMsg;
+        private double publishPeriod;
+        private double scheduleOrigin;
+        private long publishedCount;
 
         void Start()
         {
-            StartCoroutine(UpdateAndPublishMessage());
+            RegisterTopic();
+            publishPeriod = 1.0 / Math.Max(1, Frequency());
+            scheduleOrigin = Time.fixedTimeAsDouble;
         }
 
-        public IEnumerator UpdateAndPublishMessage()
+        // sim-time 定義の周波数を保つため FixedUpdate 起点で publish する(#56)。
+        // 発火時刻は scheduleOrigin + n×period の均一グリッドで、stamp もグリッド時刻を使う。
+        // fixed step (20ms) より細かい周波数では1ステップに複数回 publish される(データは直近 step の状態)
+        void FixedUpdate()
         {
-            RegisterTopic();
-            while(true)
+            if (rosConnection == null || publishPeriod <= 0)
+                return;
+            double now = Time.fixedTimeAsDouble;
+            while (scheduleOrigin + publishedCount * publishPeriod <= now)
             {
-                yield return new WaitForSecondsRealtime(1.0f / Math.Max(1, Frequency()));
                 DoUpdate();
-                PublishMessage();
+                PublishMessage(CreateSnapshot(scheduleOrigin + publishedCount * publishPeriod));
+                publishedCount++;
             }
+        }
+
+        // Publish はメッセージ参照をキューに積むだけで、直列化は送信スレッドが後から行う。
+        // 使い回しの odometryMsg をそのまま渡すと、送信前に次の publish で内容が上書きされ、
+        // 同一ステップ内の連続 publish で stamp が重複・欠落する。
+        // 派生クラスが odometryMsg に odometry を累積するため、作り直しではなく複製を渡す (#138)
+        OdometryMsg CreateSnapshot(double stampTime)
+        {
+            var src = odometryMsg;
+            return new OdometryMsg(
+                header: MessageUtil.ToHeadermessage(stampTime, src.header.frame_id),
+                child_frame_id: src.child_frame_id,
+                pose: new PoseWithCovarianceMsg(
+                    new PoseMsg(
+                        new PointMsg(src.pose.pose.position.x, src.pose.pose.position.y, src.pose.pose.position.z),
+                        new QuaternionMsg(src.pose.pose.orientation.x, src.pose.pose.orientation.y, src.pose.pose.orientation.z, src.pose.pose.orientation.w)),
+                    (double[])src.pose.covariance.Clone()),
+                twist: new TwistWithCovarianceMsg(
+                    new TwistMsg(
+                        new Vector3Msg(src.twist.twist.linear.x, src.twist.twist.linear.y, src.twist.twist.linear.z),
+                        new Vector3Msg(src.twist.twist.angular.x, src.twist.twist.angular.y, src.twist.twist.angular.z)),
+                    (double[])src.twist.covariance.Clone()));
         }
 
         void RegisterTopic()
@@ -41,7 +73,9 @@ namespace PWRISimulator.ROS
             odometryMsg.child_frame_id = $"{MachineName()}/base_link";
 
             rosConnection = ROSConnection.GetOrCreateInstance();
-            rosConnection.RegisterPublisher<OdometryMsg>(topicName);
+            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
+            rosConnection.RegisterPublisher<OdometryMsg>(topicName, (int)Math.Max(10, Frequency()));
         }
 
         /// <summary>
@@ -57,9 +91,9 @@ namespace PWRISimulator.ROS
 
         /// <returns>更新周期(FPS)</returns>
         abstract protected uint Frequency();
-        void PublishMessage()
+        void PublishMessage(OdometryMsg msg)
         {
-            rosConnection.Publish(topicName, odometryMsg);
+            rosConnection.Publish(topicName, msg);
         }
     }
 }
