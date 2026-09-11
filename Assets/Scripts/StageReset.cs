@@ -154,6 +154,24 @@ namespace PWRISimulator
                 // ハイトマップのリセット
                 terrain.ResetHeights();
 
+                // Reset dump terrain (issue #59: dump terrain isolation)
+                var dumpDeformable = TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump);
+                if (dumpDeformable != null)
+                {
+                    var dumpSoilSim = dumpDeformable.Native?.getSoilSimulationInterface();
+                    if (dumpSoilSim != null)
+                    {
+                        var dumpParticles = dumpSoilSim.getSoilParticles();
+                        for (int i = (int)dumpParticles.size() - 1; i >= 0; i--)
+                        {
+                            var particle = dumpParticles.at((uint)i);
+                            dumpSoilSim.removeSoilParticle(particle);
+                            particle.ReturnToPool();
+                        }
+                    }
+                    dumpDeformable.ResetHeights();
+                }
+
                 // 地形スコアリングのリセット
                 TerrainScore.Reset();
 

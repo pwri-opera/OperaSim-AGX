@@ -271,6 +271,12 @@ namespace PWRISimulator
             // 地形粒子モデルを取得
             if (terrain == null)
             {
+                // Prefer the excavation terrain for soil particle save (issue #59:
+                // dump terrain is isolated; excavation particles are the save target).
+                terrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Excavation);
+            }
+            if (terrain == null)
+            {
                 terrain = FindObjectOfType<DeformableTerrain>();
             }
 

@@ -289,7 +289,17 @@ namespace PWRISimulator
             // 自動的にComponentを取得：
 
             if (terrain == null)
+            {
+                // Prefer the dump-role terrain so dump particles are isolated
+                // from the excavation terrain (issue #59).
+                terrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump);
+            }
+            if (terrain == null)
+            {
+                // Fallback: use any DeformableTerrain (backward compatibility
+                // for scenes without a dedicated dump terrain).
                 terrain = FindObjectOfType<DeformableTerrain>();
+            }
 
             if (containerBody == null)
                 containerBody = GetComponentInParent<RigidBody>();

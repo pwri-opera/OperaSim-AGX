@@ -2007,6 +2007,8 @@ GameObject:
   - component: {fileID: 55944580}
   - component: {fileID: 55944579}
   - component: {fileID: 55944586}
+  - component: {fileID: 55944587}
+  - component: {fileID: 55944588}
   m_Layer: 0
   m_Name: Terrain_merge
   m_TagString: Untagged
@@ -2166,6 +2168,32 @@ MonoBehaviour:
   - <PropagateToChildren>k__BackingField: 0
     <ForceContactUpdate>k__BackingField: 0
     <Tag>k__BackingField: TerrainHeightField
+--- !u!114 &55944587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55944578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548050be26a14d6f9d9d1928840bd7e6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  dumpAreaCenter: {x: 188, y: 0, z: 140}
+--- !u!114 &55944588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55944578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffaf5e87cd4412eb7f93d40ef8af64e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  role: 0
 --- !u!1 &58382884
 GameObject:
   m_ObjectHideFlags: 0
