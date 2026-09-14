@@ -33,6 +33,12 @@ namespace PWRISimulator
             var factory = mainTerrain.gameObject.AddComponent<DumpTerrainFactory>();
             factory.mainTerrain = mainTerrain;
             factory.dumpAreaCenter = dumpAreaCenter;
+
+            // AddComponent triggers Awake() synchronously before the fields above
+            // are assigned, so DumpTerrainFactory.Awake() sees mainTerrain == null
+            // and returns early. Call CreateDumpTerrain() now that fields are set.
+            if (TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump) == null)
+                factory.CreateDumpTerrain();
         }
     }
 }

@@ -174,6 +174,14 @@ namespace PWRISimulator
             // Create the dump terrain before Simulation and DumpSoil initialize.
             // If a dump terrain already exists (e.g., from a previous play session
             // that didn't clean up), don't create another.
+            if (mainTerrain == null)
+            {
+                // mainTerrain is set by DumpTerrainBootstrap after AddComponent,
+                // which triggers Awake() before the field is assigned.
+                // DumpTerrainBootstrap calls CreateDumpTerrain() after setting fields.
+                return;
+            }
+
             if (TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump) != null)
             {
                 Debug.Log("[DumpTerrainFactory] Dump terrain already exists, skipping creation.");
