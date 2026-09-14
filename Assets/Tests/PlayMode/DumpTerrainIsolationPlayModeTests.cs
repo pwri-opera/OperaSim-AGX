@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -7,14 +8,39 @@ using AGXUnity.Model;
 
 namespace PWRISimulator.Tests.PlayMode
 {
+    /// <summary>
+    /// PlayMode tests for dump terrain isolation (issue #59).
+    /// Uses reflection to access TerrainRole because the test assembly
+    /// (PWRISimulator.Tests.PlayMode) does not reference Assembly-CSharp
+    /// directly — same pattern as SimulationSaveLoadTests and
+    /// DumpSoilCapturePlayModeTests.
+    /// </summary>
     public class DumpTerrainIsolationPlayModeTests
     {
+        private System.Type _terrainRoleType;
+        private System.Type _roleEnumType;
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            _terrainRoleType = System.Type.GetType(
+                "PWRISimulator.TerrainRole, Assembly-CSharp");
+            Assert.IsNotNull(_terrainRoleType,
+                "TerrainRole type not found in Assembly-CSharp.");
+
+            _roleEnumType = _terrainRoleType.GetNestedType("Role");
+            Assert.IsNotNull(_roleEnumType,
+                "TerrainRole.Role enum not found.");
+
+            yield return null;
+        }
+
         [UnityTest]
         public IEnumerator DumpTerrain_ExistsAndHasCorrectRole()
         {
             yield return null; // Wait one frame for Awake/Start
 
-            var dumpTerrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump);
+            var dumpTerrain = FindTerrainByRole("Dump");
             Assert.IsNotNull(dumpTerrain, "Dump terrain should be created by DumpTerrainFactory");
             Assert.AreEqual("Terrain_Dump", dumpTerrain.gameObject.name);
         }
@@ -23,10 +49,10 @@ namespace PWRISimulator.Tests.PlayMode
         public IEnumerator DumpParticles_DoNotModifyExcavationTerrainHeights()
         {
             // 1. Find terrains
-            var dumpTerrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Dump);
-            var excTerrain = TerrainRole.FindTerrainByRole(TerrainRole.Role.Excavation);
+            var dumpTerrain = FindTerrainByRole("Dump");
+            var excTerrain = FindTerrainByRole("Excavation");
             if (excTerrain == null)
-                excTerrain = FindObjectOfType<DeformableTerrain>();
+                excTerrain = Object.FindObjectOfType<DeformableTerrain>();
 
             Assert.IsNotNull(dumpTerrain, "Dump terrain should exist after DumpTerrainFactory runs");
             Assert.IsNotNull(excTerrain, "Excavation terrain should exist");
@@ -66,6 +92,17 @@ namespace PWRISimulator.Tests.PlayMode
             Assert.IsFalse(heightsChanged,
                 "Excavation terrain heights changed during simulation. " +
                 "Dump particles may be affecting the excavation terrain.");
+        }
+
+        /// <summary>
+        /// Calls TerrainRole.FindTerrainByRole via reflection.
+        /// </summary>
+        private DeformableTerrain FindTerrainByRole(string roleName)
+        {
+            var roleValue = System.Enum.Parse(_roleEnumType, roleName);
+            var method = _terrainRoleType.GetMethod("FindTerrainByRole",
+                BindingFlags.Public | BindingFlags.Static);
+            return method?.Invoke(null, new object[] { roleValue }) as DeformableTerrain;
         }
     }
 }
