@@ -14,7 +14,7 @@ namespace PWRISimulator
     [DefaultExecutionOrder(-100)]
     public class DumpTerrainBootstrap : MonoBehaviour
     {
-        [Tooltip("放土エリアの地表中心。GameScene の Dump_frame を指定する。")]
+        [Tooltip("放土エリアの X/Z 中心。GameScene の Dump_frame を指定する。地表高さはメイン地形に合わせる。")]
         public Transform dumpArea;
 
         void Awake()

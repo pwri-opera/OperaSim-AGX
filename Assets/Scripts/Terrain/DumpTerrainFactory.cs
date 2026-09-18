@@ -6,7 +6,7 @@ namespace PWRISimulator
 {
     /// <summary>
     /// 放土エリア専用の DeformableTerrain を実行時に生成する。
-    /// メイン地形の起伏をコピーし、地表中心を放土エリア中心に合わせて生成する。
+    /// 放土エリアの X/Z に、メイン地形と同じ世界座標の地表高さをコピーして生成する。
     /// 粒子は全地形で共有するため、放土地形は範囲外粒子を削除しない。
     ///
     /// このコンポーネントはシーン内のメイン地形と同じ GameObject または独立の GameObject に
@@ -20,7 +20,7 @@ namespace PWRISimulator
         public DeformableTerrain mainTerrain;
 
         [Header("Dump Area")]
-        [Tooltip("放土エリアの地表中心（世界座標）。")]
+        [Tooltip("放土エリアの世界座標中心。X/Z のみ使用し、地表高さはメイン地形から引き継ぐ。")]
         public Vector3 dumpAreaCenter = new Vector3(188f, 9f, 140f);
 
         [Tooltip("放土地形の最小サイズ。AGX の等間隔格子に合わせ X/Z は大きい方に揃える。")]
@@ -127,12 +127,8 @@ namespace PWRISimulator
                 mainHeights, mainRes, mainTerrainSize, mainTerrainPos,
                 worldMin, size, dumpHeightmapResolution);
 
-            // Preserve the sampled relief, but anchor the receiving surface to the
-            // marker's Y as well as X/Z. Terrain origins are corners, not centers.
-            float centerHeight = SampleHeightFromMainTerrain(
-                mainHeights, mainRes, mainTerrainSize, mainTerrainPos,
-                new Vector2(dumpAreaCenter.x, dumpAreaCenter.z)) * mainTerrainSize.y;
-            worldMin.y = dumpAreaCenter.y - centerHeight;
+            // Keep the sampled world heights and source origin Y unchanged.
+            // Marker Y describes the area marker, not the ground elevation.
 
             generatedTerrainData = new TerrainData
             {

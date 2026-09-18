@@ -93,9 +93,10 @@ namespace PWRISimulator.Tests.PlayMode
         }
 
         [Test]
-        public void DumpSurface_AlignsWithMarker_AndNativeGridMatchesVisibleGrid()
+        public void DumpSurface_MatchesMainGround_AndNativeGridMatchesVisibleGrid()
         {
             var dump = FindTerrainByRole("Dump");
+            var excavation = FindTerrainByRole("Excavation");
             var marker = GameObject.Find("Dump_frame");
             Assert.That(marker, Is.Not.Null, "GameScene must provide the dump destination marker.");
             var data = dump.TerrainData;
@@ -107,8 +108,6 @@ namespace PWRISimulator.Tests.PlayMode
 
             Assert.That(center.x, Is.EqualTo(marker.transform.position.x).Within(0.01f),
                 "The visible dump center must match the destination X.");
-            Assert.That(center.y, Is.EqualTo(marker.transform.position.y).Within(0.01f),
-                "MaximumDepth and main terrain initialization must not lower the receiving surface.");
             Assert.That(center.z, Is.EqualTo(marker.transform.position.z).Within(0.01f),
                 "The visible dump center must match the destination Z.");
             Assert.That(data.heightmapScale.x, Is.EqualTo(data.heightmapScale.z).Within(0.00001f),
@@ -120,6 +119,25 @@ namespace PWRISimulator.Tests.PlayMode
             Assert.That(Coordinate(nativeSize, "x"), Is.EqualTo(data.size.x).Within(0.001));
             Assert.That(Coordinate(nativeSize, "y"), Is.EqualTo(data.size.z).Within(0.001),
                 "Native collision/deposition bounds must not extend beyond the visible dump terrain.");
+
+            // Marker Y is not a terrain elevation. Check the center and every
+            // corner/edge midpoint against the actual surrounding ground.
+            int last = data.heightmapResolution - 1;
+            foreach (int z in new[] { 0, last / 2, last })
+            {
+                foreach (int x in new[] { 0, last / 2, last })
+                {
+                    var point = dump.transform.position + new Vector3(
+                        x * data.heightmapScale.x, 0f, z * data.heightmapScale.z);
+                    float ground = excavation.Terrain.SampleHeight(point) + excavation.transform.position.y;
+                    float visible = data.GetHeight(x, z) + dump.transform.position.y;
+                    float nativeHeight = dump.GetHeight(x, z) + dump.MaximumDepth + dump.transform.position.y;
+                    Assert.That(visible, Is.EqualTo(ground).Within(0.005f),
+                        $"Visible dump surface must join main ground at ({point.x}, {point.z}).");
+                    Assert.That(nativeHeight, Is.EqualTo(ground).Within(0.005f),
+                        $"Native dump surface must join main ground at ({point.x}, {point.z}).");
+                }
+            }
         }
 
         [Test]
