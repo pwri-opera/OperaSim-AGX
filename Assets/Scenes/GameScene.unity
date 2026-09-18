@@ -2180,7 +2180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 548050be26a14d6f9d9d1928840bd7e6, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  dumpAreaCenter: {x: 188, y: 0, z: 140}
+  dumpArea: {fileID: 4130645159751973465}
 --- !u!114 &55944588
 MonoBehaviour:
   m_ObjectHideFlags: 0
