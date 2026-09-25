@@ -1,14 +1,13 @@
 using UnityEngine;
 using AGXUnity;
 using AGXUnity.Model;
-using AGXUnity.Collide;
 
 namespace PWRISimulator
 {
     /// <summary>
     /// 放土エリア専用の DeformableTerrain を実行時に生成する。
-    /// メイン（掘削）地形から放土エリアの高さをサンプリングして初期ハイトマップを作成し、
-    /// DumpSoil がこの地形に粒子を放出するようにする（issue #59: 掘削地形への雪崩伝播を防止）。
+    /// 放土エリアの X/Z に、メイン地形と同じ世界座標の地表高さをコピーして生成する。
+    /// 粒子は全地形で共有するため、放土地形は範囲外粒子を削除しない。
     ///
     /// このコンポーネントはシーン内のメイン地形と同じ GameObject または独立の GameObject に
     /// 配置し、インスペクターでメイン地形と放土エリア中心を指定する。
@@ -21,14 +20,18 @@ namespace PWRISimulator
         public DeformableTerrain mainTerrain;
 
         [Header("Dump Area")]
-        [Tooltip("放土エリアの世界座標中心")]
-        public Vector3 dumpAreaCenter = new Vector3(188f, 0f, 140f);
+        [Tooltip("放土エリアの世界座標中心。X/Z のみ使用し、地表高さはメイン地形から引き継ぐ。")]
+        public Vector3 dumpAreaCenter = new Vector3(188f, 9f, 140f);
 
-        [Tooltip("放土地形のサイズ (幅 x 高さ最大 x 奥行き)。放土エリア(10x5) + マージン(1m) = 12x7")]
-        public Vector3 dumpTerrainSize = new Vector3(12f, 6f, 7f);
+        [Tooltip("放土地形の最小サイズ。AGX の等間隔格子に合わせ X/Z は大きい方に揃える。")]
+        public Vector3 dumpTerrainSize = new Vector3(12f, 30f, 12f);
 
         [Tooltip("放土地形のハイトマップ解像度")]
         public int dumpHeightmapResolution = 65;
+
+        private GameObject generatedTerrain;
+        private TerrainData generatedTerrainData;
+        private DeformableTerrainProperties generatedProperties;
 
         /// <summary>
         /// メイン地形のハイトマップから指定した世界座標の正規化高さをサンプリングする。
@@ -39,10 +42,6 @@ namespace PWRISimulator
             Vector3 mainTerrainSize, Vector3 mainTerrainPos,
             Vector2 worldXZ)
         {
-            float worldToNorm = (mainResolution - 1) / mainTerrainSize.x;
-            // Unity Terrain heightmap: index [x, y] where x maps to world X, y maps to world Z
-            // But Unity heightmap is accessed as heights[y, x] (row=y, col=x)
-            // and the terrain origin is at mainTerrainPos.
             float fx = (worldXZ.x - mainTerrainPos.x) / mainTerrainSize.x * (mainResolution - 1);
             float fy = (worldXZ.y - mainTerrainPos.z) / mainTerrainSize.z * (mainResolution - 1);
 
@@ -52,13 +51,11 @@ namespace PWRISimulator
             float tx = Mathf.Clamp01(fx - ix);
             float ty = Mathf.Clamp01(fy - iy);
 
-            // Bilinear interpolation. mainHeights is indexed as [x, y] in this project's
-            // convention (matching TerrainData.GetHeights which returns heights[y, x] but
-            // our test data uses [x, y] for simplicity — see note in BuildDumpHeightmap).
-            float h00 = mainHeights[ix, iy];
-            float h10 = mainHeights[ix + 1, iy];
-            float h01 = mainHeights[ix, iy + 1];
-            float h11 = mainHeights[ix + 1, iy + 1];
+            // Unity TerrainData stores rows in Z and columns in X.
+            float h00 = mainHeights[iy, ix];
+            float h10 = mainHeights[iy, ix + 1];
+            float h01 = mainHeights[iy + 1, ix];
+            float h11 = mainHeights[iy + 1, ix + 1];
 
             float h0 = Mathf.Lerp(h00, h10, tx);
             float h1 = Mathf.Lerp(h01, h11, tx);
@@ -91,10 +88,8 @@ namespace PWRISimulator
                         mainTerrainSize, mainTerrainPos,
                         new Vector2(worldX, worldZ));
 
-                    // Convert from main terrain normalized height to dump terrain normalized height.
-                    // normalized_height = world_height / terrain_size.y
-                    // So: dump_norm = main_norm * (main_size.y / dump_size.y)
-                    dumpHeights[dx, dy] = normalizedHeight * mainTerrainSize.y / dumpTerrainSize.y;
+                    float worldHeight = mainTerrainPos.y + normalizedHeight * mainTerrainSize.y;
+                    dumpHeights[dy, dx] = (worldHeight - dumpTerrainWorldMin.y) / dumpTerrainSize.y;
                 }
             }
 
@@ -112,61 +107,77 @@ namespace PWRISimulator
                 return null;
             }
 
-            // 1. Create TerrainData
-            TerrainData dumpTerrainData = new TerrainData();
-            dumpTerrainData.heightmapResolution = dumpHeightmapResolution;
-            dumpTerrainData.size = dumpTerrainSize;
-
-            // 2. Copy heights from main terrain
             TerrainData mainTerrainData = mainTerrain.TerrainData;
             int mainRes = mainTerrainData.heightmapResolution;
             float[,] mainHeights = mainTerrainData.GetHeights(0, 0, mainRes, mainRes);
-
             Vector3 mainTerrainSize = mainTerrainData.size;
             Vector3 mainTerrainPos = mainTerrain.transform.position;
-            // After DeformableTerrain.Initialize, the terrain is moved down by MaximumDepth.
-            // But DumpTerrainFactory runs in Awake, before Initialize. So mainTerrainPos
-            // is the pre-initialization position. We account for this in the y-offset.
 
-            Vector3 dumpWorldMin = new Vector3(
-                dumpAreaCenter.x - dumpTerrainSize.x * 0.5f,
-                mainTerrainPos.y, // same base y as main terrain
-                dumpAreaCenter.z - dumpTerrainSize.z * 0.5f);
+            // AGX uses one element size for both horizontal axes. Reserve vertical
+            // room for its depth offset and at least 1 m above the source height range.
+            Vector3 size = dumpTerrainSize;
+            size.x = size.z = Mathf.Max(size.x, size.z);
+            size.y = Mathf.Max(size.y, mainTerrainSize.y + mainTerrain.MaximumDepth + 1f);
+            Vector3 worldMin = new Vector3(
+                dumpAreaCenter.x - size.x * 0.5f,
+                mainTerrainPos.y,
+                dumpAreaCenter.z - size.z * 0.5f);
 
-            float[,] dumpHeights = BuildDumpHeightmap(
-                mainHeights, mainRes,
-                mainTerrainSize, mainTerrainPos,
-                dumpWorldMin, dumpTerrainSize,
-                dumpHeightmapResolution);
+            float[,] heights = BuildDumpHeightmap(
+                mainHeights, mainRes, mainTerrainSize, mainTerrainPos,
+                worldMin, size, dumpHeightmapResolution);
 
-            dumpTerrainData.SetHeights(0, 0, dumpHeights);
+            // Keep the sampled world heights and source origin Y unchanged.
+            // Marker Y describes the area marker, not the ground elevation.
 
-            // 3. Create Terrain GameObject
-            GameObject dumpObj = Terrain.CreateTerrainGameObject(dumpTerrainData);
-            dumpObj.name = "Terrain_Dump";
-            dumpObj.transform.position = dumpWorldMin;
-            dumpObj.transform.parent = transform; // parent under the factory's GameObject
+            generatedTerrainData = new TerrainData
+            {
+                heightmapResolution = dumpHeightmapResolution,
+                size = size,
+                terrainLayers = mainTerrainData.terrainLayers
+            };
+            generatedTerrainData.SetHeights(0, 0, heights);
+            generatedTerrain = Terrain.CreateTerrainGameObject(generatedTerrainData);
+            generatedTerrain.name = "Terrain_Dump";
+            generatedTerrain.transform.position = worldMin;
+            // Keep a scene root: mainTerrain itself moves down by MaximumDepth.
 
-            // 4. Add DeformableTerrain component
-            var dumpDeformable = dumpObj.GetComponent<DeformableTerrain>() ??
-                                  dumpObj.AddComponent<DeformableTerrain>();
-
-            // Copy material references from main terrain
+            var dumpDeformable = generatedTerrain.AddComponent<DeformableTerrain>();
             dumpDeformable.Material = mainTerrain.Material;
             dumpDeformable.ParticleMaterial = mainTerrain.ParticleMaterial;
             dumpDeformable.DefaultTerrainMaterial = mainTerrain.DefaultTerrainMaterial;
-            dumpDeformable.TerrainProperties = mainTerrain.TerrainProperties;
             dumpDeformable.MaximumDepth = mainTerrain.MaximumDepth;
 
-            // 5. Add TerrainRole marker
-            var role = dumpObj.GetComponent<TerrainRole>() ??
-                       dumpObj.AddComponent<TerrainRole>();
-            role.role = TerrainRole.Role.Dump;
+            // Native terrain instances share one particle system. A small terrain
+            // must not delete the excavation particles outside its own bounds.
+            // Clone before changing the flag so the main terrain keeps its policy.
+            generatedProperties = mainTerrain.TerrainProperties != null
+                ? Instantiate(mainTerrain.TerrainProperties)
+                : ScriptAsset.Create<DeformableTerrainProperties>();
+            generatedProperties.DeleteSoilParticlesOutsideBoundsEnabled = false;
+            dumpDeformable.TerrainProperties = generatedProperties;
 
-            Debug.Log($"[DumpTerrainFactory] Created dump terrain at {dumpWorldMin}, " +
-                      $"size {dumpTerrainSize}, resolution {dumpHeightmapResolution}");
-
+            generatedTerrain.AddComponent<TerrainRole>().role = TerrainRole.Role.Dump;
+            Debug.Log($"[DumpTerrainFactory] Created dump terrain at {worldMin}, " +
+                      $"size {size}, resolution {dumpHeightmapResolution}");
             return dumpDeformable;
+        }
+
+        void OnDestroy()
+        {
+            // These objects are generated per scene, never project assets.
+            if (Application.isPlaying)
+            {
+                Destroy(generatedTerrain);
+                Destroy(generatedTerrainData);
+                Destroy(generatedProperties);
+            }
+            else
+            {
+                DestroyImmediate(generatedTerrain);
+                DestroyImmediate(generatedTerrainData);
+                DestroyImmediate(generatedProperties);
+            }
         }
 
         void Awake()
