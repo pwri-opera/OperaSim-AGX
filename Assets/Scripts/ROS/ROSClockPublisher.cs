@@ -8,6 +8,7 @@ using Unity.Robotics.Core;
 
 namespace PWRISimulator.ROS
 {
+    [DefaultExecutionOrder(100)] // Publish after the default-order sensor publishers in each fixed step.
     public class ROSClockPublisher : MonoBehaviour
     {
         [SerializeField]
@@ -75,14 +76,12 @@ namespace PWRISimulator.ROS
             m_ROS.Publish("clock", clockMsg);
         }
 
-        // /clock を Update() で publish する: Update はすべての FixedUpdate() 完了後に実行されるため、
-        // データパブリッシャが FixedUpdate で publish したメッセージが TF broadcaster に届く前に
-        // /clock が consumer に到達するのを防げる (#96 のメッセージ到着順序問題)。
-        // now には Time.timeAsDouble ではなく Time.fixedTimeAsDouble を使う: Update の timeAsDouble は
-        // 補間時間を含むため fixedTime より進んでおり、clock stamp がデータ stamp より未来になると
-        // ExtrapolationException が発生する。fixedTimeAsDouble を使うことで clock がデータと同じ時刻
-        // グリッドに留まり、TF lookup が成功する。fps 非依存は scheduled time で保証 (#58)。
-        void Update()
+        // Keep /clock after sensor publication within each physics step. Publishing
+        // only in Update lets a catch-up batch send future-dated odom/TF while ROS
+        // time is still at the previous rendered frame; the EKF cannot consume those
+        // measurements yet. Execution order preserves data-before-clock ordering
+        // without waiting for the entire FixedUpdate batch to finish.
+        void FixedUpdate()
         {
             if (m_ROS == null || m_PublishPeriod <= 0)
                 return;
