@@ -60,7 +60,7 @@
   </link>
   <!-- boom axis -->
   <joint name="joint2" type="revolute">
-    <origin xyz="0.22767 -0.040187 0.83669"/>
+    <origin xyz="0.05467 -0.040187 0.72492"/>
     <axis xyz="0 1 0"/>
     <parent link="link3"/>
     <child link="link4"/>
@@ -197,7 +197,7 @@
     </inertial>
   </link>
   <joint name="joint3" type="revolute">
-    <origin xyz="4.7878 0.010957 2.9959"/>
+    <origin xyz="4.83998 0.010957 3.00227"/>
     <axis xyz="0 1 0"/>
     <parent link="link4"/>
     <child link="link5"/>
@@ -224,7 +224,7 @@
   </link>
   <!-- bucket axis -->
   <joint name="joint4" type="revolute">
-    <origin xyz="1.8954 -0.023546 2.1809"/>
+    <origin xyz="1.91546 -0.023546 2.17374"/>
     <axis xyz="0 1 0"/>
     <parent link="link5"/>
     <child link="link6"/>
