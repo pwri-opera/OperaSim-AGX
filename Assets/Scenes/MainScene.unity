@@ -35842,8 +35842,8 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 773665788}
     m_localPosition: {x: 0.040187, y: 0.72492, z: 0.05467}
-    m_localRotation: {x: -0.6948694, y: -0.13098288, z: 0.6948694, w: 0.13098294}
-  m_synchronized: 1
+    m_localRotation: {x: -0.67965390, y: -0.19511673, z: 0.67965392, w: 0.19511679}
+  m_synchronized: 0
 --- !u!114 &795855120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58549,8 +58549,8 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 776953429}
     m_localPosition: {x: 0.023546, y: 2.17374, z: 1.91546}
-    m_localRotation: {x: 0.7000089, y: -0.09993769, z: -0.7000089, w: 0.09993765}
-  m_synchronized: 1
+    m_localRotation: {x: 0.70482868, y: -0.05671434, z: -0.70482868, w: 0.05671428}
+  m_synchronized: 0
 --- !u!114 &1314955421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329115,8 +329115,8 @@ MonoBehaviour:
   m_connectedFrame:
     m_parent: {fileID: 1760676692}
     m_localPosition: {x: -0.010957, y: 3.00227, z: 4.83998}
-    m_localRotation: {x: 0.6071235, y: 0.36249286, z: -0.6071235, w: -0.36249286}
-  m_synchronized: 1
+    m_localRotation: {x: 0.69936652, y: 0.10433819, z: -0.69936652, w: -0.10433819}
+  m_synchronized: 0
 --- !u!114 &2073083425
 MonoBehaviour:
   m_ObjectHideFlags: 0
