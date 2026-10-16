@@ -32,6 +32,10 @@ namespace PWRISimulator.ROS
 
         [SerializeField]uint frequency = 60;
         [SerializeField]string frameId = "";
+        // 追いつき publish のバーストで既定の送信キュー (10) が溢れてメッセージが
+        // 捨てられるのを防ぐため、有効時はキューを 1 秒分に拡大する (#139)。
+        // 輻輳時は古いメッセージが遅れて届くようになるため既定では無効
+        [SerializeField]bool extendSendQueue = false;
 
         double publishPeriod;
         double scheduleOrigin;
@@ -93,9 +97,16 @@ namespace PWRISimulator.ROS
             imuMsg = new();
 
             rosConnection = ROSConnection.GetOrCreateInstance();
-            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
-            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
-            rosConnection.RegisterPublisher<ImuMsg>(topicName, Math.Max(10, (int)frequency));
+            if (extendSendQueue)
+            {
+                // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+                // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
+                rosConnection.RegisterPublisher<ImuMsg>(topicName, Math.Max(10, (int)frequency));
+            }
+            else
+            {
+                rosConnection.RegisterPublisher<ImuMsg>(topicName);
+            }
         }
 
         void DoUpdate()
