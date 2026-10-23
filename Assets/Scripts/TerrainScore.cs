@@ -61,11 +61,11 @@ namespace PWRISimulator
         // スコアリング
         private double init_sum;
         private double curt_sum;
-        private double prev_sumDiff;
+        private double prev_sumVolumeDiff;
 
         private double init_excSum;
         private double curt_excSum;
-        private double prev_excDiff;
+        private double prev_excVolumeDiff;
 
         private double init_dmpSum;
         private double curt_dmpSum;
@@ -457,11 +457,11 @@ namespace PWRISimulator
 
             init_sum = 0.0;
             curt_sum = 0.0;
-            prev_sumDiff = 0.0;
+            prev_sumVolumeDiff = 0.0;
 
             init_excSum = 0.0;
             curt_excSum = 0.0;
-            prev_excDiff = 0.0;
+            prev_excVolumeDiff = 0.0;
 
             init_dmpSum = 0.0;
             curt_dmpSum = 0.0;
@@ -573,11 +573,11 @@ namespace PWRISimulator
 
                 init_sum = 0.0;
                 curt_sum = 0.0;
-                prev_sumDiff = 0.0;
+                prev_sumVolumeDiff = 0.0;
 
                 init_excSum = 0.0;
                 curt_excSum = 0.0;
-                prev_excDiff = 0.0;
+                prev_excVolumeDiff = 0.0;
 
                 init_dmpSum = 0.0;
                 curt_dmpSum = 0.0;
@@ -659,11 +659,13 @@ namespace PWRISimulator
 
             // スコア計算
             double excDiff = curt_excSum - init_excSum;
-            //Debug.Log("excDiff: " + excDiff + ", curt_excSum: " + curt_excSum + ", init_excSum: " + init_excSum);
+            // 正規化高さ積算差分を物理体積 [m^3] に変換（issue #90: 次元整合性）
+            double excVolumeDiff = normalizedHeightSumToVolume(excDiff, terrainData);
+            //Debug.Log("excDiff: " + excDiff + ", excVolumeDiff: " + excVolumeDiff);
 
-            if (excDiff < 0.0 && excDiff < prev_excDiff)
+            if (excVolumeDiff < 0.0 && excVolumeDiff < prev_excVolumeDiff)
             {
-                var _diff = excDiff - prev_excDiff;
+                var _diff = excVolumeDiff - prev_excVolumeDiff;
                 //excScore += GlobalVariables.MiningCoef * Math.Abs(excDiff) / 0.5;
                 excScore += GlobalVariables.MiningCoef * Math.Abs(_diff);
 
@@ -678,7 +680,7 @@ namespace PWRISimulator
                     excScore = excScore - (int)excScore;
 
                     // 差分保持
-                    prev_excDiff = excDiff;
+                    prev_excVolumeDiff = excVolumeDiff;
                 }
             }
 
@@ -727,11 +729,13 @@ namespace PWRISimulator
             LogUnloadScoreDiagnosticsIfDue();
 
             double sumDiff = curt_sum - init_sum;
-            //Debug.Log("sumDiff: " + sumDiff + ",curt_sum: " + curt_sum + ", init_sum: " + init_sum);
+            // 正規化高さ積算差分を物理体積 [m^3] に変換（issue #90: 次元整合性）
+            double sumVolumeDiff = normalizedHeightSumToVolume(sumDiff, terrainData);
+            //Debug.Log("sumDiff: " + sumDiff + ", sumVolumeDiff: " + sumVolumeDiff);
 
-            if (sumDiff > 0.0 && sumDiff > prev_sumDiff)
+            if (sumVolumeDiff > 0.0 && sumVolumeDiff > prev_sumVolumeDiff)
             {
-                var _diff = sumDiff - prev_sumDiff;
+                var _diff = sumVolumeDiff - prev_sumVolumeDiff;
                 //sumScore += -1.0 * GlobalVariables.MiningCoef * Math.Abs(sumDiff) / 0.5;
                 sumScore += -1.0 * GlobalVariables.MiningCoef * Math.Abs(_diff);
 
@@ -746,7 +750,7 @@ namespace PWRISimulator
                     sumScore = sumScore - (int)sumScore;
 
                     // 差分保持
-                    prev_sumDiff = sumDiff;
+                    prev_sumVolumeDiff = sumVolumeDiff;
                 }
             }
 
