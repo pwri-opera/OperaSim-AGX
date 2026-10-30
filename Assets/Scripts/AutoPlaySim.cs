@@ -7,8 +7,8 @@ using UnityEngine;
 // "Start Simulation" button does.
 //
 // Additionally, while launched via VideoAutoPlay:
-// - spawns a chase camera parented to ic120_0/track_link so the Game view
-//   follows the truck,
+// - spawns a chase camera that is reposed in world space behind the ic120_0
+//   body (track_link) every frame so the Game view follows the truck,
 // - captures that camera's render to a 1920x1080 RenderTexture and dumps PNG
 //   frames at 5 fps to .omp/video/frames2/ for ffmpeg stitching (works at
 //   full resolution regardless of the editor window's Game view size).
@@ -20,6 +20,7 @@ public class AutoPlaySim : MonoBehaviour
     private int frames;
     private bool started;
     private Camera chaseCam;
+    private Transform trackLink;
     private RenderTexture rt;
     private string outDir;
     private float nextCapture;
@@ -36,34 +37,51 @@ public class AutoPlaySim : MonoBehaviour
 
     private void TryAttach()
     {
-        if (chaseCam != null)
-            return;
-        GameObject track = GameObject.Find("ic120_0/track_link");
-        if (track == null)
+        if (trackLink == null)
         {
-            foreach (var t in UnityEngine.Object.FindObjectsOfType<Transform>(true))
+            GameObject track = GameObject.Find("ic120_0/track_link");
+            if (track == null)
             {
-                if (t.name == "track_link")
+                foreach (var t in UnityEngine.Object.FindObjectsOfType<Transform>(true))
                 {
-                    track = t.gameObject;
-                    break;
+                    if (t.name == "track_link" &&
+                        t.root != null && t.root.name.StartsWith("ic120"))
+                    {
+                        track = t.gameObject;
+                        break;
+                    }
                 }
             }
+            if (track == null)
+                return;
+            trackLink = track.transform;
         }
-        if (track == null)
-            return;
-        var camGo = new GameObject("VideoChaseCam");
-        camGo.transform.SetParent(track.transform, false);
-        camGo.transform.localPosition = new Vector3(-14f, 6.5f, 0f);
-        camGo.transform.localRotation = Quaternion.LookRotation(new Vector3(12f, -4.5f, 0f), Vector3.up);
-        chaseCam = camGo.AddComponent<Camera>();
-        chaseCam.fieldOfView = 42f;
-        chaseCam.depth = 10; // wins over the scene's HUD/ground camera
-        rt = new RenderTexture(1920, 1080, 24);
-        chaseCam.targetTexture = rt;
-        outDir = Path.Combine(Application.dataPath, "../.omp/video/frames2");
-        Directory.CreateDirectory(outDir);
-        Debug.Log("[AutoPlaySim] chase cam on track_link; dumping " + outDir);
+        if (chaseCam == null)
+        {
+            var camGo = new GameObject("VideoChaseCam");
+            chaseCam = camGo.AddComponent<Camera>();
+            chaseCam.fieldOfView = 42f;
+            rt = new RenderTexture(1920, 1080, 24);
+            chaseCam.targetTexture = rt;
+            outDir = Path.Combine(Application.dataPath, "../.omp/video/frames2");
+            Directory.CreateDirectory(outDir);
+            Debug.Log("[AutoPlaySim] chase cam on " + trackLink.root.name +
+                "/" + trackLink.name + "; dumping " + outDir);
+        }
+        // Repose every frame instead of parenting. The link's joint frame is
+        // rotated 90 deg vs the body (parenting produced a sideways chase
+        // cam); the body's horizontal forward is +link.right. Root
+        // ('ic120_0') never moves and cannot be used for yaw.
+        Vector3 flatFwd = trackLink.right;
+        flatFwd.y = 0f;
+        if (flatFwd.sqrMagnitude < 1e-4f)
+            flatFwd = Vector3.forward;
+        flatFwd.Normalize();
+        Vector3 pos = trackLink.position - flatFwd * 16f + Vector3.up * 8f;
+        chaseCam.transform.position = pos;
+        chaseCam.transform.rotation = Quaternion.LookRotation(
+            (trackLink.position + flatFwd * 4f + Vector3.up * 1.5f) - pos,
+            Vector3.up);
     }
 
     void Update()
