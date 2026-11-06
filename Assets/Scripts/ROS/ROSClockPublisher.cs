@@ -19,6 +19,12 @@ namespace PWRISimulator.ROS
         [SerializeField]
         double m_PublishRateHz = 60f;
 
+        // 追いつき publish のバーストで既定の送信キュー (10) が溢れてメッセージが
+        // 捨てられるのを防ぐため、有効時はキューを 1 秒分に拡大する (#139)。
+        // 輻輳時は古いメッセージが遅れて届くようになるため既定では無効
+        [SerializeField]
+        bool m_ExtendSendQueue = false;
+
         double m_PublishPeriod;
         double m_ScheduleOrigin;
         long m_PublishedCount;
@@ -58,10 +64,17 @@ namespace PWRISimulator.ROS
             // m_PublishRateHz はデータパブリッサの frequency と同じ値にすること。
             m_PublishPeriod = 1.0 / Math.Max(1, m_PublishRateHz);
             m_ScheduleOrigin = Time.fixedTimeAsDouble;
-            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
-            // メッセージが捨てられるため、実効レートの 1 秒分を保持できる深さにする (#139)
-            int queueSize = Math.Max(10, (int)Math.Round(1.0 / m_PublishPeriod));
-            m_ROS.RegisterPublisher<ClockMsg>("clock", queueSize);
+            if (m_ExtendSendQueue)
+            {
+                // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+                // メッセージが捨てられるため、実効レートの 1 秒分を保持できる深さにする (#139)
+                int queueSize = Math.Max(10, (int)Math.Round(1.0 / m_PublishPeriod));
+                m_ROS.RegisterPublisher<ClockMsg>("clock", queueSize);
+            }
+            else
+            {
+                m_ROS.RegisterPublisher<ClockMsg>("clock");
+            }
         }
 
         void PublishMessage(double stampTime)

@@ -18,6 +18,10 @@ namespace PWRISimulator.ROS
         private double publishPeriod;
         private double scheduleOrigin;
         private long publishedCount;
+        // 追いつき publish のバーストで既定の送信キュー (10) が溢れてメッセージが
+        // 捨てられるのを防ぐため、有効時はキューを 1 秒分に拡大する (#139)。
+        // 輻輳時は古いメッセージが遅れて届くようになるため既定では無効
+        [SerializeField] bool extendSendQueue = false;
         // Start is called before the first frame update
         void Start()
         {
@@ -71,10 +75,17 @@ namespace PWRISimulator.ROS
             }
 
             // register publisher
-            // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
-            // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
             rosConnection = ROSConnection.GetOrCreateInstance();
-            rosConnection.RegisterPublisher<FluidPressureArrayMsg>(topicName, (int)Math.Max(10, Frequency()));
+            if (extendSendQueue)
+            {
+                // 処理落ち後の追いつき publish のバーストで既定の送信キュー (10) が溢れて
+                // メッセージが捨てられるため、1 秒分を保持できる深さにする (#139)
+                rosConnection.RegisterPublisher<FluidPressureArrayMsg>(topicName, (int)Math.Max(10, Frequency()));
+            }
+            else
+            {
+                rosConnection.RegisterPublisher<FluidPressureArrayMsg>(topicName);
+            }
         }
 
         /// <summary>
