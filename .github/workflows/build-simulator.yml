@@ -1,0 +1,169 @@
+name: Windows Simulator Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      unity_activation:
+        description: Unity activation method (requires an applicable license)
+        type: choice
+        required: true
+        default: serial
+        options:
+          - serial
+          - license-file
+      use_agx_license:
+        description: Load AGX_LICENSE_BASE64 for a licensed comparison build
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-simulator-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Windows x64 / Mono / Unity 2022.3.62f3
+    runs-on: windows-2022
+    timeout-minutes: 150
+    env:
+      OPERA_PLAYER_DIRECTORY: ${{ github.workspace }}\build\player
+      OPERA_DIAGNOSTICS_DIRECTORY: ${{ github.workspace }}\build\diagnostics
+      OPERA_UNITY_ACTIVATION: ${{ inputs.unity_activation }}
+      OPERA_USE_AGX_LICENSE: ${{ inputs.use_agx_license }}
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out reviewed workflow revision
+        id: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Initialize runner-local paths
+        run: |
+          $editor = Join-Path $env:RUNNER_TEMP 'opera-unity/Editor/Unity.exe'
+          $ci = Join-Path $env:RUNNER_TEMP 'opera-ci'
+          "UNITY_EDITOR_PATH=$editor" | Add-Content -LiteralPath $env:GITHUB_ENV
+          "OPERA_CI_DIRECTORY=$ci" | Add-Content -LiteralPath $env:GITHUB_ENV
+
+      - name: Check activation prerequisites
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          AGX_LICENSE_BASE64: ${{ inputs.use_agx_license && secrets.AGX_LICENSE_BASE64 || '' }}
+        run: ./.github/scripts/Invoke-UnityBuild.ps1 -Operation Preflight
+
+      - name: Install pinned, signed Windows Unity Editor
+        timeout-minutes: 30
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ProgressPreference = 'SilentlyContinue'
+          $version = Get-Content 'ProjectSettings/ProjectVersion.txt' -Raw
+          if ($version -notmatch '(?m)^m_EditorVersion: 2022\.3\.62f3\r?$' -or
+              $version -notmatch '96770f904ca7') {
+            throw 'Update this workflow explicitly before changing the Unity Editor version.'
+          }
+
+          New-Item -ItemType Directory -Force -Path $env:OPERA_CI_DIRECTORY | Out-Null
+          $installer = Join-Path $env:OPERA_CI_DIRECTORY 'UnitySetup64-2022.3.62f3.exe'
+          $url = 'https://download.unity3d.com/download_unity/96770f904ca7/Windows64EditorInstaller/UnitySetup64-2022.3.62f3.exe'
+          Invoke-WebRequest -Uri $url -OutFile $installer
+
+          # The vendor MD5 detects transport errors; Authenticode authenticates the publisher.
+          $hash = (Get-FileHash -LiteralPath $installer -Algorithm MD5).Hash
+          if ($hash -ne '2e9ec527a1329e0d72c3454047f37d24') {
+            throw 'Unity installer does not match the official release metadata.'
+          }
+          $signature = Get-AuthenticodeSignature -LiteralPath $installer
+          if ($signature.Status -ne 'Valid' -or
+              $signature.SignerCertificate.Subject -notmatch 'Unity Technologies') {
+            throw 'Unity installer publisher signature could not be verified.'
+          }
+
+          $installRoot = Join-Path $env:RUNNER_TEMP 'opera-unity'
+          $process = Start-Process -FilePath $installer -ArgumentList @('/S', "/D=$installRoot") -PassThru
+          if (-not $process.WaitForExit(1200000)) {
+            $process.Kill($true)
+            throw 'Unity installation exceeded 20 minutes.'
+          }
+          if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $env:UNITY_EDITOR_PATH -PathType Leaf)) {
+            throw "Unity installation failed (exit code $($process.ExitCode))."
+          }
+          Remove-Item -LiteralPath $installer -Force
+
+      - name: Activate Unity
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: ./.github/scripts/Invoke-UnityBuild.ps1 -Operation Activate
+
+      - name: Build Windows simulator
+        env:
+          AGX_LICENSE_BASE64: ${{ inputs.use_agx_license && secrets.AGX_LICENSE_BASE64 || '' }}
+        run: ./.github/scripts/Invoke-UnityBuild.ps1 -Operation Build
+
+      - name: Validate and package complete player
+        id: package
+        run: |
+          ./.github/scripts/Package-Simulator.ps1 `
+            -PlayerDirectory $env:OPERA_PLAYER_DIRECTORY `
+            -ArchivePath "$env:GITHUB_WORKSPACE/build/artifacts/OperaSim-Windows.zip"
+          @(
+            '## Windows simulator build'
+            ''
+            "Source commit: $env:GITHUB_SHA"
+            "AGX license supplied: $env:OPERA_USE_AGX_LICENSE"
+            ''
+            'Package validation passed. This does not verify simulator runtime behavior.'
+            'Run the licensed Windows + Linux ROS sample smoke test before distribution.'
+          ) | Add-Content -LiteralPath $env:GITHUB_STEP_SUMMARY
+
+      - name: Return serial-based Unity activation
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: ./.github/scripts/Invoke-UnityBuild.ps1 -Operation ReturnLicense
+
+      - name: Export scrubbed Unity diagnostics
+        id: diagnostics
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          AGX_LICENSE_BASE64: ${{ inputs.use_agx_license && secrets.AGX_LICENSE_BASE64 || '' }}
+        run: ./.github/scripts/Invoke-UnityBuild.ps1 -Operation ExportLogs
+
+      - name: Remove helper-owned license files
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        run: ./.github/scripts/Invoke-UnityBuild.ps1 -Operation Cleanup
+
+      - name: Upload validated simulator ZIP
+        if: ${{ !cancelled() && steps.package.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: OperaSim-Windows-${{ github.run_number }}
+          path: build/artifacts/OperaSim-Windows.zip
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload scrubbed diagnostics
+        if: ${{ !cancelled() && steps.diagnostics.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: OperaSim-Windows-diagnostics-${{ github.run_number }}
+          path: build/diagnostics/*.log
+          if-no-files-found: warn
+          retention-days: 7
